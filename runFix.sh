@@ -1,0 +1,43 @@
+#!/usr/local/bin/bash
+bam=$1
+id=$RANDOM
+
+#create stats before the fix
+stats=$(samtools view $bam|wc -l)
+echo $bam $stats > ${bam}.stats
+
+#first to get a bam contains all reads with missing RG info
+samtools view -hr "Disc1" $bam |samtools view -Sb - > $bam\_mrg.bam
+
+#get a list of querynames that doesn't have RG tag
+samtools view $bam\_mrg.bam|awk '{print $1}'>$bam\_mrg.txt
+
+#create logs dir
+mkdir -p logs
+
+#Use picard to get reads that have RG tag attached
+echo 'java -Xmx8000M -jar /nfs/team143/software/picard-tools-1.72/FilterSamReads.jar INPUT='$bam' OUTPUT='$bam'\_rg.bam FILTER=excludeReadList READ_LIST_FILE='$bam'\_mrg.txt SORT_ORDER=coordinate WRITE_READS_FILES=false VALIDATION_STRINGENCY=LENIENT'|bsub -G team151 -M 8000 -R"select[mem>8000] rusage[mem=8000]" -q normal -J "$id-$bam-extract" -o logs/$bam\_extract.o -e logs/$bam\_extract.e
+
+#Add the RG info using Picard
+
+samtools view -H $bam |grep ^@RG|head -1|sed -e 's/:/=/g' -e 's/\t/\n/g'>$bam\_rg.txt
+
+LB=$(grep ^LB $bam\_rg.txt|awk '{print $1}')
+PL=$(grep ^PL $bam\_rg.txt)
+PU=$(echo "PU=remapped-"$id)
+SM=$(grep ^SM $bam\_rg.txt)
+CN=$(grep ^CN $bam\_rg.txt)
+DS=$(grep ^DS $bam\_rg.txt)
+
+echo 'java -Xmx500M -jar /nfs/team143/software/picard-tools-1.72/AddOrReplaceReadGroups.jar INPUT='$bam'\_mrg.bam OUTPUT='$bam'\_rgfix.bam SORT_ORDER=coordinate VALIDATION_STRINGENCY=SILENT RGID=bridged-'$id $LB $PL $PU $SM $CN $DS|bsub -G team151 -M 2000 -R"select[mem>2000] rusage[mem=2000]" -q normal -J "$id-$bam-rg" -o logs/$bam\_rg.o -e logs/$bam\_rg.e
+
+#Merge two files together using samtools
+echo 'java -Xmx500M -jar /nfs/team143/software/picard-tools-1.72/MergeSamFiles.jar INPUT='$bam'\_rg.bam INPUT='$bam'\_rgfix.bam OUTPUT='$bam'\_new.bam SORT_ORDER=coordinate ASSUME_SORTED=true VALIDATION_STRINGENCY=SILENT CREATE_MD5_FILE=false CREATE_INDEX=false'| bsub -G team151 -M 2000 -R"select[mem>2000] rusage[mem=2000]" -q normal -w "done($id-$bam-rg) && done($id-$bam-extract)" -J "$id-$bam-merge" -o logs/$bam\_merge.o -e logs/$bam\_merge.e
+ 
+#remark duplicates
+echo 'java -Xmx16g -jar /nfs/users/nfs_y/yl2/team143/software/picard-tools-1.72/MarkDuplicates.jar INPUT='$bam'\_new.bam OUTPUT='$bam'\_mkdup.bam METRICS_FILE='$bam'.temp VALIDATION_STRINGENCY=SILENT REMOVE_DUPLICATES=false ASSUME_SORTED=true CREATE_INDEX=TRUE VERBOSITY=ERROR CREATE_MD5_FILE=false' | bsub -G team151 -w "done($id-$bam-merge)" -M 16000 -R"select[mem>16000] rusage[mem=16000]" -q yesterday -J "$id-$bam-mkdup" -o logs/$bam\_mkdup.o -e logs/$bam\_mkdup.e
+
+#make sure everything finished then delete all the intermediate files
+bsub -G team151 -w "done($id-$bam-mkdup)" -J "$id-$bam-clean" -o logs/$bam\_clean.o -e logs/$bam\_clean.e -M2000 -R"select[mem>2000] rusage[mem=2000]" -q yesterday -- bash clean.sh $bam
+
+echo $bam-"Jobs are submitted, please check logs to check their status!"
