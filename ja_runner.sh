@@ -3,8 +3,8 @@
 # This is the runner file run by bsub
 # Arguments: runner.sh filelist
 # Environment variables: LSB_JOBINDEX
-
-file=`sed -n "${LSB_JOBINDEX}p" $2`
+# mkdir -p LOGS;size=`wc -l result.list|cut -f 1 -d " "`;bsub -J "p_check[1-${size}]" -o "LOGS/%J_p_check.%I.o" -M 5000 -R"select[mem>5000] rusage[mem=5000]" -q normal -- ~/Work/bash_scripts/ja_runner_par.sh ~/Work/bash_scripts/check_pvals_test.sh result.list
+file=`sed -n "${LSB_JOBINDEX}p" $1`
 
 # script=$1
 # uncomment this if you need to work with chr as jobindex
@@ -18,7 +18,9 @@ file=`sed -n "${LSB_JOBINDEX}p" $2`
 # chr=$2
 # cohort=$1
 # trait=$1
-outpath=$1
+outpath=$2
+mkdir -p ${outpath}
+grep_file=$3
 # bash $script $file $3 $4 $5
 # /software/vertres/codebase/scripts/bamcheck -c 1,50,1 -d /lustre/scratch113/projects/fvg_seq/F12HPCEUHK0358_HUMpngR/BRIDGED_BAMS/${file}
 # zcat ${file} | sed 's/,rs/|rs/g' | awk -v chr=${LSB_JOBINDEX} '{ snp=(NF-5)/3; if($2 ~/^rs/) s=$2;else s="NA"; printf "chr"chr":"$3"-"s"-"$4"-"$5"," $4 "," $5; for(i=1; i<=snp; i++) printf "," $(i*3+3)*2+$(i*3+4); printf "\n" }' > chr${LSB_JOBINDEX}.bimbam
@@ -100,19 +102,30 @@ outpath=$1
 #chr=${file}
 #plink --bfile ~/UK10K/users/jh21/imputed/fvg/fvg_370/shapeit/chr${chr} --bmerge ~/UK10K/users/jh21/imputed/fvg/fvg_omni/shapeit/chr${chr}.bed ~/UK10K/users/jh21/imputed/fvg/fvg_omni/shapeit/chr${chr}.bim ~/UK10K/users/jh21/imputed/fvg/fvg_omni/shapeit/chr${chr}.fam --make-bed --out ${outpath}/chr${chr}_merged
 
-#extract sites by region using antitumoral list
-chr=`echo ${file} | cut -f 1 -d " "`
-start=`echo ${file} | cut -f 2 -d " "`
-end=`echo ${file} | cut -f 3 -d " "`
-gene=`echo ${file} | cut -f 4 -d " "`
-#plink --noweb --bfile /nfs/users/nfs_m/mc14/Work/SANGER/FVG/ANTI_TUMORAL_DRUGS/merged/chr${chr}_merged --chr ${chr} --from-bp ${start} --to-bp ${end} --make-bed --out ${outpath}/chr${chr}_${gene}
+# #extract sites by region using antitumoral list
+# echo ${file}
+# chr=`echo ${file} | cut -f 1 -d " "`
+# start=`echo ${file} | cut -f 2 -d " "`
+# end=`echo ${file} | cut -f 3 -d " "`
+# gene=`echo ${file} | cut -f 4 -d " "`
+# #create bed files
+# # plink --noweb --bfile /nfs/users/nfs_m/mc14/Work/SANGER/FVG/ANTI_TUMORAL_DRUGS/merged/chr${chr}_merged --chr ${chr} --from-bp ${start} --to-bp ${end} --make-bed --out ${outpath}/chr${chr}_${gene}
 
-#now calculate also the frequencies in FVG
-#plink --noweb --bfile /nfs/users/nfs_m/mc14/Work/SANGER/FVG/ANTI_TUMORAL_DRUGS/merged/chr${chr}_merged --chr ${chr} --from-bp ${start} --to-bp ${end} --freq --out ${outpath}/chr${chr}_${gene}_fvgfrq
+# #now calculate also the frequencies in FVG
+# # plink --noweb --bfile /nfs/users/nfs_m/mc14/Work/SANGER/FVG/ANTI_TUMORAL_DRUGS/merged/chr${chr}_merged --chr ${chr} --from-bp ${start} --to-bp ${end} --freq --out ${outpath}/chr${chr}_${gene}_fvgfrq
 
-#now calculate also the frequencies in FVG for males only
-plink --noweb --bfile /nfs/users/nfs_m/mc14/Work/SANGER/FVG/ANTI_TUMORAL_DRUGS/merged/chr${chr}_merged --chr ${chr} --from-bp ${start} --to-bp ${end} --filter-males --freq --out ${outpath}/males/chr${chr}_${gene}_fvgfrq
+# #now calculate also the frequencies in FVG for males only
+# plink --noweb --bfile /nfs/users/nfs_m/mc14/Work/SANGER/FVG/ANTI_TUMORAL_DRUGS/merged/chr${chr}_merged --chr ${chr} --from-bp ${start} --to-bp ${end} --filter-males --freq --out ${outpath}/males/chr${chr}_${gene}_fvgfrq
 
-#now calculate also the frequencies in FVG for females only
-plink --noweb --bfile /nfs/users/nfs_m/mc14/Work/SANGER/FVG/ANTI_TUMORAL_DRUGS/merged/chr${chr}_merged --chr ${chr} --from-bp ${start} --to-bp ${end} --filter-females --freq --out ${outpath}/females/chr${chr}_${gene}_fvgfrq
+# #now calculate also the frequencies in FVG for females only
+# plink --noweb --bfile /nfs/users/nfs_m/mc14/Work/SANGER/FVG/ANTI_TUMORAL_DRUGS/merged/chr${chr}_merged --chr ${chr} --from-bp ${start} --to-bp ${end} --filter-females --freq --out ${outpath}/females/chr${chr}_${gene}_fvgfrq
 
+#calculate md5sum
+# filename=`basename ${file}`
+# md5sum ${file} > ${outpath}/${filename}.md5sum
+
+#15/01/2014
+#Extract list of snps for Nicola
+# (head -1 ${file};fgrep -w -f ${grep_file} ${file}) > ${outpath}/${file}.nicola
+
+(zcat ${file}| head -1;zcat ${file}|fgrep -w -f ${grep_file}) > ${outpath}/${file}.nicola

@@ -204,6 +204,6 @@
 # tabix -p vcf ALL.wgs.phase1_release_v3.20101123.snps_indels_sv.sites.$1.vcf.gz
 
 #do the same for dbSNP-b138
-tabix -h /lustre/scratch113/projects/fvg_seq/variant_refinemet/annotations/dbSNP-b138/00-All.vcf.gz $1 | bgzip > $1.dbsnp_138.vcf.gz
+# tabix -h /lustre/scratch113/projects/fvg_seq/variant_refinemet/annotations/dbSNP-b138/00-All.vcf.gz $1 | bgzip > $1.dbsnp_138.vcf.gz
 
-tabix -p vcf $1.dbsnp_138.vcf.gz
+# tabix -p vcf $1.dbsnp_138.vcf.gz
