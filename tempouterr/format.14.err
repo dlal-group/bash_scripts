@@ -1,0 +1,4 @@
+  File "/nfs/users/nfs_m/mc14/Work/bash_scripts//count_functional_annotations.py", line 8
+    tags=['WITHIN_NON_CODING_GENE,'INTRONIC','DOWNSTREAM','UPSTREAM','INTERGENIC','REGULATORY_REGION','NON_SYNONYMOUS_CODING','5PRIME_UTR','SYNONYMOUS_CODING','3PRIME_UTR','NMD_TRANSCRIPT','ESSENTIAL_SPLICE_SITE','SPLICE_SITE','STOP_GAINED','STOP_LOST','WITHIN_MATURE_miRNA']
+                                          ^
+SyntaxError: invalid syntax

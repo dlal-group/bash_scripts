@@ -4,17 +4,11 @@
 #
 #Steps involved:
 #Extract genotypes from plink files
-inpath=$1
-outdir=$2
-keeplist=$3
+chr=$1
+inpath=$2
+outdir=$3
+keeplist=$4
 mkdir -p ${outdir}
 
-for chr in {1..22} X
-do
-	bsub -J "plink_run_${chr}" -o "${outdir}/%J_plink_run_${chr}.o" -M 3000 -R"select[mem>3000] rusage[mem=3000]" -q normal -- plink --noweb \
-	--bfile ${inpath}/chr${chr} \
-	--chr ${chr} \
-	--keep ${keeplist} \
-	--make-bed \
-	--out ${outdir}/FVG_seq_subset_chr${chr}
-done
+# plink --noweb --bfile /lustre/scratch113/projects/uk10k/users/jh21/imputed/fvg/fvg_370/shapeit/chr5 --chr 5 --keep ../test.keeplist --make-bed --out test_chr5_single_sample
+plink --noweb --bfile ${inpath}/chr${chr} --chr ${chr} --keep ${keeplist} --make-bed --out ${outdir}/FVG_seq_subset_chr${chr}

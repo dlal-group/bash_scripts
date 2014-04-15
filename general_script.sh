@@ -207,3 +207,15 @@
 # tabix -h /lustre/scratch113/projects/fvg_seq/variant_refinemet/annotations/dbSNP-b138/00-All.vcf.gz $1 | bgzip > $1.dbsnp_138.vcf.gz
 
 # tabix -p vcf $1.dbsnp_138.vcf.gz
+
+#calculate stats for sequences
+# vcftools --gzvcf fvg.vqsr.beagle.impute2.anno.20140109.csq.pop.vqslod.fixed.noX.vcf.gz --freq --derived --out fvg.vqsr.beagle.impute2.anno.20140109.csq.pop.vqslod.fixed.noX.vcf.pop_info
+# vcftools --gzvcf fvg.vqsr.beagle.impute2.anno.20140109.csq.pop.vqslod.fixed.noX.vcf.gz --TsTv-by-count --out fvg.vqsr.beagle.impute2.anno.20140109.csq.pop.vqslod.fixed.noX.vcf.pop_info
+# vcftools --gzvcf fvg.vqsr.beagle.impute2.anno.20140109.csq.pop.vqslod.fixed.noX.vcf.gz --het --out fvg.vqsr.beagle.impute2.anno.20140109.csq.pop.vqslod.fixed.noX.vcf.pop_info
+# vcftools --gzvcf fvg.vqsr.beagle.impute2.anno.20140109.csq.pop.vqslod.fixed.noX.vcf.gz --hardy --out fvg.vqsr.beagle.impute2.anno.20140109.csq.pop.vqslod.fixed.noX.vcf.pop_info
+# vcftools --gzvcf fvg.vqsr.beagle.impute2.anno.20140109.csq.pop.vqslod.fixed.noX.vcf.gz --singletons --out fvg.vqsr.beagle.impute2.anno.20140109.csq.pop.vqslod.fixed.noX.vcf.pop_info
+vcftools --gzvcf fvg.vqsr.beagle.impute2.anno.20140109.csq.pop.vqslod.fixed.noX.vcf.gz --relatedness --out fvg.vqsr.beagle.impute2.anno.20140109.csq.pop.vqslod.fixed.noX.vcf.pop_info
+vcftools --gzvcf fvg.vqsr.beagle.impute2.anno.20140109.csq.pop.vqslod.fixed.noX.vcf.gz --relatedness2 --out fvg.vqsr.beagle.impute2.anno.20140109.csq.pop.vqslod.fixed.noX.vcf.pop_info
+# vcftools --gzvcf fvg.vqsr.beagle.impute2.anno.20140109.csq.pop.vqslod.fixed.noX.vcf.gz --TajimaD 3000000 --out fvg.vqsr.beagle.impute2.anno.20140109.csq.pop.vqslod.fixed.noX.vcf.pop_info
+# vcftools --gzvcf esgi-vbseq.vqsr.beagle.impute2.anno.20120607.csq.SNPS.re_ann.vcf.gz --TajimaD 3000000 --out esgi-vbseq.vqsr.beagle.impute2.anno.20120607.csq.SNPS.re_ann.vcf.pop_info
+# vcftools --gzvcf fvg.vqsr.beagle.impute2.anno.20140109.csq.pop.vqslod.fixed.noX.vcf.gz --weir-fst-pop fvg.vqsr.beagle.impute2.anno.20140109.csq.pop.vqslod.fixed.noX.vcf.FST

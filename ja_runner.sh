@@ -18,9 +18,9 @@ file=`sed -n "${LSB_JOBINDEX}p" $1`
 # chr=$2
 # cohort=$1
 # trait=$1
-outpath=$2
-mkdir -p ${outpath}
-grep_file=$3
+# outpath=$2
+# mkdir -p ${outpath}
+# grep_file=$3
 # bash $script $file $3 $4 $5
 # /software/vertres/codebase/scripts/bamcheck -c 1,50,1 -d /lustre/scratch113/projects/fvg_seq/F12HPCEUHK0358_HUMpngR/BRIDGED_BAMS/${file}
 # zcat ${file} | sed 's/,rs/|rs/g' | awk -v chr=${LSB_JOBINDEX} '{ snp=(NF-5)/3; if($2 ~/^rs/) s=$2;else s="NA"; printf "chr"chr":"$3"-"s"-"$4"-"$5"," $4 "," $5; for(i=1; i<=snp; i++) printf "," $(i*3+3)*2+$(i*3+4); printf "\n" }' > chr${LSB_JOBINDEX}.bimbam
@@ -73,7 +73,8 @@ grep_file=$3
 # --bed /lustre/scratch113/projects/uk10k/users/jh21/references_panel/uk10k/plink/chr${chr}.pruned.bed \
 # --bim /lustre/scratch113/projects/uk10k/users/jh21/references_panel/uk10k/plink/chr${chr}.pruned.bim.COPY \
 # --fam /lustre/scratch113/projects/uk10k/users/jh21/references_panel/uk10k/plink/chr${chr}.pruned.fam \
-# --allow-no-sex \
+# --allow-no-sex \file1
+# file
 # --keep /nfs/users/nfs_m/mc14/Work/SANGER/UK10K/BATCHEFF/samples/3621_${cohort}_samples.keeplist \
 # --pheno /nfs/users/nfs_m/mc14/Work/SANGER/UK10K/BATCHEFF/samples/3621_${cohort}_samples_pheno.centre \
 # --logistic \
@@ -128,4 +129,122 @@ grep_file=$3
 #Extract list of snps for Nicola
 # (head -1 ${file};fgrep -w -f ${grep_file} ${file}) > ${outpath}/${file}.nicola
 
-(zcat ${file}| head -1;zcat ${file}|fgrep -w -f ${grep_file}) > ${outpath}/${file}.nicola
+# (zcat ${file}| head -1;zcat ${file}|fgrep -w -f ${grep_file}) > ${outpath}/${file}.nicola
+
+#tabix index vcf file
+# tabix -p vcf ${file}.vcf.gz
+
+# #split file in chromosomes
+# filename=`basename $2`
+# tabix -h $2 ${file} | bgzip -c > $3/${filename}.${file}.vcf.gz
+# tabix -p vcf $3/$2.${file}.vcf.gz
+
+#Check sex in ba files
+# echo "${file}"
+# samtools view ${file} Y| cut -f 1 | sort -u | wc -l
+
+#17/02/2014 subset vcf file
+#ARGS:
+# $2=vcf file path
+# $3= outpath
+# village_file=`basename ${file}`
+# village=${village_file%_*}
+
+
+# bcftools2 view -s ${file} $2 -O v | vcf-annotate --fill-ICF | bgzip -c > $3.${village}.vcf.gz
+# tabix -f -p vcf $3.${village}.vcf.gz
+
+#extract stats by village
+# bcftools2 stats -d 0,5000,1 -s - ${file} > ${file}.vcfchk;plot-vcfstats ${file}.vcfchk -p vcf_check/plots/${file}
+
+# extract table info by village
+#(echo "CHROM POS ID REF ALT AN AC TGP_AF AMR_AF ASN_AF AFR_AF EUR_AF IMP2 VQSLOD CULPRIT AF MAF MINOR";bcftools2 query ${file} -f "%CHROM\t%POS\t%ID\t%REF\t%ALT\t%INFO/AN\t%INFO/AC\t%INFO/1kg_AF\t%INFO/1kg_AMR_AF\t%INFO/1kg_ASN_AF\t%INFO/1kg_AFR_AF\t%INFO/1kg_EUR_AF\t%INFO/IMP2\t%INFO/VQSLOD\t%INFO/culprit\n" | awk '{if($5 !~ ",") print $0}' | awk '{if($6 != 0)print $0,$7/$6;else print $0,"NA"}' | awk '{if($NF != "NA") {if($NF > 0.5) print $0,1-$NF,$4;else print $0,$NF,$5}else{print $0,"NA","NA"}}') | tr "\t" " " > ${file}.csv
+# (echo "CHROM POS ID REF ALT AN AC VQSLOD CULPRIT AF MAF MINOR";bcftools2 query ${file} -f "%CHROM\t%POS\t%ID\t%REF\t%ALT\t%INFO/AN\t%INFO/AC\t%INFO/VQSLOD\t%INFO/culprit\n" | awk '{if($5 !~ ",") print $0}' | awk '{if($6 != 0)print $0,$7/$6;else print $0,"NA"}' | awk '{if($NF != "NA") {if($NF > 0.5) print $0,1-$NF,$4;else print $0,$NF,$5}else{print $0,"NA","NA"}}') | tr "\t" " " > ${file}.csv
+
+#3/3/2014
+#split SNPS and indels
+# output1=$2
+# output2=$3
+# mkdir -p ${output1}
+# mkdir -p ${output2}
+
+# base=`basename ${file}`
+# zcat ${file} | awk 'length($4) != 1 || length($5) != 1'| cut -f 2- -d " " | awk '{print $1,$0}'| tr "\t" " "| gzip -c > ${output1}/${base}
+# zcat ${file} | awk 'length($4) == 1 && length($5) == 1'| cut -f 2- -d " " | awk '{print $1,$0}'| tr "\t" " "| gzip -c > ${output2}/${base}
+
+#3/3/2014
+#merge genotype imputation files
+# output=$2
+# mkdir -p ${output}
+
+# file1=`echo ${file} | cut -f 1 -d " "`
+# file2=`echo ${file} | cut -f 2 -d " "`
+# base1=`basename ${file1}`
+# base2=`basename ${file2}`
+
+# samples1=`echo ${file1%.*}_samples`
+# samples2=`echo ${file2%.*}_samples`
+# gtool -M --g ${file1} ${file2} --s ${samples1} ${samples2} --log ${output}/${base1}_${base2}.log --og ${output}/${base1}_${base2}.gen --os ${output}/${base1}_${base2}.gen_samples
+
+#calculate relatedness from sequence file
+# vcftools --gzvcf ${file} --relatedness2 --out ${file}.pop_info
+
+#gzip files
+# gzip ${file}
+
+#compare chromosomes
+# bcftools stats /lustre/scratch113/projects/esgi-vbseq/20140319/20140320_VQSR2.5_reapply_9764/20140322_SHAPEIT/${file}.vcf.gz /lustre/scratch113/projects/fvg_seq/20140319/20140321_VQSR2.5_reapply_9654/20140323_SHAPEIT/${file}.vcf.gz > INGI_VB_FVG_comp_chr${file}.log
+
+# plot stats
+# plot-vcfstats INGI_VB_FVG_comp_chr${file}.log -p PLOTS/plot_${file}
+
+# - Comparison between INGI and UK10K
+# - FVG
+# bcftools stats /lustre/scratch113/projects/fvg_seq/20140319/20140321_VQSR2.5_reapply_9654/20140323_SHAPEIT/${file}.vcf.gz /lustre/scratch113/projects/uk10k/cohorts/REL-2012-06-02/v2/vcf_sites_filtered/chr${file}.sites.vcf.gz > INGI_FVG_UK10K_comp_chr${file}.log
+# plot-vcfstats INGI_FVG_UK10K_comp_chr${file}.log -p PLOTS/plot_${file}
+	 
+# - VBI
+# bcftools stats /lustre/scratch113/projects/esgi-vbseq/20140319/20140320_VQSR2.5_reapply_9764/20140322_SHAPEIT/${file}.vcf.gz /lustre/scratch113/projects/uk10k/cohorts/REL-2012-06-02/v2/vcf_sites_filtered/chr${file}.sites.vcf.gz > INGI_VB_UK10K_comp_chr${file}.log
+# plot-vcfstats INGI_VB_UK10K_comp_chr${file}.log -p PLOTS/plot_${file}
+
+# - Comparison between INGI and TGP
+# - FVG
+# bcftools stats /lustre/scratch113/projects/fvg_seq/20140319/20140321_VQSR2.5_reapply_9654/20140323_SHAPEIT/${file}.vcf.gz /lustre/scratch111/resources/variation/Homo_sapiens/grch37/1K_phase1_release_v3.20101123/ALL.chr${file}.phase1_release_v3.20101123.snps_indels_svs.genotypes.vcf.gz > /lustre/scratch113/teams/soranzo/users/mc14/INGI/SEQ_COMPARISON_TGP/FVG/INGI_FVG_TGP_comp_chr${file}.log
+# plot-vcfstats /lustre/scratch113/teams/soranzo/users/mc14/INGI/SEQ_COMPARISON_TGP/FVG/INGI_FVG_TGP_comp_chr${file}.log -p /lustre/scratch113/teams/soranzo/users/mc14/INGI/SEQ_COMPARISON_TGP/FVG/PLOTS/plot_${file}
+ 
+# # - VBI
+# bcftools stats /lustre/scratch113/projects/esgi-vbseq/20140319/20140320_VQSR2.5_reapply_9764/20140322_SHAPEIT/${file}.vcf.gz /lustre/scratch111/resources/variation/Homo_sapiens/grch37/1K_phase1_release_v3.20101123/ALL.chr${file}.phase1_release_v3.20101123.snps_indels_svs.genotypes.vcf.gz > /lustre/scratch113/teams/soranzo/users/mc14/INGI/SEQ_COMPARISON_TGP/VBI/INGI_VB_TGP_comp_chr${file}.log
+# plot-vcfstats /lustre/scratch113/teams/soranzo/users/mc14/INGI/SEQ_COMPARISON_TGP/VBI/INGI_VB_TGP_comp_chr${file}.log -p /lustre/scratch113/teams/soranzo/users/mc14/INGI/SEQ_COMPARISON_TGP/VBI/PLOTS/plot_${file}
+
+# # - INGI vs ALL
+# vcf-compare /lustre/scratch113/projects/esgi-vbseq/20140319/20140320_VQSR2.5_reapply_9764/20140322_SHAPEIT/${file}.vcf.gz /lustre/scratch113/projects/fvg_seq/20140319/20140321_VQSR2.5_reapply_9654/20140323_SHAPEIT/${file}.vcf.gz /lustre/scratch111/resources/variation/Homo_sapiens/grch37/1K_phase1_release_v3.20101123/ALL.chr${file}.phase1_release_v3.20101123.snps_indels_svs.genotypes.vcf.gz /lustre/scratch113/projects/uk10k/cohorts/REL-2012-06-02/v2/vcf_sites_filtered/chr${file}.sites.vcf.gz > /lustre/scratch113/teams/soranzo/users/mc14/INGI/SEQ_COMPARISON_ALL/INGI_vs_all_comp_chr${file}.log
+# plot-vcfstats /lustre/scratch113/teams/soranzo/users/mc14/INGI/SEQ_COMPARISON_ALL/INGI_vs_all_comp_chr${file}.log -p /lustre/scratch113/teams/soranzo/users/mc14/INGI/SEQ_COMPARISON_ALL/PLOTS/plot_${file}
+
+#extract unrelated samples in the same way as we did for village split
+# $2=vcf file path
+# $3=outpath
+# village_file=`basename ${file}`
+# village=${village_file%_*}
+
+
+# bcftools2 view -s ${file} $2 -O v | vcf-annotate --fill-ICF | bgzip -c > $2.${village}.vcf.gz
+# tabix -f -p vcf $2.${village}.vcf.gz
+
+# # extract stats by village
+# bcftools2 stats -d 0,5000,1 -s - $2.${village}.vcf.gz > $2.${village}.vcfchk;plot-vcfstats $2.${village}.vcfchk -p vcf_check/unrelated/plots/${village}
+
+# # extract table info by village
+# #removed multiallelic sites and formatted the output to avoid missing problem when checking frequencies
+# (echo "CHROM POS ID REF ALT AC AN TGP_AF TGP_AMR_AF TGP_ASN_AF TGP_AFR_AF TGP_EUR_AF IMP2 VQSLOD AF MAF MINOR";bcftools2 query $2.${village}.vcf.gz -f '%CHROM\t%POS\t%ID\t%REF\t%ALT\t%INFO/AC\t%INFO/AN\t%INFO/1kg_AF\t%INFO/1kg_AMR_AF\t%INFO/1kg_ASN_AF\t%INFO/1kg_AFR_AF\t%INFO/1kg_EUR_AF\t%INFO/IMP2\t%INFO/VQSLOD\n'| fgrep -v CHROM | awk '{if($5 !~ ",") print $0}' | awk '{if($7 != 0)print $0,$6/$7;else print $0,"NA"}' | awk '{if($NF != "NA") {if ($NF <= 0.5) print $0,$NF,$5;else print $0,(1-$NF),$4}else{print $0,"NA","NA"}}')| tr "\t" " " > $2.${village}.vcf.gz.maf_table.tab
+
+#extract stats after annotation
+# bcftools stats -i ${file}.vcf.gz > ${file}.novel.vchk
+
+#extract info using samtools on coverage
+# filename=`basename ${file}`
+# samtools mpileup -D ${file} | awk '{x+=$4;next}END{print x/NR}' > ${filename}.mean_coverage
+
+
+#extract stats from TGP files
+filename=`basename ${file}`
+bcftools stats ${file} > ${filename}.novel.vchk

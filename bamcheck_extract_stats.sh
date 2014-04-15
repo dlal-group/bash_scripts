@@ -2,13 +2,21 @@
 
 #extract info per sample from bamcheck results
 #Args
-#$1 = stats files path
+#$1 = files path
+#$2 = out dir
 
-# files=(`ls $1/*.bamchek.stats`)
-# index=$[LSB_JOBINDEX]
 
 # Summary Numbers. Use `grep ^SN | cut -f 2-` to extract this part.
 out_name=`basename $1`
+out_dir=$2
+
+mkdir -p $out_dir/BAMCHECK_STATS/
+mkdir -p $out_dir/BAMCHECK_STATS/PLOTS/QC_GRIND/
+
+echo "Processing $out_name"
+#create bam stats if they're not present already
+# /software/vertres/codebase/scripts/bamcheck -c 1,50,1 -d $1 > $out_dir/BAMCHECK_STATS/$out_name.bamchek.stats
+/software/vertres/codebase/scripts/bamcheck $1 > $out_dir/BAMCHECK_STATS/$out_name.bamchek.stats
 
 #grep ^SN ${files[$index]} | cut -f 2- > $1/$out_name.summary
 
@@ -29,4 +37,6 @@ out_name=`basename $1`
 
 #plot-bamcheck -r /lustre/scratch111/resources/ref/Homo_sapiens/1000Genomes/human_g1k_v37.fasta.gc_stats -p $1/PLOTS/QC_GRIND/${out_name%%.*}/ $1/${out_name}
 #WE NEED TO USE THE NEW ALIGNEMNT REFERENCE
-plot-bamcheck -r /lustre/scratch111/resources/ref/Homo_sapiens/1000Genomes_hs37d5/hs37d5.fa.gc_stats -p $2/PLOTS/QC_GRIND/${out_name%%.*}/ $1
+echo "Plotting $out_dir/BAMCHECK_STATS/$out_name.bamchek.stats"
+# plot-bamcheck -r /lustre/scratch111/resources/ref/Homo_sapiens/1000Genomes_hs37d5/hs37d5.fa.gc_stats -p $out_dir/BAMCHECK_STATS/PLOTS/QC_GRIND/${out_name%%.*}/ $out_dir/BAMCHECK_STATS/$out_name.bamchek.stats
+plot-bamcheck -p $out_dir/BAMCHECK_STATS/PLOTS/QC_GRIND/${out_name%%.*} $out_dir/BAMCHECK_STATS/$out_name.bamchek.stats

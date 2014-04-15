@@ -1,0 +1,18 @@
+#!/usr/local/bin/bash
+
+#script to check what in novel vbi sites is also in uk10k set
+#what we need:
+#$1=input_1_path
+#$2=input_2_path
+#$3=chr number
+#$4=output_path
+
+if [ $# -eq 3 ]
+then
+	#EXTRACT NOT OVERLAPPING LIST
+	cat <(zcat $2/UK10K.chr$3.snps.vcf.gz | grep ^# ) <(fgrep -v -f <(cut -f 1,2 $1/esgi-vbseq.vqsr.beagle.impute2.anno.20120607.csq.SNPS.chr$3.re_ann.NOT_OVERLAP.NO_RSID.map ) <(tabix $2/UK10K.chr$3.snps.vcf.gz chr $3)) | bgzip -c > $4/UK10K.chr$3.snps.not_overlapp.vcf.gz
+else
+	#EXTRACT OVERLAPPING LIST
+	cat <(zcat $2/UK10K.chr$3.snps.vcf.gz | grep ^# ) <(fgrep -f <(cut -f 1,2 $1/esgi-vbseq.vqsr.beagle.impute2.anno.20120607.csq.SNPS.chr$3.re_ann.NOT_OVERLAP.NO_RSID.map ) <(tabix $2/UK10K.chr$3.snps.vcf.gz chr $3)) | bgzip -c > $4/UK10K.chr$3.snps.not_overlapp.vcf.gz
+
+fi

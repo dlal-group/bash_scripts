@@ -1,0 +1,155 @@
+7
+
+------------------------------------------------------------
+Sender: LSF System <lsfadmin@bc-22-2-06>
+Subject: Job 95667: </software/bin/python-2.7 /nfs/users/nfs_m/mc14/Work/bash_scripts//count_functional_annotations.py  7  > Done
+
+Job </software/bin/python-2.7 /nfs/users/nfs_m/mc14/Work/bash_scripts//count_functional_annotations.py  7  > was submitted from host <farm2-head4> by user <mc14> in cluster <farm2>.
+Job was executed on host(s) <bc-22-2-06>, in queue <normal>, as user <mc14> in cluster <farm2>.
+</nfs/users/nfs_m/mc14> was used as the home directory.
+</nfs/users/nfs_m/mc14/lustre110_home/GENOTIPI/COMPARISON/NOT_OVERLAPPING/NOT_OVERLAPPING_LIST/with_genotypes/NO_RSID_VCF/CHR_SPLITTED> was used as the working directory.
+Started at Thu Sep 27 15:02:25 2012
+Results reported at Thu Sep 27 15:02:48 2012
+
+Your job looked like:
+
+------------------------------------------------------------
+# LSBATCH: User input
+/software/bin/python-2.7 /nfs/users/nfs_m/mc14/Work/bash_scripts//count_functional_annotations.py  7  
+------------------------------------------------------------
+
+Successfully completed.
+
+Resource usage summary:
+
+    CPU time   :     22.06 sec.
+    Max Memory :         5 MB
+    Max Swap   :        43 MB
+
+    Max Processes  :         1
+    Max Threads    :         1
+
+The output (if any) is above this job summary.
+
+
+
+PS:
+
+Read file </nfs/users/nfs_m/mc14/Work/bash_scripts/tempouterr/format.7.err> for stderr output of this job.
+
+7
+
+------------------------------------------------------------
+Sender: LSF System <lsfadmin@bc-13-2-08>
+Subject: Job 2474126: </software/bin/python-2.7 /nfs/users/nfs_m/mc14/Work/bash_scripts//count_functional_annotations.py  7  > Done
+
+Job </software/bin/python-2.7 /nfs/users/nfs_m/mc14/Work/bash_scripts//count_functional_annotations.py  7  > was submitted from host <farm2-head2> by user <mc14> in cluster <farm2>.
+Job was executed on host(s) <bc-13-2-08>, in queue <normal>, as user <mc14> in cluster <farm2>.
+</nfs/users/nfs_m/mc14> was used as the home directory.
+</nfs/users/nfs_m/mc14/lustre110_home/GENOTIPI/COMPARISON/NOT_OVERLAPPING/PUTATIVE_NOVEL/NEW_RUN/former_rsID_filtered/UK10K_FILTERED> was used as the working directory.
+Started at Sat Oct 27 12:30:10 2012
+Results reported at Sat Oct 27 12:30:28 2012
+
+Your job looked like:
+
+------------------------------------------------------------
+# LSBATCH: User input
+/software/bin/python-2.7 /nfs/users/nfs_m/mc14/Work/bash_scripts//count_functional_annotations.py  7  
+------------------------------------------------------------
+
+Successfully completed.
+
+Resource usage summary:
+
+    CPU time   :     17.99 sec.
+    Max Memory :         2 MB
+    Max Swap   :        45 MB
+
+    Max Processes  :         1
+    Max Threads    :         1
+
+The output (if any) is above this job summary.
+
+
+
+PS:
+
+Read file </nfs/users/nfs_m/mc14/Work/bash_scripts/tempouterr/format.7.err> for stderr output of this job.
+
+
+------------------------------------------------------------
+Sender: LSF System <lsfadmin@bc-16-2-11>
+Subject: Job 4865884: </software/bin/python-2.7 /nfs/users/nfs_m/mc14/Work/bash_scripts//count_functional_annotations.py  7  > Exited
+
+Job </software/bin/python-2.7 /nfs/users/nfs_m/mc14/Work/bash_scripts//count_functional_annotations.py  7  > was submitted from host <farm2-head4> by user <mc14> in cluster <farm2>.
+Job was executed on host(s) <bc-16-2-11>, in queue <normal>, as user <mc14> in cluster <farm2>.
+</nfs/users/nfs_m/mc14> was used as the home directory.
+</nfs/users/nfs_m/mc14/lustre110_home/GENOTIPI/COMPARISON/NOT_OVERLAPPING/PUTATIVE_NOVEL/NEW_RUN/former_rsID_filtered/UK10K_FILTERED/gte2_indivs> was used as the working directory.
+Started at Mon Nov  5 10:13:41 2012
+Results reported at Mon Nov  5 10:13:42 2012
+
+Your job looked like:
+
+------------------------------------------------------------
+# LSBATCH: User input
+/software/bin/python-2.7 /nfs/users/nfs_m/mc14/Work/bash_scripts//count_functional_annotations.py  7  
+------------------------------------------------------------
+
+Exited with exit code 1.
+
+Resource usage summary:
+
+    CPU time   :      0.07 sec.
+    Max Memory :         2 MB
+    Max Swap   :        46 MB
+
+    Max Processes  :         1
+    Max Threads    :         1
+
+The output (if any) is above this job summary.
+
+
+
+PS:
+
+Read file </nfs/users/nfs_m/mc14/Work/bash_scripts/tempouterr/format.7.err> for stderr output of this job.
+
+7
+
+------------------------------------------------------------
+Sender: LSF System <lsfadmin@bc-17-4-14>
+Subject: Job 4867986: </software/bin/python-2.7 /nfs/users/nfs_m/mc14/Work/bash_scripts//count_functional_annotations.py  7  > Done
+
+Job </software/bin/python-2.7 /nfs/users/nfs_m/mc14/Work/bash_scripts//count_functional_annotations.py  7  > was submitted from host <farm2-head4> by user <mc14> in cluster <farm2>.
+Job was executed on host(s) <bc-17-4-14>, in queue <normal>, as user <mc14> in cluster <farm2>.
+</nfs/users/nfs_m/mc14> was used as the home directory.
+</nfs/users/nfs_m/mc14/lustre110_home/GENOTIPI/COMPARISON/NOT_OVERLAPPING/PUTATIVE_NOVEL/NEW_RUN/former_rsID_filtered/UK10K_FILTERED/gte2_indivs> was used as the working directory.
+Started at Mon Nov  5 11:00:36 2012
+Results reported at Mon Nov  5 11:00:39 2012
+
+Your job looked like:
+
+------------------------------------------------------------
+# LSBATCH: User input
+/software/bin/python-2.7 /nfs/users/nfs_m/mc14/Work/bash_scripts//count_functional_annotations.py  7  
+------------------------------------------------------------
+
+Successfully completed.
+
+Resource usage summary:
+
+    CPU time   :      2.92 sec.
+    Max Memory :         2 MB
+    Max Swap   :        45 MB
+
+    Max Processes  :         1
+    Max Threads    :         1
+
+The output (if any) is above this job summary.
+
+
+
+PS:
+
+Read file </nfs/users/nfs_m/mc14/Work/bash_scripts/tempouterr/format.7.err> for stderr output of this job.
+

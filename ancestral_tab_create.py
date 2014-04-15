@@ -57,7 +57,7 @@ for ancline in ancestral:
 	x = ancline.split()
 	#we need to format all those lines with a double ancestor in a way like rsID anc_rs1,anc_rs2 anc_all1,anc_all2
 
-	if len(table)%3000000 == 0:
+	if len(table)%30000 == 0:
 		usage=resource.getrusage(resource.RUSAGE_SELF)
 		print "mem=%s mb" %((usage[2]*resource.getpagesize())/(1024**2) )
 		print "table=%s mb (length %s)" %(sys.getsizeof(table)/(1024**2),len(table))
@@ -68,32 +68,39 @@ for ancline in ancestral:
 		table[x[0]] = ["rs"+x[1],allels[x[1]]]
 	
 # if i%5000000 == 0:
+dbsnp = {}
+for snpline in dbsnp_table:
+	snp = snpline.split()
+	dbsnp[snp[2]] = [snp[0],snp[1],snp[3],snp[4]]
+	if len(dbsnp)%3000000 == 0:
+		usage=resource.getrusage(resource.RUSAGE_SELF)
+		print "mem=%s mb" %((usage[2]*resource.getpagesize())/(1024**2) )
+		print "dbsnp=%s mb (length %s)" %(sys.getsizeof(dbsnp)/(1024**2),len(dbsnp))
+
 out=open('%s/Ancestral_ann_table.txt' %(outpath), 'w')
 sys.stdout=out
 
 # print "CHROM POS ID REF ALT anc_rsID ANC_ALL"
 # for k in sorted(table.iterkeys(),key=int):
 # 	#this will have the form: rsID => CHROM,POS,REF,ALT
-# 	dbsnp = {}
-# 	for snpline in dbsnp_table:
-# 		snp = snpline.split()
+
 # 		# if 'rs'+k in dbsnp:
 # 		if 'rs'+k == snp[2]:
-# 			# dbsnp[snp[2]] = [snp[0],snp[1],snp[3],snp[4]]
 # 			# print "%s %s rs%s %s %s %s %s"  %(dbsnp['rs'+k][0],dbsnp['rs'+k][1],k,dbsnp['rs'+k][2],dbsnp['rs'+k][3],table[k][0],table[k][1])
 # 			print "%s %s rs%s %s %s %s %s"  %(snp[0],snp[1],k,snp[3],snp[4],table[k][0],table[k][1])
 
 print "CHROM POS ID REF ALT anc_rsID ANC_ALL"
 for k in sorted(table.iterkeys(),key=int):
 	#this will have the form: rsID => CHROM,POS,REF,ALT
-	# dbsnp = {}
-	for snpline in dbsnp_table:
-		snp = snpline.split()
-		# if 'rs'+k in dbsnp:
-		if 'rs'+k == snp[2]:
+	# for snpline in dbsnp_table:
+	# 	snp = snpline.split()
+	if 'rs'+k in dbsnp:
+		# if 'rs'+k == snp[2]:
 			# dbsnp[snp[2]] = [snp[0],snp[1],snp[3],snp[4]]
-			# print "%s %s rs%s %s %s %s %s"  %(dbsnp['rs'+k][0],dbsnp['rs'+k][1],k,dbsnp['rs'+k][2],dbsnp['rs'+k][3],table[k][0],table[k][1])
-			print "%s %s rs%s %s %s %s %s"  %(snp[0],snp[1],k,snp[3],snp[4],table[k][0],table[k][1])
+		print "%s %s rs%s %s %s %s %s"  %(dbsnp['rs'+k][0],dbsnp['rs'+k][1],k,dbsnp['rs'+k][2],dbsnp['rs'+k][3],table[k][0],table[k][1])
+			# print "%s %s rs%s %s %s %s %s"  %(snp[0],snp[1],k,snp[3],snp[4],table[k][0],table[k][1])
+			# dbsnp_table.seek(0)
+			# break
 
 			
 

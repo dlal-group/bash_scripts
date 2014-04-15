@@ -8,7 +8,11 @@ import pdb
 def g_concordance(table):
 	overall_conc_den=sum([table['SRR_ORR'],table['SRR_ORA'],table['SRR_OAA'],table['SRA_ORR'],table['SRA_ORA'],table['SRA_OAA'],table['SAA_ORR'],table['SAA_ORA'],table['SAA_OAA']])
 	overall_conc_num= sum([table['SRR_ORR'],table['SRA_ORA'],table['SAA_OAA']])
-	overall_concordance=float(overall_conc_num)/float(overall_conc_den)
+	if overall_conc_den!= 0:
+		overall_concordance=float(overall_conc_num)/float(overall_conc_den)
+	else:
+		overall_concordance='NA'
+		
 	return overall_concordance
 
 def nr_discordance(table):

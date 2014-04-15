@@ -21,7 +21,8 @@ then
 	echo "Shell Mode"
 	echo -e "Processing file $1"
 	#check pval calculating lambda and qqplot
-	(echo "chr	rs	pos	beta	se	p_wald	chi2";cut -f -3,5,6,9 $1 | tail -n+2 | awk '{OFS=" "}{print $0,(($4/$5)*($4/$5))}' ) | tr " " "\t" | gzip -c > $1_chi2.gz
+	# (echo "chr	rs	pos	beta	se	p_wald	chi2";cut -f -3,5,6,9 $1 | tail -n+2 | awk '{OFS=" "}{print $0,(($4/$5)*($4/$5))}' ) | tr " " "\t" | gzip -c > $1_chi2.gz
+	(echo "chr	rs	pos	beta	se	p_wald	chi2";zcat $1 | cut -f -3,5,6,9 | tail -n+2 | awk '{OFS=" "}{print $0,(($4/$5)*($4/$5))}' ) | tr " " "\t" | gzip -c > $1_chi2.gz
 
 	# lets try to calculate the same formula with awk : lambda=median(chi2,na.rm=T)/qchisq(0.5,1)
 	# qchisq(0.5,1) = 0.4549364 

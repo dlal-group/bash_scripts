@@ -22,10 +22,10 @@ outname_f2=`basename $2`.s2
 
 #recode files in ped format
 bsub -J "recode_f1" -o "%J_recode_f1.log" -M3000 -R"select[mem>3000] rusage[mem=3000]" \
--q normal "plink --noweb --tfile $1 --recode --allow-no-sex --out ${outname_f1}"
+-q normal "plink --noweb --bfile $1 --recode --allow-no-sex --out ${outname_f1}"
 
 bsub -J "recode_f2" -o "%J_recode_f2.log" -M3000 -R"select[mem>3000] rusage[mem=3000]" \
--q normal "plink --noweb --tfile $2 --recode --allow-no-sex --out ${outname_f2}"
+-q normal "plink --noweb --bfile $2 --recode --allow-no-sex --out ${outname_f2}"
 
 #create the freq file for first dataset:this is useful to set the reference only if the first dataset came from gwas data
 bsub -J "create_freq_table_d1" -o "%J_create_freq_table_d1.log" -w "ended(recode_f1)" -M3000 -R"select[mem>3000] rusage[mem=3000]" \
@@ -56,8 +56,8 @@ then
 -q normal R CMD BATCH "--args ${outname_f1}.frq ${outname_f1}.map" /nfs/users/nfs_m/mc14/Work/r_scripts/gt_discordance.r
 fi
 
-# for chr in {1..22}
-for chr in 22
+# for chr in 22
+for chr in {1..22}
 do
 	if [ $# -eq 4 ]
 		#if we provide the 4th argument we are going to use our own REF table:this apply for data as WES or WGS

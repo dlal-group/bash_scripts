@@ -10,15 +10,21 @@ then
 fi
 
 sample_file_path=$1
-outdir=$2
-file_count=0
+# sampledir=`dirname $sample_file_path`
+samplename=`echo ${sample_file_path##*/}`
+outdir=$2/${samplename}
+# file_count=0
 
 mkdir -p $outdir
 
-for file in `ls $sample_file_path/*.fastq.gz`
-do
-	filecount=$[filecount+1]
-	echo $filecount
-	echo ${sample_file_path#*Sample_}
-	qsub -N $filecount_${sample_file_path#*Sample_} -e $outdir/$filecount_fastqc.err -o $outdir/$filecount_fastqc.log -q workq -- /lustre1/tools/bin/fastqc $file --outdir=$outdir
-done
+# /nfs/team151/software/bin/fastqc $sample_file_path --casava --outdir=$outdir
+/nfs/team151/software/bin/fastqc --casava -t 4 $sample_file_path/*.fastq.gz --outdir=$outdir
+
+# for file in `ls $sample_file_path/*.fastq.gz`
+# do
+# 	filecount=$[filecount+1]
+# 	echo $filecount
+# 	echo ${sample_file_path#*Sample_}
+# 	# qsub -N $filecount_${sample_file_path#*Sample_} -e $outdir/$filecount_fastqc.err -o $outdir/$filecount_fastqc.log -q workq -- /lustre1/tools/bin/fastqc $file --outdir=$outdir
+# 	bsub -J"$filecount_${sample_file_path#*Sample_}" -o"$outdir/$filecount_fastqc.o" -M4000 -R"select[mem>=4000] rusage[mem=4000]" -q normal -- /nfs/team151/software/bin/fastqc $file --outdir=$outdir
+# done
