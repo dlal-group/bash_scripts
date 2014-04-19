@@ -251,4 +251,4 @@ file=`sed -n "${LSB_JOBINDEX}p" $1`
 
 #extract table info by village
 #removed multiallelic sites and formatted the output to avoid missing problem when checking frequencies
-(echo "CHROM POS ID REF ALT AC AN IMP2 VQSLOD AF MAF MINOR";bcftools2 query ${file}.vcf.gz -f '%CHROM\t%POS\t%ID\t%REF\t%ALT\t%INFO/AC\t%INFO/AN\t%INFO/IMP2\t%INFO/VQSLOD\n'| fgrep -v CHROM | awk '{if($5 !~ ",") print $0}' | awk '{if($7 != 0)print $0,$6/$7;else print $0,"NA"}' | awk '{if($NF != "NA") {if ($NF <= 0.5) print $0,$NF,$5;else print $0,(1-$NF),$4}else{print $0,"NA","NA"}}')| tr "\t" " " > ${file}.maf_table.tab
+(echo "CHROM POS ID REF ALT AC AN IMP2 VQSLOD AF MAF MINOR";bcftools2 query ${file}.vcf.gz -f '%CHROM\t%POS\t%ID\t%REF\t%ALT\t%INFO/AC\t%INFO/AN\t%INFO/IMP2\t%INFO/VQSLOD\n'| fgrep -v CHROM | awk '{if($5 !~ ",") print $0}' | awk '{if($7 != 0)print $0,$6/$7;else print $0,"NA"}' | awk '{if($NF != "NA") {if ($NF <= 0.5) print $0,$NF,$5;else print $0,(1-$NF),$4}else{print $0,"NA","NA"}}')| tr "\t" " " > MAF/${file}.maf_table.tab
