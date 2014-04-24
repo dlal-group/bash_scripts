@@ -7,7 +7,6 @@
 
 #Extract IBD information for each population. Here we are using plink2 (1.9)
 pops="FVG VBI TSI CEU"
-pops="VBI TSI CEU"
 for pop in $pops
 do
 
