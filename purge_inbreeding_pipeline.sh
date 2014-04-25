@@ -54,8 +54,12 @@ case $MODE in
           pop_path=/lustre/scratch113/projects/fvg_seq/20140410/TGP/CEU
             ;;
       esac
-        bsub -J"inb_${pop}" -o"%J_inb_${pop}.o" -q yesterday -M8000 -n2 -R"span[hosts=1] select[mem>=8000] rusage[mem=8000]" -- plink2 --vcf ${pop_path}/22.vcf.gz --double-id --biallelic-only --het --parallel 1 2 --out ind_${pop}
-        bsub -J"ibc_${pop}" -o"%J_ibc_${pop}.o" -q yesterday -M8000 -n2 -R"span[hosts=1] select[mem>=8000] rusage[mem=8000]" -- plink2 --vcf ${pop_path}/22.vcf.gz --double-id --biallelic-only --ibc --parallel 1 2 --out ibc_${pop}
+        #calculate frequencies, before:
+        bsub -J"freq_${pop}" -o"%J_freq_${pop}.o" -q yesterday -M8000 -n2 -R"span[hosts=1] select[mem>=8000] rusage[mem=8000]" -- plink2 --vcf ${pop_path}/22.vcf.gz --double-id --biallelic-only --freqx --nonfounders --parallel 1 2 --out freq_${pop}
+        
+        #use freq data
+        bsub -J"inb_${pop}" -o"%J_inb_${pop}.o" -q yesterday -M8000 -n2 -R"span[hosts=1] select[mem>=8000] rusage[mem=8000]" -- plink2 --vcf ${pop_path}/22.vcf.gz --double-id --biallelic-only --het --parallel 1 2 --read-freq freq_${pop}.frqx --out inb_${pop}
+        bsub -J"ibc_${pop}" -o"%J_ibc_${pop}.o" -q yesterday -M8000 -n2 -R"span[hosts=1] select[mem>=8000] rusage[mem=8000]" -- plink2 --vcf ${pop_path}/22.vcf.gz --double-id --biallelic-only --ibc --parallel 1 2 --read-freq freq_${pop}.frqx --out ibc_${pop}
       done
     ;;
   esac
