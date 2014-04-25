@@ -44,24 +44,24 @@ case $MODE in
 
       case $pop in
         FVG )
-          pop_path=/lustre/scratch113/projects/fvg_seq/20140410/INGI/FVG
+          pop_path=/lustre/scratch113/projects/fvg_seq/20140410/INGI/FVG/PLINK
           ;;
         VBI )
-          pop_path=/lustre/scratch113/projects/fvg_seq/20140410/INGI/VBI
+          pop_path=/lustre/scratch113/projects/fvg_seq/20140410/INGI/VBI/PLINK
             ;;
         TSI )
-          pop_path=/lustre/scratch113/projects/fvg_seq/20140410/TGP/TSI
+          pop_path=/lustre/scratch113/projects/fvg_seq/20140410/TGP/TSI/PLINK
             ;;
         CEU )
-          pop_path=/lustre/scratch113/projects/fvg_seq/20140410/TGP/CEU
+          pop_path=/lustre/scratch113/projects/fvg_seq/20140410/TGP/CEU/PLINK
             ;;
       esac
         #calculate frequencies, before:
-        bsub -J"freq_${pop}" -o"%J_freq_${pop}.o" -q yesterday -M8000 -n2 -R"span[hosts=1] select[mem>=8000] rusage[mem=8000]" -- plink2 --vcf ${pop_path}/22.vcf.gz --double-id --biallelic-only --freqx --nonfounders --parallel 1 2 --out freq_${pop}
+        bsub -J"freq_${pop}" -o"%J_freq_${pop}.o" -q yesterday -M8000 -n2 -R"span[hosts=1] select[mem>=8000] rusage[mem=8000]" -- plink2 --bfile ${pop_path}/22.${pop,,} --freq --nonfounders --out freq_${pop}
         
         #use freq data
-        bsub -J"inb_${pop}" -o"%J_inb_${pop}.o" -w "ended(freq_${pop})" -q yesterday -M8000 -n2 -R"span[hosts=1] select[mem>=8000] rusage[mem=8000]" -- plink2 --vcf ${pop_path}/22.vcf.gz --double-id --biallelic-only --het --parallel 1 2 --read-freq freq_${pop}.frqx --out inb_${pop}
-        bsub -J"ibc_${pop}" -o"%J_ibc_${pop}.o" -w "ended(freq_${pop})" -q yesterday -M8000 -n2 -R"span[hosts=1] select[mem>=8000] rusage[mem=8000]" -- plink2 --vcf ${pop_path}/22.vcf.gz --double-id --biallelic-only --ibc --parallel 1 2 --read-freq freq_${pop}.frqx --out ibc_${pop}
+        bsub -J"inb_${pop}" -o"%J_inb_${pop}.o" -w "ended(freq_${pop})" -q yesterday -M8000 -n2 -R"span[hosts=1] select[mem>=8000] rusage[mem=8000]" -- plink2 --bfile ${pop_path}/22.${pop,,} --het --read-freq freq_${pop}.frq --out inb_${pop}
+        bsub -J"ibc_${pop}" -o"%J_ibc_${pop}.o" -w "ended(freq_${pop})" -q yesterday -M8000 -n2 -R"span[hosts=1] select[mem>=8000] rusage[mem=8000]" -- plink2 --bfile ${pop_path}/22.${pop,,} --ibc --read-freq freq_${pop}.frq --out ibc_${pop}
       done
     ;;
   esac
