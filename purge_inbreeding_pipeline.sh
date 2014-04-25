@@ -14,6 +14,7 @@ MODE=$1
 case $MODE in
   IBD )
     #Extract IBD information for each population. Here we are using plink2 (1.9)
+    echo "Calculate IBD...."
     for pop in $pops
     do
 
@@ -37,6 +38,7 @@ case $MODE in
   HET )
     #Extract Inbreeding coeff information for each population. Here we are using plink2 (1.9)
     #we'll use the --het option as long as the --ibc option
+    echo "Calculate Inbreeding...."
     for pop in $pops
     do
 
@@ -58,8 +60,8 @@ case $MODE in
         bsub -J"freq_${pop}" -o"%J_freq_${pop}.o" -q yesterday -M8000 -n2 -R"span[hosts=1] select[mem>=8000] rusage[mem=8000]" -- plink2 --vcf ${pop_path}/22.vcf.gz --double-id --biallelic-only --freqx --nonfounders --parallel 1 2 --out freq_${pop}
         
         #use freq data
-        bsub -J"inb_${pop}" -o"%J_inb_${pop}.o" -q yesterday -M8000 -n2 -R"span[hosts=1] select[mem>=8000] rusage[mem=8000]" -- plink2 --vcf ${pop_path}/22.vcf.gz --double-id --biallelic-only --het --parallel 1 2 --read-freq freq_${pop}.frqx --out inb_${pop}
-        bsub -J"ibc_${pop}" -o"%J_ibc_${pop}.o" -q yesterday -M8000 -n2 -R"span[hosts=1] select[mem>=8000] rusage[mem=8000]" -- plink2 --vcf ${pop_path}/22.vcf.gz --double-id --biallelic-only --ibc --parallel 1 2 --read-freq freq_${pop}.frqx --out ibc_${pop}
+        bsub -J"inb_${pop}" -o"%J_inb_${pop}.o" -w "ended(freq_${pop})" -q yesterday -M8000 -n2 -R"span[hosts=1] select[mem>=8000] rusage[mem=8000]" -- plink2 --vcf ${pop_path}/22.vcf.gz --double-id --biallelic-only --het --parallel 1 2 --read-freq freq_${pop}.frqx --out inb_${pop}
+        bsub -J"ibc_${pop}" -o"%J_ibc_${pop}.o" -w "ended(freq_${pop})" -q yesterday -M8000 -n2 -R"span[hosts=1] select[mem>=8000] rusage[mem=8000]" -- plink2 --vcf ${pop_path}/22.vcf.gz --double-id --biallelic-only --ibc --parallel 1 2 --read-freq freq_${pop}.frqx --out ibc_${pop}
       done
     ;;
   esac
