@@ -71,16 +71,16 @@ case $MODE in
 
       case $pop in
         FVG )
-          pop_path=/lustre/scratch113/projects/fvg_seq/20140410/INGI/FVG/PLINK
+          pop_path=/lustre/scratch113/projects/fvg_seq/20140410/INGI/FVG
           ;;
         VBI )
-          pop_path=/lustre/scratch113/projects/fvg_seq/20140410/INGI/VBI/PLINK
+          pop_path=/lustre/scratch113/projects/fvg_seq/20140410/INGI/VBI
             ;;
         TSI )
-          pop_path=/lustre/scratch113/projects/fvg_seq/20140410/TGP/TSI/PLINK
+          pop_path=/lustre/scratch113/projects/fvg_seq/20140410/TGP/TSI
             ;;
         CEU )
-          pop_path=/lustre/scratch113/projects/fvg_seq/20140410/TGP/CEU/PLINK
+          pop_path=/lustre/scratch113/projects/fvg_seq/20140410/TGP/CEU
             ;;
       esac
         #use freq data
