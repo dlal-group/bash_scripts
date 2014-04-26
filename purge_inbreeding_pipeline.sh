@@ -64,5 +64,30 @@ case $MODE in
         bsub -J"ibc_${pop}" -o"%J_ibc_${pop}.o" -w "ended(freq_${pop})" -q yesterday -M8000 -n2 -R"span[hosts=1] select[mem>=8000] rusage[mem=8000]" -- plink2 --bfile ${pop_path}/22.${pop,,} --ibc --out ibc_${pop}
       done
     ;;
+    ROH )
+    echo "Calculate ROH...."
+    for pop in $pops
+    do
+
+      case $pop in
+        FVG )
+          pop_path=/lustre/scratch113/projects/fvg_seq/20140410/INGI/FVG/PLINK
+          ;;
+        VBI )
+          pop_path=/lustre/scratch113/projects/fvg_seq/20140410/INGI/VBI/PLINK
+            ;;
+        TSI )
+          pop_path=/lustre/scratch113/projects/fvg_seq/20140410/TGP/TSI/PLINK
+            ;;
+        CEU )
+          pop_path=/lustre/scratch113/projects/fvg_seq/20140410/TGP/CEU/PLINK
+            ;;
+      esac
+        #use freq data
+        bsub -J"roh_${pop}" -o"%J_roh_${pop}.o" -q yesterday -M8000 -R"select[mem>=8000] rusage[mem=8000]" -- java -Xms5000m -Xmx5000m -jar /nfs/team151/software/beagle_4/b4.r1230.jar gl=${pop_path}/22.vcf.gz ibd=true out=${pop}.roh
+      
+      done
+
+    ;;
   esac
 
