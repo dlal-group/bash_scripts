@@ -3,7 +3,7 @@
 # This is the runner file run by bsub
 # Arguments: runner.sh filelist
 # Environment variables: LSB_JOBINDEX
-# mkdir -p LOGS;size=`wc -l result.list|cut -f 1 -d " "`;bsub -J "p_check[1-${size}]" -o "LOGS/%J_p_check.%I.o" -M 5000 -R"select[mem>5000] rusage[mem=5000]" -q normal -- ~/Work/bash_scripts/ja_runner_par.sh ~/Work/bash_scripts/check_pvals_test.sh result.list
+# mkdir -p LOGS;size=`wc -l result.list|cut -f 1 -d " "`;bsub -J "p_check[1-${size}]" -o "LOGS/%J_p_check.%I.o" -M 5000 -R"select[mem>5000] rusage[mem=5000]" -q normal -- ~/Work/bash_scripts/ja_runner.sh result.list
 file=`sed -n "${LSB_JOBINDEX}p" $1`
 
 # script=$1
@@ -242,7 +242,9 @@ file=`sed -n "${LSB_JOBINDEX}p" $1`
 
 #extract info using samtools on coverage
 filename=`basename ${file}`
-samtools mpileup -D ${file} | awk '{x+=$4;next}END{print x/NR}' > ${filename}.mean_coverage
+# samtools mpileup -D  ${file} | awk '{x+=$4;next}END{print x/NR}' > ${filename}.mean_coverage
+#use a higher depth cut off value to include all variants
+samtools mpileup -D -BQ0 -d10000000 ${file} | awk '{x+=$4;next}END{print x/NR}' > ${filename}.mean_coverage
 
 
 #extract stats from TGP files
