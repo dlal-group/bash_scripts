@@ -10,7 +10,7 @@ plink --noweb --file $2 --chr $3 --recode --transpose --tab --allow-no-sex --out
 # SEQ/XX_sex_plink.overl_pos_NO_INDEL.esgi-vbseq.vqsr.beagle.impute2.anno.20120607.csq.vcf.recode.vcf.chr20.tped
 # ref_discordance_table.txt 
 #20
-python2.7 ~/Work/bash_scripts/non_ref_discordance.py \
+python2.7 /nfs/users/nfs_m/mc14/Work/bash_scripts/non_ref_discordance.py \
 ${1}_chr$3.tped \
 ${2}_chr$3.tped \
 $5 $3 $4
