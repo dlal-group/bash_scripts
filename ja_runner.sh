@@ -258,5 +258,5 @@ file=`sed -n "${LSB_JOBINDEX}p" $1`
 
 #convert SHAPEIT phased haplotypes to vcf for VBI population to use in NRD calculations
 shapeit2 -convert --input-haps /lustre/scratch113/projects/uk10k/users/jh21/imputed/vb/shapeit/chr${file}.hap.gz /lustre/scratch113/projects/uk10k/users/jh21/imputed/vb/shapeit/vbi.sample --output-vcf /lustre/scratch113/teams/soranzo/users/mc14/INGI_VB/ARRAY/chr${file}.vcf
-(grep "^#" /lustre/scratch113/teams/soranzo/users/mc14/INGI_VB/ARRAY/chr${file}.vcf;grep -v "^#" /lustre/scratch113/teams/soranzo/users/mc14/INGI_VB/ARRAY/chr${file}.vcf | awk -v chr=${file} '{print chr,$0}'|tr "\t" " "|cut -f 1,3- -d " "|tr " " "\t" ) | bgzip -c | vcf-annotate --fill-ICF > /lustre/scratch113/teams/soranzo/users/mc14/INGI_VB/ARRAY/chr${file}.vcf.gz
+(grep "^#" /lustre/scratch113/teams/soranzo/users/mc14/INGI_VB/ARRAY/chr${file}.vcf;grep -v "^#" /lustre/scratch113/teams/soranzo/users/mc14/INGI_VB/ARRAY/chr${file}.vcf | awk -v chr=${file} '{print chr,$0}'|tr "\t" " "|cut -f 1,3- -d " "|tr " " "\t" ) | vcf-annotate --fill-ICF | bgzip -c > /lustre/scratch113/teams/soranzo/users/mc14/INGI_VB/ARRAY/chr${file}.vcf.gz
 tabix -p vcf /lustre/scratch113/teams/soranzo/users/mc14/INGI_VB/ARRAY/chr${file}.vcf.gz
