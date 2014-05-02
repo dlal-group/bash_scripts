@@ -241,10 +241,10 @@ file=`sed -n "${LSB_JOBINDEX}p" $1`
 # bcftools stats -i ${file}.vcf.gz > ${file}.novel.vchk
 
 #extract info using samtools on coverage
-filename=`basename ${file}`
+# filename=`basename ${file}`
 # samtools mpileup -D  ${file} | awk '{x+=$4;next}END{print x/NR}' > ${filename}.mean_coverage
 #use a higher depth cut off value to include all variants
-samtools mpileup -D -BQ0 -d10000000 ${file} | awk '{x+=$4;next}END{print x/NR}' > ${filename}.mean_coverage
+# samtools mpileup -D -BQ0 -d10000000 ${file} | awk '{x+=$4;next}END{print x/NR}' > ${filename}.mean_coverage
 
 
 #extract stats from TGP files
@@ -254,3 +254,9 @@ samtools mpileup -D -BQ0 -d10000000 ${file} | awk '{x+=$4;next}END{print x/NR}' 
 #extract table info by village
 #removed multiallelic sites and formatted the output to avoid missing problem when checking frequencies
 # (echo "CHROM POS ID REF ALT AC AN IMP2 VQSLOD AF MAF MINOR";bcftools2 query ${file}.vcf.gz -f '%CHROM\t%POS\t%ID\t%REF\t%ALT\t%INFO/AC\t%INFO/AN\t%INFO/IMP2\t%INFO/VQSLOD\n'| fgrep -v CHROM | awk '{if($5 !~ ",") print $0}' | awk '{if($7 != 0)print $0,$6/$7;else print $0,"NA"}' | awk '{if($NF != "NA") {if ($NF <= 0.5) print $0,$NF,$5;else print $0,(1-$NF),$4}else{print $0,"NA","NA"}}')| tr "\t" " " > MAF/${file}.maf_table.tab
+
+
+#convert SHAPEIT phased haplotypes to vcf for VBI population to use in NRD calculations
+shapeit2 -convert --input-haps /lustre/scratch113/projects/uk10k/users/jh21/imputed/vb/shapeit/chr${file}.hap.gz /lustre/scratch113/projects/uk10k/users/jh21/imputed/vb/shapeit/vbi.sample --output-vcf /lustre/scratch113/teams/soranzo/users/mc14/INGI_VB/ARRAY/chr${file}.vcf
+(grep "^#" /lustre/scratch113/teams/soranzo/users/mc14/INGI_VB/ARRAY/chr${file}.vcf;grep -v "^#" /lustre/scratch113/teams/soranzo/users/mc14/INGI_VB/ARRAY/chr${file}.vcf | awk -v chr=${file} '{print chr,$0}'|tr "\t" " "|cut -f 1,3- -d " "|tr " " "\t" ) | bgzip -c > /lustre/scratch113/teams/soranzo/users/mc14/INGI_VB/ARRAY/chr${file}.vcf.gz
+tabix -p /lustre/scratch113/teams/soranzo/users/mc14/INGI_VB/ARRAY/chr${file}.vcf.gz
