@@ -9,7 +9,7 @@
 if [ $# -lt 3 ]
 then
 	echo -e "\nError!!Missing arguments\n\n****** USAGE *****"
-	echo -e "genotype_concordance_pipeline.sh <plink file name (no extension) for 1st genotype set> <plink file name (no extension) for 2nd genotype set> <indiv list file path> [<reference_table_file>]\n"
+	echo -e "genotype_concordance_pipeline.sh <plink file name (no extension) for 1st genotype set (the GWAS dataset)> <plink file name (no extension) for 2nd genotype set (the WGS dataset)> <indiv list file path> [<reference_table_file>]\n"
 	exit 1
 fi
 
