@@ -29,7 +29,7 @@ bsub -J "recode_f2" -o "%J_recode_f2.log" -M1000 -R"select[mem>1000] rusage[mem=
 
 #create the freq file for first dataset:this is useful to set the reference only if the first dataset came from gwas data
 bsub -J "create_freq_table_d1" -o "%J_create_freq_table_d1.log" -w "ended(recode_f1)" -M1000 -R"select[mem>1000] rusage[mem=1000]" \
--q yesterday "plink --noweb --file ${outname_f1} --freq --allow-no-sex --out ${outname_f1}"
+-q yesterday "plink2 --file ${outname_f1} --freq --allow-no-sex --out ${outname_f1}"
 
 #correctly format the frq file
 bsub -J "format_freq_table_f1" -o "%J_format_freq_table_f1.log" -w "ended(create_freq_table_d1)" -M4000 -R"select[mem>4000] rusage[mem=4000]" \
@@ -37,7 +37,7 @@ bsub -J "format_freq_table_f1" -o "%J_format_freq_table_f1.log" -w "ended(create
 
 #create the freq file for second dataset
 bsub -J "create_freq_table_d2" -o "%J_create_freq_table_d2.log" -w "ended(recode_f2)" -M1000 -R"select[mem>1000] rusage[mem=1000]" \
--q yesterday "plink --noweb --file ${outname_f2} --freq --allow-no-sex --out ${outname_f2}"
+-q yesterday "plink2 --file ${outname_f2} --freq --allow-no-sex --out ${outname_f2}"
 
 #correctly format the frq file
 bsub -J "format_freq_table_f2" -o "%J_format_freq_table_f2.log" -w "ended(create_freq_table_d2)" -M4000 -R"select[mem>4000] rusage[mem=4000]" \
