@@ -19,3 +19,11 @@ python2.7 ~/Work/bash_scripts/non_ref_discordance_by_sample.py QC_OUT/all_sample
 
 #move files:
 mv all_sample_concordance_discordance* QC_OUT/
+
+#create a unified fiele for all sites
+(echo "CHR POS OGC NRD"
+for i in {1..22}
+do
+  grep -v CHR CHR${i}/site_concordance_discordance_table_chr${i}.txt
+done) | tr " " "\t" > all_sites_all_chr_concordance_discordance_table.txt
+
