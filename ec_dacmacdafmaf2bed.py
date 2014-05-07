@@ -8,12 +8,12 @@ import os
 
 """
 *** USAGE ***
-hd1_dac_mac_1kg.py vcfinput individuals.list 
+hd1_dac_mac_1kg.py individuals.list vcfinput
 
 """
 
-inputvcf=sys.argv[1]
-individualssamplelist=sys.argv[2]
+individualssamplelist=sys.argv[1]
+inputvcf=sys.argv[2]
 
 #~~~~~~~~~~~~~ output files ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
