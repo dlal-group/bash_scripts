@@ -11,7 +11,7 @@ out_path=sys.argv[3]
 listaconseq=[]
 
 # for chr in range (1, 23):
-for chr in range (22):
+for chr in range (22,22):
 	if chr == 23:
 		chr='X'
 	
