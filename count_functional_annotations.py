@@ -17,7 +17,8 @@ for cat in tags:
 #this work by chr!!
 print chr 
 #pat tho vcf 
-inputfile=gzip.open('/lustre/scratch113/projects/fvg_seq/REL-2014-01-09/v1/chr_split/fvg.vqsr.beagle.impute2.anno.20140109.csq.pop.vcf.gz.%s.vcf.gz' %(chr), 'r')
+# inputfile=gzip.open('/lustre/scratch113/projects/fvg_seq/REL-2014-01-09/v1/chr_split/fvg.vqsr.beagle.impute2.anno.20140109.csq.pop.vcf.gz.%s.vcf.gz' %(chr), 'r')
+inputfile=gzip.open('/lustre/scratch113/projects/esgi-vbseq/20140430_purging/gen_load/20140419_BEAUTIFY/%s.vcf.gz' %(chr), 'r')
 
 for line in inputfile:
 	x=line.split()
