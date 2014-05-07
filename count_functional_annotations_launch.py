@@ -15,7 +15,7 @@ chr=22
 if chr==23:
 	chr="X"
 
-cmdl='bsub -R"select[mem>2500] rusage[mem=2500]" -M2500  -e %s/format.%s.err -o %s/format.%s.out \'/software/bin/python-2.7 %s/%s  %s  \'' %( outerrdir, chr,  outerrdir,  chr,  codedir, scriptname, chr)
+cmdl='bsub -R"select[mem>2500] rusage[mem=2500]" -M2500  -e %s/format.%s.err -o %s/format.%s.out -q yesterday \'/software/bin/python-2.7 %s/%s  %s  \'' %( outerrdir, chr,  outerrdir,  chr,  codedir, scriptname, chr)
 
 #print cmdl 
 os.system(cmdl)
