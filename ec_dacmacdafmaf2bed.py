@@ -8,12 +8,13 @@ import os
 
 """
 *** USAGE ***
-hd1_dac_mac_1kg.py individuals.list vcfinput
+hd1_dac_mac_1kg.py individuals.list vcfinput out_prefix
 
 """
 
 individualssamplelist=sys.argv[1]
 inputvcf=sys.argv[2]
+outprefix=sys.argv[3]
 
 #~~~~~~~~~~~~~ output files ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
@@ -65,6 +66,7 @@ for line in open (individualssamplelist , 'r') :
 	sampleind.append(x[0])
 
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+# out_file=open(outprefix 'all_sample_concordance_discordance_table.txt', 'w')
 print '#CHROM\tPOZ\tPOS\tID\tREF\tALT\tINFO\tREC\tALC\tDAC\tMAC\tDAF\tMAF'
 
 sampleind_index=[]

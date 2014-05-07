@@ -24,7 +24,7 @@ poplist={'EUR':['CEU', 'FIN', 'GBR', 'TSI'], 'ASN': ['CHB', 'CHS', 'JPT'], 'AFR'
 
 for pop in poplist[contofinterest]:
 	for vt in vartype:  dic_xac[vt][pop]={}
-	for line in open('dacmac/%s.chr%s.dacmac'%(pop, chr ), 'r'):
+	for line in open('%s.chr%s.tab'%(pop, chr ), 'r'):
 		y=line.split('\t')
 		if re.match('CHR', line): 
                 	colofinterest=y.index(xac)
