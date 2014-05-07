@@ -1,4 +1,4 @@
-#!/usr/bin/python
+#!/software/bin/python
 import re
 import gzip
 import sys

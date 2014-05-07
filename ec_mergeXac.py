@@ -1,3 +1,5 @@
+#!/software/bin/python
+
 import gzip 
 import re 
 import sys 
