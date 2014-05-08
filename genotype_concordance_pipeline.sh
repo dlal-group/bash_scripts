@@ -17,8 +17,8 @@ fi
 #input file preparation step
 # bsub -J "input_prep_$1" -o "%J_input_prep_$1.o" -M2000 -R"select[mem>2000] rusage[mem=2000]" -q yesterday -- genotype_concordance_input_prep.sh 
 
-outname_f1=`basename $1`.s1
-outname_f2=`basename $2`.s2
+outname_f1=`basename $1`.s1_gwas
+outname_f2=`basename $2`.s2_seq
 
 #recode files in ped format and standardized names
 bsub -J "recode_f1" -o "%J_recode_f1.log" -M1000 -R"select[mem>1000] rusage[mem=1000]" \
