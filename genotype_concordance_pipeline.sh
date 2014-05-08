@@ -8,8 +8,8 @@
 
 if [ $# -lt 3 ]
 then
+	echo -e "*******ATTENTION!!!THE SAMPLE LIST AHS TO BE SORTED BY SAMPLE NAME!!!******\n"
 	echo -e "\nError!!Missing arguments\n\n****** USAGE *****"
-	echo -e "*******ATTENTION!!!THE SAMPLE LIST AHS TO BE SORTED BY SAMPLE NAME!!!******"
 	echo -e "genotype_concordance_pipeline.sh <plink file name (no extension) for 1st genotype set (the GWAS dataset)> <plink file name (no extension) for 2nd genotype set (the WGS dataset)> <SORTED indiv list file path> [<reference_table_file>]\n"
 	exit 1
 fi
@@ -57,8 +57,8 @@ then
 -q normal R CMD BATCH "--args ${outname_f1}.frq ${outname_f1}.map" /nfs/users/nfs_m/mc14/Work/r_scripts/gt_discordance.r
 fi
 
-# for chr in {1..22}
-for chr in 11
+# for chr in 11
+for chr in {1..22}
 do
 	if [ $# -eq 4 ]
 		#if we provide the 4th argument we are going to use our own REF table:this apply for data as WES or WGS
