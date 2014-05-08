@@ -58,16 +58,19 @@ bsub -J "plink_mds_all" -o "${outdir}/%J_plink_mds_all.o" -M8000 -w "ended(conca
 rm(list=ls())
 cohort <- "FVG"
 fvg <- read.table("/nfs/users/nfs_m/mc14/Work/SANGER/FVG/SEQ_CALLING/DOCS/samples_resume.txt",header=T)
+# fvg <- read.table("~/Work/FVG/SEQ_CALLING/DOCS/samples_resume.txt",header=T)
 mds <- read.table("all_chr_merged.mds",header=T)
 #mds <- read.table("chr20.mds.mod",sep="\t",header=T)
 merged_new <- merge(mds,fvg,by.x="IID",by.y="clinic_id",all.x)
+# merged_new <- mds
 villages <- unique(merged_new$village)
 #remove the sample with all missing,otherwise the plot for c1/c2 is too shrinked
 merged_new <- merged_new[-which(merged_new$IID == "591350"),]
 #plot different villages
 jpeg(paste("PCA_",cohort,".jpg",sep=""),width=1754, height=1024,pointsize = 20)
 par(lab=c(4,4,6),mfrow=c(2,3))
-for (c in seq(4,which(colnames(merged_new) == "C10"),by=2)) {
+# for (c in seq(4,which(colnames(merged_new) == "C10"),by=2)) {
+for (c in seq(7,which(colnames(merged_new) == "V16"),by=2)) {
     xmax <- max(merged_new[c])
     ymax <- max(merged_new[c+1])
     plot(merged_new[which(merged_new$village == villages[1]),c],merged_new[which(merged_new$village == villages[1]),c+1],xlim=c(min(merged_new[c])-0.001,max(merged_new[c])+0.001),ylim=c(min(merged_new[c+1])-0.001,max(merged_new[c+1])+0.001),main=paste("PCA ",colnames(merged_new)[c]," vs ",colnames(merged_new)[c+1]," ",cohort,sep=""),xlab=colnames(merged_new)[c],ylab=colnames(merged_new)[c+1], col=colors()[72])
@@ -84,7 +87,7 @@ dev.off()
 
 jpeg(paste("PCA_cons_",cohort,".jpg",sep=""),width=1754, height=1024,pointsize = 20)
 par(lab=c(4,4,6),mfrow=c(2,3))
-for (c in seq(4,which(colnames(merged_new) == "C4"),by=1)) {
+for (c in seq(7,which(colnames(merged_new) == "V10"),by=1)) {
     xmax <- max(merged_new[c])
     ymax <- max(merged_new[c+1])
     plot(merged_new[which(merged_new$village == villages[1]),c],merged_new[which(merged_new$village == villages[1]),c+1],xlim=c(min(merged_new[c])-0.001,max(merged_new[c])+0.001),ylim=c(min(merged_new[c+1])-0.001,max(merged_new[c+1])+0.001),main=paste("PCA ",colnames(merged_new)[c]," vs ",colnames(merged_new)[c+1]," ",cohort,sep=""),xlab=colnames(merged_new)[c],ylab=colnames(merged_new)[c+1], col=colors()[72])
@@ -96,5 +99,20 @@ for (c in seq(4,which(colnames(merged_new) == "C4"),by=1)) {
 }
 plot.new()
 legend("center",legend=villages,fill=vill_cols,xpd=TRUE,cex=2, bty="n", title="Villages:")
+
+dev.off()
+
+#plot pca withouth village information
+jpeg(paste("PCA_",cohort,".jpg",sep=""),width=1754, height=1024,pointsize = 20)
+par(lab=c(4,4,6),mfrow=c(2,3))
+# for (c in seq(4,which(colnames(merged_new) == "C10"),by=2)) {
+for (c in seq(7,which(colnames(merged_new) == "V16"),by=2)) {
+    xmax <- max(merged_new[c])
+    ymax <- max(merged_new[c+1])
+    plot(merged_new[,c],merged_new[,c+1],xlim=c(min(merged_new[c])-0.001,max(merged_new[c])+0.001),ylim=c(min(merged_new[c+1])-0.001,max(merged_new[c+1])+0.001),main=paste("PCA ",colnames(merged_new)[c]," vs ",colnames(merged_new)[c+1]," ",cohort,sep=""),xlab=colnames(merged_new)[c],ylab=colnames(merged_new)[c+1], col=colors()[72])
+    
+}
+# plot.new()
+# legend("center",legend=villages,fill=vill_cols,xpd=TRUE,cex=2, bty="n", title="Villages:")
 
 dev.off()
