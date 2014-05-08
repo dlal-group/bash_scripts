@@ -79,9 +79,10 @@ def table_counter(first_table_el,second_table_el):
 	return el_cohord
 
 #TODO:write down all command used to format all files involved in the script!
-#OTHER_inputfile_name='370K/TEST_AD/biallelic_overl.SNP.unfilt.geno.seq.VB.chr20.tped'
-#SEQ_inputfile_name='SEQ/XX_sex_plink.overl_pos_NO_INDEL.esgi-vbseq.vqsr.beagle.impute2.anno.20120607.csq.vcf.recode.vcf.chr20.tped'
-#ref_inputfile_name='ref_discordance_table.txt'
+#OTHER_inputfile_name='/lustre/scratch113/projects/fvg_seq/20140319/20140401_VQSR2.5_reapply_v138_excl/20140503_COMPARISON/HMG/DISCORDANCE/rs681524.hm22.set.only.seq.s2_seq_chr11.tped'
+#SEQ_inputfile_name='/lustre/scratch113/projects/fvg_seq/20140319/20140401_VQSR2.5_reapply_v138_excl/20140503_COMPARISON/HMG/DISCORDANCE/rs681524.seq.set.only.hm22.s1_gwas_chr11.tped'
+#ref_inputfile_name='/lustre/scratch113/projects/fvg_seq/20140319/20140401_VQSR2.5_reapply_v138_excl/20140503_COMPARISON/HMG/DISCORDANCE/ref_discordance_table.txt'
+# indiv_inputfile_name='/lustre/scratch113/projects/fvg_seq/20140319/20140401_VQSR2.5_reapply_v138_excl/20140503_COMPARISON/HMG/DISCORDANCE/rs681524.seq.set.only.hm22.s1_gwas_chr11.tfam'
 OTHER_inputfile_name=sys.argv[1]
 SEQ_inputfile_name=sys.argv[2]
 ref_inputfile_name=sys.argv[3]
