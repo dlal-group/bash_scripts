@@ -28,7 +28,7 @@ for pop in poplist[contofinterest]:
 	for line in open('%s.chr%s.DAF_ann_intergenic.tab'%(pop, chr ), 'r'):
 		if re.match('CHR', line): 
 			y=line.split('\t')
-      colofinterest=y.index(xac)
+			colofinterest=y.index(xac)
 			#print colofinterest
 
 		if re.match('\d+\t', line):
