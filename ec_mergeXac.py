@@ -41,14 +41,14 @@ for pop in poplist[contofinterest]:
 
 
 
-print '#CHR\tPOS\tVT\t',
+print '#CHR\tPOZ\tPOS\tVT\t',
 for pop in poplist[contofinterest]: print '%s\t' % (pop), 
 print '\r'
 
 for site in set(sitelist):
 	for vt in vartype:
 		if site in dic_xac[vt][poplist[contofinterest][0]]:  
-			print '%s\t%s\t%s\t' %(chr, site , vt),
+			print '%s\t%s\t%s\t%s\t' %(chr, int(site)-1 ,  site , vt),
 			for pop in poplist[contofinterest]: 
 				print '%s\t' %(dic_xac[vt][pop][site]), 
 			print '\r'
