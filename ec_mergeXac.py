@@ -42,7 +42,7 @@ for pop in poplist[contofinterest]:
 
 
 
-print '#CHR\tPOZ\tPOS\tVT'
+stdout.write('#CHR\tPOZ\tPOS\tVT')
 # for pop in poplist[contofinterest]: print '%s' %(pop),
 for pop in poplist[contofinterest]: stdout.write('\t%s' % pop)
 print '\r'
