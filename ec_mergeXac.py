@@ -24,19 +24,20 @@ poplist={'EUR':['CEU', 'FIN', 'GBR', 'TSI'], 'ASN': ['CHB', 'CHS', 'JPT'], 'AFR'
 
 for pop in poplist[contofinterest]:
 	for vt in vartype:  dic_xac[vt][pop]={}
-		for line in open('%s.chr%s.DAF_ann_intergenic.tab'%(pop, chr ), 'r'):
-			if re.match('CHR', line): 
-				y=line.split('\t')
-	      colofinterest=y.index(xac)
-				#print colofinterest
 
-			if re.match('\d+\t', line):
-				y=line.split('\t')
-				posizione=y[2]; sitelist.append(posizione)
-				if re.search('VT=SNP' ,line ): dic_type['SNP'].append(posizione); dic_xac['SNP'][pop][posizione]=y[colofinterest]
-				elif re.search('VT=INDEL' ,line ): dic_type['INDEL'].append(posizione); dic_xac['INDEL'][pop][posizione]=y[colofinterest]
-				elif re.search ('VT=SV' , line ) : dic_type['SV'].append(posizione); dic_xac['SV'][pop][posizione]=y[colofinterest]
-				else: dic_type['NA'].append(posizione); dic_xac['NA'][pop][posizione]=y[colofinterest]
+	for line in open('%s.chr%s.DAF_ann_intergenic.tab'%(pop, chr ), 'r'):
+		if re.match('CHR', line): 
+			y=line.split('\t')
+      colofinterest=y.index(xac)
+			#print colofinterest
+
+		if re.match('\d+\t', line):
+			y=line.split('\t')
+			posizione=y[2]; sitelist.append(posizione)
+			if re.search('VT=SNP' ,line ): dic_type['SNP'].append(posizione); dic_xac['SNP'][pop][posizione]=y[colofinterest]
+			elif re.search('VT=INDEL' ,line ): dic_type['INDEL'].append(posizione); dic_xac['INDEL'][pop][posizione]=y[colofinterest]
+			elif re.search ('VT=SV' , line ) : dic_type['SV'].append(posizione); dic_xac['SV'][pop][posizione]=y[colofinterest]
+			else: dic_type['NA'].append(posizione); dic_xac['NA'][pop][posizione]=y[colofinterest]
 
 
 
