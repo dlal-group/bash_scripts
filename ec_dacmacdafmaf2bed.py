@@ -95,11 +95,11 @@ for line in gzip.open(inputvcf, 'r'):
 			rac=alleles_count[0]; alc=alleles_count[1]; dac=alleles_count[3]; mac=alleles_count[4]
 		else: 
 			alleles_count=frequencies_mac(  temporary_genotypes, ref, alt) 
-			rac=alleles_count[0]; alc=alleles_count[1]; dac='na'; mac=alleles_count[3]
+			rac=alleles_count[0]; alc=alleles_count[1]; dac='NA'; mac=alleles_count[3]
 		for item in  [chr,poz,position, vid, ref, alt, infofield]:  #z[0:8]: 
                         print '%s\t' %(item),
                 print '%s\t%s\t%s\t%s\t' %(rac,alc, dac, mac),
-                if not dac=='na': print '%.50f\t' %(int(dac)/float(len(sampleind_index)*2)),
-                else: print 'na\t',
+                if not dac=='NA': print '%.50f\t' %(int(dac)/float(len(sampleind_index)*2)),
+                else: print 'NA\t',
                 print int(mac)/float(len(sampleind_index)*2)
 	
