@@ -42,14 +42,17 @@ for pop in poplist[contofinterest]:
 
 
 print '#CHR\tPOZ\tPOS\tVT'
-for pop in poplist[contofinterest]: print '\t%s' %(pop)
+# for pop in poplist[contofinterest]: print '%s' %(pop),
+for pop in poplist[contofinterest]: stdout.write('\t%s' % pop)
 print '\r'
 
 for site in set(sitelist):
 	for vt in vartype:
 		if site in dic_xac[vt][poplist[contofinterest][0]]:  
-			print '%s\t%s\t%s\t%s' %(chr,int(site)-1,site,vt)
+			# print '%s\t%s\t%s\t%s' %(chr,int(site)-1,site,vt)
+			stdout.write('%s\t%s\t%s\t%s' %(chr,int(site)-1,site,vt))
 			for pop in poplist[contofinterest]: 
-				print '\t%s' %(dic_xac[vt][pop][site])
+				# print '%s' %(dic_xac[vt][pop][site]),
+				stdout.write('\t%s' %(dic_xac[vt][pop][site]))
 			print '\r'
  
