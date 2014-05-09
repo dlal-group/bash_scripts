@@ -40,7 +40,7 @@ for pop in poplist[contofinterest]:
 			# else: dic_type['NA'].append(posizione); dic_xac['NA'][pop][posizione]=y[colofinterest]
 			if (len(y[4]) == 1 & len(y[5]) == 1): dic_type['SNP'].append(posizione); dic_xac['SNP'][pop][posizione]=y[colofinterest]
 			elif (len(y[4]) != len(y[5]) & re.search(",",y[5]) ): dic_type['MULTI'].append(posizione); dic_xac['MULTI'][pop][posizione]=y[colofinterest]
-			elif (len(y[4]) != len(y[5]) & !re.search(",",y[5]) ): dic_type['INDEL'].append(posizione); dic_xac['INDEL'][pop][posizione]=y[colofinterest]
+			elif (len(y[4]) != len(y[5]) & not re.search(",",y[5]) ): dic_type['INDEL'].append(posizione); dic_xac['INDEL'][pop][posizione]=y[colofinterest]
 			elif re.search ('VT=SV' , line ) : dic_type['SV'].append(posizione); dic_xac['SV'][pop][posizione]=y[colofinterest]
 			else: dic_type['NA'].append(posizione); dic_xac['NA'][pop][posizione]=y[colofinterest]
 
