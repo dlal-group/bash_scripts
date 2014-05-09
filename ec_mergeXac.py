@@ -40,6 +40,7 @@ for pop in poplist[contofinterest]:
 			else: dic_type['NA'].append(posizione); dic_xac['NA'][pop][posizione]=y[colofinterest]
 
 
+sys.stdout=stdout
 
 print '#CHR\tPOZ\tPOS\tVT'
 # for pop in poplist[contofinterest]: print '%s' %(pop),
