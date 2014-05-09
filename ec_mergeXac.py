@@ -43,7 +43,7 @@ for pop in poplist[contofinterest]:
 
 print '#CHR\tPOZ\tPOS\tVT',
 for pop in poplist[contofinterest]: print '%s' %(pop), 
-print '\r'
+# print '\r'
 
 for site in set(sitelist):
 	for vt in vartype:
@@ -51,5 +51,5 @@ for site in set(sitelist):
 			print '%s\t%s\t%s\t%s' %(chr,int(site)-1,site,vt),
 			for pop in poplist[contofinterest]: 
 				print '%s' %(dic_xac[vt][pop][site]), 
-			print '\r'
+			# print '\r'
  
