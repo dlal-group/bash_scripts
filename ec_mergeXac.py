@@ -15,7 +15,7 @@ dic_xac={}
 dic_type={}
 sitelist=[]
 
-vartype=['SNP', 'INDEL', 'SV', 'NA']
+vartype=['SNP', 'INDEL', 'MULTI', 'NA']
 for vt in vartype: 
 	dic_type[vt]=[]
 	dic_xac[vt]={}
@@ -34,8 +34,13 @@ for pop in poplist[contofinterest]:
 		if re.match('\d+\t', line):
 			y=line.split('\t')
 			posizione=y[2]; sitelist.append(posizione)
-			if re.search('VT=SNP' ,line ): dic_type['SNP'].append(posizione); dic_xac['SNP'][pop][posizione]=y[colofinterest]
-			elif re.search('VT=INDEL' ,line ): dic_type['INDEL'].append(posizione); dic_xac['INDEL'][pop][posizione]=y[colofinterest]
+			# if re.search('VT=SNP' ,line ): dic_type['SNP'].append(posizione); dic_xac['SNP'][pop][posizione]=y[colofinterest]
+			# elif re.search('VT=INDEL' ,line ): dic_type['INDEL'].append(posizione); dic_xac['INDEL'][pop][posizione]=y[colofinterest]
+			# elif re.search ('VT=SV' , line ) : dic_type['SV'].append(posizione); dic_xac['SV'][pop][posizione]=y[colofinterest]
+			# else: dic_type['NA'].append(posizione); dic_xac['NA'][pop][posizione]=y[colofinterest]
+			if (len(y[4]) == 1 &&  len(y[5]) == 1): dic_type['SNP'].append(posizione); dic_xac['SNP'][pop][posizione]=y[colofinterest]
+			elif (len(y[4]) != len(y[5]) && re.search(",",y[5]) ): dic_type['MULTI'].append(posizione); dic_xac['MULTI'][pop][posizione]=y[colofinterest]
+			elif (len(y[4]) != len(y[5]) && !re.search(",",y[5]) ): dic_type['INDEL'].append(posizione); dic_xac['INDEL'][pop][posizione]=y[colofinterest]
 			elif re.search ('VT=SV' , line ) : dic_type['SV'].append(posizione); dic_xac['SV'][pop][posizione]=y[colofinterest]
 			else: dic_type['NA'].append(posizione); dic_xac['NA'][pop][posizione]=y[colofinterest]
 
