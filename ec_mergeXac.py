@@ -32,7 +32,7 @@ for pop in poplist[contofinterest]:
 
 		if re.match('\d+\t', line):
 			y=line.split('\t')
-			posizione=y[1]; sitelist.append(posizione)
+			posizione=y[2]; sitelist.append(posizione)
 			if re.search('VT=SNP' ,line ): dic_type['SNP'].append(posizione); dic_xac['SNP'][pop][posizione]=y[colofinterest]
 			elif re.search('VT=INDEL' ,line ): dic_type['INDEL'].append(posizione); dic_xac['INDEL'][pop][posizione]=y[colofinterest]
 			elif re.search ('VT=SV' , line ) : dic_type['SV'].append(posizione); dic_xac['SV'][pop][posizione]=y[colofinterest]
