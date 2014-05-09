@@ -50,6 +50,6 @@ for site in set(sitelist):
 		if site in dic_xac[vt][poplist[contofinterest][0]]:  
 			print '%s\t%s\t%s\t%s\t' %(chr, int(site)-1 ,  site , vt),
 			for pop in poplist[contofinterest]: 
-				print '%s\t' %(dic_xac[vt][pop][site]), 
-			print '\n'
+				print '%s\t\n' %(dic_xac[vt][pop][site]), 
+			# print '\n'
  
