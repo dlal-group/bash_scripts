@@ -51,5 +51,5 @@ for site in set(sitelist):
 			print '%s\t%s\t%s\t%s\t' %(chr, int(site)-1 ,  site , vt),
 			for pop in poplist[contofinterest]: 
 				print '%s\t' %(dic_xac[vt][pop][site]), 
-			print '\r'
+			print '\n'
  
