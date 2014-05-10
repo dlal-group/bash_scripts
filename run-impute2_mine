@@ -509,7 +509,7 @@ sub impute2
         if ( $$self{impute2_args} =~ "-sample_g" )
         { 
             my %options;
-            %options = map{split / /,$_}(split /^-/, $$self{impute2_args});
+            %options = map{split / /,$_}(split /-/, $$self{impute2_args});
             print $options{sample_g};
             $files = qq[-g $outdir/01.vcf_to_impute2.$from-$to.impute_gts.gz -sample_g $options{sample_g}]; 
          }
