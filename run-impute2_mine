@@ -635,22 +635,7 @@ sub impute2
 
         #    $known = "$out.";
     }
-    else 
-    { 
-        # read the correct sample file
-        if ( $$self{impute2_args} =~ "-sample_g" )
-        { 
-            my %options;
-            %options = map{split / /,$_}(split /-/, $$self{impute2_args});
-            print $options{sample_g};
-            $files = qq[-g $outdir/01.vcf_to_impute2.$from-$to.impute_gts.gz -sample_g $options{sample_g}]; 
-         }
-         else
-         {
-            $files = qq[-g $outdir/01.vcf_to_impute2.$from-$to.impute_gts.gz -sample_g $outdir/01.vcf_to_impute2.$from-$to.impute_samples]; 
-         }
-    }
-    
+        
     # Reference genotypes: there can be one or more reference panels. With multiple panels,
     #   they can be merged on the fly without saving or saved as gen.gz file for future reusal.
     # Traditionally we ran without the reference panel in the genotype refinement mode,
@@ -705,7 +690,17 @@ sub impute2
     }
 
     # study genotypes
-    $files = qq[-g $outdir/01.vcf_to_impute2.$from-$to.impute_gts.gz -sample_g $outdir/01.vcf_to_impute2.$from-$to.impute_samples]; 
+    if ( $$self{impute2_args} =~ "-sample_g" )
+    { 
+        my %options;
+        %options = map{split / /,$_}(split /-/, $$self{impute2_args});
+        print $options{sample_g};
+        $files = qq[-g $outdir/01.vcf_to_impute2.$from-$to.impute_gts.gz -sample_g $options{sample_g}]; 
+     }
+     else
+     {
+        $files = qq[-g $outdir/01.vcf_to_impute2.$from-$to.impute_gts.gz -sample_g $outdir/01.vcf_to_impute2.$from-$to.impute_samples]; 
+     }
 
     $self->cmd(qq[$CMD $files -o $out >>$out.o 2>>$out.e]);
 
