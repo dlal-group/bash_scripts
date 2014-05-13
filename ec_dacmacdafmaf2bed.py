@@ -99,7 +99,7 @@ for line in gzip.open(inputvcf, 'r'):
 		for item in  [chr,poz,position, vid, ref, alt, infofield]:  #z[0:8]: 
                         print '%s\t' %(item),
                 print '%s\t%s\t%s\t%s\t' %(rac,alc, dac, mac),
-                if not dac=='NA': print '%.50f\t' %(int(dac)/float(len(sampleind_index)*2)),
+                if not dac=='NA': print '%.6f\t' %(int(dac)/float(len(sampleind_index)*2)),
                 else: print 'NA\t',
                 print int(mac)/float(len(sampleind_index)*2)
 	
