@@ -57,7 +57,7 @@ then
 -q normal R CMD BATCH "--args ${outname_f1}.frq ${outname_f1}.map" /nfs/users/nfs_m/mc14/Work/r_scripts/gt_discordance.r
 fi
 
-chr_list=`cut -f 1 ${outname_f1}.map| uniq`
+chr_list=`cut -f 1 $1.bed| uniq`
 
 # for chr in {1..22}
 for chr in ${chr_list}
