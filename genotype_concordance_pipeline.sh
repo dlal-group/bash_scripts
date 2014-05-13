@@ -57,8 +57,10 @@ then
 -q normal R CMD BATCH "--args ${outname_f1}.frq ${outname_f1}.map" /nfs/users/nfs_m/mc14/Work/r_scripts/gt_discordance.r
 fi
 
+chr_list=`cut -f 1 ${outname_f1}.map| uniq`
+
 # for chr in {1..22}
-for chr in 11
+for chr in ${chr_list}
 do
 	if [ $# -eq 4 ]
 		#if we provide the 4th argument we are going to use our own REF table:this apply for data as WES or WGS
