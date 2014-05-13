@@ -1,4 +1,5 @@
-#!/usr/bin/python
+#!/software/bin/python
+
 import numpy
 import re
 import gzip
@@ -11,8 +12,8 @@ import random
 """
 - take as input file a list of "CHR POSITION " (test-list); mandatory no header; chromosome and position must appear in this order 
 - give as output a list of sites on the chromosme passed as argument matched for allele  frequency to the test-list
-- require a file with allele frequencies in the minumun format CHR POS DAF where 
-	CHR <- chromosome 
+- require a file with allele frequencies in the minumun format CHROM POS DAF where 
+	CHROM <- chromosome 
 	POS <- position 
 	DAF <- alle efrequency 
 	CHR POS and DAF in the header are mandatory, can  be changed in the code 
@@ -42,8 +43,8 @@ for line in open( pathtoinfile, 'r'):
 #~~~~~~~~~~~~~~~~~find out alle frequency distribution for test sites ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~	
 
 
-freqfile=gzip.open( pathtodaffile, 'r') #remove gzip if required 
-#freqfile=open( pathtodaffile, 'r') #remove gzip if required
+# freqfile=gzip.open( pathtodaffile, 'r') #remove gzip if required 
+freqfile=open( pathtodaffile, 'r') #remove gzip if required
 for line in freqfile: 
 	x=line.strip().split()
 	if re.match('CHROM', line): 
@@ -91,11 +92,11 @@ for quar in quartili: dic_freqchr[quar]=[]
 listaposizioni=[]
 diz_frequenze={}
 
-freqfile=gzip.open( pathtodaffile, 'r') #remove gzip if required 
-#freqfile=open( pathtodaffile, 'r') 
+# freqfile=gzip.open( pathtodaffile, 'r') #remove gzip if required 
+freqfile=open( pathtodaffile, 'r') 
 for line in freqfile: 
 	x=line.rstrip().split('\t')
-	if re.match('CHR', line): 
+	if re.match('CHROM', line): 
 		coldaf=x.index('DAF')
 		colchr=x.index('CHROM')
 		colpos=x.index('POS')
