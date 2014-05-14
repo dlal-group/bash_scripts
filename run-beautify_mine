@@ -29,7 +29,10 @@ sub new
     $$self{chunk_nsites} = 5_000;
     $$self{do_clean} = 1;
     $$self{vcfcheck_args} = '-s -';
-    $$self{vcf_annotate} = q[vcf-annotate
+    $$self{vcf_annotate} = q[
+                sed "s/ID=GL,Number=3/ID=GL,Number=G/"
+                |
+                vcf-annotate
                 --fill-ICF
                 -r INFO/AC1,INFO/AF1,INFO/FQ,INFO/G3,INFO/MQ,INFO/PV4,INFO/VDB,FORMAT/PL,FORMAT/GQ,FORMAT/SP,INFO/SF
                 -r INFO/BaseQRankSum,INFO/Dels,INFO/FS,INFO/HRun,INFO/HaplotypeScore,INFO/MQ0,INFO/InbreedingCoeff,INFO/MQRankSum,INFO/QD,INFO/ReadPosRankSum,INFO/VQSLOD,INFO/culprit,FORMAT/PQ
@@ -49,9 +52,8 @@ sub new
                 --regulatory
                 --sift b 
                 --polyphen b 
-                --condel b 
-                --gene 
-                --hgnc 
+                --plugin Condel,/software/vertres/bin-external/VEP_plugins/config/Condel/config/,b
+                --symbol
                 --format vcf 
                 --force_overwrite 
                 --cache 
@@ -61,14 +63,20 @@ sub new
                 --grantham 
                 --gerp /lustre/scratch105/projects/g1k/ref/gerp_db/hs
         ];
+    $$self{bcftools} = '/software/vertres/bin-external/bcftools-exp-rc';
 
-    $$self{limits} = { memory=>5_000, runtime=>3*24*60 };
-    $$self{config_version} = '1349789206';
+    $$self{limits} = { memory=>3_000, runtime=>3*60 };
+    $$self{config_version} = '1394700014';
     $$self{_sampleconf} = q[
             # For sanity checking that your config file is not obsolete. Update the version key in your 
             #  config file to get rid of the warnings.
+            #
+            # What changes since version:
+            #   1349789206 .. Switched from "vcf-concat" to "bcftools concat"
+            #
             version  => '] .$$self{config_version}. q[',
 
+            bcftools         => '] . $$self{bcftools} . q[',
             vcf_annotate     => '] . $$self{vcf_annotate} . q[',
             predictor        => '] . $$self{predictor} . q[',
             vcf2consequences => '] . $$self{vcf2consequences} . q[',
@@ -244,7 +252,6 @@ sub read_chunks
         for my $region (@regions)
         {
             $self->cmd("cat $$self{chunk_file}.$region >> $$self{chunk_file}.part");
-            $self->spawn('define_chunks',"$$self{chunk_file}.$region",$in_file,$region);
         }
         rename("$$self{chunk_file}.part",$$self{chunk_file}) or $self->throw("rename $$self{chunk_file}.part $$self{chunk_file}: $!");
         for my $region (@regions)
@@ -366,10 +373,8 @@ sub run_predictor
     my $from   = $$chunk[1];
     my $to     = $$chunk[2];
     my $prefix = "$$self{outdir}/$$chunk[0]/$$chunk[1]-$$chunk[2]";
-    my $outdir = "$$self{outdir}/$chr";
     my $in_vcf = $self->expand_chrom($$self{in_vcf},$chr);
     # exclude overlapping indels
-    $self->cmd("mkdir -p $outdir");
     $self->cmd("tabix -h $in_vcf $chr:$from-$to | awk '\$1~/^#/ || \$2>=$from' | bgzip -c > $prefix.in.vcf.gz");
     $self->cmd("zcat $prefix.in.vcf.gz | $$self{predictor} -o $outfile.part");
     rename("$outfile.part",$outfile);
@@ -405,11 +410,11 @@ sub concat_vcfs
         print $fh $file, "\n";
     }
     close($fh);
-    $self->cmd(qq[vcf-concat -f $outfile.list | bgzip -c > $outfile.part]);
+    $self->cmd(qq[$$self{bcftools} concat -f $outfile.list -Oz > $outfile.part]);
     $self->cmd(qq[cat $outfile.part | md5sum > $outfile.md5]);
     rename("$outfile.part","$outfile.tmp.vcf.gz");
     $self->cmd("tabix -p vcf -f $outfile.tmp.vcf.gz");
-    $self->cmd(qq[vcf check -r $chr $$self{vcfcheck_args} $outfile.tmp.vcf.gz > $outfile.vchk]);
+    $self->cmd(qq[$$self{bcftools} stats -r $chr $$self{vcfcheck_args} $outfile.tmp.vcf.gz > $outfile.vchk]);
     rename("$outfile.tmp.vcf.gz.tbi","$outfile.tbi");
     rename("$outfile.tmp.vcf.gz",$outfile);
 }
