@@ -12,8 +12,8 @@ listaconseq=[]
 
 for chr in range (1, 22):
 # chr=22
-if chr == 23:
-	chr='X'
+	if chr == 23:
+		chr='X'
 
 print chr 
 
