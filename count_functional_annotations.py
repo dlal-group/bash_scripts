@@ -5,6 +5,8 @@ import os
 
 chr=sys.argv[1]
 consequences=sys.argv[2]
+file_path=sys.argv[3]
+
 #tags=['REGULATORY_REGION','UPSTREAM','WITHIN_NON_CODING_GENE','DOWNSTREAM','INTRONIC','INTERGENIC','NON_SYNONYMOUS_CODING','SYNONYMOUS_CODING','5PRIME_UTR','3PRIME_UTR','NMD_TRANSCRIPT','SPLICE_SITE','STOP_GAINED','ESSENTIAL_SPLICE_SITE','WITHIN_MATURE_miRNA','STOP_LOST','PARTIAL_CODON','CODING_UNKNOWN']
 #tags=['WITHIN_NON_CODING_GENE','INTRONIC','DOWNSTREAM','UPSTREAM','INTERGENIC','REGULATORY_REGION','NON_SYNONYMOUS_CODING','5PRIME_UTR','SYNONYMOUS_CODING','3PRIME_UTR','NMD_TRANSCRIPT','ESSENTIAL_SPLICE_SITE','SPLICE_SITE','STOP_GAINED','STOP_LOST','WITHIN_MATURE_miRNA']
 # tags=['regulatory_region_variant','downstream_gene_variant','upstream_gene_variant','intron_variant','nc_transcript_variant','non_coding_exon_variant','intergenic_variant','feature_elongation','feature_truncation','TF_binding_site_variant','splice_region_variant','missense_variant','synonymous_variant','3_prime_UTR_variant','NMD_transcript_variant','5_prime_UTR_variant','splice_donor_variant','inframe_deletion','splice_acceptor_variant','frameshift_variant','initiator_codon_variant','inframe_insertion','stop_lost','TFBS_ablation','stop_gained','stop_retained_variant','coding_sequence_variant','mature_miRNA_variant','incomplete_terminal_codon_variant','transcript_ablation']
@@ -28,7 +30,7 @@ for cat in tags:
 print chr 
 #pat tho vcf 
 # inputfile=gzip.open('/lustre/scratch113/projects/fvg_seq/REL-2014-01-09/v1/chr_split/fvg.vqsr.beagle.impute2.anno.20140109.csq.pop.vcf.gz.%s.vcf.gz' %(chr), 'r')
-inputfile=gzip.open('/lustre/scratch113/projects/esgi-vbseq/20140430_purging/gen_load/20140419_BEAUTIFY/%s.vcf.gz' %(chr), 'r')
+inputfile=gzip.open('%s/%s.vcf.gz' %(filepath, chr), 'r')
 
 for line in inputfile:
 	x=line.split()
