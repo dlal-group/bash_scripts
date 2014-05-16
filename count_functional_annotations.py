@@ -4,10 +4,20 @@ import re
 import os 
 
 chr=sys.argv[1]
+consequences=sys.argv[2]
 #tags=['REGULATORY_REGION','UPSTREAM','WITHIN_NON_CODING_GENE','DOWNSTREAM','INTRONIC','INTERGENIC','NON_SYNONYMOUS_CODING','SYNONYMOUS_CODING','5PRIME_UTR','3PRIME_UTR','NMD_TRANSCRIPT','SPLICE_SITE','STOP_GAINED','ESSENTIAL_SPLICE_SITE','WITHIN_MATURE_miRNA','STOP_LOST','PARTIAL_CODON','CODING_UNKNOWN']
 #tags=['WITHIN_NON_CODING_GENE','INTRONIC','DOWNSTREAM','UPSTREAM','INTERGENIC','REGULATORY_REGION','NON_SYNONYMOUS_CODING','5PRIME_UTR','SYNONYMOUS_CODING','3PRIME_UTR','NMD_TRANSCRIPT','ESSENTIAL_SPLICE_SITE','SPLICE_SITE','STOP_GAINED','STOP_LOST','WITHIN_MATURE_miRNA']
 # tags=['regulatory_region_variant','downstream_gene_variant','upstream_gene_variant','intron_variant','nc_transcript_variant','non_coding_exon_variant','intergenic_variant','feature_elongation','feature_truncation','TF_binding_site_variant','splice_region_variant','missense_variant','synonymous_variant','3_prime_UTR_variant','NMD_transcript_variant','5_prime_UTR_variant','splice_donor_variant','inframe_deletion','splice_acceptor_variant','frameshift_variant','initiator_codon_variant','inframe_insertion','stop_lost','TFBS_ablation','stop_gained','stop_retained_variant','coding_sequence_variant','mature_miRNA_variant','incomplete_terminal_codon_variant','transcript_ablation']
-tags=['intergenic_variant','upstream_gene_variant','non_coding_exon_variant','nc_transcript_variant','intron_variant','feature_truncation','downstream_gene_variant','feature_elongation','regulatory_region_variant','NMD_transcript_variant','missense_variant','synonymousvariant','stop_gained','5_prime_UTR_variant','splice_region_variant','TF_binding_site_variant','splice_donor_variant','3_prime_UTR_ariant','splice_acceptor_variant','initiator_codon_variant','coding_sequence_variant','inframe_deletion','frameshift_variant','matue_miRNA_variant','stop_lost','stop_retained_variant','TFBS_ablation','inframe_insertion','incomplete_terminal_codon_variant','transript_ablation']
+# tags=['intergenic_variant','upstream_gene_variant','non_coding_exon_variant','nc_transcript_variant','intron_variant','feature_truncation','downstream_gene_variant','feature_elongation','regulatory_region_variant','NMD_transcript_variant','missense_variant','synonymousvariant','stop_gained','5_prime_UTR_variant','splice_region_variant','TF_binding_site_variant','splice_donor_variant','3_prime_UTR_ariant','splice_acceptor_variant','initiator_codon_variant','coding_sequence_variant','inframe_deletion','frameshift_variant','matue_miRNA_variant','stop_lost','stop_retained_variant','TFBS_ablation','inframe_insertion','incomplete_terminal_codon_variant','transript_ablation']
+
+#Read a generic file with consequences list and create a consequence array
+list_file=open(consequences,'r')
+
+tags=[]
+for lfile in list_file: 
+	cat=lfile.split()
+	tags.append(cat[0])
+
 diktag_snp={}
 diktag_indel={}
 for cat in tags: 
