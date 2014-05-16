@@ -126,7 +126,8 @@ ref_all={}
 for snp_line in ref_inputfile:
 	x=snp_line.split()
 	if x[0]==str(chr):
-		ref_all[x[1]]=x[3]
+		# ref_all[x[1]]=x[3] , use the rs id instead of the position
+		ref_all[x[2]]=x[3]
 print len(ref_all)
 
 ###WORK BY SITE!!!######
@@ -151,7 +152,9 @@ print >> seq_NA_out, "POS ALL1 ALL2 REF CONV"
 for rs_line in rs_lines:
 	#print (seq_conversion)
 	snp=rs_line.strip().split('\t')
-	current_ref=ref_all[snp[3]]
+	# current_ref=ref_all[snp[3]] , switch to rsID instead of position checking 
+	ref_snp = snp[1]
+	current_ref=ref_all[ref_snp]
 	global conversion_seq
 	conversion=[]
 	for i in xrange (4,len(snp)):
@@ -159,23 +162,23 @@ for rs_line in rs_lines:
 			if snp[i]==" ".join([current_ref,current_ref]):
 				#major allele monomorphic
 				conv_value=0
-				print >> seq_RR_out, "%s %s %s %s" %(snp[3],snp[i],current_ref,conv_value)
+				print >> seq_RR_out, "%s %s %s %s" %(ref_snp,snp[i],current_ref,conv_value)
 			else:
 				#heterozygote
 				conv_value=1
-				print >> seq_het_out, "%s %s %s %s" %(snp[3],snp[i],current_ref,conv_value)
+				print >> seq_het_out, "%s %s %s %s" %(ref_snp,snp[i],current_ref,conv_value)
 		elif snp[i]== '0 0':
 			#missing genotype
 			conv_value='NA'
-			print >> seq_NA_out, "%s %s %s %s" %(snp[3],snp[i],current_ref,conv_value)
+			print >> seq_NA_out, "%s %s %s %s" %(ref_snp,snp[i],current_ref,conv_value)
 		elif current_ref not in snp[i]:
 			#minor allele monomorphic
 			conv_value=2
-			print >> seq_AA_out, "%s %s %s %s" %(snp[3],snp[i],current_ref,conv_value)
+			print >> seq_AA_out, "%s %s %s %s" %(ref_snp,snp[i],current_ref,conv_value)
 		conversion.append(conv_value)
 		#print 'TEST ON SEQ'
 		#print conversion
-	seq_conversion[snp[3]]=conversion
+	seq_conversion[ref_snp]=conversion
 seq_RR_out.close()
 seq_het_out.close()
 seq_AA_out.close()
@@ -200,7 +203,8 @@ gwas_conversion={}
 gwas_lines=OTHER_inputfile.readlines()
 for gwas_line in gwas_lines:
 	snp=gwas_line.strip().split('\t')
-	current_ref=ref_all[snp[3]]
+	ref_snp = snp[1] #switch to rsId istead of position for cheking: change this back to ref_snp = snp[3] to use position again
+	current_ref=ref_all[ref_snp]
 	global conversion_gwas
 	conversion_gwas=[]
 	for i in xrange (4,len(snp)):
@@ -208,23 +212,23 @@ for gwas_line in gwas_lines:
 			if snp[i]==" ".join([current_ref,current_ref]):
 				#major allele monomorphic
 				g_conv_value=0
-				print >> gwas_RR_out, "%s %s %s %s" %(snp[3],snp[i],current_ref,g_conv_value)
+				print >> gwas_RR_out, "%s %s %s %s" %(ref_snp,snp[i],current_ref,g_conv_value)
 			else:
 				#heterozygote
 				g_conv_value=1
-				print >> gwas_het_out, "%s %s %s %s" %(snp[3],snp[i],current_ref,g_conv_value)
+				print >> gwas_het_out, "%s %s %s %s" %(ref_snp,snp[i],current_ref,g_conv_value)
 		elif snp[i]== '0 0':
 			#missing genotype
 			g_conv_value='NA'
-			print >> gwas_NA_out, "%s %s %s %s" %(snp[3],snp[i],current_ref,g_conv_value)
+			print >> gwas_NA_out, "%s %s %s %s" %(ref_snp,snp[i],current_ref,g_conv_value)
 		elif current_ref not in snp[i]:
 			#minor allele monomorphic
 			g_conv_value=2
-			print >> gwas_AA_out, "%s %s %s %s" %(snp[3],snp[i],current_ref,g_conv_value)
+			print >> gwas_AA_out, "%s %s %s %s" %(ref_snp,snp[i],current_ref,g_conv_value)
 		conversion_gwas.append(g_conv_value)
 #		print 'TEST ON GWAS'
 #		print conversion
-	gwas_conversion[snp[3]]=conversion_gwas
+	gwas_conversion[ref_snp]=conversion_gwas
 #print gwas_conversion
 gwas_RR_out.close()
 gwas_het_out.close()

@@ -97,7 +97,7 @@ for sample in indiv_list.keys():
 	print >> all_samples_table, '%s\t%s\t%s' %(sample,sample_overall_concordance,sample_nonref_disc)
 
 	#now print everything in a fancy way!
-	print >> table_file,'\n\tVBI seq vs GWAS (sample: %s)\n' %(sample)
+	print >> table_file,'\n\tWGS seq vs GWAS (sample: %s)\n' %(sample)
 	print_table(all_sample_count[sample],table_file)
 	print >> table_file,'Overall concordance: %s' %(sample_overall_concordance)
 	print >> table_file,'Non ref-discordance: %s' %(sample_nonref_disc)
