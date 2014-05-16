@@ -23,10 +23,10 @@ outname_f2=`basename $2`.s2_seq
 
 #recode files in ped format and standardized names
 bsub -J "recode_f1" -o "%J_recode_f1.log" -M1000 -R"select[mem>1000] rusage[mem=1000]" \
--q normal "plink2 --bfile $1 --keep $3 --recode --allow-no-sex --out ${outname_f1}"
+-q normal "plink --noweb --bfile $1 --keep $3 --recode --allow-no-sex --out ${outname_f1}"
 
 bsub -J "recode_f2" -o "%J_recode_f2.log" -M1000 -R"select[mem>1000] rusage[mem=1000]" \
--q normal "plink2 --bfile $2 --keep $3 --recode --allow-no-sex --out ${outname_f2}"
+-q normal "plink --noweb --bfile $2 --keep $3 --recode --allow-no-sex --out ${outname_f2}"
 
 #create the freq file for first dataset:this is useful to set the reference only if the first dataset came from gwas data
 bsub -J "create_freq_table_d1" -o "%J_create_freq_table_d1.log" -w "ended(recode_f1)" -M1000 -R"select[mem>1000] rusage[mem=1000]" \
