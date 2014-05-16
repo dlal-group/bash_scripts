@@ -6,6 +6,7 @@ import os
 chr=sys.argv[1]
 consequences=sys.argv[2]
 file_path=sys.argv[3]
+outdir=os.getcwd()
 
 #tags=['REGULATORY_REGION','UPSTREAM','WITHIN_NON_CODING_GENE','DOWNSTREAM','INTRONIC','INTERGENIC','NON_SYNONYMOUS_CODING','SYNONYMOUS_CODING','5PRIME_UTR','3PRIME_UTR','NMD_TRANSCRIPT','SPLICE_SITE','STOP_GAINED','ESSENTIAL_SPLICE_SITE','WITHIN_MATURE_miRNA','STOP_LOST','PARTIAL_CODON','CODING_UNKNOWN']
 #tags=['WITHIN_NON_CODING_GENE','INTRONIC','DOWNSTREAM','UPSTREAM','INTERGENIC','REGULATORY_REGION','NON_SYNONYMOUS_CODING','5PRIME_UTR','SYNONYMOUS_CODING','3PRIME_UTR','NMD_TRANSCRIPT','ESSENTIAL_SPLICE_SITE','SPLICE_SITE','STOP_GAINED','STOP_LOST','WITHIN_MATURE_miRNA']
@@ -43,7 +44,7 @@ for line in inputfile:
 			if re.search(cat, line): 
 				if re.search('INDEL', line): diktag_indel[cat]+=1
 				else: diktag_snp[cat]+=1
-out=open('/lustre/scratch113/projects/fvg_seq/REL-2014-01-09/v1/chr_split/FUNKANN/funkann.chr%s.table' %(chr), 'w')
+out=open('%s/funkann.chr%s.table' %(outdir, chr), 'w')
 sys.stdout=out
 print 'CAT\tINDEL\tSNP' 
 					
