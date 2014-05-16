@@ -341,7 +341,7 @@ for current_sample in sorted(indiv_list.keys()):
 	#create the genotype list for the current sample
 	#the lists have to be in the same order
 	current_sample_gwas=[]
-	for current_pos in sorted(gwas_conversion.keys(),key=int):
+	for current_pos in sorted(gwas_conversion.keys(),key=str.lower):
 #		pdb.set_trace()
 		sample_gwas=gwas_conversion[current_pos][indiv_list[current_sample]]
 		current_sample_gwas.append(sample_gwas)
@@ -349,7 +349,7 @@ for current_sample in sorted(indiv_list.keys()):
 #	print 'sample GWAS'
 #	print actual_sample_gwas[current_sample]
 	current_sample_seq=[]
-	for current_pos in sorted(seq_conversion.keys(),key=int):
+	for current_pos in sorted(seq_conversion.keys(),key=str.lower):
 #		pdb.set_trace()
 		sample_seq=seq_conversion[current_pos][indiv_list[current_sample]]
 		current_sample_seq.append(sample_seq)
