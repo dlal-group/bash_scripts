@@ -16,8 +16,7 @@ for chr in range (1, 23):
   	chr="X"
 
   cmdl='bsub -R"select[mem>2500] rusage[mem=2500]" -M2500  -e %s/format.%s.err -o %s/format.%s.out -q yesterday \'/software/bin/python-2.7 %s/%s %s %s %s\'' %( outerrdir, chr,  outerrdir,  chr,  codedir, scriptname, chr, conseq_list_path , input_path)
-
-#print cmdl 
-os.system(cmdl)
+  #print cmdl 
+  os.system(cmdl)
 
   

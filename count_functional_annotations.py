@@ -30,7 +30,7 @@ for cat in tags:
 print chr 
 #pat tho vcf 
 # inputfile=gzip.open('/lustre/scratch113/projects/fvg_seq/REL-2014-01-09/v1/chr_split/fvg.vqsr.beagle.impute2.anno.20140109.csq.pop.vcf.gz.%s.vcf.gz' %(chr), 'r')
-inputfile=gzip.open('%s/%s.vcf.gz' %(filepath, chr), 'r')
+inputfile=gzip.open('%s/%s.vcf.gz' %(file_path, chr), 'r')
 
 for line in inputfile:
 	x=line.split()
