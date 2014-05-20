@@ -90,7 +90,7 @@ case $MODE in
 
     ;;
     ROH2 )
-    echo "Calculate ROH from a unified vcf file...."
+    echo "Calculate ROH from a unified vcf file....we use the gtgl option to deal with missing data"
     #use he same vcf file for all the samples but change the sample list of individuals toi exclude from the analysis
     for pop in $pops
     do
@@ -111,7 +111,7 @@ case $MODE in
       esac
         pop_list=/lustre/scratch113/projects/esgi-vbseq/20140430_purging/listpop/all_pop_but_${pop}.txt
         #use freq data
-        bsub -J"roh_${pop}" -o"%J_roh_${pop}.o" -q yesterday -M8000 -n2 -R"span[hosts=1] select[mem>=8000] rusage[mem=8000]" -- java -Xms5000m -Xmx5000m -jar /nfs/team151/software/beagle_4/b4.r1230.jar gl=${pop_path}/22.vcf.gz ibd=true nthreads=2 excludesamples=${pop_list} out=${pop}.roh
+        bsub -J"roh_${pop}" -o"%J_roh_${pop}.o" -q yesterday -M8000 -n2 -R"span[hosts=1] select[mem>=8000] rusage[mem=8000]" -- java -Xms5000m -Xmx5000m -jar /nfs/team151/software/beagle_4/b4.r1230.jar gtgl=${pop_path}/22.vcf.gz ibd=true nthreads=2 excludesamples=${pop_list} out=${pop}.roh
       
       done
 
