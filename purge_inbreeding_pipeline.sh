@@ -89,5 +89,32 @@ case $MODE in
       done
 
     ;;
+    ROH2 )
+    echo "Calculate ROH from a unified vcf file...."
+    #use he same vcf file for all the samples but change the sample list of individuals toi exclude from the analysis
+    for pop in $pops
+    do
+
+      case $pop in
+        FVG )
+          pop_path=/lustre/scratch113/projects/esgi-vbseq/20140430_purging/POP_MERGED_FILES/20140419_ANNOTATED
+          ;;
+        VBI )
+          pop_path=/lustre/scratch113/projects/esgi-vbseq/20140430_purging/POP_MERGED_FILES/20140419_ANNOTATED
+            ;;
+        TSI )
+          pop_path=/lustre/scratch113/projects/esgi-vbseq/20140430_purging/POP_MERGED_FILES/20140419_ANNOTATED
+            ;;
+        CEU )
+          pop_path=/lustre/scratch113/projects/esgi-vbseq/20140430_purging/POP_MERGED_FILES/20140419_ANNOTATED
+            ;;
+      esac
+        pop_list=/lustre/scratch113/projects/esgi-vbseq/20140430_purging/listpop/all_pop_but_${pop}.txt
+        #use freq data
+        bsub -J"roh_${pop}" -o"%J_roh_${pop}.o" -q yesterday -M8000 -n2 -R"span[hosts=1] select[mem>=8000] rusage[mem=8000]" -- java -Xms5000m -Xmx5000m -jar /nfs/team151/software/beagle_4/b4.r1230.jar gl=${pop_path}/22.vcf.gz ibd=true nthreads=2 excludesamples=${pop_list} out=${pop}.roh
+      
+      done
+
+    ;;
   esac
 
