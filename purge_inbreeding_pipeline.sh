@@ -7,6 +7,7 @@ pops="FVG VBI TSI CEU"
 
 #retrieve the MODE parameter to select the correct operation
 MODE=$1
+CHR=$2
 # Merge different popuplation together
 # TODO: add code!!!
 
@@ -71,20 +72,20 @@ case $MODE in
 
       case $pop in
         FVG )
-          pop_path=/lustre/scratch113/projects/fvg_seq/20140410/INGI/FVG
+          pop_path=/lustre/scratch113/projects/esgi-vbseq/20140430_purging/POPULATIONS/INGI/FVG
           ;;
         VBI )
-          pop_path=/lustre/scratch113/projects/fvg_seq/20140410/INGI/VBI
+          pop_path=/lustre/scratch113/projects/esgi-vbseq/20140430_purging/POPULATIONS/INGI/VBI
             ;;
         TSI )
-          pop_path=/lustre/scratch113/projects/fvg_seq/20140410/TGP/TSI
+          pop_path=/lustre/scratch113/projects/esgi-vbseq/20140430_purging/POPULATIONS/TGP/TSI
             ;;
         CEU )
-          pop_path=/lustre/scratch113/projects/fvg_seq/20140410/TGP/CEU
+          pop_path=/lustre/scratch113/projects/esgi-vbseq/20140430_purging/POPULATIONS/TGP/CEU
             ;;
       esac
         #use freq data
-        bsub -J"roh_${pop}" -o"%J_roh_${pop}.o" -q yesterday -M8000 -R"select[mem>=8000] rusage[mem=8000]" -- java -Xms5000m -Xmx5000m -jar /nfs/team151/software/beagle_4/b4.r1230.jar gl=${pop_path}/22.vcf.gz ibd=true out=${pop}.roh
+        bsub -J"roh_${pop}" -o"%J_roh_${pop}.o" -q yesterday -M8000 -R"select[mem>=8000] rusage[mem=8000]" -- java -Xms5000m -Xmx5000m -jar /nfs/team151/software/beagle_4/b4.r1230.jar gl=${pop_path}/${CHR}.vcf.gz ibd=true out=${pop}.roh
       
       done
 
