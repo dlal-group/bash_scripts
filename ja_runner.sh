@@ -227,11 +227,11 @@ file=`sed -n "${LSB_JOBINDEX}p" $1`
 # village=${village_file%_*}
 
 
-# bcftools2 view -s ${file} $2 -O v | vcf-annotate --fill-ICF | bgzip -c > $2.${village}.vcf.gz
+# bcftools view -s ${file} $2 -O v | vcf-annotate --fill-ICF | bgzip -c > $2.${village}.vcf.gz
 # tabix -f -p vcf $2.${village}.vcf.gz
 
 # # extract stats by village
-# bcftools2 stats -d 0,5000,1 -s - $2.${village}.vcf.gz > $2.${village}.vcfchk;plot-vcfstats $2.${village}.vcfchk -p vcf_check/unrelated/plots/${village}
+# bcftools stats -d 0,5000,1 -s - $2.${village}.vcf.gz > $2.${village}.vcfchk;plot-vcfstats $2.${village}.vcfchk -p vcf_check/unrelated/plots/${village}
 
 # # extract table info by village
 # #removed multiallelic sites and formatted the output to avoid missing problem when checking frequencies
@@ -265,6 +265,11 @@ file=`sed -n "${LSB_JOBINDEX}p" $1`
 # /nfs/team151/software/variant_effect_predictor/variant_effect_predictor.pl -i ${file} --quiet --regulatory --sift b --polyphen b --plugin Condel,/software/vertres/bin-external/VEP_plugins/config/Condel/config/,b --symbol --format vcf --force_overwrite --cache --dir /nfs/team151/software/VEP
 
 # extract table info and write table in current folder
-filename=`basename ${file}`
-(echo "CHROM POS ID REF ALT AN AC TGP_AF AMR_AF ASN_AF AFR_AF EUR_AF IMP2 VQSLOD TGP UK10K HWE DP ICF AF MAF MINOR";bcftools query ${file} -f "%CHROM\t%POS\t%ID\t%REF\t%ALT\t%INFO/AN\t%INFO/AC\t%INFO/1kg_AF\t%INFO/1kg_AMR_AF\t%INFO/1kg_ASN_AF\t%INFO/1kg_AFR_AF\t%INFO/1kg_EUR_AF\t%INFO/IMP2\t%INFO/VQSLOD\t%INFO/TGP\t%INFO/UK10K\t%INFO/HWE\t%INFO/DP\t%INFO/ICF\n" | awk '{if($5 !~ ",") print $0}' | awk '{if($6 != 0)print $0,$7/$6;else print $0,"NA"}' | awk '{if($NF != "NA") {if($NF > 0.5) print $0,1-$NF,$4;else print $0,$NF,$5}else{print $0,"NA","NA"}}') | tr "\t" " " > ${filename}.csv
+# filename=`basename ${file}`
+# (echo "CHROM POS ID REF ALT AN AC TGP_AF AMR_AF ASN_AF AFR_AF EUR_AF IMP2 VQSLOD TGP UK10K HWE DP ICF AF MAF MINOR";bcftools query ${file} -f "%CHROM\t%POS\t%ID\t%REF\t%ALT\t%INFO/AN\t%INFO/AC\t%INFO/1kg_AF\t%INFO/1kg_AMR_AF\t%INFO/1kg_ASN_AF\t%INFO/1kg_AFR_AF\t%INFO/1kg_EUR_AF\t%INFO/IMP2\t%INFO/VQSLOD\t%INFO/TGP\t%INFO/UK10K\t%INFO/HWE\t%INFO/DP\t%INFO/ICF\n" | awk '{if($5 !~ ",") print $0}' | awk '{if($6 != 0)print $0,$7/$6;else print $0,"NA"}' | awk '{if($NF != "NA") {if($NF > 0.5) print $0,1-$NF,$4;else print $0,$NF,$5}else{print $0,"NA","NA"}}') | tr "\t" " " > ${filename}.csv
 # (echo "CHROM POS ID REF ALT AN AC VQSLOD CULPRIT AF MAF MINOR";bcftools2 query ${file} -f "%CHROM\t%POS\t%ID\t%REF\t%ALT\t%INFO/AN\t%INFO/AC\t%INFO/VQSLOD\t%INFO/culprit\n" | awk '{if($5 !~ ",") print $0}' | awk '{if($6 != 0)print $0,$7/$6;else print $0,"NA"}' | awk '{if($NF != "NA") {if($NF > 0.5) print $0,1-$NF,$4;else print $0,$NF,$5}else{print $0,"NA","NA"}}') | tr "\t" " " > ${file}.csv
+
+#22/05/2014
+#extract stats for vcf files
+filename=`basename ${file}`
+bcftools stats ${file} > ${filename}.vchk
