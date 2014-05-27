@@ -6,6 +6,7 @@ import sys
 from sys import stdout
 """
 usage python ec_mergeXac.py mychr myvarofinterest mycontofinterest > myfilemerged.bed
+
 """
 chr=sys.argv[1]
 xac=sys.argv[2]
@@ -25,7 +26,7 @@ poplist={'EUR':['CEU', 'FIN', 'GBR', 'TSI'], 'ASN': ['CHB', 'CHS', 'JPT'], 'AFR'
 for pop in poplist[contofinterest]:
 	for vt in vartype:  dic_xac[vt][pop]={}
 
-	for line in open('%s.chr%s.tab'%(pop, chr ), 'r'):
+	for line in gzip.open('%s.chr%s.not_fixed.tab.gz'%(pop, chr ), 'r'):
 		if re.match('CHR', line): 
 			y=line.split('\t')
 			colofinterest=y.index(xac)
