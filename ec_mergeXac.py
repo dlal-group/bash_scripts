@@ -65,8 +65,30 @@ for site in set(sitelist):
 				else:
 					stdout.write('\tna')
 			print '\r'
- 
-dic_xacd={}
-dic_xac[vt]={}
-dic_xac[vt][pop]={}
-dic_xac[vt][pop][site] ={}
+		elif site in dic_xac[vt][poplist[contofinterest][1]]:
+			stdout.write('%s\t%s\t%s\t%s' %(chr,int(site)-1,site,vt))
+			for pop in poplist[contofinterest]: 
+				# print '%s' %(dic_xac[vt][pop][site]),
+				if site in dic_xac[vt][pop]:
+					stdout.write('\t%s' %(dic_xac[vt][pop][site]))
+				else:
+					stdout.write('\tna')
+			print '\r'
+		elif site in dic_xac[vt][poplist[contofinterest][2]]:
+			stdout.write('%s\t%s\t%s\t%s' %(chr,int(site)-1,site,vt))
+			for pop in poplist[contofinterest]: 
+				# print '%s' %(dic_xac[vt][pop][site]),
+				if site in dic_xac[vt][pop]:
+					stdout.write('\t%s' %(dic_xac[vt][pop][site]))
+				else:
+					stdout.write('\tna')
+			print '\r'
+		elif site in dic_xac[vt][poplist[contofinterest][3]]:
+			stdout.write('%s\t%s\t%s\t%s' %(chr,int(site)-1,site,vt))
+			for pop in poplist[contofinterest]: 
+				# print '%s' %(dic_xac[vt][pop][site]),
+				if site in dic_xac[vt][pop]:
+					stdout.write('\t%s' %(dic_xac[vt][pop][site]))
+				else:
+					stdout.write('\tna')
+			print '\r'
