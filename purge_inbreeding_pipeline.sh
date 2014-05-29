@@ -211,7 +211,7 @@ case $MODE in
       done
 
     ;;
-    ROH5 )
+    ROH6 )
     echo "Calculate ROH from a unified vcf file....using plink! (with MAF FILTERING)"
     echo -e "Parameters: \nwindow=${window}"
     #use he same vcf file for all the samples but change the sample list of individuals toi exclude from the analysis
@@ -238,7 +238,7 @@ case $MODE in
       done
 
     ;;
-    ROH6 )
+    ROH7 )
     echo "Calculate ROH from different files for each population....using PLINK!"
     echo -e "Parameters: \nwindow=${window}"
     for pop in $pops
