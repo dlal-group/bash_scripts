@@ -299,7 +299,7 @@ case $MODE in
             ;;
       esac
         # echo "(zcat ${pop_path}| head -1;zfgrep ${category} ${pop_path} | cut -f 1-6,8-) > ${outdir}/${pop}.${category}." | bsub -J"split_${pop}" -o"%J_slit_${pop}.o" -q normal -M8000 -n2 -R"span[hosts=1] select[mem>=8000] rusage[mem=8000]"
-        (zcat ${pop_path}| head -1;zfgrep ${category} ${pop_path} | cut -f 1-6,8-) | gzip -c > ${outdir}/${pop}.${category}.${CHR}.tab.gz
+        (zcat ${pop_path}| head -1;zfgrep ${category} ${pop_path} )| cut -f 1-6,8- | gzip -c > ${outdir}/${pop}.${category}.${CHR}.tab.gz
     
     done
 
