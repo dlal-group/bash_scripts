@@ -20,7 +20,6 @@ case $MODE in
   SPLITCSQ)
     #set parameters for splitting in consequences
     category=$3
-    outdir=CHR${CHR}/${pop}
     ;;
 esac
 
@@ -299,8 +298,10 @@ case $MODE in
           pop_path=/lustre/scratch113/projects/esgi-vbseq/20140430_purging/INPUT_FILES/${pop}.chr${CHR}.tab.gz
             ;;
       esac
-        # echo "(zcat ${pop_path}| head -1;zfgrep ${category} ${pop_path} | cut -f 1-6,8-) > ${outdir}/${pop}.${category}." | bsub -J"split_${pop}" -o"%J_slit_${pop}.o" -q normal -M8000 -n2 -R"span[hosts=1] select[mem>=8000] rusage[mem=8000]"
-        (zcat ${pop_path}| head -1;zfgrep ${category} ${pop_path} )| cut -f 1-6,8- | gzip -c > ${outdir}/${pop}.${category}.${CHR}.tab.gz
+
+      mkdir -p ${outdir}/${pop}
+      # echo "(zcat ${pop_path}| head -1;zfgrep ${category} ${pop_path} | cut -f 1-6,8-) > ${outdir}/${pop}.${category}." | bsub -J"split_${pop}" -o"%J_slit_${pop}.o" -q normal -M8000 -n2 -R"span[hosts=1] select[mem>=8000] rusage[mem=8000]"
+      (zcat ${pop_path}| head -1;zfgrep ${category} ${pop_path} )| cut -f 1-6,8- | gzip -c > ${outdir}/${pop}/${pop}.${category}.${CHR}.tab.gz
     
     done
 
