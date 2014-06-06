@@ -286,4 +286,7 @@ file=`sed -n "${LSB_JOBINDEX}p" $1`
 #5/06/2014
 filename=`basename ${file}`
 #Extract plink file format from wgs from TSI and CEU using a keplist
-plink2 --vcf ${file} --keep $2 --make-bed --keep-allele-order --double-id --biallelic-only list --out ${filename}
+plink2 --vcf ${file} --keep $2 --make-bed --keep-allele-order --double-id --biallelic-only list --snps-only --out ${filename}
+awk '{if($2==".") print $1,"chr"$1":"$4,$3,$4,$5,$6;else print $0}' ${filename}.bim | tr " " "\t" > ${filename}.bim.sanitized
+mv ${filename}.bim ${filename}.bim.old
+mv ${filename}.bim.sanitized ${filename}.bim
