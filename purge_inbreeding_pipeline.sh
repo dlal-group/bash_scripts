@@ -8,6 +8,8 @@ pops="FVG VBI TSI CEU"
 #retrieve the MODE parameter to select the correct operation
 MODE=$1
 CHR=$2
+# define the output folder relative to the chromosome, if specified
+outdir=CHR${CHR}
 
 case $MODE in
   ROH*)
@@ -18,17 +20,16 @@ case $MODE in
   SPLITCSQ)
     #set parameters for splitting in consequences
     category=$3
+    outdir=CHR${CHR}/${pop}
     ;;
 esac
 
-# create the output folder relative to the chromosome, if specified
-outdir=CHR${CHR}
+mkdir -p ${outdir}
 
 # Merge different popuplation together
 # TODO: add code!!!
 
 
-mkdir -p ${outdir}
 
 #create a case statement to select the operation to do:
 case $MODE in
