@@ -20,20 +20,20 @@ outprefix=sys.argv[3]
 
 #~~~~~~~~~~~~ routines ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 def frequencies_anc_known_confidence(genlist, ref, alt, anc) :
-        R=A=M=0
-        D=0; confidence=''
-        #swap={'a':'A', 't':'T', 'g':'G', 'c':'C'}
-        for item in genlist:
-                x=item.split(':')
-                r=x[0].count('0'); a=x[0].count('1'); m=x[0].count('.')
-                R=R+r; A=A+a; M=M+m
-                if ref==anc: D=A
-                else: D=R
-                    #upperanc=swap[anc]
-                    #if ref==upperanc: D=A
-                    #else: D=R
+	R=A=M=0
+	D=0; confidence=''
+	#swap={'a':'A', 't':'T', 'g':'G', 'c':'C'}
+	for item in genlist:
+		x=item.split(':')
+		r=x[0].count('0'); a=x[0].count('1'); m=x[0].count('.')
+		R=R+r; A=A+a; M=M+m
+		if ref==anc: D=A
+		else: D=R
+		    #upperanc=swap[anc]
+		    #if ref==upperanc: D=A
+		    #else: D=R
 	mac=min(R,A )
-        return R, A, M, D, mac  #, confidence
+		return R, A, M, D, mac  #, confidence
 
 def frequencies_mac(genlist, ref, alt) :
 	R=A=M=0
@@ -46,9 +46,9 @@ def frequencies_mac(genlist, ref, alt) :
 
 def remove_dups(seq):
 	x = {}
-    	for y in seq: x[y] = 1
-    	u = x.keys(); u.sort()
-    	return u 
+	for y in seq: x[y] = 1
+	u = x.keys(); u.sort()
+	return u 
 
 def findpopranges(dic_index, pop, dic_indiv_pop): 
 	list=[]
@@ -76,10 +76,11 @@ for line in gzip.open(inputvcf, 'r'):
 
 		for indiv in sampleind:
 			sampleind_index.append(header.index(indiv))
-		#break 
-  elif re.match('\d+\t', line):
+		#break
+
+	elif re.match('\d+\t', line):
 		confidence=''
-    z=line.split()
+		z=line.split()
 		chr=z[0]; poz=int(z[1])-1; position=z[1]; vid=z[2]; ref=z[header.index('REF')]; alt=z[header.index('ALT')]; infofield=z[header.index('INFO')]
 		infosplit=infofield.split(';')
 
@@ -101,12 +102,11 @@ for line in gzip.open(inputvcf, 'r'):
 			alleles_count=frequencies_mac(  temporary_genotypes, ref, alt) 
 			rac=alleles_count[0]; alc=alleles_count[1]; dac='NA'; mac=alleles_count[3]
 		for item in  [chr,poz,position, vid, ref, alt, infofield]:  #z[0:8]: 
-      print '%s\t' %(item),
+			print '%s\t' %(item),
 
-    print '%s\t%s\t%s\t%s\t' %(rac,alc, dac, mac),
+		print '%s\t%s\t%s\t%s\t' %(rac,alc, dac, mac),
 
-    if not dac=='NA': print '%.6f\t' %(int(dac)/float(len(sampleind_index)*2)),
-    else: print 'NA\t',
+		if not dac=='NA': print '%.6f\t' %(int(dac)/float(len(sampleind_index)*2)),
+		else: print 'NA\t',
 
-    print int(mac)/float(len(sampleind_index)*2)
-    
+		print int(mac)/float(len(sampleind_index)*2)
