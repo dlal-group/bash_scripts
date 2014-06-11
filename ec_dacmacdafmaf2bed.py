@@ -8,7 +8,7 @@ import os
 
 """
 *** USAGE ***
-hd1_dac_mac_1kg.py individuals.list vcfinput out_prefix
+ec_dac_mac_1kg.py individuals.list (from vcf header) vcfinput out_prefix
 
 """
 
@@ -73,19 +73,23 @@ sampleind_index=[]
 for line in gzip.open(inputvcf, 'r'):
 	if re.match('#CHROM', line): 
 		header=line.rstrip().split() 
+
 		for indiv in sampleind:
 			sampleind_index.append(header.index(indiv))
 		#break 
-        elif re.match('\d+\t', line):
+  elif re.match('\d+\t', line):
 		confidence=''
-                z=line.split()
+    z=line.split()
 		chr=z[0]; poz=int(z[1])-1; position=z[1]; vid=z[2]; ref=z[header.index('REF')]; alt=z[header.index('ALT')]; infofield=z[header.index('INFO')]
 		infosplit=infofield.split(';')
+
 		for ii in infosplit: 
 			if re.match('AA=', ii): 
 				iisplitted=ii.split('=')
 				ancestralallele=iisplitted[1]
+
 		temporary_genotypes=[]		
+
 		for id in sampleind_index: temporary_genotypes.append(z[id])
 		#print temporary_genotypes
 
@@ -97,9 +101,12 @@ for line in gzip.open(inputvcf, 'r'):
 			alleles_count=frequencies_mac(  temporary_genotypes, ref, alt) 
 			rac=alleles_count[0]; alc=alleles_count[1]; dac='NA'; mac=alleles_count[3]
 		for item in  [chr,poz,position, vid, ref, alt, infofield]:  #z[0:8]: 
-                        print '%s\t' %(item),
-                print '%s\t%s\t%s\t%s\t' %(rac,alc, dac, mac),
-                if not dac=='NA': print '%.6f\t' %(int(dac)/float(len(sampleind_index)*2)),
-                else: print 'NA\t',
-                print int(mac)/float(len(sampleind_index)*2)
-	
+      print '%s\t' %(item),
+
+    print '%s\t%s\t%s\t%s\t' %(rac,alc, dac, mac),
+
+    if not dac=='NA': print '%.6f\t' %(int(dac)/float(len(sampleind_index)*2)),
+    else: print 'NA\t',
+
+    print int(mac)/float(len(sampleind_index)*2)
+    
