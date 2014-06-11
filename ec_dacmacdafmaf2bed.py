@@ -33,7 +33,7 @@ def frequencies_anc_known_confidence(genlist, ref, alt, anc) :
 		    #if ref==upperanc: D=A
 		    #else: D=R
 	mac=min(R,A )
-		return R, A, M, D, mac  #, confidence
+	return R, A, M, D, mac  #, confidence
 
 def frequencies_mac(genlist, ref, alt) :
 	R=A=M=0
