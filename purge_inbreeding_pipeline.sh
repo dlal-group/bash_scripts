@@ -3,7 +3,8 @@
 #
 #
 #define the population we are using
-pops="FVG VBI TSI CEU"
+# pops="FVG VBI TSI CEU"
+pops="FVG VBI"
 
 #retrieve the MODE parameter to select the correct operation
 MODE=$1
