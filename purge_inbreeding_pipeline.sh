@@ -306,7 +306,7 @@ case $MODE in
             pop_path=/lustre/scratch113/projects/esgi-vbseq/20140430_purging/UNRELATED/INPUT_FILES/${pop}.chr${CHR}.tab.gz
               ;;
         esac
-        outdir = "${outdir}_fixed"
+        outdir=${outdir}_fixed
       else
         case $pop in
           FVG )
@@ -322,7 +322,7 @@ case $MODE in
             pop_path=/lustre/scratch113/projects/esgi-vbseq/20140430_purging/UNRELATED/INPUT_FILES/${pop}.chr${CHR}.not_fixed.tab.gz
             ;;
         esac
-        outdir = "${outdir}_no_fixed"
+        outdir=${outdir}_no_fixed
       fi
       
       mkdir -p ${outdir}/${pop}
