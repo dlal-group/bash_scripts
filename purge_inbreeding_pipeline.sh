@@ -18,7 +18,7 @@ case $MODE in
     window=$3
     overlap=$4
     ;;
-  SPLITCSQ)
+  SPLITCSQ*)
     #set parameters for splitting in consequences
     category=$3
     fixed=$4
@@ -356,7 +356,7 @@ case $MODE in
             ;;
           VBI )
             pop_path=/lustre/scratch113/projects/esgi-vbseq/20140430_purging/UNRELATED/INPUT_FILES/${pop}_private_chr${CHR}.merged_daf.fixed.tab.gz
-              ;;
+            ;;
         esac
       else
         case $pop in
@@ -374,7 +374,6 @@ case $MODE in
       (zcat ${pop_path}| head -1;zfgrep ${category} ${pop_path} )| cut -f 1-6,8- | gzip -c > ${outdir}/${pop}/${pop}.private.${category}.${CHR}.tab.gz
     
     done
-
   ;;
   * )
     echo -e "USAGE:\n
