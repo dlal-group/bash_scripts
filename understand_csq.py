@@ -7,8 +7,8 @@ import sys
 #this version works on a single chromosome, so we can submit a job array
 in_path=sys.argv[1]
 # prefix=sys.argv[2]
-chr=sys.argv[2]
-out_path=sys.argv[3]
+out_path=sys.argv[2]
+chr=sys.argv[3]
 
 listaconseq=[]
 
