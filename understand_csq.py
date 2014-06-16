@@ -38,7 +38,7 @@ for line in gzip.open('%s/%s.vcf.gz' %(in_path,chr) , 'r'):
 						else: 
 							if not w[2] in listaconseq: listaconseq.append(w[2])
 
-out=open('%s/%s_consequences.list' %(chr,out_path), 'w')
+out=open('%s/%s_consequences.list' %(out_path,chr), 'w')
 sys.stdout=out
 for csq in listaconseq: print csq
 						 
