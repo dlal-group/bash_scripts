@@ -26,7 +26,8 @@ poplist={'EUR':['CEU', 'FIN', 'GBR', 'TSI'], 'ASN': ['CHB', 'CHS', 'JPT'], 'AFR'
 for pop in poplist[contofinterest]:
 	for vt in vartype:  dic_xac[vt][pop]={}
 
-	for line in gzip.open('%s.chr%s.tab.gz'%(pop, chr ), 'r'):
+	# for line in gzip.open('%s.chr%s.tab.gz'%(pop, chr ), 'r'):
+	for line in gzip.open('%s.chr%s.not_fixed.not_MAC1.tab.gz'%(pop, chr ), 'r'):
 		if re.match('CHR', line): 
 			y=line.split('\t')
 			colofinterest=y.index(xac)
