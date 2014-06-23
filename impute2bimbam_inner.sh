@@ -7,10 +7,10 @@
 #$3=transformed file output
 #Modified to be run as a job array
 file=$1
-# chr=$2
-outpath=$2
+chr=$2
+outpath=$3
 file_name=`basename ${file}`
-chr=`echo ${file_name%%.*}|sed 's/chr//g'`
+# chr=`echo ${file_name%%.*}|sed 's/chr//g'`
 ##################################################################################################################################################
 #ATTENTION: to generate the bimbam file we check if the snp id column matches the pattern "rs*" if this is not the case, we set the rsID to "NA"!!!
 ##################################################################################################################################################
