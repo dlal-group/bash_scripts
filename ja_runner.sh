@@ -104,28 +104,28 @@ file=`sed -n "${LSB_JOBINDEX}p" $1`
 #plink --bfile ~/UK10K/users/jh21/imputed/fvg/fvg_370/shapeit/chr${chr} --bmerge ~/UK10K/users/jh21/imputed/fvg/fvg_omni/shapeit/chr${chr}.bed ~/UK10K/users/jh21/imputed/fvg/fvg_omni/shapeit/chr${chr}.bim ~/UK10K/users/jh21/imputed/fvg/fvg_omni/shapeit/chr${chr}.fam --make-bed --out ${outpath}/chr${chr}_merged
 
 #extract sites by region using antitumoral list
-echo ${file}
-chr=`echo ${file} | cut -f 1 -d " "`
-start=`echo ${file} | cut -f 2 -d " "`
-end=`echo ${file} | cut -f 3 -d " "`
-gene=`echo ${file} | cut -f 4 -d " "`
-genotype_path=$2
-outpath=$3
+# echo ${file}
+# chr=`echo ${file} | cut -f 1 -d " "`
+# start=`echo ${file} | cut -f 2 -d " "`
+# end=`echo ${file} | cut -f 3 -d " "`
+# gene=`echo ${file} | cut -f 4 -d " "`
+# genotype_path=$2
+# outpath=$3
 
-mkdir -p ${outpath}/males
-mkdir -p ${outpath}/females
+# mkdir -p ${outpath}/males
+# mkdir -p ${outpath}/females
 
-#create bed files
-plink --noweb --bfile ${genotype_path} --chr ${chr} --from-bp ${start} --to-bp ${end} --make-bed --out ${outpath}/chr${chr}_${gene}
+# #create bed files
+# plink --noweb --bfile ${genotype_path} --chr ${chr} --from-bp ${start} --to-bp ${end} --make-bed --out ${outpath}/chr${chr}_${gene}
 
-#now calculate also the frequencies in FVG
-plink --noweb --bfile ${genotype_path} --chr ${chr} --from-bp ${start} --to-bp ${end} --freq --out ${outpath}/chr${chr}_${gene}_fvgfrq
+# #now calculate also the frequencies in FVG
+# plink --noweb --bfile ${genotype_path} --chr ${chr} --from-bp ${start} --to-bp ${end} --freq --out ${outpath}/chr${chr}_${gene}_fvgfrq
 
-#now calculate also the frequencies in FVG for males only
-plink --noweb --bfile ${genotype_path} --chr ${chr} --from-bp ${start} --to-bp ${end} --filter-males --freq --out ${outpath}/males/chr${chr}_${gene}_fvgfrq
+# #now calculate also the frequencies in FVG for males only
+# plink --noweb --bfile ${genotype_path} --chr ${chr} --from-bp ${start} --to-bp ${end} --filter-males --freq --out ${outpath}/males/chr${chr}_${gene}_fvgfrq
 
-#now calculate also the frequencies in FVG for females only
-plink --noweb --bfile ${genotype_path} --chr ${chr} --from-bp ${start} --to-bp ${end} --filter-females --freq --out ${outpath}/females/chr${chr}_${gene}_fvgfrq
+# #now calculate also the frequencies in FVG for females only
+# plink --noweb --bfile ${genotype_path} --chr ${chr} --from-bp ${start} --to-bp ${end} --filter-females --freq --out ${outpath}/females/chr${chr}_${gene}_fvgfrq
 
 #calculate md5sum
 # filename=`basename ${file}`
@@ -296,3 +296,9 @@ plink --noweb --bfile ${genotype_path} --chr ${chr} --from-bp ${start} --to-bp $
 # awk '{if($2==".") print $1,"chr"$1":"$4,$3,$4,$5,$6;else print $0}' ${filename}.bim | tr " " "\t" > ${filename}.bim.sanitized
 # mv ${filename}.bim ${filename}.bim.old
 # mv ${filename}.bim.sanitized ${filename}.bim
+
+
+#2/07/2014 extract data from 1000G phase1_release_v3 for different populations splitted by chromosomes
+pop=$2
+
+bcftools view -S /lustre/scratch113/projects/esgi-vbseq/20140430_purging/ALL/POPULATIONS/TGP/${pop}/${pop}.keeplist -O z -o /lustre/scratch113/projects/esgi-vbseq/20140430_purging/ALL/POPULATIONS/TGP/${pop}/${file}.vcf.gz /lustre/scratch113/projects/esgi-vbseq/20140430_purging/ALL/POPULATIONS/TGP/WGS/ALL.chr${file}.phase1_release_v3.20101123.snps_indels_svs.genotypes.vcf.gz

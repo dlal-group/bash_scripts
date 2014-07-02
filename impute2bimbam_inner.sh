@@ -32,6 +32,6 @@ zcat $file|cut -f 2- -d " " | awk -v chr=${chr} '{ snp=(NF-5)/3; printf "chr"chr
 
 # zcat $file | awk -v chrom=$chr '{printf "chr"chr":"$3","$3","chrom"\n"}' > $outpath/$file_name.pos
 #just in case of qctool merging of files we need to remove the first column
-zcat $file|cut -f 2- -d " " | awk -v chrom=$chr '{printf "chr"chr":"$3","$3","chrom"\n"}' > $outpath/$file_name.pos
+zcat $file|cut -f 2- -d " " | awk -v chrom=$chr '{printf "chr"chrom":"$3","$3","chrom"\n"}' > $outpath/$file_name.pos
 
 

@@ -56,8 +56,8 @@ else
 
 if [ ${reg_length} -eq 4 ]
 then
-echo "Using a reference snp: ${refsnp}"
 refsnp=`echo ${line} | awk '{print $4}'`
+echo "Using a reference snp: ${refsnp}"
 locuszoom --no-date --cache None --plotonly \
 --metal ${resultfile} \
 --chr ${chrom} \
