@@ -99,6 +99,9 @@ file=`sed -n "${LSB_JOBINDEX}p" $1`
 # generate stats for bamfiles
 # samtools_stats.sh ${file} ${outpath}
 
+# generate index for bamfiles
+samtools index ${file}
+
 #merge genotypes
 #chr=${file}
 #plink --bfile ~/UK10K/users/jh21/imputed/fvg/fvg_370/shapeit/chr${chr} --bmerge ~/UK10K/users/jh21/imputed/fvg/fvg_omni/shapeit/chr${chr}.bed ~/UK10K/users/jh21/imputed/fvg/fvg_omni/shapeit/chr${chr}.bim ~/UK10K/users/jh21/imputed/fvg/fvg_omni/shapeit/chr${chr}.fam --make-bed --out ${outpath}/chr${chr}_merged
@@ -299,6 +302,7 @@ file=`sed -n "${LSB_JOBINDEX}p" $1`
 
 
 #2/07/2014 extract data from 1000G phase1_release_v3 for different populations splitted by chromosomes
-pop=$2
+# pop=$2
 
-bcftools view -S /lustre/scratch113/projects/esgi-vbseq/20140430_purging/ALL/POPULATIONS/TGP/${pop}/${pop}.keeplist -O z -o /lustre/scratch113/projects/esgi-vbseq/20140430_purging/ALL/POPULATIONS/TGP/${pop}/${file}.vcf.gz /lustre/scratch113/projects/esgi-vbseq/20140430_purging/ALL/POPULATIONS/TGP/WGS/ALL.chr${file}.phase1_release_v3.20101123.snps_indels_svs.genotypes.vcf.gz
+# bcftools view -S /lustre/scratch113/projects/esgi-vbseq/20140430_purging/ALL/POPULATIONS/TGP/${pop}/${pop}.keeplist -O z -o /lustre/scratch113/projects/esgi-vbseq/20140430_purging/ALL/POPULATIONS/TGP/${pop}/${file}.vcf.gz /lustre/scratch113/projects/esgi-vbseq/20140430_purging/ALL/POPULATIONS/TGP/WGS/ALL.chr${file}.phase1_release_v3.20101123.snps_indels_svs.genotypes.vcf.gz
+
