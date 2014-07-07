@@ -100,7 +100,10 @@ file=`sed -n "${LSB_JOBINDEX}p" $1`
 # samtools_stats.sh ${file} ${outpath}
 
 # generate index for bamfiles
-samtools index ${file}
+if [ ! -f ${file}.bai ];
+then
+  samtools index ${file}
+fi
 
 #merge genotypes
 #chr=${file}
