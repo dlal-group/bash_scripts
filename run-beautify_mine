@@ -121,7 +121,6 @@ sub parse_args
         if ( $arg eq '-o' or $arg eq '--outdir' ) { $$self{outdir}=shift(@ARGV); next; }
         if ( $arg eq '-i' or $arg eq '--input-vcf' ) { $$self{in_vcf}=shift(@ARGV); next; }
         if ( $arg eq '-m' or $arg eq '--mrProper' ) { $$self{mrProper}=1; next; }
-        if ( $arg eq '-novep' ) { $$self{novep}=1; next; }
         $self->throw();
     }
     if ( !exists($$self{version}) or $$self{version} ne $$self{config_version} )
@@ -154,9 +153,7 @@ sub main
     {
         for my $chunk (@$chunks)
         {
-            if ( !exists($$self{novep}) ) {
-               $self->spawn('run_predictor',"$outdir/$$chunk[0]/$$chunk[1]-$$chunk[2].vep",$chunk);
-            }
+            $self->spawn('run_predictor',"$outdir/$$chunk[0]/$$chunk[1]-$$chunk[2].vep",$chunk);
         }
         $self->wait;
         $self->cmd("touch $outdir/predictor.done");
@@ -393,12 +390,10 @@ sub annotate
     my $vep_in = "$prefix.vep";
     my $in_vcf = "$prefix.in.vcf.gz";
 
-    if ( !exists($$self{novep}) ) {
-        my $cmd = q[( cat ] . $vep_in . q[ | head -100 | grep ^#; cat ] . $vep_in . q[ | grep -v ^# | awk '{OFS="\t"}{gsub(/:/,"\t",$2); print}' | sort -k2,2d -k3,3n ) | bgzip -c > ] . $vep_in . q[.tab.gz]; 
-        $self->cmd($cmd);
-        $self->cmd("tabix -s 2 -b 3 -e 3 $vep_in.tab.gz");
-    }
-    
+    my $cmd = q[( cat ] . $vep_in . q[ | head -100 | grep ^#; cat ] . $vep_in . q[ | grep -v ^# | awk '{OFS="\t"}{gsub(/:/,"\t",$2); print}' | sort -k2,2d -k3,3n ) | bgzip -c > ] . $vep_in . q[.tab.gz]; 
+    $self->cmd($cmd);
+    $self->cmd("tabix -s 2 -b 3 -e 3 $vep_in.tab.gz");
+
     my $annotate = (!exists($$self{vcf_annotate}) or $$self{vcf_annotate}=~/^\s*$/) ? '' : "| $$self{vcf_annotate}";
     $self->cmd("$$self{vcf2consequences} -v $in_vcf -t $vep_in.tab.gz $annotate | bgzip -c > $outfile.part");
     $self->tabix_part($outfile);
