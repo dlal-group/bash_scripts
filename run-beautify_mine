@@ -410,7 +410,8 @@ sub concat_vcfs
         print $fh $file, "\n";
     }
     close($fh);
-    $self->cmd(qq[$$self{bcftools} concat -f $outfile.list -Oz > $outfile.part]);
+    # $self->cmd(qq[$$self{bcftools} concat -f $outfile.list -Oz > $outfile.part]);
+    $self->cmd(qq[vcf-concat -f $outfile.list | bgzip -c > $outfile.part]);
     $self->cmd(qq[cat $outfile.part | md5sum > $outfile.md5]);
     rename("$outfile.part","$outfile.tmp.vcf.gz");
     $self->cmd("tabix -p vcf -f $outfile.tmp.vcf.gz");
