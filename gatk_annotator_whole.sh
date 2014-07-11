@@ -24,3 +24,7 @@ dbsnp_ann=$3
 # --dbsnp /lustre/scratch111/resources/variation/Homo_sapiens/grch37/dbsnp_138.vcf.gz \
 # --resource:1kg /lustre/scratch111/resources/variation/Homo_sapiens/grch37/ALL.wgs.phase1_release_v3.20101123.snps_indels_sv.sites.vcf.gz \
 # --list
+tabix -p vcf ${out_file}
+
+zcat ${out_file} | sed "s/1kg\.//g" | bgzip -c > ${out_file}.clean_annotated.vcf.gz
+
