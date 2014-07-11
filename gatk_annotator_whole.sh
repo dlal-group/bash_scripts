@@ -9,7 +9,7 @@ out_file=$2
 dbsnp_ann=$3
 
 
-/software/jre1.7.0_25/bin/java -Xmx1000m -Xms1000m -server -XX:+UseSerialGC -jar /nfs/users/nfs_m/mercury/src/GenomeAnalysisTK-3.1-1/GenomeAnalysisTK.jar -T VariantAnnotator \
+/software/jre1.7.0_25/bin/java -Xmx1000m -Xms1000m -server -XX:+UseSerialGC -jar /nfs/users/nfs_m/mercury/src/GenomeAnalysisTK-3.1-1/GenomeAnalysisTK.jar -T VariantAnnotator -nt 2\
 --dbsnp ${dbsnp_ann} \
 --variant ${in_file} \
 --out ${out_file} \
