@@ -9,7 +9,7 @@ outfolder=$3
 chr=$1
 
 
-/software/jre1.7.0_25/bin/java -Xmx1000m -Xms1000m -server -XX:+UseSerialGC -jar /nfs/users/nfs_m/mercury/src/GenomeAnalysisTK-2.7-2-g6bda569/GenomeAnalysisTK.jar -T VariantAnnotator \
+/software/jre1.7.0_25/bin/java -Xmx1000m -Xms1000m -server -XX:+UseSerialGC -jar /nfs/users/nfs_m/mercury/src/GenomeAnalysisTK-3.1-1/GenomeAnalysisTK.jar -T VariantAnnotator \
 --dbsnp /lustre/scratch113/projects/fvg_seq/variant_refinemet/annotations/dbSNP-b138/${chr}.dbsnp_138.vcf.gz \
 --variant ${infolder}/${chr}.vcf.gz \
 --out ${outfolder}/${chr}.vcf.gz \
