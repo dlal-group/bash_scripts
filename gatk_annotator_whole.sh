@@ -28,3 +28,4 @@ tabix -p vcf ${out_file}
 
 zcat ${out_file} | sed "s/1kg\.//g" | bgzip -c > ${out_file}.clean_annotated.vcf.gz
 
+tabix -p vcf ${out_file}.clean_annotated.vcf.gz
