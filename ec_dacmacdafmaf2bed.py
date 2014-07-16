@@ -88,6 +88,8 @@ for line in gzip.open(inputvcf, 'r'):
 			if re.match('AA=', ii): 
 				iisplitted=ii.split('=')
 				ancestralallele=iisplitted[1]
+			else:
+				ancestralallele='.'
 
 		temporary_genotypes=[]		
 
