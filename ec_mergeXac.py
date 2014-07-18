@@ -29,8 +29,8 @@ for pop in poplist[contofinterest]:
 	# for line in gzip.open('%s.chr%s.not_fixed.not_MAC1.tab.gz'%(pop, chr ), 'r'):
 	for line in gzip.open('%s.chr%s.tab.gz'%(pop, chr ), 'r'):
 		if re.match('#CHROM', line): 
-			y=line.split('\t')
-			print xac
+			print line
+			y=line.rstrip().split('\t')
 			colofinterest=y.index(xac)
 			print colofinterest
 
@@ -46,8 +46,6 @@ for pop in poplist[contofinterest]:
 			elif (len(y[4]) != len(y[5]) and (not (re.search(",",y[5])))): dic_type['INDEL'].append(posizione); dic_xac['INDEL'][pop][posizione]=y[colofinterest]
 			elif re.search ('VT=SV' , line ) : dic_type['SV'].append(posizione); dic_xac['SV'][pop][posizione]=y[colofinterest]
 			else: dic_type['NA'].append(posizione); dic_xac['NA'][pop][posizione]=y[colofinterest]
-
-
 
 
 stdout.write('#CHR\tPOZ\tPOS\tVT')
