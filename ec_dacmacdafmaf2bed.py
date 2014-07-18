@@ -89,7 +89,7 @@ for line in gzip.open(inputvcf, 'r'):
 				iisplitted=ii.split('=')
 				ancestralallele=iisplitted[1]
 			else:
-				ancestralallele='.'
+				ancestralallele='N'
 
 		temporary_genotypes=[]		
 
