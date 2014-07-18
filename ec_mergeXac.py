@@ -30,6 +30,7 @@ for pop in poplist[contofinterest]:
 	for line in gzip.open('%s.chr%s.tab.gz'%(pop, chr ), 'r'):
 		if re.match('#CHROM', line): 
 			y=line.split('\t')
+			print xac
 			colofinterest=y.index(xac)
 			print colofinterest
 
