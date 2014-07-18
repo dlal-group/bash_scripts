@@ -28,7 +28,7 @@ for pop in poplist[contofinterest]:
 
 	# for line in gzip.open('%s.chr%s.not_fixed.not_MAC1.tab.gz'%(pop, chr ), 'r'):
 	for line in gzip.open('%s.chr%s.tab.gz'%(pop, chr ), 'r'):
-		if re.match('CHR', line): 
+		if re.match('#CHROM', line): 
 			y=line.split('\t')
 			colofinterest=y.index(xac)
 			#print colofinterest
