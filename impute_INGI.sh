@@ -64,7 +64,8 @@ for chr in X_PAR1 X_PAR2; do
 
 	### step 2: impute ###
 	refhap=$refdir/$refname/chr$chr.hap.gz
-	reflegend=$refdir/$refname/chr$chr.legend.gz	
+	# reflegend=$refdir/$refname/chr$chr.legend.gz	
+	reflegend=$refdir/$refname/chrX.legend.gz	
 	chr_begin=`zcat $reflegend | awk 'NR==2 {printf \$2}'`
 	chr_end=`zcat $reflegend | tail -1 | awk '{printf \$2}'`
 	let "chunk_num=($chr_end - $chr_begin)/$chunk_size" # bash rounds automatically
