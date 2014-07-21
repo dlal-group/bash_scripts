@@ -8,8 +8,11 @@ from sys import stdout
 usage python ec_mergeXac.py mychr myvarofinterest mycontofinterest > myfilemerged.bed
 
 """
+# chr=22
 chr=sys.argv[1]
+# xac="MAF"
 xac=sys.argv[2]
+# contofinterest="INGI"
 contofinterest=sys.argv[3]
 
 dic_xac={}
@@ -27,7 +30,8 @@ for pop in poplist[contofinterest]:
 	for vt in vartype:  dic_xac[vt][pop]={}
 
 	# for line in gzip.open('%s.chr%s.not_fixed.not_MAC1.tab.gz'%(pop, chr ), 'r'):
-	for line in gzip.open('%s.chr%s.tab.gz'%(pop, chr ), 'r'):
+	# for line in gzip.open('%s.chr%s.tab.gz'%(p op, chr ), 'r'):
+	for line in gzip.open('%s.chr%s.test.gz'%(pop, chr ), 'r'):
 		if re.match('#CHROM', line): 
 			print line
 			y=line.rstrip().split('\t')

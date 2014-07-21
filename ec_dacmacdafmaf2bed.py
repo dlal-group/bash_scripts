@@ -11,9 +11,11 @@ import os
 ec_dac_mac_1kg.py individuals.list (from vcf header) vcfinput out_prefix
 
 """
-
+# individualssamplelist="/lustre/scratch113/projects/esgi-vbseq/20140430_purging/UNRELATED/listpop/FVG_unrelated.list"
 individualssamplelist=sys.argv[1]
+# inputvcf="/lustre/scratch113/projects/esgi-vbseq/20140430_purging/UNRELATED/POP_MERGED_FILES/FIVE_POPS/20140711_ANNOTATED/22.vcf.gz"
 inputvcf=sys.argv[2]
+# outprefix="FVG.chr22.tab"
 outprefix=sys.argv[3]
 
 #~~~~~~~~~~~~~ output files ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -97,8 +99,8 @@ for line in gzip.open(inputvcf, 'r'):
 		#print temporary_genotypes
 
 		#print '##', ref, alt, ancestralallele
-		if not  (re.search('\.', ancestralallele)   or re.search('-' , ancestralallele) or re.search('N', ancestralallele)  ):
-			alleles_count=frequencies_anc_known_confidence(temporary_genotypes, ref, alt, ancestralallele) 
+		if not (re.search('\.', ancestralallele) or re.search('-' , ancestralallele) or re.search('N', ancestralallele)):
+			alleles_count=frequencies_anc_known_confidence(temporary_genotypes, ref, alt, ancestralallele)
 			rac=alleles_count[0]; alc=alleles_count[1]; dac=alleles_count[3]; mac=alleles_count[4]
 		else: 
 			alleles_count=frequencies_mac(  temporary_genotypes, ref, alt) 
