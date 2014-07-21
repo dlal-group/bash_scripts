@@ -29,7 +29,8 @@ extra_str="-verbose" #"-verbose" #"-phase"
 # extra_str="-exclude_samples_g $scratch113/references_panel/uk10k/uk10k.sample.ids"
 
 # for chr in {1..22}; do
-for chr in X_PAR1 X_PAR2 X ; do
+# for chr in X_PAR1 X_PAR2 X ; do
+for chr in X_PAR1 X_PAR2; do
 	if [[ "$chr" == "X_PAR1" ]]; then # (60,001 - 2,699,520)
 		plink_str="--chr X --from-bp 60001 --to-bp 2699520"
 		chrX_phase_str=""
@@ -98,7 +99,7 @@ for chr in X_PAR1 X_PAR2 X ; do
 			reflegend=$refdir/$refname/chr$chr.${chunkStr}$postfix.legend.gz
 		fi
 		echo -e "#!/usr/local/bin/bash
-		\n$impute2 -allow_large_regions -m $scratch113/references_panel/1kg/genetic_map_chr${chr}_combined_b37.txt -h $refhap -l $reflegend -known_haps_g $phasedir/chr$chr.hap.gz -sample_g $phasedir/chr$chr.sample $extra_str -use_prephased_g -k_hap $k_hap -int $chunk_begin $chunk_end -Ne 20000 -buffer $buffer_size -o chr$chr.$chunkStr.gen $chrX_impute_str
+		\n$impute2 -allow_large_regions -m $scratch113/references_panel/1kg/genetic_map_chrX_combined_b37.txt -h $refhap -l $reflegend -known_haps_g $phasedir/chr$chr.hap.gz -sample_g $phasedir/chr$chr.sample $extra_str -use_prephased_g -k_hap $k_hap -int $chunk_begin $chunk_end -Ne 20000 -buffer $buffer_size -o chr$chr.$chunkStr.gen $chrX_impute_str
 		\ngzip -f chr$chr.$chunkStr.gen
 		\nif [[ -e chr$chr.$chunkStr.gen_allele_probs ]]; then
 		\ngzip chr$chr.$chunkStr.gen_allele_probs chr$chr.$chunkStr.gen_haps
