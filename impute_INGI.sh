@@ -30,7 +30,7 @@ extra_str="-verbose" #"-verbose" #"-phase"
 
 # for chr in {1..22}; do
 # for chr in X_PAR1 X_PAR2 X ; do
-for chr in X_PAR1 X_PAR2; do
+for chr in X; do
 	if [[ "$chr" == "X_PAR1" ]]; then # (60,001 - 2,699,520)
 		plink_str="--chr X --from-bp 60001 --to-bp 2699520"
 		chrX_phase_str=""
