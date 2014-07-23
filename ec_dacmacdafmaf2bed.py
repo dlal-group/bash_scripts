@@ -5,8 +5,7 @@ import sys
 import numpy
 import scipy
 import os
-import pdb
-pdb.set_trace()
+
 """
 *** USAGE ***
 ec_dac_mac_1kg.py individuals.list (from vcf header) vcfinput out_prefix
@@ -71,6 +70,8 @@ for line in open (individualssamplelist , 'r') :
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 # out_file=open(outprefix 'all_sample_concordance_discordance_table.txt', 'w')
 print '#CHROM\tPOZ\tPOS\tID\tREF\tALT\tINFO\tREC\tALC\tDAC\tMAC\tDAF\tMAF'
+
+import pdb;pdb.set_trace()
 
 sampleind_index=[]
 for line in gzip.open(inputvcf, 'r'):
