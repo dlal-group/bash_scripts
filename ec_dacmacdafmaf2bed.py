@@ -5,7 +5,7 @@ import sys
 import numpy
 import scipy
 import os
-import pdb
+# import pdb
 """
 *** USAGE ***
 ec_dac_mac_1kg.py individuals.list (from vcf header) vcfinput out_prefix
@@ -88,7 +88,7 @@ for line in gzip.open(inputvcf, 'r'):
 
 		for ii in infosplit:
 			if re.match('AA=', ii): 
-				pdb.set_trace()
+				# pdb.set_trace()
 				iisplitted=ii.split('=')
 				ancestralallele=iisplitted[1]
 				break
@@ -103,7 +103,7 @@ for line in gzip.open(inputvcf, 'r'):
 
 		#print '##', ref, alt, ancestralallele
 		if not (re.search('\.', ancestralallele) or re.search('-' , ancestralallele) or re.search('N', ancestralallele)):
-			pdb.set_trace()
+			# pdb.set_trace()
 			alleles_count=frequencies_anc_known_confidence(temporary_genotypes, ref, alt, ancestralallele)
 			rac=alleles_count[0]; alc=alleles_count[1]; dac=alleles_count[3]; mac=alleles_count[4]
 		else: 
