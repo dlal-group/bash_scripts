@@ -100,9 +100,9 @@ for line in gzip.open(inputvcf, 'r'):
 		for id in sampleind_index: temporary_genotypes.append(z[id])
 		#print temporary_genotypes
 
-		pdb.set_trace()
 		#print '##', ref, alt, ancestralallele
 		if not (re.search('\.', ancestralallele) or re.search('-' , ancestralallele) or re.search('N', ancestralallele)):
+			pdb.set_trace()
 			alleles_count=frequencies_anc_known_confidence(temporary_genotypes, ref, alt, ancestralallele)
 			rac=alleles_count[0]; alc=alleles_count[1]; dac=alleles_count[3]; mac=alleles_count[4]
 		else: 
