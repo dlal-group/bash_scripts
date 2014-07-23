@@ -1,5 +1,8 @@
 #!/usr/local/bin/bash
-
+#
+#################################################
+#	CUSTOMIZED FOR CHRX imputation by max!!!!!		#
+#################################################
 # For CGI:
 #	1. remove extra_str; remove PRE-PHASING file check
 #	2. -g $scratch113/imputed/$geno/wgs/chr$chr.gwas.gen.gz -k 100

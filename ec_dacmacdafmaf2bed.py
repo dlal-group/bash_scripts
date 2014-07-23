@@ -5,6 +5,7 @@ import sys
 import numpy
 import scipy
 import os
+import pdb
 
 """
 *** USAGE ***
@@ -86,7 +87,8 @@ for line in gzip.open(inputvcf, 'r'):
 		chr=z[0]; poz=int(z[1])-1; position=z[1]; vid=z[2]; ref=z[header.index('REF')]; alt=z[header.index('ALT')]; infofield=z[header.index('INFO')]
 		infosplit=infofield.split(';')
 
-		for ii in infosplit: 
+		for ii in infosplit:
+			pdb.set_trace() 
 			if re.match('AA=', ii): 
 				iisplitted=ii.split('=')
 				ancestralallele=iisplitted[1]
@@ -109,6 +111,7 @@ for line in gzip.open(inputvcf, 'r'):
 			print '%s\t' %(item),
 
 		print '%s\t%s\t%s\t%s\t' %(rac,alc, dac, mac),
+		pdb.set_trace() 
 
 		if not dac=='NA': print '%.6f\t' %(int(dac)/float(len(sampleind_index)*2)),
 		else: print 'NA\t',
