@@ -88,18 +88,19 @@ for line in gzip.open(inputvcf, 'r'):
 
 		for ii in infosplit:
 			if re.match('AA=', ii): 
+				pdb.set_trace()
 				iisplitted=ii.split('=')
 				ancestralallele=iisplitted[1]
 			else:
 				ancestralallele='N'
 		
-		pdb.set_trace()
 
 		temporary_genotypes=[]		
 
 		for id in sampleind_index: temporary_genotypes.append(z[id])
 		#print temporary_genotypes
 
+		pdb.set_trace()
 		#print '##', ref, alt, ancestralallele
 		if not (re.search('\.', ancestralallele) or re.search('-' , ancestralallele) or re.search('N', ancestralallele)):
 			alleles_count=frequencies_anc_known_confidence(temporary_genotypes, ref, alt, ancestralallele)
