@@ -75,11 +75,11 @@ sampleind_index=[]
 for line in gzip.open(inputvcf, 'r'):
 	if re.match('#CHROM', line): 
 		header=line.rstrip().split() 
-		pdb.set_trace()
 
 		for indiv in sampleind:
 			sampleind_index.append(header.index(indiv))
 		#break
+		pdb.set_trace()
 
 	elif re.match('\d+\t', line):
 		confidence=''
