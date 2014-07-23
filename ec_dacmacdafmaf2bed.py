@@ -70,12 +70,12 @@ for line in open (individualssamplelist , 'r') :
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 # out_file=open(outprefix 'all_sample_concordance_discordance_table.txt', 'w')
 print '#CHROM\tPOZ\tPOS\tID\tREF\tALT\tINFO\tREC\tALC\tDAC\tMAC\tDAF\tMAF'
-pdb.set_trace()
 
 sampleind_index=[]
 for line in gzip.open(inputvcf, 'r'):
 	if re.match('#CHROM', line): 
 		header=line.rstrip().split() 
+		pdb.set_trace()
 
 		for indiv in sampleind:
 			sampleind_index.append(header.index(indiv))
