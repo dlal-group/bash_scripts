@@ -79,7 +79,6 @@ for line in gzip.open(inputvcf, 'r'):
 		for indiv in sampleind:
 			sampleind_index.append(header.index(indiv))
 		#break
-		pdb.set_trace()
 
 	elif re.match('\d+\t', line):
 		confidence=''
@@ -93,6 +92,8 @@ for line in gzip.open(inputvcf, 'r'):
 				ancestralallele=iisplitted[1]
 			else:
 				ancestralallele='N'
+		
+		pdb.set_trace()
 
 		temporary_genotypes=[]		
 
