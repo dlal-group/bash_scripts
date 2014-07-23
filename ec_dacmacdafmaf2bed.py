@@ -91,6 +91,7 @@ for line in gzip.open(inputvcf, 'r'):
 				pdb.set_trace()
 				iisplitted=ii.split('=')
 				ancestralallele=iisplitted[1]
+				break
 			else:
 				ancestralallele='N'
 		
