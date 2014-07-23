@@ -69,7 +69,7 @@ for site in set(sitelist):
 					else:
 						stdout.write('\tna')
 				print '\r'
-			pdb.set_trace()
+			# pdb.set_trace()
 			# elif site in dic_xac[vt][poplist[contofinterest][1]]:
 			# 	stdout.write('%s\t%s\t%s\t%s' %(chr,int(site)-1,site,vt))
 			# 	for pop in poplist[contofinterest]: 
