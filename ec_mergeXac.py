@@ -65,7 +65,7 @@ for site in set(sitelist):
 				for pop in poplist[contofinterest]: 
 					# print '%s' %(dic_xac[vt][pop][site]),
 					if site in dic_xac[vt][pop]:
-						stdout.write('\t%s' %(dic_xac[vt][pop][site]))
+						stdout.write('\t%s' %(dic_xac[vt][pop][site].rstrip()))
 					else:
 						stdout.write('\tna')
 				print '\r'
