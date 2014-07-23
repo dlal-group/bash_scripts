@@ -6,7 +6,7 @@ import numpy
 import scipy
 import os
 import pdb
-
+pdb.set_trace()
 """
 *** USAGE ***
 ec_dac_mac_1kg.py individuals.list (from vcf header) vcfinput out_prefix
@@ -88,7 +88,6 @@ for line in gzip.open(inputvcf, 'r'):
 		infosplit=infofield.split(';')
 
 		for ii in infosplit:
-			pdb.set_trace() 
 			if re.match('AA=', ii): 
 				iisplitted=ii.split('=')
 				ancestralallele=iisplitted[1]
@@ -111,7 +110,6 @@ for line in gzip.open(inputvcf, 'r'):
 			print '%s\t' %(item),
 
 		print '%s\t%s\t%s\t%s\t' %(rac,alc, dac, mac),
-		pdb.set_trace() 
 
 		if not dac=='NA': print '%.6f\t' %(int(dac)/float(len(sampleind_index)*2)),
 		else: print 'NA\t',
