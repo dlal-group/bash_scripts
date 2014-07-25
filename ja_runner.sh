@@ -310,5 +310,7 @@ file=`sed -n "${LSB_JOBINDEX}p" $1`
 # bcftools view -S /lustre/scratch113/projects/esgi-vbseq/20140430_purging/ALL/POPULATIONS/TGP/${pop}/${pop}.keeplist -O z -o /lustre/scratch113/projects/esgi-vbseq/20140430_purging/ALL/POPULATIONS/TGP/${pop}/${file}.vcf.gz /lustre/scratch113/projects/esgi-vbseq/20140430_purging/ALL/POPULATIONS/TGP/WGS/ALL.chr${file}.phase1_release_v3.20101123.snps_indels_svs.genotypes.vcf.gz
 
 #25/07/2014
-# Join chromosomes from different populations 
-bcftools merge /lustre/scratch113/projects/esgi-vbseq/20140430_purging/ALL/POPULATIONS/POPULATIONS/TGP/CEU/${file}.vcf.gz /lustre/scratch113/projects/esgi-vbseq/20140430_purging/ALL/POPULATIONS/POPULATIONS/TGP/TSI/${file}.vcf.gz /lustre/scratch113/projects/esgi-vbseq/20140430_purging/ALL/POPULATIONS/POPULATIONS/INGI/FVG/${file}.vcf.gz /lustre/scratch113/projects/esgi-vbseq/20140430_purging/ALL/POPULATIONS/POPULATIONS/INGI/VBI/${file}.vcf.gz /lustre/scratch113/projects/esgi-vbseq/20140430_purging/ALL/POPULATIONS/POPULATIONS/INGI/CARL/${file}.vcf.gz -O z > chr${file}.union.vcf.gz
+# Join chromosomes from different populations
+tabix -f -p vcf /lustre/scratch113/projects/esgi-vbseq/20140430_purging/ALL/POPULATIONS/TGP/CEU/${file}.vcf.gz
+tabix -f -p vcf /lustre/scratch113/projects/esgi-vbseq/20140430_purging/ALL/POPULATIONS/TGP/TSI/${file}.vcf.gz
+bcftools merge /lustre/scratch113/projects/esgi-vbseq/20140430_purging/ALL/POPULATIONS/TGP/CEU/${file}.vcf.gz /lustre/scratch113/projects/esgi-vbseq/20140430_purging/ALL/POPULATIONS/TGP/TSI/${file}.vcf.gz /lustre/scratch113/projects/esgi-vbseq/20140430_purging/ALL/POPULATIONS/INGI/FVG/${file}.vcf.gz /lustre/scratch113/projects/esgi-vbseq/20140430_purging/ALL/POPULATIONS/INGI/VBI/${file}.vcf.gz /lustre/scratch113/projects/esgi-vbseq/20140430_purging/ALL/POPULATIONS/INGI/CARL/${file}.vcf.gz -O z > chr${file}.union.vcf.gz
