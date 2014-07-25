@@ -100,10 +100,10 @@ file=`sed -n "${LSB_JOBINDEX}p" $1`
 # samtools_stats.sh ${file} ${outpath}
 
 # generate index for bamfiles
-if [ ! -f ${file}.bai ];
-then
-  samtools index ${file}
-fi
+# if [ ! -f ${file}.bai ];
+# then
+#   samtools index ${file}
+# fi
 
 #merge genotypes
 #chr=${file}
@@ -309,3 +309,6 @@ fi
 
 # bcftools view -S /lustre/scratch113/projects/esgi-vbseq/20140430_purging/ALL/POPULATIONS/TGP/${pop}/${pop}.keeplist -O z -o /lustre/scratch113/projects/esgi-vbseq/20140430_purging/ALL/POPULATIONS/TGP/${pop}/${file}.vcf.gz /lustre/scratch113/projects/esgi-vbseq/20140430_purging/ALL/POPULATIONS/TGP/WGS/ALL.chr${file}.phase1_release_v3.20101123.snps_indels_svs.genotypes.vcf.gz
 
+#25/07/2014
+# Join chromosomes from different populations 
+bcftools merge /lustre/scratch113/projects/esgi-vbseq/20140430_purging/ALL/POPULATIONS/POPULATIONS/TGP/CEU/${file}.vcf.gz /lustre/scratch113/projects/esgi-vbseq/20140430_purging/ALL/POPULATIONS/POPULATIONS/TGP/TSI/${file}.vcf.gz /lustre/scratch113/projects/esgi-vbseq/20140430_purging/ALL/POPULATIONS/POPULATIONS/INGI/FVG/${file}.vcf.gz /lustre/scratch113/projects/esgi-vbseq/20140430_purging/ALL/POPULATIONS/POPULATIONS/INGI/VBI/${file}.vcf.gz /lustre/scratch113/projects/esgi-vbseq/20140430_purging/ALL/POPULATIONS/POPULATIONS/INGI/CARL/${file}.vcf.gz -O z > chr${file}.union.vcf.gz
