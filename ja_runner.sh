@@ -312,14 +312,17 @@ file=`sed -n "${LSB_JOBINDEX}p" $1`
 #25/07/2014
 # Join chromosomes from different populations
 
-mv /lustre/scratch113/projects/esgi-vbseq/20140430_purging/ALL/POPULATIONS/TGP/CEU/${file}.vcf.gz /lustre/scratch113/projects/esgi-vbseq/20140430_purging/ALL/POPULATIONS/TGP/CEU/${file}.vcf.old.gz;zcat /lustre/scratch113/projects/esgi-vbseq/20140430_purging/ALL/POPULATIONS/TGP/CEU/${file}.vcf.old.gz | sed "s/ID=GL,Number=./ID=GL,Number=G/"|sed "s/ID=AC,Number=./ID=AC,Number=A/" | bgzip -c > /lustre/scratch113/projects/esgi-vbseq/20140430_purging/ALL/POPULATIONS/TGP/CEU/${file}.vcf.gz;
-mv /lustre/scratch113/projects/esgi-vbseq/20140430_purging/ALL/POPULATIONS/TGP/TSI/${file}.vcf.gz /lustre/scratch113/projects/esgi-vbseq/20140430_purging/ALL/POPULATIONS/TGP/TSI/${file}.vcf.old.gz;zcat /lustre/scratch113/projects/esgi-vbseq/20140430_purging/ALL/POPULATIONS/TGP/TSI/${file}.vcf.old.gz | sed "s/ID=GL,Number=./ID=GL,Number=G/"|sed "s/ID=AC,Number=./ID=AC,Number=A/" | bgzip -c > /lustre/scratch113/projects/esgi-vbseq/20140430_purging/ALL/POPULATIONS/TGP/TSI/${file}.vcf.gz;
+# mv /lustre/scratch113/projects/esgi-vbseq/20140430_purging/ALL/POPULATIONS/TGP/CEU/${file}.vcf.gz /lustre/scratch113/projects/esgi-vbseq/20140430_purging/ALL/POPULATIONS/TGP/CEU/${file}.vcf.old.gz;zcat /lustre/scratch113/projects/esgi-vbseq/20140430_purging/ALL/POPULATIONS/TGP/CEU/${file}.vcf.old.gz | sed "s/ID=GL,Number=./ID=GL,Number=G/"|sed "s/ID=AC,Number=./ID=AC,Number=A/" | bgzip -c > /lustre/scratch113/projects/esgi-vbseq/20140430_purging/ALL/POPULATIONS/TGP/CEU/${file}.vcf.gz;
+# mv /lustre/scratch113/projects/esgi-vbseq/20140430_purging/ALL/POPULATIONS/TGP/TSI/${file}.vcf.gz /lustre/scratch113/projects/esgi-vbseq/20140430_purging/ALL/POPULATIONS/TGP/TSI/${file}.vcf.old.gz;zcat /lustre/scratch113/projects/esgi-vbseq/20140430_purging/ALL/POPULATIONS/TGP/TSI/${file}.vcf.old.gz | sed "s/ID=GL,Number=./ID=GL,Number=G/"|sed "s/ID=AC,Number=./ID=AC,Number=A/" | bgzip -c > /lustre/scratch113/projects/esgi-vbseq/20140430_purging/ALL/POPULATIONS/TGP/TSI/${file}.vcf.gz;
 
-tabix -f -p vcf /lustre/scratch113/projects/esgi-vbseq/20140430_purging/ALL/POPULATIONS/TGP/CEU/${file}.vcf.gz
-tabix -f -p vcf /lustre/scratch113/projects/esgi-vbseq/20140430_purging/ALL/POPULATIONS/TGP/TSI/${file}.vcf.gz
+# tabix -f -p vcf /lustre/scratch113/projects/esgi-vbseq/20140430_purging/ALL/POPULATIONS/TGP/CEU/${file}.vcf.gz
+# tabix -f -p vcf /lustre/scratch113/projects/esgi-vbseq/20140430_purging/ALL/POPULATIONS/TGP/TSI/${file}.vcf.gz
 
-bcftools merge /lustre/scratch113/projects/esgi-vbseq/20140430_purging/ALL/POPULATIONS/TGP/CEU/${file}.vcf.gz /lustre/scratch113/projects/esgi-vbseq/20140430_purging/ALL/POPULATIONS/TGP/TSI/${file}.vcf.gz /lustre/scratch113/projects/esgi-vbseq/20140430_purging/ALL/POPULATIONS/INGI/FVG/${file}.vcf.gz /lustre/scratch113/projects/esgi-vbseq/20140430_purging/ALL/POPULATIONS/INGI/VBI/${file}.vcf.gz /lustre/scratch113/projects/esgi-vbseq/20140430_purging/ALL/POPULATIONS/INGI/CARL/${file}.vcf.gz -O z > chr${file}.union.vcf.gz
+# bcftools merge /lustre/scratch113/projects/esgi-vbseq/20140430_purging/ALL/POPULATIONS/TGP/CEU/${file}.vcf.gz /lustre/scratch113/projects/esgi-vbseq/20140430_purging/ALL/POPULATIONS/TGP/TSI/${file}.vcf.gz /lustre/scratch113/projects/esgi-vbseq/20140430_purging/ALL/POPULATIONS/INGI/FVG/${file}.vcf.gz /lustre/scratch113/projects/esgi-vbseq/20140430_purging/ALL/POPULATIONS/INGI/VBI/${file}.vcf.gz /lustre/scratch113/projects/esgi-vbseq/20140430_purging/ALL/POPULATIONS/INGI/CARL/${file}.vcf.gz -O z > chr${file}.union.vcf.gz
 
+#28/07/2014
+#index joint files
+tabix -p vcf chr${file}.union.vcf.gz
 
 
 # bcftools merge /lustre/scratch113/projects/esgi-vbseq/20140430_purging/ALL/POPULATIONS/TGP/CEU/21.vcf.gz /lustre/scratch113/projects/esgi-vbseq/20140430_purging/ALL/POPULATIONS/TGP/TSI/21.vcf.gz /lustre/scratch113/projects/esgi-vbseq/20140430_purging/ALL/POPULATIONS/INGI/FVG/21.vcf.gz /lustre/scratch113/projects/esgi-vbseq/20140430_purging/ALL/POPULATIONS/INGI/VBI/21.vcf.gz /lustre/scratch113/projects/esgi-vbseq/20140430_purging/ALL/POPULATIONS/INGI/CARL/21.vcf.gz
