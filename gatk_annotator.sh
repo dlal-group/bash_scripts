@@ -4,9 +4,9 @@
 #Args: 
 #Use LSB_JOBINDEX as chr number!
 # chr=${LSB_JOBINDEX}
+chr=$1
 infolder=$2
 outfolder=$3
-chr=$1
 
 
 /software/jre1.7.0_25/bin/java -Xmx1000m -Xms1000m -server -XX:+UseSerialGC -jar /nfs/users/nfs_m/mercury/src/GenomeAnalysisTK-3.1-1/GenomeAnalysisTK.jar -T VariantAnnotator \
@@ -25,3 +25,6 @@ chr=$1
 #index with tabix
 tabix -p vcf ${outfolder}/${chr}.vcf.gz
 
+zcat ${outfolder}/${chr}.vcf.gz | sed "s/1kg\.//g" | bgzip -c > ${outfolder}/${chr}.clean_annotated.vcf.gz
+
+tabix -p vcf ${outfolder}/${chr}.clean_annotated.vcf.gz
