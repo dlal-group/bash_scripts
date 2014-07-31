@@ -104,11 +104,17 @@ for line in gzip.open(inputvcf, 'r'):
 		#print '##', ref, alt, ancestralallele
 		if not (re.search('\.', ancestralallele) or re.search('-' , ancestralallele) or re.search('N', ancestralallele)):
 			# pdb.set_trace()
-			alleles_count=frequencies_anc_known_confidence(temporary_genotypes, ref, alt, ancestralallele)
-			rac=alleles_count[0]; alc=alleles_count[1]; dac=alleles_count[3]; mac=alleles_count[4]
+			if ((ref == ancestralallele)	or (alt == ancestralallele)):
+				alleles_count=frequencies_anc_known_confidence(temporary_genotypes, ref, alt, ancestralallele)
+				rac=alleles_count[0]; alc=alleles_count[1]; dac=alleles_count[3]; mac=alleles_count[4]
+			else
+				alleles_count=frequencies_mac(  temporary_genotypes, ref, alt) 
+				rac=alleles_count[0]; alc=alleles_count[1]; dac='NA'; mac=alleles_count[3]
+
 		else: 
 			alleles_count=frequencies_mac(  temporary_genotypes, ref, alt) 
 			rac=alleles_count[0]; alc=alleles_count[1]; dac='NA'; mac=alleles_count[3]
+			
 		for item in  [chr,poz,position, vid, ref, alt, infofield]:  #z[0:8]: 
 			print '%s\t' %(item),
 
