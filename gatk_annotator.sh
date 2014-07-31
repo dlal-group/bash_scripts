@@ -9,8 +9,8 @@ chr=$1
 infolder=$2
 outfolder=$3
 
-#first fix the header
-(tabix -H ${infolder}/${chr}.vcf.gz ${chr}|grep "^##";cat /lustre/scratch113/projects/esgi-vbseq/20140430_purging/UNRELATED/POP_MERGED_FILES/FIVE_POPS/20140711_ANNOTATED/to_add_to_header2.txt;tabix -H ${infolder}/${chr}.vcf.gz ${chr}| tail -n1;tabix ${infolder}/${chr}.vcf.gz ${chr})| dos2unix | bgzip -c > ${infolder}/${chr}.fixed.vcf.gz;
+#first fix the header AND filter out all sites with a deletion AT THE BEGINNIG of the ALT allele field
+(tabix -H ${infolder}/${chr}.vcf.gz ${chr}|grep "^##";cat /lustre/scratch113/projects/esgi-vbseq/20140430_purging/UNRELATED/POP_MERGED_FILES/FIVE_POPS/20140711_ANNOTATED/to_add_to_header2.txt;tabix -H ${infolder}/${chr}.vcf.gz ${chr}| tail -n1;tabix ${infolder}/${chr}.vcf.gz ${chr})| awk '$5 !~ "^<DEL>.+"'|dos2unix | bgzip -c > ${infolder}/${chr}.fixed.vcf.gz;
 # (tabix -H 1.vcf.gz 1|grep "^##";cat /lustre/scratch113/projects/esgi-vbseq/20140430_purging/UNRELATED/POP_MERGED_FILES/FIVE_POPS/20140711_ANNOTATED/to_add_to_header2.txt;tabix -H 1.vcf.gz 1| tail -n1;tabix 1.vcf.gz 1)| bgzip -c > ${infolder}/${chr}.fixed.vcf.gz;
 tabix -f -p vcf ${infolder}/${chr}.fixed.vcf.gz;
 
