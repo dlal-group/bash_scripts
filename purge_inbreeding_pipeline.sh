@@ -77,6 +77,9 @@ case $MODE in
         CEU )
           pop_path=/lustre/scratch113/projects/fvg_seq/20140410/TGP/CEU/PLINK
             ;;
+        CARL )
+          pop_path=/lustre/scratch113/projects/fvg_seq/20140410/INGI/CARL/PLINK
+            ;;
       esac
         #calculate frequencies, before:
         bsub -J"freq_${pop}" -o"%J_freq_${pop}.o" -q yesterday -M8000 -n2 -R"span[hosts=1] select[mem>=8000] rusage[mem=8000]" -- plink2 --bfile ${pop_path}/22.${pop,,} --freq --nonfounders --out ${outdir}/freq_${pop}
@@ -85,6 +88,30 @@ case $MODE in
         bsub -J"inb_${pop}" -o"%J_inb_${pop}.o" -w "ended(freq_${pop})" -q yesterday -M8000 -n2 -R"span[hosts=1] select[mem>=8000] rusage[mem=8000]" -- plink2 --bfile ${pop_path}/22.${pop,,} --het --out ${outdir}/inb_${pop}
         bsub -J"ibc_${pop}" -o"%J_ibc_${pop}.o" -w "ended(freq_${pop})" -q yesterday -M8000 -n2 -R"span[hosts=1] select[mem>=8000] rusage[mem=8000]" -- plink2 --bfile ${pop_path}/22.${pop,,} --ibc --out ${outdir}/ibc_${pop}
       done
+  ;;
+  DACMAF )
+    #extract data in bed format for different populations in a separate way
+    case $pop in
+      FVG )
+        pop_path=/lustre/scratch113/projects/esgi-vbseq/20140430_purging/UNRELATED/listpop/FVG_unrelated.list
+        ;;
+      VBI )
+        pop_path=/lustre/scratch113/projects/esgi-vbseq/20140430_purging/UNRELATED/listpop/VBI_unrelated.list
+        ;;
+      CARL )
+        pop_path=/lustre/scratch113/projects/esgi-vbseq/20140430_purging/UNRELATED/listpop/CARL_unrelated.list
+        ;;
+      TSI )
+        pop_path=/lustre/scratch113/projects/esgi-vbseq/20140430_purging/UNRELATED/listpop/TSI.list
+        ;;
+      CEU )
+        pop_path=/lustre/scratch113/projects/esgi-vbseq/20140430_purging/UNRELATED/listpop/CEU.list
+        ;;
+    esac
+    in_vcf=/lustre/scratch113/projects/esgi-vbseq/20140430_purging/UNRELATED/POP_MERGED_FILES/FIVE_POPS/20140730_ANNOTATED/${CHR}.clean_annotated.vcf.gz
+    out_tab=${pop}.chr${CHR}.tab
+    #create files for each population for each chromosome in a separate folder
+    echo "ec_dacmacdafmaf2bed.py ${pop_path} ${in_vcf} ${out_tab} | gzip -c > ${outdir}/${out_tab}.gz" | bsub -J"dac_exract" -o"%J_dac_extract.o" -M3000 -R"select[mem>=3000] rusage[mem=3000]" -q yesterday
   ;;
   ROH )
     echo "Calculate ROH....with BEAGLE and separate population files (no maf filtering)"
