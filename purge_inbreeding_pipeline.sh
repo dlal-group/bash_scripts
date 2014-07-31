@@ -114,7 +114,7 @@ case $MODE in
       in_vcf=/lustre/scratch113/projects/esgi-vbseq/20140430_purging/UNRELATED/POP_MERGED_FILES/FIVE_POPS/20140730_ANNOTATED/${CHR}.clean_annotated.vcf.gz
       out_tab=${pop}.chr${CHR}.tab
       #create files for each population for each chromosome in a separate folder
-      echo "ec_dacmacdafmaf2bed.py ${pop_path} ${in_vcf} ${out_tab} | gzip -c > ${outdir}/${out_tab}.gz" | bsub -J"dac_exract" -o"%J_dac_extract.o" -M3000 -R"select[mem>=3000] rusage[mem=3000]" -q yesterday
+      echo "ec_dacmacdafmaf2bed.py ${pop_path} ${in_vcf} ${out_tab} | gzip -c > ${outdir}/${out_tab}.gz" | bsub -J"dac_exract" -o"%J_dac_extract.o" -M3000 -R"select[mem>=3000] rusage[mem=3000]" -q normal
     done
   ;;
   ROH )
