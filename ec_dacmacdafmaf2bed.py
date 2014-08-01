@@ -28,13 +28,17 @@ def frequencies_anc_known_confidence(genlist, ref, alt, anc) :
 	for item in genlist:
 		x=item.split(':')
 		r=x[0].count('0'); a=x[0].count('1'); m=x[0].count('.')
-		R=R+r; A=A+a; M=M+m
+		R=R+r; A=A+a; M=M+m #here we're not taking in account that a site can be missing for an entire population
 		if ref==anc: D=A
 		else: D=R
 		    #upperanc=swap[anc]
 		    #if ref==upperanc: D=A
 		    #else: D=R
-	mac=min(R,A )
+	if R==A==0;
+		mac="NA"
+	else:
+		mac=min(R,A )
+
 	return R, A, M, D, mac  #, confidence
 
 def frequencies_mac(genlist, ref, alt) :
@@ -42,8 +46,12 @@ def frequencies_mac(genlist, ref, alt) :
 	for item in genlist:
 		x=item.split(':')
 		r=x[0].count('0'); a=x[0].count('1'); m=x[0].count('.')
-		R=R+r; A=A+a; M=M+m
-	mac=min(R,A )
+		R=R+r; A=A+a; M=M+m #here we're not taking in account that a site can be missing for an entire population
+	if R==A==0;	
+		mac="NA"
+	else:
+		mac=min(R,A )
+
 	return R, A, M, mac
 
 def remove_dups(seq):
@@ -123,4 +131,7 @@ for line in gzip.open(inputvcf, 'r'):
 		if not dac=='NA': print '%.6f\t' %(int(dac)/float(len(sampleind_index)*2)),
 		else: print 'NA\t',
 
-		print int(mac)/float(len(sampleind_index)*2)
+		if not mac=='NA': print int(mac)/float(len(sampleind_index)*2)
+		else: print 'NA\t'
+
+

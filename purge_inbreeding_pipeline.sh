@@ -61,6 +61,63 @@ case $MODE in
       bsub -J"ibd_${pop}" -o"%J_ibd_${pop}.o" -q yesterday -M8000 -n2 -R"span[hosts=1] select[mem>=8000] rusage[mem=8000]" -- plink2 --vcf ${pop_path}/22.vcf.gz --double-id --biallelic-only --genome gz --parallel 1 2 --out ${outdir}/ibd_${pop}
     done
   ;;
+  MERGEROH )
+    #merge all ROH to plot a cumulative sites number for each population genome wide
+    #we'll work on all populations, included FVG's villages
+    pops_updated="FVG VBI TSI CEU CARL Erto Resia Illegio Sauris"
+    for pop in $pops_updated
+    do
+      case $pop in
+        FVG )
+          pop_path=/lustre/scratch113/projects/esgi-vbseq/20140430_purging/UNRELATED/RESULTS/ROH/20140801/BEAGLE/ALL/UNION/over_7k/LAST/CHR${CHR}
+          ;;
+        VBI )
+          pop_path=/lustre/scratch113/projects/esgi-vbseq/20140430_purging/UNRELATED/RESULTS/ROH/20140801/BEAGLE/ALL/UNION/over_7k/LAST/CHR${CHR}
+            ;;
+        TSI )
+          pop_path=/lustre/scratch113/projects/esgi-vbseq/20140430_purging/UNRELATED/RESULTS/ROH/20140801/BEAGLE/ALL/UNION/over_7k/LAST/CHR${CHR}
+            ;;
+        CEU )
+          pop_path=/lustre/scratch113/projects/esgi-vbseq/20140430_purging/UNRELATED/RESULTS/ROH/20140801/BEAGLE/ALL/UNION/over_7k/LAST/CHR${CHR}
+            ;;
+        CARL )
+          pop_path=/lustre/scratch113/projects/esgi-vbseq/20140430_purging/UNRELATED/RESULTS/ROH/20140801/BEAGLE/ALL/UNION/over_7k/LAST/CHR${CHR}
+            ;;
+        Erto )
+          pop_path=/lustre/scratch113/projects/esgi-vbseq/20140430_purging/UNRELATED/RESULTS/ROH/20140801/BEAGLE/ALL/UNION/over_7k/LAST/CHR${CHR}
+            ;;
+        Sauris )
+          pop_path=/lustre/scratch113/projects/esgi-vbseq/20140430_purging/UNRELATED/RESULTS/ROH/20140801/BEAGLE/ALL/UNION/over_7k/LAST/CHR${CHR}
+            ;;
+        Illegio )
+          pop_path=/lustre/scratch113/projects/esgi-vbseq/20140430_purging/UNRELATED/RESULTS/ROH/20140801/BEAGLE/ALL/UNION/over_7k/LAST/CHR${CHR}
+            ;;
+        Resia )
+          pop_path=/lustre/scratch113/projects/esgi-vbseq/20140430_purging/UNRELATED/RESULTS/ROH/20140801/BEAGLE/ALL/UNION/over_7k/LAST/CHR${CHR}
+            ;;
+      esac
+      # While adding ROH length info to hbd BEAGLE output, filter out with min LOD of 4 and 5 to control for sequence error rate
+      awk '{if($1==$3 && $8 >= 4) print $0,$7-$6}' ${pop_path}/${pop}.roh.hbd| tr "\t" " " > ${pop_path}/${pop}.roh.length.4.hbd
+      awk '{if($1==$3 && $8 >= 5) print $0,$7-$6}' ${pop_path}/${pop}.roh.hbd| tr "\t" " " > ${pop_path}/${pop}.roh.length.5.hbd
+
+      #While adding length info to IBD data from BEAGLE4, joining col 1 and col 3 to create a unique identifier for the couple and filter out with min LOD of 4 and 5 to control for sequence error rate
+
+      awk '{if($8 >= 4) print $0,$1"_"$3,$7-$6}' ${pop_path}/${pop}.roh.ibd| tr "\t" " " > ${pop_path}/${pop}.roh.length.4.ibd
+      awk '{if($8 >= 5) print $0,$1"_"$3,$7-$6}' ${pop_path}/${pop}.roh.ibd| tr "\t" " " > ${pop_path}/${pop}.roh.length.5.ibd
+
+      #now take all the files and join them together to create a whole genome ROH and IBD file for each population/village
+      #create a population folder
+      mkdir -p ${pop}
+      #ROH
+      cat ${pop_path}/${pop}.roh.length.4.hbd >> ${pop}/${pop}.WG.roh.length.4.hbd
+      cat ${pop_path}/${pop}.roh.length.5.hbd >> ${pop}/${pop}.WG.roh.length.5.hbd
+      
+      #IBD
+      cat ${pop_path}/${pop}.roh.length.4.ibd >> ${pop}/${pop}.WG.roh.length.4.ibd
+      cat ${pop_path}/${pop}.roh.length.5.ibd >> ${pop}/${pop}.WG.roh.length.5.ibd
+      
+  done
+  ;;
   HET )
     #Extract Inbreeding coeff information for each population. Here we are using plink2 (1.9)
     #we'll use the --het option as long as the --ibc option
