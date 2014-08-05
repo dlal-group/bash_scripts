@@ -24,9 +24,13 @@ case $MODE in
     fixed=$4
     ;;
   SHARED )
-    #set parameters for file output
+    #set parameters for file input/output
     in_dir=$3
     ;;
+  MERGEROH )
+      #set parameters for file input/output
+      in_dir=$3
+      ;;
 esac
 
 mkdir -p ${outdir}
@@ -69,31 +73,31 @@ case $MODE in
     do
       case $pop in
         FVG )
-          pop_path=/lustre/scratch113/projects/esgi-vbseq/20140430_purging/UNRELATED/RESULTS/ROH/20140801/BEAGLE/ALL/UNION/over_7k/LAST/CHR${CHR}
+          pop_path=${in_dir}/CHR${CHR}
           ;;
         VBI )
-          pop_path=/lustre/scratch113/projects/esgi-vbseq/20140430_purging/UNRELATED/RESULTS/ROH/20140801/BEAGLE/ALL/UNION/over_7k/LAST/CHR${CHR}
+          pop_path=${in_dir}/CHR${CHR}
             ;;
         TSI )
-          pop_path=/lustre/scratch113/projects/esgi-vbseq/20140430_purging/UNRELATED/RESULTS/ROH/20140801/BEAGLE/ALL/UNION/over_7k/LAST/CHR${CHR}
+          pop_path=${in_dir}/CHR${CHR}
             ;;
         CEU )
-          pop_path=/lustre/scratch113/projects/esgi-vbseq/20140430_purging/UNRELATED/RESULTS/ROH/20140801/BEAGLE/ALL/UNION/over_7k/LAST/CHR${CHR}
+          pop_path=${in_dir}/CHR${CHR}
             ;;
         CARL )
-          pop_path=/lustre/scratch113/projects/esgi-vbseq/20140430_purging/UNRELATED/RESULTS/ROH/20140801/BEAGLE/ALL/UNION/over_7k/LAST/CHR${CHR}
+          pop_path=${in_dir}/CHR${CHR}
             ;;
         Erto )
-          pop_path=/lustre/scratch113/projects/esgi-vbseq/20140430_purging/UNRELATED/RESULTS/ROH/20140801/BEAGLE/ALL/UNION/over_7k/LAST/CHR${CHR}
+          pop_path=${in_dir}/CHR${CHR}
             ;;
         Sauris )
-          pop_path=/lustre/scratch113/projects/esgi-vbseq/20140430_purging/UNRELATED/RESULTS/ROH/20140801/BEAGLE/ALL/UNION/over_7k/LAST/CHR${CHR}
+          pop_path=${in_dir}/CHR${CHR}
             ;;
         Illegio )
-          pop_path=/lustre/scratch113/projects/esgi-vbseq/20140430_purging/UNRELATED/RESULTS/ROH/20140801/BEAGLE/ALL/UNION/over_7k/LAST/CHR${CHR}
+          pop_path=${in_dir}/CHR${CHR}
             ;;
         Resia )
-          pop_path=/lustre/scratch113/projects/esgi-vbseq/20140430_purging/UNRELATED/RESULTS/ROH/20140801/BEAGLE/ALL/UNION/over_7k/LAST/CHR${CHR}
+          pop_path=${in_dir}/CHR${CHR}
             ;;
       esac
       # While adding ROH length info to hbd BEAGLE output, filter out with min LOD of 4 and 5 to control for sequence error rate
@@ -572,7 +576,7 @@ case $MODE in
           pop_path=/lustre/scratch113/projects/esgi-vbseq/20140430_purging/UNRELATED/POP_MERGED_FILES/FIVE_POPS/20140801_NONMISSING
             ;;
       esac
-        
+
         pop_list=/lustre/scratch113/projects/esgi-vbseq/20140430_purging/46_SAMPLES/listpop/BEAGLE/all_pop_but_${pop}.txt
         # pop_list=/lustre/scratch113/projects/esgi-vbseq/20140430_purging/UNRELATED/listpop/FIVE_POPS/all_pop_but_${pop}.txt
         # pop_list=/lustre/scratch113/projects/esgi-vbseq/20140430_purging/UNRELATED/listpop/all_pop_but_${pop}.txt
