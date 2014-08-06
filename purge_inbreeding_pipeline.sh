@@ -261,10 +261,10 @@ case $MODE in
           ;;
       esac
       #those are the files I need to use to extract the info splitted by chr
-      private=pop_path/${pop}/${pop}_private.merged_daf.tab
-      private_fixed=pop_path/${pop}/${pop}_private.merged_daf.fixed.tab
-      shared=pop_path/${pop}/${pop}_shared.merged_daf.tab
-      shared_fixed=pop_path/${pop}/${pop}_shared.merged_daf.fixed.tab
+      private=${pop_path}/${pop}/${pop}_private.merged_daf.tab
+      private_fixed=${pop_path}/${pop}/${pop}_private.merged_daf.fixed.tab
+      shared=${pop_path}/${pop}/${pop}_shared.merged_daf.tab
+      shared_fixed=${pop_path}/${pop}/${pop}_shared.merged_daf.fixed.tab
 
       #create the list of variants we need to extract
       awk '{print $1"O"$2"O"$3}' ${private} | tr " " "\t" | dos2unix > ${private}.list
