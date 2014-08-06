@@ -273,7 +273,7 @@ case $MODE in
       # awk '{print $1"O"$2"O"$3}' ${shared_fixed} | tr " " "\t" | dos2unix > ${shared_fixed}.list
 
       #create temporary files to do the extraction
-      in_file=/lustre/scratch113/projects/esgi-vbseq/20140430_purging/UNRELATED/INPUT_FILES/FIVE_POPS/WG/CHR${CHR}/${pop}.chr${CHR}.tab.gz| 
+      in_file=/lustre/scratch113/projects/esgi-vbseq/20140430_purging/UNRELATED/INPUT_FILES/FIVE_POPS/WG/CHR${CHR}/${pop}.chr${CHR}.tab.gz
       zcat ${in_file} | awk '{print $1"O"$2"O"$3,$0}' | tr " " "\t" | dos2unix > ${in_file}.tmp
 
       # #now grep the file to extract the data we need, using different lists
