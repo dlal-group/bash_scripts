@@ -336,7 +336,7 @@ chr=${file}
 #create output folder
 mkdir -p CHR${chr}
 
-ec_dacmacdafmaf2besd.py /lustre/scratch113/projects/esgi-vbseq/20140430_purging/46_SAMPLES/listpop/${pop}_unrelated.list /lustre/scratch113/projects/esgi-vbseq/20140430_purging/UNRELATED/POP_MERGED_FILES/FIVE_POPS/20140711_ANNOTATED/${chr}.vcf.gz ${pop}.chr${chr}.tab
+ec_dacmacdafmaf2bed.py /lustre/scratch113/projects/esgi-vbseq/20140430_purging/46_SAMPLES/listpop/${pop}_unrelated.list /lustre/scratch113/projects/esgi-vbseq/20140430_purging/UNRELATED/POP_MERGED_FILES/FIVE_POPS/20140711_ANNOTATED/${chr}.vcf.gz ${pop}.chr${chr}.tab
 
 mv ${pop}.chr${chr}.tab CHR${chr}/
 gzip CHR${chr}/${pop}.chr${chr}.tab
