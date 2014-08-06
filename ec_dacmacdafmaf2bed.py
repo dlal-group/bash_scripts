@@ -8,7 +8,7 @@ import os
 # import pdb
 """
 *** USAGE ***
-ec_dac_mac_1kg.py individuals.list (from vcf header) vcfinput out_prefix
+ec_dac_mac_1kg.py individuals.list (from vcf header) vcfinput outfile
 
 """
 # individualssamplelist="/lustre/scratch113/projects/esgi-vbseq/20140430_purging/UNRELATED/listpop/FVG_unrelated.list"
@@ -16,7 +16,7 @@ individualssamplelist=sys.argv[1]
 # inputvcf="/lustre/scratch113/projects/esgi-vbseq/20140430_purging/UNRELATED/POP_MERGED_FILES/FIVE_POPS/20140711_ANNOTATED/22.vcf.gz"
 inputvcf=sys.argv[2]
 # outprefix="FVG.chr22.tab"
-outprefix=sys.argv[3]
+outfile=sys.argv[3]
 
 #~~~~~~~~~~~~~ output files ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
@@ -76,8 +76,8 @@ for line in open (individualssamplelist , 'r') :
 	sampleind.append(x[0])
 
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-# out_file=open(outprefix 'all_sample_concordance_discordance_table.txt', 'w')
-print '#CHROM\tPOZ\tPOS\tID\tREF\tALT\tINFO\tREC\tALC\tDAC\tMAC\tDAF\tMAF'
+out_file=open(outfile , 'w')
+print >> out_file, '#CHROM\tPOZ\tPOS\tID\tREF\tALT\tINFO\tREC\tALC\tDAC\tMAC\tDAF\tMAF'
 
 sampleind_index=[]
 for line in gzip.open(inputvcf, 'r'):
@@ -124,14 +124,14 @@ for line in gzip.open(inputvcf, 'r'):
 			rac=alleles_count[0]; alc=alleles_count[1]; dac='NA'; mac=alleles_count[3]
 
 		for item in  [chr,poz,position, vid, ref, alt, infofield]:  #z[0:8]: 
-			print '%s\t' %(item),
+			print >> out_file, '%s\t' %(item),
 
-		print '%s\t%s\t%s\t%s\t' %(rac,alc, dac, mac),
+		print >> out_file, '%s\t%s\t%s\t%s\t' %(rac,alc, dac, mac),
 
-		if not dac=='NA': print '%.6f\t' %(int(dac)/float(len(sampleind_index)*2)),
-		else: print 'NA\t',
+		if not dac=='NA': print >> out_file, '%.6f\t' %(int(dac)/float(len(sampleind_index)*2)),
+		else: print >> out_file, 'NA\t',
 
-		if not mac=='NA': print int(mac)/float(len(sampleind_index)*2)
-		else: print 'NA\t'
+		if not mac=='NA': print >> out_file, int(mac)/float(len(sampleind_index)*2)
+		else: print >> out_file, 'NA\t'
 
 
