@@ -238,6 +238,52 @@ case $MODE in
 
     done
   ;;
+  EXTRMAF )
+    #extract data in bed format for different populations in a separate way
+    echo "Extract from tables for each population, complete info about shared/private sites"
+    for pop in $pops
+    do
+      case $pop in
+        FVG )
+          pop_path=/lustre/scratch113/projects/esgi-vbseq/20140430_purging/UNRELATED/RESULTS/DAF/FIVE_POP
+          ;;
+        VBI )
+          pop_path=/lustre/scratch113/projects/esgi-vbseq/20140430_purging/UNRELATED/RESULTS/DAF/FIVE_POP
+          ;;
+        CARL )
+          pop_path=/lustre/scratch113/projects/esgi-vbseq/20140430_purging/UNRELATED/RESULTS/DAF/FIVE_POP
+          ;;
+        TSI )
+          pop_path=/lustre/scratch113/projects/esgi-vbseq/20140430_purging/UNRELATED/RESULTS/DAF/FIVE_POP
+          ;;
+        CEU )
+          pop_path=/lustre/scratch113/projects/esgi-vbseq/20140430_purging/UNRELATED/RESULTS/DAF/FIVE_POP
+          ;;
+      esac
+      #those are the files I need to use to extract the info splitted by chr
+      private=pop_path/${pop}/${pop}_private.merged_daf.tab
+      private_fixed=pop_path/${pop}/${pop}_private.merged_daf.fixed.tab
+      shared=pop_path/${pop}/${pop}_shared.merged_daf.tab
+      shared_fixed=pop_path/${pop}/${pop}_shared.merged_daf.fixed.tab
+
+      #create the list of variants we need to extract
+      awk '{print $1"O"$2"O"$3}' ${private} | tr " " "\t" | dos2unix > ${private}.list
+      awk '{print $1"O"$2"O"$3}' ${private_fixed} | tr " " "\t" | dos2unix > ${private_fixed}.list
+      awk '{print $1"O"$2"O"$3}' ${shared} | tr " " "\t" | dos2unix > ${shared}.list
+      awk '{print $1"O"$2"O"$3}' ${shared_fixed} | tr " " "\t" | dos2unix > ${shared_fixed}.list
+
+      #create temporary files to do the extraction
+      # in_file=/lustre/scratch113/projects/esgi-vbseq/20140430_purging/UNRELATED/INPUT_FILES/FIVE_POPS/WG/CHR${CHR}/${pop}.chr${CHR}.tab.gz| 
+      # zcat ${in_file} | awk '{print $1"O"$2"O"$3,$0}' | tr " " "\t" | dos2unix > ${in_file}.tmp
+
+      # #now grep the file to extract the data we need, using different lists
+      # (fgrep -v -w -f ${private}.list ${in_file}.tmp)| cut -f 2- | dos2unix |gzip -c > ${in_file}.private.tab.gz
+      # (fgrep -v -w -f ${private_fixed}.list ${in_file}.tmp)| cut -f 2- | dos2unix |gzip -c > ${in_file}.private_fixed.tab.gz
+      # (fgrep -v -w -f ${shared}.list ${in_file}.tmp)| cut -f 2- | dos2unix |gzip -c > ${in_file}.shared.tab.gz
+      # (fgrep -v -w -f ${shared_fixed}.list ${in_file}.tmp)| cut -f 2- | dos2unix |gzip -c > ${in_file}.shared_fixed.tab.gz
+
+    done
+  ;;
   ROH )
     echo "Calculate ROH....with BEAGLE and separate population files (no maf filtering)"
     echo -e "Parameters: \nwindow=${window}\noverlap=${overlap}"
