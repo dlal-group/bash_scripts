@@ -47,7 +47,7 @@ def frequencies_mac(genlist, ref, alt) :
 		x=item.split(':')
 		r=x[0].count('0'); a=x[0].count('1'); m=x[0].count('.')
 		R=R+r; A=A+a; M=M+m #here we're not taking in account that a site can be missing for an entire population
-	if R==A==0;	
+	if (R==0 and A==0):
 		mac="NA"
 	else:
 		mac=min(R,A )
