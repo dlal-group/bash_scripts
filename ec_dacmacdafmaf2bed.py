@@ -34,7 +34,7 @@ def frequencies_anc_known_confidence(genlist, ref, alt, anc) :
 		    #upperanc=swap[anc]
 		    #if ref==upperanc: D=A
 		    #else: D=R
-	if R==A==0;
+	if (R==0 and A==0);
 		mac="NA"
 	else:
 		mac=min(R,A )
