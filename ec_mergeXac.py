@@ -25,7 +25,7 @@ for vt in vartype:
 	dic_type[vt]=[]
 	dic_xac[vt]={}
 
-poplist={'EUR':['CEU', 'FIN', 'GBR', 'TSI'], 'ASN': ['CHB', 'CHS', 'JPT'], 'AFR': ['ASW', 'LWK', 'YRI'], 'CON':['AFR', 'ASN', 'EUR'], 'INGI':['CEU','TSI','VBI','FVG','CARL']} 
+poplist={'EUR':['CEU', 'FIN', 'GBR', 'TSI'], 'ASN': ['CHB', 'CHS', 'JPT'], 'AFR': ['ASW', 'LWK', 'YRI'], 'CON':['AFR', 'ASN', 'EUR'], 'INGI':['CEU','TSI','VBI','FVG','CARL'],'INGI_villages':['CEU','TSI','VBI','FVG','CARL','Erto','Illegio','Resia','Sauris']} 
 
 for pop in poplist[contofinterest]:
 	for vt in vartype:  dic_xac[vt][pop]={}
