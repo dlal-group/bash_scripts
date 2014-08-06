@@ -282,6 +282,8 @@ case $MODE in
       (fgrep -v -w -f ${shared}.list ${in_file}.tmp)| cut -f 2- | dos2unix |gzip -c > ${in_file}.shared.tab.gz
       (fgrep -v -w -f ${shared_fixed}.list ${in_file}.tmp)| cut -f 2- | dos2unix |gzip -c > ${in_file}.shared_fixed.tab.gz
 
+      rm ${in_file}.tmp
+      
     done
   ;;
   ROH )
