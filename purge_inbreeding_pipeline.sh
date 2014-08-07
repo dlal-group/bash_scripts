@@ -210,7 +210,9 @@ case $MODE in
   DACMAF )
     #extract data in bed format for different populations in a separate way
     echo "Create bed formatted files..."
-    for pop in $pops
+    pops_updated="Erto Resia Illegio Sauris"
+    # for pop in $pops
+    for pop in $pops_updated
     do
       case $pop in
         FVG )
@@ -228,6 +230,18 @@ case $MODE in
         CEU )
           pop_path=/lustre/scratch113/projects/esgi-vbseq/20140430_purging/UNRELATED/listpop/CEU.list
           ;;
+        Erto )
+          pop_path=/lustre/scratch113/projects/esgi-vbseq/20140430_purging/UNRELATED/listpop/Erto_unrelated.list
+            ;;
+        Sauris )
+          pop_path=/lustre/scratch113/projects/esgi-vbseq/20140430_purging/UNRELATED/listpop/Sauris_unrelated.list
+            ;;
+        Illegio )
+          pop_path=/lustre/scratch113/projects/esgi-vbseq/20140430_purging/UNRELATED/listpop/Illegio_unrelated.list
+            ;;
+        Resia )
+          pop_path=/lustre/scratch113/projects/esgi-vbseq/20140430_purging/UNRELATED/listpop/Resia_unrelated.list
+            ;;
       esac
       in_vcf=/lustre/scratch113/projects/esgi-vbseq/20140430_purging/UNRELATED/POP_MERGED_FILES/FIVE_POPS/20140711_ANNOTATED/${CHR}.vcf.gz
       # in_vcf=/lustre/scratch113/projects/esgi-vbseq/20140430_purging/ALL/POP_MERGED_FILES/FIVE_POPS/20140730_ANNOTATED/${CHR}.clean_annotated.vcf.gz
