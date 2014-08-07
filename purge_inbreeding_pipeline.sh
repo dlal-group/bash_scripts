@@ -176,9 +176,9 @@ case $MODE in
     zcat ${in_dir}/CHR${CHR}/INGI_chr${CHR}.merged_daf.tab.gz | awk '$9 !="NA" && $9 == 1 && ($6 > 0 || $5 > 0)'| gzip -c > ${outdir}/CARL_shared_chr${CHR}.merged_daf.fixed.tab.gz
 
     # NOVEL in Isolate
-    zcat ${in_dir}/CHR${CHR}/INGI_chr${CHR}.merged_daf.tab.gz | awk '$7 !="NA" && ($6 == "NA" && $5 == "NA")'| gzip -c > ${outdir}/VBI_novel_chr${CHR}.merged_daf.tab.gz
-    zcat ${in_dir}/CHR${CHR}/INGI_chr${CHR}.merged_daf.tab.gz | awk '$8 !="NA" && ($6 == "NA" && $5 == "NA")'| gzip -c > ${outdir}/FVG_novel_chr${CHR}.merged_daf.tab.gz
-    zcat ${in_dir}/CHR${CHR}/INGI_chr${CHR}.merged_daf.tab.gz | awk '$9 !="NA" && ($6 == "NA" && $5 == "NA")'| gzip -c > ${outdir}/CARL_novel_chr${CHR}.merged_daf.tab.gz
+    zcat ${in_dir}/CHR${CHR}/INGI_chr${CHR}.merged_daf.tab.gz | awk '$7 =="NA" && ($6 == "NA" && $5 == "NA")'| gzip -c > ${outdir}/VBI_novel_chr${CHR}.merged_daf.tab.gz
+    zcat ${in_dir}/CHR${CHR}/INGI_chr${CHR}.merged_daf.tab.gz | awk '$8 =="NA" && ($6 == "NA" && $5 == "NA")'| gzip -c > ${outdir}/FVG_novel_chr${CHR}.merged_daf.tab.gz
+    zcat ${in_dir}/CHR${CHR}/INGI_chr${CHR}.merged_daf.tab.gz | awk '$9 =="NA" && ($6 == "NA" && $5 == "NA")'| gzip -c > ${outdir}/CARL_novel_chr${CHR}.merged_daf.tab.gz
   ;;
   PRISHCOUNT )
     #extract data from different files categories and count to summarize all in Isolates
@@ -273,16 +273,21 @@ case $MODE in
       # awk '{print $1"O"$2"O"$3}' ${shared_fixed} | tr " " "\t" | dos2unix > ${shared_fixed}.list
 
       #create temporary files to do the extraction
-      in_file=/lustre/scratch113/projects/esgi-vbseq/20140430_purging/UNRELATED/INPUT_FILES/FIVE_POPS/WG/CHR${CHR}/${pop}.chr${CHR}.tab.gz
-      zcat ${in_file} | awk '{print $1"O"$2"O"$3,$0}' | tr " " "\t" | dos2unix > ${in_file}.tmp
+      in_file=/lustre/scratch113/projects/esgi-vbseq/20140430_purging/UNRELATED/INPUT_FILES/FIVE_POPS/WG/CHR${CHR}/INGI_chr${CHR}.merged_maf.tab.gz
+      # zcat ${in_file} | awk '{print $1"O"$2"O"$3,$0}' | tr " " "\t" | dos2unix > ${in_file}.tmp
 
+      zcat ${in_file} |awk '{print $1"O"$2"O"$3"O"$4,$0}'|tr " " "\t" | fgrep -w -f <(awk '{print $1"O"$2"O"$3"O"$4}' ${private})|cut -f 2- |gzip -c > ${in_file}.${pop}.private.tab.gz
+      zcat ${in_file} |awk '{print $1"O"$2"O"$3"O"$4,$0}'|tr " " "\t" | fgrep -w -f <(awk '{print $1"O"$2"O"$3"O"$4}' ${private_fixed})|cut -f 2- |gzip -c > ${in_file}.${pop}.private_fixed.tab.gz
+      zcat ${in_file} |awk '{print $1"O"$2"O"$3"O"$4,$0}'|tr " " "\t" | fgrep -w -f <(awk '{print $1"O"$2"O"$3"O"$4}' ${shared})|cut -f 2- |gzip -c > ${in_file}.${pop}.shared.tab.gz
+      zcat ${in_file} |awk '{print $1"O"$2"O"$3"O"$4,$0}'|tr " " "\t" | fgrep -w -f <(awk '{print $1"O"$2"O"$3"O"$4}' ${shared_fixed})|cut -f 2- |gzip -c > ${in_file}.${pop}.shared_fixed.tab.gz
+      
       # #now grep the file to extract the data we need, using different lists
-      (fgrep -w -f <(grep "^${CHR}" ${private}.list) ${in_file}.tmp)| cut -f 2- | dos2unix |gzip -c > ${in_file}.private.tab.gz
-      (fgrep -w -f <(grep "^${CHR}" ${private_fixed}.list) ${in_file}.tmp)| cut -f 2- | dos2unix |gzip -c > ${in_file}.private_fixed.tab.gz
-      (fgrep -w -f <(grep "^${CHR}" ${shared}.list) ${in_file}.tmp)| cut -f 2- | dos2unix |gzip -c > ${in_file}.shared.tab.gz
-      (fgrep -w -f <(grep "^${CHR}" ${shared_fixed}.list) ${in_file}.tmp)| cut -f 2- | dos2unix |gzip -c > ${in_file}.shared_fixed.tab.gz
+      # (fgrep -w -f <(grep "^${CHR}" ${private}.list) ${in_file}.tmp)| cut -f 2- | dos2unix |gzip -c > ${in_file}.private.tab.gz
+      # (fgrep -w -f <(grep "^${CHR}" ${private_fixed}.list) ${in_file}.tmp)| cut -f 2- | dos2unix |gzip -c > ${in_file}.private_fixed.tab.gz
+      # (fgrep -w -f <(grep "^${CHR}" ${shared}.list) ${in_file}.tmp)| cut -f 2- | dos2unix |gzip -c > ${in_file}.shared.tab.gz
+      # (fgrep -w -f <(grep "^${CHR}" ${shared_fixed}.list) ${in_file}.tmp)| cut -f 2- | dos2unix |gzip -c > ${in_file}.shared_fixed.tab.gz
 
-      rm ${in_file}.tmp
+      # rm ${in_file}.tmp
 
     done
   ;;
