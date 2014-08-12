@@ -31,6 +31,11 @@ case $MODE in
       #set parameters for file input/output
       in_dir=$3
       ;;
+  MAFSPEC )
+      #set parameters for file input/output
+      input_file=$3
+      maf_file_path=$4
+    ;;
 esac
 
 mkdir -p ${outdir}
@@ -127,7 +132,6 @@ case $MODE in
     echo "Calculate Inbreeding...."
     for pop in $pops
     do
-
       case $pop in
         FVG )
           pop_path=/lustre/scratch113/projects/fvg_seq/20140410/INGI/FVG/PLINK
@@ -304,6 +308,49 @@ case $MODE in
       # rm ${in_file}.tmp
 
     done
+  ;;
+  MAFSPEC )
+    #extract MAF data different populations from a given list
+    echo "Extract data for af/maf spectrum plot"
+    pops_updated="FVG VBI CARL TSI CEU Erto Resia Illegio Sauris"
+    # for pop in $pops
+    # for pop in $pops_updated
+    # do
+      # case $pop in
+      #   FVG )
+      #     pop_path=/lustre/scratch113/projects/esgi-vbseq/20140430_purging/UNRELATED/listpop/FVG_unrelated.list
+      #     ;;
+      #   VBI )
+      #     pop_path=/lustre/scratch113/projects/esgi-vbseq/20140430_purging/UNRELATED/listpop/VBI_unrelated.list
+      #     ;;
+      #   CARL )
+      #     pop_path=/lustre/scratch113/projects/esgi-vbseq/20140430_purging/UNRELATED/listpop/CARL_unrelated.list
+      #     ;;
+      #   TSI )
+      #     pop_path=/lustre/scratch113/projects/esgi-vbseq/20140430_purging/UNRELATED/listpop/TSI.list
+      #     ;;
+      #   CEU )
+      #     pop_path=/lustre/scratch113/projects/esgi-vbseq/20140430_purging/UNRELATED/listpop/CEU.list
+      #     ;;
+      #   Erto )
+      #     pop_path=/lustre/scratch113/projects/esgi-vbseq/20140430_purging/UNRELATED/listpop/Erto_unrelated.list
+      #       ;;
+      #   Sauris )
+      #     pop_path=/lustre/scratch113/projects/esgi-vbseq/20140430_purging/UNRELATED/listpop/Sauris_unrelated.list
+      #       ;;
+      #   Illegio )
+      #     pop_path=/lustre/scratch113/projects/esgi-vbseq/20140430_purging/UNRELATED/listpop/Illegio_unrelated.list
+      #       ;;
+      #   Resia )
+      #     pop_path=/lustre/scratch113/projects/esgi-vbseq/20140430_purging/UNRELATED/listpop/Resia_unrelated.list
+      #       ;;
+      # esac
+      maf_file=${maf_file_path}/INGI_chr${CHR}.merged_maf.tab.gz
+      out_tmp=`basename ${input_file}`
+
+      (zcat ${maf_file} | head -1| cut -f 1,3-;zcat ${maf_file} | cut -f 1,3- | fgrep -w -f <(cut -f 2 -d " " ${input_file}) )| tr " " "\t" > ${out_tmp}.maf_file
+
+    # done
   ;;
   ROH )
     echo "Calculate ROH....with BEAGLE and separate population files (no maf filtering)"
