@@ -348,7 +348,7 @@ case $MODE in
       maf_file=${maf_file_path}/INGI_chr${CHR}.merged_maf.tab.gz
       out_tmp=`basename ${input_file}`
 
-      (zcat ${maf_file} | head -1| cut -f 1,3-;zcat ${maf_file} | cut -f 1,3- | fgrep -w -f <(cut -f 2 -d " " ${input_file}) )| tr " " "\t" > ${out_tmp}.maf_file
+      (zcat ${maf_file} | cut -f 1,3- | fgrep -w -f <(cut -f 2 -d " " ${input_file}) )| tr " " "\t" > ${out_tmp}.maf_file
 
     # done
   ;;
