@@ -31,6 +31,10 @@ case $MODE in
       #set parameters for file input/output
       in_dir=$3
       ;;
+  IBDCLUST )
+      #set parameters for file input/output
+      in_dir=$3
+      ;;
   MAFSPEC )
       #set parameters for file input/output
       input_file=$3
@@ -162,10 +166,17 @@ case $MODE in
             ;;
       esac
       #we need to prepare the input files:
-      #fam file first: one for each chromosome
-      cat <(cut -f 1 -d  " " ${pop_path}/${pop}.WG.lod4.ibd| sort|uniq) <(cut -f 3 -d  " " ${pop}/${pop}.WG.lod4.ibd| sort|uniq) | sort | uniq | awk '{print $1,$1,0,0,0,-9}' > ${pop}/${pop}.WG.lod4.fam
+      # File format transformation: one for each chromosome 
+      awk '{if($8>=4) print $1,$1"."$2-1,$3,$3"."$4-1,$6,$7,$8,0,0}' ${pop_path}/${pop}.roh.length.5.hbd | sort -k 5,1n -k 6,2n > ${outdir}/${pop}.roh.length.5.ibd
+      awk '{if($8>=5) print $1,$1"."$2-1,$3,$3"."$4-1,$6,$7,$8,0,0}' ${pop_path}/${pop}.roh.length.5.ibd | sort -k 5,1n -k 6,2n > ${outdir}/${pop}.ibd.length.5.ibd
 
+      #fam file: one for each chromosome
+      cat <(cut -f 1 -d  " " ${outdir}/${pop}.roh.length.5.ibd| sort|uniq) <(cut -f 3 -d  " " ${outdir}/${pop}.roh.length.5.ibd| sort|uniq) | sort | uniq | awk '{print $1,$1,0,0,0,-9}' > ${outdir}/${pop}.roh.length.5.fam
+      cat <(cut -f 1 -d  " " ${outdir}/${pop}.ibd.length.5.ibd| sort|uniq) <(cut -f 3 -d  " " ${outdir}/${pop}.ibd.length.5.ibd| sort|uniq) | sort | uniq | awk '{print $1,$1,0,0,0,-9}' > ${outdir}/${pop}.ibd.length.5.fam
 
+      # now run EMI for the chromosome with the selected data
+      mkdir -p ${outdir}/EMI/w_20k/${pop}; emi ${outdir}/${pop}.ibd.length.5.ibd -fam ${outdir}/${pop}.ibd.length.5.fam -wgt 7th 5 50 -win 20000 bp ${outdir}/EMI/LOD5/w_20k/${pop}
+      mkdir -p ${outdir}/EMI/w_200k/${pop}; emi ${outdir}/${pop}.ibd.length.5.ibd -fam ${outdir}/${pop}.ibd.length.5.fam -wgt 7th 5 50 -win 200000 bp ${outdir}/EMI/LOD5/w_200k/${pop}
     done
   ;;
   HET )
