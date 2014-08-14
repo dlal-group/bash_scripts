@@ -126,6 +126,48 @@ case $MODE in
 
   done
   ;;
+  IBDCLUST )
+  #need to work by chromosome!!because it is right...we should have different cluster and sample in cluster, for different chrs!!
+  echo "Launch IBD clustering software EMI"
+  pops_updated="FVG VBI TSI CEU CARL Erto Resia Illegio Sauris"
+    for pop in $pops_updated
+    do
+      case $pop in
+        FVG )
+          pop_path=${in_dir}/CHR${CHR}
+          ;;
+        VBI )
+          pop_path=${in_dir}/CHR${CHR}
+            ;;
+        TSI )
+          pop_path=${in_dir}/CHR${CHR}
+            ;;
+        CEU )
+          pop_path=${in_dir}/CHR${CHR}
+            ;;
+        CARL )
+          pop_path=${in_dir}/CHR${CHR}
+            ;;
+        Erto )
+          pop_path=${in_dir}/CHR${CHR}
+            ;;
+        Sauris )
+          pop_path=${in_dir}/CHR${CHR}
+            ;;
+        Illegio )
+          pop_path=${in_dir}/CHR${CHR}
+            ;;
+        Resia )
+          pop_path=${in_dir}/CHR${CHR}
+            ;;
+      esac
+      #we need to prepare the input files:
+      #fam file first: one for each chromosome
+      cat <(cut -f 1 -d  " " ${pop_path}/${pop}.WG.lod4.ibd| sort|uniq) <(cut -f 3 -d  " " ${pop}/${pop}.WG.lod4.ibd| sort|uniq) | sort | uniq | awk '{print $1,$1,0,0,0,-9}' > ${pop}/${pop}.WG.lod4.fam
+
+
+    done
+  ;;
   HET )
     #Extract Inbreeding coeff information for each population. Here we are using plink2 (1.9)
     #we'll use the --het option as long as the --ibc option
