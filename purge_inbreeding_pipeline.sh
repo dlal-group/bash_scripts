@@ -175,8 +175,8 @@ case $MODE in
       cat <(cut -f 1 -d  " " ${outdir}/${pop}.ibd.length.5.ibd| sort|uniq) <(cut -f 3 -d  " " ${outdir}/${pop}.ibd.length.5.ibd| sort|uniq) | sort | uniq | awk '{print $1,$1,0,0,0,-9}' > ${outdir}/${pop}.ibd.length.5.fam
 
       # now run EMI for the chromosome with the selected data
-      mkdir -p ${outdir}/EMI/w_20k/${pop}; emi ${outdir}/${pop}.ibd.length.5.ibd -fam ${outdir}/${pop}.ibd.length.5.fam -wgt 7th 5 50 -win 20000 bp ${outdir}/EMI/LOD5/w_20k/${pop}
-      mkdir -p ${outdir}/EMI/w_200k/${pop}; emi ${outdir}/${pop}.ibd.length.5.ibd -fam ${outdir}/${pop}.ibd.length.5.fam -wgt 7th 5 50 -win 200000 bp ${outdir}/EMI/LOD5/w_200k/${pop}
+      mkdir -p ${outdir}/EMI/w_20k/${pop}; emi ${outdir}/${pop}.ibd.length.5.ibd -fam ${outdir}/${pop}.ibd.length.5.fam -wgt 7th 5 50 -win 20000 bp ${outdir}/EMI/LOD5/w_20k/${pop}.out
+      mkdir -p ${outdir}/EMI/w_200k/${pop}; emi ${outdir}/${pop}.ibd.length.5.ibd -fam ${outdir}/${pop}.ibd.length.5.fam -wgt 7th 5 50 -win 200000 bp ${outdir}/EMI/LOD5/w_200k/${pop}.out
     done
   ;;
   HET )
