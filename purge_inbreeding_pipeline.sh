@@ -180,7 +180,7 @@ case $MODE in
       cat <(cut -f 1 -d  " " ${outdir}/${pop}.ibd.length.5.ibd| sort|uniq) <(cut -f 3 -d  " " ${outdir}/${pop}.ibd.length.5.ibd| sort|uniq) | sort | uniq | awk '{print $1,$1,0,0,0,-9}' > ${outdir}/${pop}.ibd.length.5.fam
 
       # now run EMI for the chromosome with the selected data --> FOR IBD:
-      mkdir -p EMI/w_${win_size}k/${density}/${pop}; emi ${outdir}/${pop}.ibd.length.5.ibd -fam ${outdir}/${pop}.ibd.length.5.fam -den ${density} -wgt 7th 5 50 -win ${win_size*1000} bp EMI/w_${win_size}k/${density}/${pop}/${pop}.chr${CHR}.ibd.out
+      mkdir -p EMI/w_${win_size}k/${density}/${pop}; emi ${outdir}/${pop}.ibd.length.5.ibd -fam ${outdir}/${pop}.ibd.length.5.fam -den ${density} -wgt 7th 5 50 -win $[win_size*1000] bp EMI/w_${win_size}k/${density}/${pop}/${pop}.chr${CHR}.ibd.out
 
       # format output file to sort cluster and remove duplicates:
       awk -F "\t" -v OFS="\t" '{$1="clst"; print $0}' EMI/w_${win_size}k/${density}/${pop}/${pop}.chr${CHR}.ibd.out.clst.tmp|sort -k2n -k3n -k4n | uniq| awk '{$1="clst"NR;print $0}' > EMI/w_${win_size}k/${density}/${pop}/${pop}.chr${CHR}.ibd.out.clst.uniq.sorted.txt
@@ -189,7 +189,7 @@ case $MODE in
       awk -v chr=${CHR} '{print $1,chr,$2,$3,(NF-3)/2}' EMI/w_${win_size}k/${density}/${pop}/${pop}.chr${CHR}.ibd.out.clst.uniq.sorted.txt > EMI/w_${win_size}k/${density}/${pop}/${pop}.chr${CHR}.ibd.out.clst.uniq.size
 
       # now run EMI for the chromosome with the selected data --> FOR ROH:
-      mkdir -p EMI/w_${win_size}k/${density}/${pop}; emi ${outdir}/${pop}.roh.length.5.ibd -fam ${outdir}/${pop}.roh.length.5.fam -den ${density} -wgt 7th 5 50 -win ${win_size*1000} bp EMI/w_${win_size}k/${density}/${pop}/${pop}.chr${CHR}.roh.out
+      mkdir -p EMI/w_${win_size}k/${density}/${pop}; emi ${outdir}/${pop}.roh.length.5.ibd -fam ${outdir}/${pop}.roh.length.5.fam -den ${density} -wgt 7th 5 50 -win $[win_size*1000] bp EMI/w_${win_size}k/${density}/${pop}/${pop}.chr${CHR}.roh.out
 
       # format output file to sort cluster and remove duplicates:
       awk -F "\t" -v OFS="\t" '{$1="clst"; print $0}' EMI/w_${win_size}k/${density}/${pop}/${pop}.chr${CHR}.roh.out.clst.tmp|sort -k2n -k3n -k4n | uniq| awk '{$1="clst"NR;print $0}' > EMI/w_${win_size}k/${density}/${pop}/${pop}.chr${CHR}.roh.out.clst.uniq.sorted.txt
