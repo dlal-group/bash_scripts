@@ -33,7 +33,9 @@ case $MODE in
       ;;
   IBDCLUST )
       #set parameters for file input/output
-      in_dir=$3
+      win_size=$3
+      density=$4
+      in_dir=$5
       ;;
   MAFSPEC )
       #set parameters for file input/output
@@ -133,6 +135,9 @@ case $MODE in
   IBDCLUST )
   #need to work by chromosome!!because it is right...we should have different cluster and sample in cluster, for different chrs!!
   echo "Launch IBD clustering software EMI"
+  echo "Using win size: ${win_size}"
+  echo "Cluster Density: ${density}"
+
   pops_updated="FVG VBI TSI CEU CARL Erto Resia Illegio Sauris"
     for pop in $pops_updated
     do
@@ -175,28 +180,22 @@ case $MODE in
       cat <(cut -f 1 -d  " " ${outdir}/${pop}.ibd.length.5.ibd| sort|uniq) <(cut -f 3 -d  " " ${outdir}/${pop}.ibd.length.5.ibd| sort|uniq) | sort | uniq | awk '{print $1,$1,0,0,0,-9}' > ${outdir}/${pop}.ibd.length.5.fam
 
       # now run EMI for the chromosome with the selected data --> FOR IBD:
-      mkdir -p EMI/w_20k/${pop}; emi ${outdir}/${pop}.ibd.length.5.ibd -fam ${outdir}/${pop}.ibd.length.5.fam -wgt 7th 5 50 -win 20000 bp EMI/w_20k/${pop}/${pop}.chr${CHR}.ibd.out
-      mkdir -p EMI/w_200k/${pop}; emi ${outdir}/${pop}.ibd.length.5.ibd -fam ${outdir}/${pop}.ibd.length.5.fam -wgt 7th 5 50 -win 200000 bp EMI/w_200k/${pop}/${pop}.chr${CHR}.ibd.out
+      mkdir -p EMI/w_${win_size}k/${density}/${pop}; emi ${outdir}/${pop}.ibd.length.5.ibd -fam ${outdir}/${pop}.ibd.length.5.fam -den ${density} -wgt 7th 5 50 -win ${win_size*1000} bp EMI/w_${win_size}k/${density}/${pop}/${pop}.chr${CHR}.ibd.out
 
       # format output file to sort cluster and remove duplicates:
-      awk -F "\t" -v OFS="\t" '{$1="clst"; print $0}' EMI/w_20k/${pop}/${pop}.chr${CHR}.ibd.out.clst.tmp|sort -k2n -k3n -k4n | uniq| awk '{$1="clst"NR;print $0}' > EMI/w_20k/${pop}/${pop}.chr${CHR}.ibd.out.clst.uniq.sorted.txt
-      awk -F "\t" -v OFS="\t" '{$1="clst"; print $0}' EMI/w_200k/${pop}/${pop}.chr${CHR}.ibd.out.clst.tmp|sort -k2n -k3n -k4n | uniq| awk '{$1="clst"NR;print $0}' > EMI/w_200k/${pop}/${pop}.chr${CHR}.ibd.out.clst.uniq.sorted.txt
+      awk -F "\t" -v OFS="\t" '{$1="clst"; print $0}' EMI/w_${win_size}k/${density}/${pop}/${pop}.chr${CHR}.ibd.out.clst.tmp|sort -k2n -k3n -k4n | uniq| awk '{$1="clst"NR;print $0}' > EMI/w_${win_size}k/${density}/${pop}/${pop}.chr${CHR}.ibd.out.clst.uniq.sorted.txt
   
       # Create a file with cluster positions and number of samples:
-      awk -v chr=${CHR} '{print $1,chr,$2,$3,(NF-3)/2}' EMI/w_20k/${pop}/${pop}.chr${CHR}.ibd.out.clst.uniq.sorted.txt > EMI/w_20k/${pop}/${pop}.chr${CHR}.ibd.out.clst.uniq.size
-      awk -v chr=${CHR} '{print $1,chr,$2,$3,(NF-3)/2}' EMI/w_200k/${pop}/${pop}.chr${CHR}.ibd.out.clst.uniq.sorted.txt > EMI/w_200k/${pop}/${pop}.chr${CHR}.ibd.out.clst.uniq.size
+      awk -v chr=${CHR} '{print $1,chr,$2,$3,(NF-3)/2}' EMI/w_${win_size}k/${density}/${pop}/${pop}.chr${CHR}.ibd.out.clst.uniq.sorted.txt > EMI/w_${win_size}k/${density}/${pop}/${pop}.chr${CHR}.ibd.out.clst.uniq.size
 
       # now run EMI for the chromosome with the selected data --> FOR ROH:
-      mkdir -p EMI/w_20k/${pop}; emi ${outdir}/${pop}.roh.length.5.ibd -fam ${outdir}/${pop}.roh.length.5.fam -wgt 7th 5 50 -win 20000 bp EMI/w_20k/${pop}/${pop}.chr${CHR}.roh.out
-      mkdir -p EMI/w_200k/${pop}; emi ${outdir}/${pop}.roh.length.5.ibd -fam ${outdir}/${pop}.roh.length.5.fam -wgt 7th 5 50 -win 200000 bp EMI/w_200k/${pop}/${pop}.chr${CHR}.roh.out
+      mkdir -p EMI/w_${win_size}k/${density}/${pop}; emi ${outdir}/${pop}.roh.length.5.ibd -fam ${outdir}/${pop}.roh.length.5.fam -den ${density} -wgt 7th 5 50 -win ${win_size*1000} bp EMI/w_${win_size}k/${density}/${pop}/${pop}.chr${CHR}.roh.out
 
       # format output file to sort cluster and remove duplicates:
-      awk -F "\t" -v OFS="\t" '{$1="clst"; print $0}' EMI/w_20k/${pop}/${pop}.chr${CHR}.roh.out.clst.tmp|sort -k2n -k3n -k4n | uniq| awk '{$1="clst"NR;print $0}' > EMI/w_20k/${pop}/${pop}.chr${CHR}.roh.out.clst.uniq.sorted.txt
-      awk -F "\t" -v OFS="\t" '{$1="clst"; print $0}' EMI/w_200k/${pop}/${pop}.chr${CHR}.roh.out.clst.tmp|sort -k2n -k3n -k4n | uniq| awk '{$1="clst"NR;print $0}' > EMI/w_200k/${pop}/${pop}.chr${CHR}.roh.out.clst.uniq.sorted.txt
+      awk -F "\t" -v OFS="\t" '{$1="clst"; print $0}' EMI/w_${win_size}k/${density}/${pop}/${pop}.chr${CHR}.roh.out.clst.tmp|sort -k2n -k3n -k4n | uniq| awk '{$1="clst"NR;print $0}' > EMI/w_${win_size}k/${density}/${pop}/${pop}.chr${CHR}.roh.out.clst.uniq.sorted.txt
   
       # Create a file with cluster positions and number of samples:
-      awk -v chr=${CHR} '{print $1,chr,$2,$3,(NF-3)/2}' EMI/w_20k/${pop}/${pop}.chr${CHR}.roh.out.clst.uniq.sorted.txt > EMI/w_20k/${pop}/${pop}.chr${CHR}.roh.out.clst.uniq.size
-      awk -v chr=${CHR} '{print $1,chr,$2,$3,(NF-3)/2}' EMI/w_200k/${pop}/${pop}.chr${CHR}.roh.out.clst.uniq.sorted.txt > EMI/w_200k/${pop}/${pop}.chr${CHR}.roh.out.clst.uniq.size
+      awk -v chr=${CHR} '{print $1,chr,$2,$3,(NF-3)/2}' EMI/w_${win_size}k/${density}/${pop}/${pop}.chr${CHR}.roh.out.clst.uniq.sorted.txt > EMI/w_${win_size}k/${density}/${pop}/${pop}.chr${CHR}.roh.out.clst.uniq.size
 
     done
   ;;
