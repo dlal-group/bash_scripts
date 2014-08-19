@@ -6,7 +6,7 @@
 # mkdir -p LOGS;size=`wc -l result.list|cut -f 1 -d " "`;bsub -J "p_check[1-${size}]" -o "LOGS/%J_p_check.%I.o" -M 5000 -R"select[mem>5000] rusage[mem=5000]" -q normal -- ~/Work/bash_scripts/ja_runner.sh result.list
 file=`sed -n "${LSB_JOBINDEX}p" $1`
 #added for population control
-pop=$2
+# pop=$2
 
 # script=$1
 # uncomment this if you need to work with chr as jobindex
@@ -331,12 +331,19 @@ pop=$2
 
 #06/04/2014
 #create bed files from vcf
-chr=${file}
+# chr=${file}
 
 #create output folder
-mkdir -p CHR${chr}
+# mkdir -p CHR${chr}
 
-ec_dacmacdafmaf2bed.py /lustre/scratch113/projects/esgi-vbseq/20140430_purging/46_SAMPLES/listpop/${pop}_unrelated.list /lustre/scratch113/projects/esgi-vbseq/20140430_purging/UNRELATED/POP_MERGED_FILES/FIVE_POPS/20140711_ANNOTATED/${chr}.vcf.gz ${pop}.chr${chr}.tab
+# ec_dacmacdafmaf2bed.py /lustre/scratch113/projects/esgi-vbseq/20140430_purging/46_SAMPLES/listpop/${pop}_unrelated.list /lustre/scratch113/projects/esgi-vbseq/20140430_purging/UNRELATED/POP_MERGED_FILES/FIVE_POPS/20140711_ANNOTATED/${chr}.vcf.gz ${pop}.chr${chr}.tab
 
-mv ${pop}.chr${chr}.tab CHR${chr}/
-gzip CHR${chr}/${pop}.chr${chr}.tab
+# mv ${pop}.chr${chr}.tab CHR${chr}/
+# gzip CHR${chr}/${pop}.chr${chr}.tab
+
+#19/08/2014
+#Create plink input files for NON MISSING data
+chr=${file}
+
+plink2 --vcf /lustre/scratch113/projects/esgi-vbseq/20140430_purging/UNRELATED/POP_MERGED_FILES/FIVE_POPS/20140801_NONMISSING/${chr}.non_missing.vcf.gz --double-id --biallelic-only --keep-allele-order --recode --out /lustre/scratch113/projects/esgi-vbseq/20140430_purging/UNRELATED/INPUT_FILES/FIVE_POPS/IBD_INPUT/GERMLINE/${chr}.non_missing
+
