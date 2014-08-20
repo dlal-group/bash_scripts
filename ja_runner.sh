@@ -349,6 +349,6 @@ pop=$2
 if [ ! -s /lustre/scratch113/projects/esgi-vbseq/20140430_purging/UNRELATED/INPUT_FILES/FIVE_POPS/IBD_INPUT/GERMLINE/${pop}.${chr}.non_missing.ped ]
 then
 
-  plink2 --vcf /lustre/scratch113/projects/esgi-vbseq/20140430_purging/UNRELATED/POP_MERGED_FILES/FIVE_POPS/20140801_NONMISSING/${chr}.non_missing.vcf.gz --remove /lustre/scratch113/projects/esgi-vbseq/20140430_purging/UNRELATED/listpop/FIVE_POPS/all_pop_but_${pop}.removelist --maf 0.01 --double-id --biallelic-only --keep-allele-order --recode --out /lustre/scratch113/projects/esgi-vbseq/20140430_purging/UNRELATED/INPUT_FILES/FIVE_POPS/IBD_INPUT/GERMLINE/${pop}.${chr}.non_missing
+  plink2 --vcf /lustre/scratch113/projects/esgi-vbseq/20140430_purging/UNRELATED/POP_MERGED_FILES/FIVE_POPS/20140801_NONMISSING/${chr}.non_missing.vcf.gz --remove /lustre/scratch113/projects/esgi-vbseq/20140430_purging/UNRELATED/listpop/FIVE_POPS/all_pop_but_${pop}.removelist --cm-map /nfs/team151/reference/ALL_1000G_phase1integrated_v3_impute/genetic_map_chr${chr}_combined_b37.txt --maf 0.01 --double-id --biallelic-only --keep-allele-order --recode --out /lustre/scratch113/projects/esgi-vbseq/20140430_purging/UNRELATED/INPUT_FILES/FIVE_POPS/IBD_INPUT/GERMLINE/${pop}.${chr}.non_missing
 
 fi
