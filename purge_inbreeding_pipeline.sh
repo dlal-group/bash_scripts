@@ -541,7 +541,7 @@ case $MODE in
         echo "${outdir}/${pop}.${CHR}.non_missing" >> ${pop}.${CHR}.run
 
         # commented to use the ALL population files
-        echo "germline -map /nfs/team151/reference/ALL_1000G_phase1integrated_v3_impute/genetic_map_chr${CHR}_combined_b37.txt -min_m ${MATCH} -err_hom ${HOM} -err_het ${HET} -bits ${BITS} -h_extend -homoz -from_snp rs62224610 -to_snp rs11089388 < ${pop}.${CHR}.run" | bsub -J"LOGS/ibd_${pop}_${CHR}" -o"LOGS/%J_ibd_${pop}_${CHR}.o" -q normal -M8000 -R"span[hosts=1] select[mem>=8000] rusage[mem=8000]"
+        echo "germline -min_m ${MATCH} -err_hom ${HOM} -err_het ${HET} -bits ${BITS} -h_extend -homoz < ${pop}.${CHR}.run" | bsub -J"LOGS/ibd_${pop}_${CHR}" -o"LOGS/%J_ibd_${pop}_${CHR}.o" -q normal -M8000 -R"span[hosts=1] select[mem>=8000] rusage[mem=8000]"
       
     done
 
