@@ -531,7 +531,7 @@ case $MODE in
         ped_path=/lustre/scratch113/projects/esgi-vbseq/20140430_purging/UNRELATED/INPUT_FILES/FIVE_POPS/IBD_INPUT/GERMLINE
         pop_list=/lustre/scratch113/projects/esgi-vbseq/20140430_purging/UNRELATED/listpop/FIVE_POPS/all_pop_but_${pop}.removelist
         # commented to use the ALL population files
-        bsub -J"LOGS/ibd_${pop}_${CHR}" -o"LOGS/%J_ibd_${pop}_${CHR}.o" -q normal -M8000 -n4 -R"span[hosts=1] select[mem>=8000] rusage[mem=8000]" -- germline ${pop_path}/${CHR}.non_missing -min_m 0.5 -err_hom 2 -err_het 0 -bits 75 -h_extend -homoz
+        bsub -J"LOGS/ibd_${pop}_${CHR}" -o"LOGS/%J_ibd_${pop}_${CHR}.o" -q normal -M8000 -R"span[hosts=1] select[mem>=8000] rusage[mem=8000]" -- germline -map /nfs/team151/reference/ALL_1000G_phase1integrated_v3_impute/genetic_map_chr${CHR}_combined_b37.txt -min_m 0.5 -err_hom 2 -err_het 0 -bits 75 -h_extend -homoz 1 ${pop_path}/${pop}.${CHR}.non_missing.map ${pop_path}/${pop}.${CHR}.non_missing.ped ${outdir}/${pop}.${CHR}.non_missing
       
     done
 
