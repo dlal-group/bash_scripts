@@ -536,9 +536,9 @@ case $MODE in
         pop_list=/lustre/scratch113/projects/esgi-vbseq/20140430_purging/UNRELATED/listpop/FIVE_POPS/all_pop_but_${pop}.removelist
         #we need to create the input file for GERMLINE (WTF!!)
         echo "1" > ${pop}.${CHR}.run
-        echo "${pop_path}/${pop}.${CHR}.non_missing.map" >> ${pop}.${CHR}.run
-        echo "${pop_path}/${pop}.${CHR}.non_missing.ped" >> ${pop}.${CHR}.run
-        echo "${outdir}_test/${pop}.${CHR}.non_missing" >> ${pop}.${CHR}.run
+        echo "${ped_path}/${pop}.${CHR}.non_missing.map" >> ${pop}.${CHR}.run
+        echo "${ped_path}/${pop}.${CHR}.non_missing.ped" >> ${pop}.${CHR}.run
+        echo "${outdir}/${pop}.${CHR}.non_missing" >> ${pop}.${CHR}.run
 
         # commented to use the ALL population files
         echo "germline -map /nfs/team151/reference/ALL_1000G_phase1integrated_v3_impute/genetic_map_chr${CHR}_combined_b37.txt -min_m ${MATCH} -err_hom ${HOM} -err_het ${HET} -bits ${BITS} -h_extend -homoz -from_snp rs62224610 -to_snp rs11089388 < ${pop}.${CHR}.run" | bsub -J"LOGS/ibd_${pop}_${CHR}" -o"LOGS/%J_ibd_${pop}_${CHR}.o" -q normal -M8000 -R"span[hosts=1] select[mem>=8000] rusage[mem=8000]"
