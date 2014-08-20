@@ -45,6 +45,10 @@ case $MODE in
     ;;
   GERMLINE )
     # set up args for germline command line
+    MATCH=$3
+    HOM=$4
+    HET=$5
+    BITS=$6
   ;;
 esac
 
@@ -522,7 +526,7 @@ case $MODE in
   ;;
   GERMLINE )
     echo "Calculate IBD using GERMLINE from plink formatted files!!"
-    echo -e "Parameters: \nwindow=${window}\noverlap=${overlap}"
+    echo -e "Parameters: \nmin_match=${MATCH}\nerr_hom=${HOM}\nerr_het=${HET}\nbits=${BITS}"
     #use he same vcf file for all the samples but change the sample list of individuals toi exclude from the analysis
     pops_updated="FVG VBI TSI CEU CARL Erto Resia Illegio Sauris"
     for pop in $pops_updated
@@ -530,8 +534,14 @@ case $MODE in
 
         ped_path=/lustre/scratch113/projects/esgi-vbseq/20140430_purging/UNRELATED/INPUT_FILES/FIVE_POPS/IBD_INPUT/GERMLINE
         pop_list=/lustre/scratch113/projects/esgi-vbseq/20140430_purging/UNRELATED/listpop/FIVE_POPS/all_pop_but_${pop}.removelist
+        #we need to create the input file for GERMLINE (WTF!!)
+        echo "1" > ${pop}.${CHR}.run
+        echo "${pop_path}/${pop}.${CHR}.non_missing.map" >> ${pop}.${CHR}.run
+        echo "${pop_path}/${pop}.${CHR}.non_missing.ped" >> ${pop}.${CHR}.run
+        echo "${outdir}/${pop}.${CHR}.non_missing" >> ${pop}.${CHR}.run
+
         # commented to use the ALL population files
-        bsub -J"LOGS/ibd_${pop}_${CHR}" -o"LOGS/%J_ibd_${pop}_${CHR}.o" -q normal -M8000 -R"span[hosts=1] select[mem>=8000] rusage[mem=8000]" -- germline -map /nfs/team151/reference/ALL_1000G_phase1integrated_v3_impute/genetic_map_chr${CHR}_combined_b37.txt -min_m 0.5 -err_hom 2 -err_het 0 -bits 75 -h_extend -homoz 1 ${pop_path}/${pop}.${CHR}.non_missing.map ${pop_path}/${pop}.${CHR}.non_missing.ped ${outdir}/${pop}.${CHR}.non_missing
+        echo "germline -map /nfs/team151/reference/ALL_1000G_phase1integrated_v3_impute/genetic_map_chr${CHR}_combined_b37.txt -min_m ${MATCH} -err_hom ${HOM} -err_het ${HET} -bits ${BITS} -h_extend -homoz < ${pop}.${CHR}.run" | bsub -J"LOGS/ibd_${pop}_${CHR}" -o"LOGS/%J_ibd_${pop}_${CHR}.o" -q normal -M8000 -R"span[hosts=1] select[mem>=8000] rusage[mem=8000]"
       
     done
 
