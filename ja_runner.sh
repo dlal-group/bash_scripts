@@ -357,6 +357,7 @@ file=`sed -n "${LSB_JOBINDEX}p" $1`
 # bcftools view -G -O v -o ${file}.clean_annotated.nogeno.vcf /lustre/scratch113/projects/esgi-vbseq/20140430_purging/ALL/POP_MERGED_FILES/FIVE_POPS/20140730_ANNOTATED/${file}.clean_annotated.vcf.gz
 
 #annotate using funseq
-funseq.sh -f /lustre/scratch113/projects/esgi-vbseq/20140430_purging/ALL/POP_MERGED_FILES/FIVE_POPS/20140822_NO_GENO/${file}.clean_annotated.nogeno.vcf -m 1 -maf 0 -inf vcf -outf vcf -nc
+funseq.sh -f /lustre/scratch113/projects/esgi-vbseq/20140430_purging/ALL/POP_MERGED_FILES/FIVE_POPS/20140822_NO_GENO/${file}.clean_annotated.nogeno.vcf -m 1 -maf 0 -inf vcf -outf bed -nc
 
-# bcftools query
+#create a table for annotation of the complete files
+(head -1 out/${file}.FunSEQ.bed|awk '{print toupper($0)}'|tr ";" "\t";tail -n+2 out/${file}.FunSEQ.bed|tr ";" "\t") | bgzip -c > out/${file}.FunSEQ.bed.gz
