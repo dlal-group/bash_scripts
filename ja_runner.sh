@@ -354,7 +354,7 @@ file=`sed -n "${LSB_JOBINDEX}p" $1`
 # fi
 #22/08/2014
 # remove genotypes from all population to use funseq for annotation
-bcftools view -G -O v -o ${file}.clean_annotated.nogeno.vcf /lustre/scratch113/projects/esgi-vbseq/20140430_purging/ALL/POP_MERGED_FILES/FIVE_POPS/20140730_ANNOTATED/${file}.clean_annotated.vcf.gz
+# bcftools view -G -O v -o ${file}.clean_annotated.nogeno.vcf /lustre/scratch113/projects/esgi-vbseq/20140430_purging/ALL/POP_MERGED_FILES/FIVE_POPS/20140730_ANNOTATED/${file}.clean_annotated.vcf.gz
 
 #annotate using funseq
 funseq.sh -f /lustre/scratch113/projects/esgi-vbseq/20140430_purging/ALL/POP_MERGED_FILES/FIVE_POPS/20140822_NO_GENO/${file}.clean_annotated.nogeno.vcf -m 1 -maf 0 -inf vcf -outf vcf -nc
