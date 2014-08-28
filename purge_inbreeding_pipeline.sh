@@ -156,7 +156,8 @@ case $MODE in
       mkdir -p ${pop}
       #we need to prepare the input files:
       #first we need to sort by position
-      sort -g -k6,6 -k7,7 ${pop_path}/${pop}.roh.length.${LOD}.ibd > ${outdir}/${pop}.roh.length.${LOD}.sorted.ibd
+      # sort -g -k6,6 -k7,7 ${pop_path}/${pop}.roh.length.${LOD}.ibd > ${outdir}/${pop}.roh.length.${LOD}.sorted.ibd
+      sort -g -k6,6 -k7,7 ${pop_path}/${pop}.roh.length.${LOD}.ibd > ${pop}/${pop}.chr${CHR}.roh.length.${LOD}.sorted.ibd
 
       #we should need also a map file with starting and ending chromosome position...or we can start with the first position
       #in our result ibd file 
@@ -172,10 +173,10 @@ case $MODE in
       #now we need to count how many segments we have in a window:
       while [[ $end_w -le $end ]]; do
         #for a segment to be in a window we check only the starting position: if the segment starts in my window,I count it
-        awk -v start=$start_w -v end=$end_w '{if($6 <= end && $6 >= start) print $0}' ${pop}/${pop}.chr${CHR}.roh.length.${LOD}.sorted.ibd > ${outdir}/${pop}.roh.length.${LOD}.W${w_n}.ibd
+        awk -v start=$start_w -v end=$end_w '{if($6 <= end && $6 >= start) print $0}' ${pop}/${pop}.chr${CHR}.roh.length.${LOD}.sorted.ibd > ${pop}/${pop}.chr${CHR}.roh.length.${LOD}.W${w_n}.ibd
         #lets do a resume of all the pair/samples in each windows: we need to get the last column, sort it, select uniq values and split by "_"
-        cut -f 9 -d " " ${outdir}/${pop}.roh.length.${LOD}.W${w_n}.ibd |sort| uniq| tr "_" "\t" > ${outdir}/${pop}.roh.length.${LOD}.W${w_n}.pair_file
-        (cut -f 1 ${outdir}/${pop}.roh.length.${LOD}.W${w_n}.pair_file;cut -f 2 ${outdir}/${pop}.roh.length.${LOD}.W${w_n}.pair_file)| sort | uniq > ${outdir}/${pop}.roh.length.${LOD}.W${w_n}.sample_file
+        cut -f 9 -d " " ${pop}/${pop}.chr${CHR}.roh.length.${LOD}.W${w_n}.ibd |sort| uniq| tr "_" "\t" > ${pop}/${pop}.chr${CHR}.roh.length.${LOD}.W${w_n}.pair_file
+        (cut -f 1 ${pop}/${pop}.chr${CHR}.roh.length.${LOD}.W${w_n}.pair_file;cut -f 2 ${pop}/${pop}.chr${CHR}.roh.length.${LOD}.W${w_n}.pair_file)| sort | uniq > ${pop}/${pop}.chr${CHR}.roh.length.${LOD}.W${w_n}.sample_file
         w_n=$[$w_n + 1]
         start_w=$[$start_w + $win]
         end_w=$[$start_w + $win]
