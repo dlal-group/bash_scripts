@@ -38,6 +38,9 @@ case $MODE in
       density=$4
       in_dir=$5
       ;;
+  MANCLUSTIBD )
+      in_dir=$3
+      ;;
   MAFSPEC )
       #set parameters for file input/output
       input_file=$3
@@ -139,6 +142,42 @@ case $MODE in
       cat ${pop_path}/${pop}.roh.length.5.ibd >> ${pop}/${pop}.WG.roh.length.5.ibd
 
   done
+  ;;
+  MANCLUSTIBD )
+    # manual ibd clustering
+    # 1) define window legth: default 1Mb and LOD to filter: 5 (default)
+    win=1000000
+    LOD=5
+    pop_path=${in_dir}/CHR${CHR}
+
+    pops_updated="FVG VBI TSI CEU CARL Erto Resia Illegio Sauris"
+    for pop in $pops_updated
+    do
+      #we need to prepare the input files:
+      #first we need to sort by position
+      sort -g -k6,6 -k7,7 ${pop_path}/${pop}.roh.length.${LOD}.ibd > ${outdir}/${pop}.roh.length.${LOD}.sorted.ibd
+
+      #we should need also a map file with starting and ending chromosome position...or we can start with the first position
+      #in our result ibd file 
+      #we'll get our position from the original vcf files used for ibd calculation
+      in_vcf=/lustre/scratch113/projects/esgi-vbseq/20140430_purging/UNRELATED/POP_MERGED_FILES/FIVE_POPS/20140801_NONMISSING/${CHR}.non_missing.vcf.gz
+      start=`tabix ${in_vcf} ${CHR}|head -1| cut -f 2`
+      end=`tabix ${in_vcf} ${CHR}|tail -1| cut -f 2`
+
+      # define start_w and end_w initial values
+      start_w=$start
+      end_w=$[$start_w + $win]
+      w_n=0
+      #now we need to count how many segments we have in a window:
+      while [[ $end_w -le $end ]]; do
+        #for a segment to be in a window we check only the starting position: if the segment starts in my window,I count it
+        awk -v start=$start_w -v end=$end_w '{if($6 <= end && $6 >= start) print $0}' ${outdir}/${pop}.roh.length.${LOD}.sorted.ibd > ${outdir}/${pop}.roh.length.${LOD}.W${w_n}.ibd
+        w_n=$[$w_n + 1]
+        start_w=$[$start_w + $win]
+        end_w=$[$start_w + $win]
+      done
+
+    done
   ;;
   IBDCLUST )
   #need to work by chromosome!!because it is right...we should have different cluster and sample in cluster, for different chrs!!
