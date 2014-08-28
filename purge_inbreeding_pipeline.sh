@@ -181,7 +181,7 @@ case $MODE in
         # if the segment dont start in the windows but there is still an overlap, I count it in that window
         awk -v start=$start_w -v end=$end_w '
         {if(($6 < start) && ($7 >= start && $7 <= end))
-          {over=$7-start;class=1;}
+          {overlap=$7-start;class=1;}
         else if(($6 >= start && $6 <= end) && ($7 >= start && $7 <= end))
           {overlap=($7-$6);class=2;}
         else if(($6 >= start && $6 <= end) && ($7 > end))
