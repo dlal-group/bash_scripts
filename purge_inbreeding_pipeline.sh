@@ -149,6 +149,8 @@ case $MODE in
     win=1000000
     LOD=5
     pop_path=${in_dir}/CHR${CHR}
+    #remove useless chr folders
+    rm -r ${outdir}
 
     pops_updated="FVG VBI TSI CEU CARL Erto Resia Illegio Sauris"
     for pop in $pops_updated
