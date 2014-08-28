@@ -178,14 +178,14 @@ case $MODE in
         # for a segment to be in a window we check the starting position and how mutch overlap there is with the windows in term of base pairs: 
         # if the segment dont start in the windows but there is still an overlap, I count it in that window
         awk -v start=$start_w -v end=$end_w '
-        {if($6 < start) && ($7 >= start && $7 <= end)
-          over=$7-start;
-        else if($6 >= start && $6 <= end) && ($7 > end)
-          overlap=end-$6;
-        else if($6 >= start && $6 <= end) && ($7 >= start && $7 <= end)
-          overlap=($7-$6)
+        {if(($6 < start) && ($7 >= start && $7 <= end))
+          {over=$7-start;class=1;}
+        else if(($6 >= start && $6 <= end) && ($7 > end))
+          {overlap=end-$6;class=3;}
+        else if(($6 >= start && $6 <= end) && ($7 >= start && $7 <= end))
+          {overlap=($7-$6);class=2;}
         }
-        {if(($6 <= end && $6 >= start) || ($7 <= end && $7 >= start)) print $0,overlap}' ${pop}/${pop}.chr${CHR}.roh.length.${LOD}.sorted.ibd | tr " " "\t"> ${pop}/${pop}.chr${CHR}.roh.length.${LOD}.W${w_n}.ibd
+        {if(($6 <= end && $6 >= start) || ($7 <= end && $7 >= start)) print $0,overlap,class}' ${pop}/${pop}.chr${CHR}.roh.length.${LOD}.sorted.ibd | tr " " "\t"> ${pop}/${pop}.chr${CHR}.roh.length.${LOD}.W${w_n}.ibd
         
         #lets do a resume of all the pair/samples in each windows: we need to get the last column, sort it, select uniq values and split by "_"
         cut -f 9 -d " " ${pop}/${pop}.chr${CHR}.roh.length.${LOD}.W${w_n}.ibd |sort| uniq| tr "_" "\t" > ${pop}/${pop}.chr${CHR}.roh.length.${LOD}.W${w_n}.pair_file
