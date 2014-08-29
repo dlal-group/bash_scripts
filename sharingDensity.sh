@@ -7,18 +7,22 @@ MAP=$2 #plink format in cM
 # MAP=/lustre/scratch113/projects/esgi-vbseq/20140430_purging/UNRELATED/INPUT_FILES/FIVE_POPS/IBD_INPUT/GERMLINE/FVG.10.non_missing.map
 
 # N=$3 #numero individui
-N=`wc -l /lustre/scratch113/projects/esgi-vbseq/20140430_purging/UNRELATED/INPUT_FILES/FIVE_POPS/IBD_INPUT/GERMLINE/FVG.10.non_missing.ped | cut -f 1 -d " "`
-
+N=`wc -l ${MAP%.map}.ped | cut -f 1 -d " "`
 
 first=`head -n 1 $MAP | awk '{print $3}'`
-
 last=`tail -n 1 $MAP | awk '{print $3}'`
-
-echo $first
-echo $last
-
 minDens=0;
 resolution=0.5 #dimensione bin
+
+echo "Arguments and parameters:"
+echo "Match file-> $MATCH"
+echo "Map file -> $MAP"
+echo "N samples -> $N"
+echo "first position -> $first"
+echo "Last position -> $last"
+echo "minDens-> $minDens"
+echo "Resolution -> $resolution"
+
 
 #haplotype extension se il phasing non è buono -h_extend file da usare from germline
 T=`head -n 1 $MATCH | awk '{a=substr($2,length($2)-1,2); if (a==".0" || a==".1") print 1; else print 0; }'`
