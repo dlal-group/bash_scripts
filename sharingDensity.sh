@@ -1,20 +1,26 @@
 #!/usr/local/bin/bash
 
 MATCH=$1 #germline format
+# MATCH=/lustre/scratch113/projects/esgi-vbseq/20140430_purging/UNRELATED/RESULTS/IBD/GERMLINE/CHR10/FVG.10.non_missing.match
 
 MAP=$2 #plink format in cM
+# MAP=/lustre/scratch113/projects/esgi-vbseq/20140430_purging/UNRELATED/INPUT_FILES/FIVE_POPS/IBD_INPUT/GERMLINE/FVG.10.non_missing.map
 
-N=$3 #numero individui
+# N=$3 #numero individui
+N=`wc -l /lustre/scratch113/projects/esgi-vbseq/20140430_purging/UNRELATED/INPUT_FILES/FIVE_POPS/IBD_INPUT/GERMLINE/FVG.10.non_missing.ped | cut -f 1 -d " "`
 
 
 first=`head -n 1 $MAP | awk '{print $3}'`
 
 last=`tail -n 1 $MAP | awk '{print $3}'`
 
+echo $first
+echo $last
+
 minDens=0;
 resolution=0.5 #dimensione bin
 
-#haplotype extrension se il phasing non è buono -h_extend file da usare from germline
+#haplotype extension se il phasing non è buono -h_extend file da usare from germline
 T=`head -n 1 $MATCH | awk '{a=substr($2,length($2)-1,2); if (a==".0" || a==".1") print 1; else print 0; }'`
 
 if [ "$T" -eq "1" ]; then
@@ -50,9 +56,9 @@ END{
   for (i=begin; i<=finish; i++) {
     print i*resolution "\t" 0+dens[i]/(N*(N-1)/2 - N/2);
   } 
-}'
-# prendo histogrammi tolgo regioni che deviano dalla densitò media di un 5sd
+}' > $MATCH.shareDens
 
+# prendo histogrammi tolgo regioni che deviano dalla densità media di un 5sd
 # numero medio coppie di individui vs size in cM -> lo si fa tra unrelated e tra related e vedere cosa succede
 
 
