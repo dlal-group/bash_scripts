@@ -199,7 +199,9 @@ case $MODE in
         #lets do a resume of all the pair/samples in each windows: we need to get the last column, sort it, select uniq values and split by "_"
         cut -f 9 -d " " ${pop}/${pop}.chr${CHR}.roh.length.${LOD}.W${w_n}.${start_w}_${end_w}.ibd |sort| uniq| tr "_" "\t" > ${pop}/${pop}.chr${CHR}.roh.length.${LOD}.W${w_n}.pair_file
         (cut -f 1 ${pop}/${pop}.chr${CHR}.roh.length.${LOD}.W${w_n}.pair_file;cut -f 2 ${pop}/${pop}.chr${CHR}.roh.length.${LOD}.W${w_n}.pair_file)| sort | uniq > ${pop}/${pop}.chr${CHR}.roh.length.${LOD}.W${w_n}.sample_file
+        
         # create a report for all windows for that population
+        lines=`wc -l ${pop}/${pop}.chr${CHR}.roh.length.${LOD}.W${w_n}.${start_w}_${end_w}.ibd| cut -f 1 -d " "`
         echo "${pop}	${w_n}	${start_w}	${end_w} ${lines}	${avg_rec}" >> ${pop}/${pop}.chr${CHR}.roh.length.${LOD}.resume.txt
         w_n=$[$w_n + 1]
         start_w=$[$start_w + $win]
