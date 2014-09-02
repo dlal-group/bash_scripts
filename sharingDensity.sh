@@ -64,6 +64,6 @@ END{
 
 # prendo histogrammi tolgo regioni che deviano dalla densità media di un 5sd
 # numero medio coppie di individui vs size in cM -> lo si fa tra unrelated e tra related e vedere cosa succede
-
+  
 
 

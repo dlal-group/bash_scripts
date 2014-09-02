@@ -177,9 +177,14 @@ case $MODE in
         #for a segment to be in a window we check only the starting position: if the segment starts in my window,I count it in that window
         # awk -v start=$start_w -v end=$end_w '{if($6 <= end && $6 >= start) print $0}' ${pop}/${pop}.chr${CHR}.roh.length.${LOD}.sorted.ibd > ${pop}/${pop}.chr${CHR}.roh.length.${LOD}.W${w_n}.ibd
         
+        # we need to calculate the average recombination rate per window: we'll dot this using the genetic map from TGP
+        # because should be enough resolution already
+        # select the first and the and last line from the map, anc calculate the mean value from the second column
+        avg_rec=`awk -v start=$start_w -v end=$end_w '{if($1 >= start && $1 <= end ) print $0 }' /nfs/team151/reference/ALL_1000G_phase1integrated_v3_impute/genetic_map_chr${CHR}_combined_b37.txt | awk '{sum+=$2;next}END{print sum/NR}'`
+
         # for a segment to be in a window we check the starting position and how mutch overlap there is with the windows in term of base pairs: 
         # if the segment dont start in the windows but there is still an overlap, I count it in that window
-        awk -v start=$start_w -v end=$end_w '
+        awk -v start=$start_w -v end=$end_w -v avg_rr=$avg_rec '
         {if(($6 < start) && ($7 >= start && $7 <= end))
           {overlap=$7-start;class=1;}
         else if(($6 >= start && $6 <= end) && ($7 >= start && $7 <= end))
@@ -189,11 +194,13 @@ case $MODE in
         else if(($6 < start && $7 > end))
           {overlap=end-start;class=4;}
         }
-        {if(($6 <= end && $6 >= start) || ($7 <= end && $7 >= start)) print $0,overlap,class}' ${pop}/${pop}.chr${CHR}.roh.length.${LOD}.sorted.ibd | tr " " "\t"> ${pop}/${pop}.chr${CHR}.roh.length.${LOD}.W${w_n}.ibd
+        {if(($6 <= end && $6 >= start) || ($7 <= end && $7 >= start)) print $0,overlap,class,avg_rr}' ${pop}/${pop}.chr${CHR}.roh.length.${LOD}.sorted.ibd | tr " " "\t"> ${pop}/${pop}.chr${CHR}.roh.length.${LOD}.W${w_n}.${start_w}_${end_w}.ibd
         
         #lets do a resume of all the pair/samples in each windows: we need to get the last column, sort it, select uniq values and split by "_"
-        cut -f 9 -d " " ${pop}/${pop}.chr${CHR}.roh.length.${LOD}.W${w_n}.ibd |sort| uniq| tr "_" "\t" > ${pop}/${pop}.chr${CHR}.roh.length.${LOD}.W${w_n}.pair_file
+        cut -f 9 -d " " ${pop}/${pop}.chr${CHR}.roh.length.${LOD}.W${w_n}.${start_w}_${end_w}.ibd |sort| uniq| tr "_" "\t" > ${pop}/${pop}.chr${CHR}.roh.length.${LOD}.W${w_n}.pair_file
         (cut -f 1 ${pop}/${pop}.chr${CHR}.roh.length.${LOD}.W${w_n}.pair_file;cut -f 2 ${pop}/${pop}.chr${CHR}.roh.length.${LOD}.W${w_n}.pair_file)| sort | uniq > ${pop}/${pop}.chr${CHR}.roh.length.${LOD}.W${w_n}.sample_file
+        # create a report for all windows for that population
+        echo "${pop}	${w_n}	${start_w}	${end_w} ${lines}	${avg_rec}" >> ${pop}/${pop}.chr${CHR}.roh.length.${LOD}.resume.txt
         w_n=$[$w_n + 1]
         start_w=$[$start_w + $win]
         end_w=$[$start_w + $win]
