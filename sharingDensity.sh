@@ -56,10 +56,11 @@ $10/$11>=minDens {
     dens[i]=dens[i]+1;
     # print start, i, end;
   }
+  print start_w[start], end_w[end];
 }
 END{
   for (i=begin; i<=finish; i++) {
-    print i*resolution "\t" 0+dens[i]/(N*(N-1)/2 - N/2) "\t" start_w[i] "\t" end_w[i];
+    print i*resolution "\t" 0+dens[i]/(N*(N-1)/2 - N/2);
   } 
 }' > $MATCH.shareDens
 
