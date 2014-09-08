@@ -23,7 +23,6 @@ echo "Last position -> $last"
 echo "minDens-> $minDens"
 echo "Resolution -> $resolution"
 
-
 #haplotype extension se il phasing non è buono -h_extend file da usare from germline
 T=`head -n 1 $MATCH | awk '{a=substr($2,length($2)-1,2); if (a==".0" || a==".1") print 1; else print 0; }'`
 
@@ -58,7 +57,7 @@ $10/$11>=minDens {
 }
 END{
   for (i=begin; i<=finish; i++) {
-    print i*resolution "\t" 0+dens[i]/(N*(N-1)/2 - N/2);
+    print i*resolution "\t" 0+dens[i]/(N*(N-1)/2 - N/2) "\t"start"\t"end;
   } 
 }' > $MATCH.shareDens
 
