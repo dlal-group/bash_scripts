@@ -56,7 +56,7 @@ $10/$11>=minDens {
     dens[i]=dens[i]+1;
     # print start, i, end;
   }
-  print gen[$8],gen[$9],start_w[gen[$8]], end_w[gen[$9]];
+  print gen[$8],gen[$9],start_w[gen[$8]], end_w[gen[$9]] > "\$MATCH.check";
 }
 END{
   for (i=begin; i<=finish; i++) {
