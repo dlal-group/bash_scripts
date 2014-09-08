@@ -49,7 +49,7 @@ $10/$11>=minDens {
   # if (cnt%10000==0) print > "/dev/stderr"; 
   start=int(gen[$8]/resolution);
   end=int(gen[$9]/resolution);
-  # print start,end > "/dev/stderr";
+  print start,end > "/dev/stderr";
   for (i=start; i<=end; i++) {
     dens[i]=dens[i]+1;
     # print start, i, end;
@@ -57,7 +57,7 @@ $10/$11>=minDens {
 }
 END{
   for (i=begin; i<=finish; i++) {
-    print i*resolution "\t" 0+dens[i]/(N*(N-1)/2 - N/2) "\t"gen[$8]"\t"gen[$9];
+    print i*resolution "\t" 0+dens[i]/(N*(N-1)/2 - N/2) "\t" start "\t" end;
   } 
 }' > $MATCH.shareDens
 
