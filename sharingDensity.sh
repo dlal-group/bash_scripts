@@ -56,7 +56,7 @@ $10/$11>=minDens {
     dens[i]=dens[i]+1;
     # print start, i, end;
   }
-  print start_w[start], end_w[end];
+  print start,end,start_w[start], end_w[end];
 }
 END{
   for (i=begin; i<=finish; i++) {
