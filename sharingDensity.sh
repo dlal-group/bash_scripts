@@ -49,14 +49,14 @@ $10/$11>=minDens {
   # if (cnt%10000==0) print > "/dev/stderr"; 
   start=int(gen[$8]/resolution);
   end=int(gen[$9]/resolution);
-  start_w[start]=$6
-  end_w[end]=$7
+  start_w[gen[$8]]=$6
+  end_w[gen[$9]]=$7
   print start,end > "/dev/stderr";
   for (i=start; i<=end; i++) {
     dens[i]=dens[i]+1;
     # print start, i, end;
   }
-  print start,end,start_w[start], end_w[end];
+  print start,end,start_w[gen[$8]], end_w[gen[$9]];
 }
 END{
   for (i=begin; i<=finish; i++) {
