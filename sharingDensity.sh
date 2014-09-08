@@ -35,7 +35,7 @@ else
 cat $MATCH
 
 # fi | awk '{id1=tolower(substr($2,length($2),1)); id2=tolower(substr($4,length($4),1)); if ((id1=="a"||id1=="b")&&(id2=="a"||id2=="b")) print; }' \
-fi | awk -v first=$first -v last=$last -v resolution=$resolution -v map=$MAP -v N=$N -v minDens=$minDens '
+fi | awk -v first=$first -v last=$last -v resolution=$resolution -v map=$MAP -v N=$N -v minDens=$minDens -v check_f=$MATCH '
 BEGIN{
   while (getline < map) {
     gen[$2]=$3;
@@ -56,7 +56,7 @@ $10/$11>=minDens {
     dens[i]=dens[i]+1;
     # print start, i, end;
   }
-  print gen[$8],gen[$9],start_w[gen[$8]], end_w[gen[$9]] > "$MATCH.check";
+  print gen[$8],gen[$9],start_w[gen[$8]], end_w[gen[$9]] > "check_f.check";
 }
 END{
   for (i=begin; i<=finish; i++) {
