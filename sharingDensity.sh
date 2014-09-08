@@ -52,7 +52,7 @@ $10/$11>=minDens {
   # print start,end > "/dev/stderr";
   for (i=start; i<=end; i++) {
     dens[i]=dens[i]+1;
-    # print start, i, end;
+    print start, i, end;
   }
 }
 END{
