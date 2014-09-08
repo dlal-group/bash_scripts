@@ -35,8 +35,7 @@ else
 cat $MATCH
 
 # fi | awk '{id1=tolower(substr($2,length($2),1)); id2=tolower(substr($4,length($4),1)); if ((id1=="a"||id1=="b")&&(id2=="a"||id2=="b")) print; }' \
-fi |
-cat $MATCH |  awk -v first=$first -v last=$last -v resolution=$resolution -v map=$MAP -v N=$N -v minDens=$minDens '
+fi | awk -v first=$first -v last=$last -v resolution=$resolution -v map=$MAP -v N=$N -v minDens=$minDens '
 BEGIN{
   while (getline < map) {
     gen[$2]=$3;
@@ -52,7 +51,7 @@ $10/$11>=minDens {
   end=int(gen[$9]/resolution);
   start_w[start]=$6
   end_w[end]=$7
-  print start_w,end_w > "/dev/stderr";
+  print start,end > "/dev/stderr";
   for (i=start; i<=end; i++) {
     dens[i]=dens[i]+1;
     # print start, i, end;
@@ -60,7 +59,7 @@ $10/$11>=minDens {
 }
 END{
   for (i=begin; i<=finish; i++) {
-    print i*resolution "\t" 0+dens[i]/(N*(N-1)/2 - N/2) "\t" begin "\t" finish;
+    print i*resolution "\t" 0+dens[i]/(N*(N-1)/2 - N/2) "\t" start_w[i] "\t" end_w[i];
   } 
 }' > $MATCH.shareDens
 
