@@ -367,4 +367,4 @@ pop=$2
 chr=${file}
 p_file=/lustre/scratch113/projects/esgi-vbseq/20140430_purging/UNRELATED/listpop/${pop}_unrelated.list
 
-bcftools view -G -O z -o ${pop}.${chr}.nogeno.vcf -S ${p_file} /lustre/scratch113/projects/esgi-vbseq/20140430_purging/UNRELATED/POP_MERGED_FILES/FIVE_POPS/20140711_ANNOTATED/${chr}.vcf.gz
+bcftools view -G -O z -o ${pop}.${chr}.nogeno.vcf.gz -S ${p_file} /lustre/scratch113/projects/esgi-vbseq/20140430_purging/UNRELATED/POP_MERGED_FILES/FIVE_POPS/20140711_ANNOTATED/${chr}.vcf.gz
