@@ -598,7 +598,8 @@ case $MODE in
     echo "Calculate IBD using GERMLINE from plink formatted files!!"
     echo -e "Parameters: \nmin_match=${MATCH}\nerr_hom=${HOM}\nerr_het=${HET}\nbits=${BITS}"
     #use he same vcf file for all the samples but change the sample list of individuals toi exclude from the analysis
-    pops_updated="FVG VBI TSI CEU CARL Erto Resia Illegio Sauris"
+    # pops_updated="FVG VBI TSI CEU CARL Erto Resia Illegio Sauris"
+    pops_updated="ALL"
     for pop in $pops_updated
     do
 
