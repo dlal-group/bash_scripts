@@ -343,15 +343,15 @@ pop=$2
 
 #19/08/2014
 #Create plink input files for NON MISSING data
-chr=${file}
+# chr=${file}
 # pop=$2
 
-if [ ! -s /lustre/scratch113/projects/esgi-vbseq/20140430_purging/UNRELATED/INPUT_FILES/FIVE_POPS/IBD_INPUT/GERMLINE/ALL.${chr}.non_missing.ped ]
-then
+# if [ ! -s /lustre/scratch113/projects/esgi-vbseq/20140430_purging/UNRELATED/INPUT_FILES/FIVE_POPS/IBD_INPUT/GERMLINE/ALL.${chr}.non_missing.ped ]
+# then
 
-  plink2 --vcf /lustre/scratch113/projects/esgi-vbseq/20140430_purging/UNRELATED/POP_MERGED_FILES/FIVE_POPS/20140801_NONMISSING/${chr}.non_missing.vcf.gz --cm-map /nfs/team151/reference/ALL_1000G_phase1integrated_v3_impute/genetic_map_chr${chr}_combined_b37.txt ${chr} --maf 0.01 --double-id --biallelic-only --snps-only --keep-allele-order --recode --out /lustre/scratch113/projects/esgi-vbseq/20140430_purging/UNRELATED/INPUT_FILES/FIVE_POPS/IBD_INPUT/GERMLINE/${pop}.${chr}.non_missing
+#   plink2 --vcf /lustre/scratch113/projects/esgi-vbseq/20140430_purging/UNRELATED/POP_MERGED_FILES/FIVE_POPS/20140801_NONMISSING/${chr}.non_missing.vcf.gz --cm-map /nfs/team151/reference/ALL_1000G_phase1integrated_v3_impute/genetic_map_chr${chr}_combined_b37.txt ${chr} --maf 0.01 --double-id --biallelic-only --snps-only --keep-allele-order --recode --out /lustre/scratch113/projects/esgi-vbseq/20140430_purging/UNRELATED/INPUT_FILES/FIVE_POPS/IBD_INPUT/GERMLINE/${pop}.${chr}.non_missing
 
-fi
+# fi
 #22/08/2014
 # remove genotypes from all population to use funseq for annotation
 # bcftools view -G -O v -o ${file}.clean_annotated.nogeno.vcf /lustre/scratch113/projects/esgi-vbseq/20140430_purging/ALL/POP_MERGED_FILES/FIVE_POPS/20140730_ANNOTATED/${file}.clean_annotated.vcf.gz
@@ -368,3 +368,14 @@ fi
 # p_file=/lustre/scratch113/projects/esgi-vbseq/20140430_purging/UNRELATED/listpop/${pop}_unrelated.list
 
 # bcftools view -G -O z -o ${pop}.${chr}.nogeno.vcf.gz -S ${p_file} /lustre/scratch113/projects/esgi-vbseq/20140430_purging/UNRELATED/POP_MERGED_FILES/FIVE_POPS/20140711_ANNOTATED/${chr}.vcf.gz
+
+# 12/09/2014
+chr=${file}
+pop=$2
+
+if [ ! -s /lustre/scratch113/projects/esgi-vbseq/20140430_purging/UNRELATED/INPUT_FILES/FIVE_POPS/IBD_INPUT/GERMLINE/FILTERED/ALL.${chr}.non_missing.filtered.ped ]
+then
+
+  plink2 --vcf /lustre/scratch113/projects/esgi-vbseq/20140430_purging/UNRELATED/POP_MERGED_FILES/FIVE_POPS/20140801_NONMISSING/${chr}.non_missing.vcf.gz --extract /lustre/scratch113/projects/esgi-vbseq/20140430_purging/UNRELATED/RESULTS/IBD/GERMLINE/ALL_TOGETHER/CHR${chr}/ALL.${chr}.non_missing.match.keepsnps --cm-map /nfs/team151/reference/ALL_1000G_phase1integrated_v3_impute/genetic_map_chr${chr}_combined_b37.txt ${chr} --maf 0.01 --double-id --biallelic-only --snps-only --keep-allele-order --recode --out /lustre/scratch113/projects/esgi-vbseq/20140430_purging/UNRELATED/INPUT_FILES/FIVE_POPS/IBD_INPUT/GERMLINE/FILTERED/${pop}.${chr}.non_missing.filtered
+
+fi
