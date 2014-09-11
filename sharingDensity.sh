@@ -65,6 +65,7 @@ END{
   } 
 }' > $MATCH.shareDens
 
+# La sharing density probabilità che una coppia in quel bin abbia IBD
 # prendo histogrammi tolgo regioni che deviano dalla densità media di un 5sd
 # now we have the sharingDensity, let's calculate sd and mean for exclusion
 avg=`awk '{sum+=$2} END { printf "%.8f", sum/NR}' $MATCH.shareDens`
@@ -82,6 +83,8 @@ do
   stop=`awk -v rstrt=$start_r -v rnd=$end_r '{if($3 >= rstrt && $3<= rnd ) print $4}' $MAP | sort -g |tail -1`
   awk -v frst=${init} -v stp=${stop} '{if(($6 >= frst && $6 <= stp) || ($7 >= frst && $7 <= stp)) print $0}' $MATCH
 done < <(awk -v max_sd=${max_d} '$2>=max_sd' $MATCH.shareDens) > $MATCH.excluded_regions
+
+# fgrep -v -f $MATCH.excluded_regions $MATCH
 # done < <(awk -v max_sd=${max_d} '$2>=max_sd' CEU.22.non_missing.match.shareDens) > excluded_regions.txt
 
 # MATCH=/lustre/scratch113/projects/esgi-vbseq/20140430_purging/UNRELATED/RESULTS/IBD/GERMLINE/CHR22/CEU.22.non_missing.match
