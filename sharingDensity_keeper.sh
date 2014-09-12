@@ -89,7 +89,7 @@ do
     end_r=`tail -1 ${reg_file} | awk '{print ($1)*0.5}'`
     reg_start=`awk -v rstrt=$start_r -v rnd=$end_r '{if($3 >= rstrt && $3<= rnd ) print $2}' $MAP|head -1`
     reg_end=`awk -v rstrt=$start_r -v rnd=$end_r '{if($3 >= rstrt && $3<= rnd ) print $2}' $MAP|tail -1`
-done
+done > ${reg_file}.keepsnps
 
 # fgrep -v -f $MATCH.excluded_regions $MATCH
 # done < <(awk -v max_sd=${max_d} '$2>=max_sd' CEU.22.non_missing.match.shareDens) > excluded_regions.txt
