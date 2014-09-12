@@ -83,7 +83,7 @@ echo -e "Arguments and parameters:
 # done < <(cat $MATCH.shareDens.to_include ) > $MATCH.keepsnps
 
 #modify to extract start and end snp to extract region from plink
-for reg_file in `ls ${MATCH}_R*.to_include`
+for reg_file in `ls ${MATCH}.shareDens_R*.to_include`
 do
     start_r=`head -1 ${reg_file} | awk '{print $1*0.5}'`
     end_r=`tail -1 ${reg_file} | awk '{print ($1)*0.5}'`
