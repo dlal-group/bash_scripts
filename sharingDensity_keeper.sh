@@ -75,12 +75,21 @@ echo -e "Arguments and parameters:
 
 # extract regions with excess of sharing and retrieve their coordinates from the map file
 # awk -v max_sd=${max_d} '$2>=max_sd' $MATCH.shareDens | awk -v map=${MAP} '{}'
-while read line
+# while read line
+# do
+#   start_r=`echo $line | awk '{print $1*0.5}'`
+#   end_r=`echo $line | awk '{print ($1+0.5)*0.5}'`
+#   awk -v rstrt=$start_r -v rnd=$end_r '{if($3 >= rstrt && $3<= rnd ) print $2}' $MAP
+# done < <(cat $MATCH.shareDens.to_include ) > $MATCH.keepsnps
+
+#modify to extract start and end snp to extract region from plink
+for reg_file in `ls $MATCH.shareDens_R*.to_include`
 do
-  start_r=`echo $line | awk '{print $1*0.5}'`
-  end_r=`echo $line | awk '{print ($1+0.5)*0.5}'`
-  awk -v rstrt=$start_r -v rnd=$end_r '{if($3 >= rstrt && $3<= rnd ) print $2}' $MAP
-done < <(cat $MATCH.shareDens.to_include ) > $MATCH.keepsnps
+    start_r=`head -1 ${reg_file} | awk '{print $1*0.5}'`
+    end_r=`tail -1 ${reg_file} | awk '{print ($1)*0.5}'`
+    reg_start=`awk -v rstrt=$start_r -v rnd=$end_r '{if($3 >= rstrt && $3<= rnd ) print $2}' $MAP|head -1`
+    reg_end=`awk -v rstrt=$start_r -v rnd=$end_r '{if($3 >= rstrt && $3<= rnd ) print $2}' $MAP|tail -1`
+done
 
 # fgrep -v -f $MATCH.excluded_regions $MATCH
 # done < <(awk -v max_sd=${max_d} '$2>=max_sd' CEU.22.non_missing.match.shareDens) > excluded_regions.txt
