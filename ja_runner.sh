@@ -384,9 +384,9 @@ file=`sed -n "${LSB_JOBINDEX}p" $1`
 # create files of filtered regions in splitted files
 # g++ hom_to_ped.cpp -o hom_to_ped
 chr=${file}
-MATCH=$2
+MATCH=/lustre/scratch113/projects/esgi-vbseq/20140430_purging/UNRELATED/RESULTS/IBD/GERMLINE/ALL_TOGETHER/CHR${chr}/ALL.${chr}.non_missing.match
 # pop=$2
-for reg_file in `ls ${MATCH}.shareDens_R*.to_include`
+for reg_file in `ls ${MATCH}.shareDens_R*.to_include.keepsnps`
 do
 rs_start = `cut -f 1 -d " " ${reg_file}`
 rs_end = `cut -f 2 -d " " ${reg_file}`
