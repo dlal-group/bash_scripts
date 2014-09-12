@@ -6,7 +6,7 @@
 # mkdir -p LOGS;size=`wc -l result.list|cut -f 1 -d " "`;bsub -J "p_check[1-${size}]" -o "LOGS/%J_p_check.%I.o" -M 5000 -R"select[mem>5000] rusage[mem=5000]" -q normal -- ~/Work/bash_scripts/ja_runner.sh result.list
 file=`sed -n "${LSB_JOBINDEX}p" $1`
 #added for population control
-pop=$2
+# pop=$2
 
 # script=$1
 # uncomment this if you need to work with chr as jobindex
@@ -370,12 +370,33 @@ pop=$2
 # bcftools view -G -O z -o ${pop}.${chr}.nogeno.vcf.gz -S ${p_file} /lustre/scratch113/projects/esgi-vbseq/20140430_purging/UNRELATED/POP_MERGED_FILES/FIVE_POPS/20140711_ANNOTATED/${chr}.vcf.gz
 
 # 12/09/2014
+# chr=${file}
+# pop=$2
+
+# if [ ! -s /lustre/scratch113/projects/esgi-vbseq/20140430_purging/UNRELATED/INPUT_FILES/FIVE_POPS/IBD_INPUT/GERMLINE/FILTERED/ALL.${chr}.non_missing.filtered.ped ]
+# then
+
+#   plink2 --file /lustre/scratch113/projects/esgi-vbseq/20140430_purging/UNRELATED/INPUT_FILES/FIVE_POPS/IBD_INPUT/GERMLINE/ALL.${chr}.non_missing --extract /lustre/scratch113/projects/esgi-vbseq/20140430_purging/UNRELATED/RESULTS/IBD/GERMLINE/ALL_TOGETHER/CHR${chr}/ALL.${chr}.non_missing.match.keepsnps --cm-map /nfs/team151/reference/ALL_1000G_phase1integrated_v3_impute/genetic_map_chr${chr}_combined_b37.txt ${chr} --maf 0.01 --double-id --biallelic-only --snps-only --keep-allele-order --recode --out /lustre/scratch113/projects/esgi-vbseq/20140430_purging/UNRELATED/INPUT_FILES/FIVE_POPS/IBD_INPUT/GERMLINE/FILTERED/${pop}.${chr}.non_missing.filtered
+
+# fi
+
+# 12/09/2014
+# create files of filtered regions in splitted files
+# g++ hom_to_ped.cpp -o hom_to_ped
 chr=${file}
-pop=$2
+MATCH=$2
+# pop=$2
+for reg_file in `ls ${MATCH}.shareDens_R*.to_include`
+do
+rs_start = `cut -f 1 -d " " ${reg_file}`
+rs_end = `cut -f 2 -d " " ${reg_file}`
 
-if [ ! -s /lustre/scratch113/projects/esgi-vbseq/20140430_purging/UNRELATED/INPUT_FILES/FIVE_POPS/IBD_INPUT/GERMLINE/FILTERED/ALL.${chr}.non_missing.filtered.ped ]
-then
+cat /lustre/scratch113/projects/esgi-vbseq/20140430_purging/UNRELATED/INPUT_FILES/FIVE_POPS/IBD_INPUT/GERMLINE/ALL.${chr}.non_missing.ped | ped_to_hom > /lustre/scratch113/projects/esgi-vbseq/20140430_purging/UNRELATED/INPUT_FILES/FIVE_POPS/IBD_INPUT/GERMLINE/HOM2PED/ALL.${chr}.non_missing.hom.ped
+cp /lustre/scratch113/projects/esgi-vbseq/20140430_purging/UNRELATED/INPUT_FILES/FIVE_POPS/IBD_INPUT/GERMLINE/ALL.${chr}.non_missing.map /lustre/scratch113/projects/esgi-vbseq/20140430_purging/UNRELATED/INPUT_FILES/FIVE_POPS/IBD_INPUT/GERMLINE/HOM2PED/ALL.${chr}.non_missing.hom.map
 
-  plink2 --file /lustre/scratch113/projects/esgi-vbseq/20140430_purging/UNRELATED/INPUT_FILES/FIVE_POPS/IBD_INPUT/GERMLINE/ALL.${chr}.non_missing --extract /lustre/scratch113/projects/esgi-vbseq/20140430_purging/UNRELATED/RESULTS/IBD/GERMLINE/ALL_TOGETHER/CHR${chr}/ALL.${chr}.non_missing.match.keepsnps --cm-map /nfs/team151/reference/ALL_1000G_phase1integrated_v3_impute/genetic_map_chr${chr}_combined_b37.txt ${chr} --maf 0.01 --double-id --biallelic-only --snps-only --keep-allele-order --recode --out /lustre/scratch113/projects/esgi-vbseq/20140430_purging/UNRELATED/INPUT_FILES/FIVE_POPS/IBD_INPUT/GERMLINE/FILTERED/${pop}.${chr}.non_missing.filtered
+plink2 --file  /lustre/scratch113/projects/esgi-vbseq/20140430_purging/UNRELATED/INPUT_FILES/FIVE_POPS/IBD_INPUT/GERMLINE/HOM2PED/ALL.${chr}.non_missing.hom.ped --from ${rs_start} --to ${rs_end} --recode 12 --out /lustre/scratch113/projects/esgi-vbseq/20140430_purging/UNRELATED/INPUT_FILES/FIVE_POPS/IBD_INPUT/GERMLINE/HOM2PED/ALL.${chr}.non_missing_${rs_start}-${rs_end}.hom
 
-fi
+# g++ ped_to_hom.cpp -o ped_to_hom
+cat /lustre/scratch113/projects/esgi-vbseq/20140430_purging/UNRELATED/INPUT_FILES/FIVE_POPS/IBD_INPUT/GERMLINE/HOM2PED/ALL.${chr}.non_missing_${rs_start}-${rs_end}.hom.ped | hom_to_ped > /lustre/scratch113/projects/esgi-vbseq/20140430_purging/UNRELATED/INPUT_FILES/FIVE_POPS/IBD_INPUT/GERMLINE/HOM2PED/ALL.${chr}.non_missing_${rs_start}-${rs_end}.ped
+mv /lustre/scratch113/projects/esgi-vbseq/20140430_purging/UNRELATED/INPUT_FILES/FIVE_POPS/IBD_INPUT/GERMLINE/HOM2PED/ALL.${chr}.non_missing_${rs_start}-${rs_end}.hom.map /lustre/scratch113/projects/esgi-vbseq/20140430_purging/UNRELATED/INPUT_FILES/FIVE_POPS/IBD_INPUT/GERMLINE/HOM2PED/ALL.${chr}.non_missing_${rs_start}-${rs_end}.map
+done
