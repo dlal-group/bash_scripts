@@ -604,17 +604,31 @@ case $MODE in
     do
 
         # ped_path=/lustre/scratch113/projects/esgi-vbseq/20140430_purging/UNRELATED/INPUT_FILES/FIVE_POPS/IBD_INPUT/GERMLINE
-        ped_path=/lustre/scratch113/projects/esgi-vbseq/20140430_purging/UNRELATED/INPUT_FILES/FIVE_POPS/IBD_INPUT/GERMLINE/FILTERED
+        # ped_path=/lustre/scratch113/projects/esgi-vbseq/20140430_purging/UNRELATED/INPUT_FILES/FIVE_POPS/IBD_INPUT/GERMLINE/FILTERED
+        # pop_list=/lustre/scratch113/projects/esgi-vbseq/20140430_purging/UNRELATED/listpop/FIVE_POPS/all_pop_but_${pop}.removelist
+        ped_path=/lustre/scratch113/projects/esgi-vbseq/20140430_purging/UNRELATED/INPUT_FILES/FIVE_POPS/IBD_INPUT/GERMLINE/HOM2PED
         pop_list=/lustre/scratch113/projects/esgi-vbseq/20140430_purging/UNRELATED/listpop/FIVE_POPS/all_pop_but_${pop}.removelist
-        #we need to create the input file for GERMLINE (WTF!!)
-        echo "1" > ${pop}.${CHR}.run
-        echo "${ped_path}/${pop}.${CHR}.non_missing.filtered.map" >> ${pop}.${CHR}.run
-        echo "${ped_path}/${pop}.${CHR}.non_missing.filtered.ped" >> ${pop}.${CHR}.run
-        echo "${outdir}/${pop}.${CHR}.non_missing.filtered" >> ${pop}.${CHR}.run
+        
+        for filename in `ls ${ped_path}/*.ped`; do
+          #we need to create the input file for GERMLINE (WTF!!)
+          file=`basename ${filename}`
+          echo "1" > ${file}.run
+          echo "${filename%*.ped}.map" >> ${file}.run
+          echo "${filename}" >> ${file}.run
+          echo "${filename}.filtered" >> ${file}.run
+
+          echo "germline -min_m ${MATCH} -err_hom ${HOM} -err_het ${HET} -bits ${BITS} -h_extend -homoz < ${file}.run" | bsub -J"LOGS/ibd_${file}" -o"LOGS/%J_ibd_${file}.o" -q basement -M8000 -R"span[hosts=1] select[mem>=8000] rusage[mem=8000]"
+        done
+        
+        # #we need to create the input file for GERMLINE (WTF!!)
+        # echo "1" > ${pop}.${CHR}.run
+        # echo "${ped_path}/${pop}.${CHR}.non_missing.filtered.map" >> ${pop}.${CHR}.run
+        # echo "${ped_path}/${pop}.${CHR}.non_missing.filtered.ped" >> ${pop}.${CHR}.run
+        # echo "${outdir}/${pop}.${CHR}.non_missing.filtered" >> ${pop}.${CHR}.run
 
         # commented to use the ALL population files
         # echo "germline -min_m ${MATCH} -err_hom ${HOM} -err_het ${HET} -bits ${BITS} -h_extend -homoz -from_snp rs62224610 -to_snp rs7410320 < ${pop}.${CHR}.run" | bsub -J"LOGS/ibd_${pop}_${CHR}" -o"LOGS/%J_ibd_${pop}_${CHR}.o" -q basement -M8000 -R"span[hosts=1] select[mem>=8000] rusage[mem=8000]"
-        echo "germline -min_m ${MATCH} -err_hom ${HOM} -err_het ${HET} -bits ${BITS} -h_extend -homoz < ${pop}.${CHR}.run" | bsub -J"LOGS/ibd_${pop}_${CHR}" -o"LOGS/%J_ibd_${pop}_${CHR}.o" -q basement -M8000 -R"span[hosts=1] select[mem>=8000] rusage[mem=8000]"
+        # echo "germline -min_m ${MATCH} -err_hom ${HOM} -err_het ${HET} -bits ${BITS} -h_extend -homoz < ${pop}.${CHR}.run" | bsub -J"LOGS/ibd_${pop}_${CHR}" -o"LOGS/%J_ibd_${pop}_${CHR}.o" -q basement -M8000 -R"span[hosts=1] select[mem>=8000] rusage[mem=8000]"
       
     done
 
