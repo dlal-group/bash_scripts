@@ -53,6 +53,13 @@ case $MODE in
     HET=$5
     BITS=$6
   ;;
+  GERMLINEREG )
+    # set up args for germline command line, no need for CHR!
+    MATCH=$2
+    HOM=$3
+    HET=$4
+    BITS=$5
+  ;;
 esac
 
 mkdir -p ${outdir}
@@ -604,8 +611,30 @@ case $MODE in
     do
 
         # ped_path=/lustre/scratch113/projects/esgi-vbseq/20140430_purging/UNRELATED/INPUT_FILES/FIVE_POPS/IBD_INPUT/GERMLINE
-        # ped_path=/lustre/scratch113/projects/esgi-vbseq/20140430_purging/UNRELATED/INPUT_FILES/FIVE_POPS/IBD_INPUT/GERMLINE/FILTERED
-        # pop_list=/lustre/scratch113/projects/esgi-vbseq/20140430_purging/UNRELATED/listpop/FIVE_POPS/all_pop_but_${pop}.removelist
+        ped_path=/lustre/scratch113/projects/esgi-vbseq/20140430_purging/UNRELATED/INPUT_FILES/FIVE_POPS/IBD_INPUT/GERMLINE/FILTERED
+        pop_list=/lustre/scratch113/projects/esgi-vbseq/20140430_purging/UNRELATED/listpop/FIVE_POPS/all_pop_but_${pop}.removelist
+        
+        
+        # #we need to create the input file for GERMLINE (WTF!!)
+        echo "1" > ${pop}.${CHR}.run
+        echo "${ped_path}/${pop}.${CHR}.non_missing.filtered.map" >> ${pop}.${CHR}.run
+        echo "${ped_path}/${pop}.${CHR}.non_missing.filtered.ped" >> ${pop}.${CHR}.run
+        echo "${outdir}/${pop}.${CHR}.non_missing.filtered" >> ${pop}.${CHR}.run
+
+        # commented to use the ALL population files
+        # echo "germline -min_m ${MATCH} -err_hom ${HOM} -err_het ${HET} -bits ${BITS} -h_extend -homoz -from_snp rs62224610 -to_snp rs7410320 < ${pop}.${CHR}.run" | bsub -J"LOGS/ibd_${pop}_${CHR}" -o"LOGS/%J_ibd_${pop}_${CHR}.o" -q basement -M8000 -R"span[hosts=1] select[mem>=8000] rusage[mem=8000]"
+        echo "germline -min_m ${MATCH} -err_hom ${HOM} -err_het ${HET} -bits ${BITS} -h_extend -homoz < ${pop}.${CHR}.run" | bsub -J"LOGS/ibd_${pop}_${CHR}" -o"LOGS/%J_ibd_${pop}_${CHR}.o" -q basement -M8000 -R"span[hosts=1] select[mem>=8000] rusage[mem=8000]"
+    done
+  ;;
+  GERMLINEREG )
+    echo "Calculate IBD using GERMLINE from plink formatted files!!"
+    echo -e "Parameters: \nmin_match=${MATCH}\nerr_hom=${HOM}\nerr_het=${HET}\nbits=${BITS}"
+    #use he same vcf file for all the samples but change the sample list of individuals toi exclude from the analysis
+    # pops_updated="FVG VBI TSI CEU CARL Erto Resia Illegio Sauris"
+    pops_updated="ALL"
+    for pop in $pops_updated
+    do
+
         ped_path=/lustre/scratch113/projects/esgi-vbseq/20140430_purging/UNRELATED/INPUT_FILES/FIVE_POPS/IBD_INPUT/GERMLINE/HOM2PED
         pop_list=/lustre/scratch113/projects/esgi-vbseq/20140430_purging/UNRELATED/listpop/FIVE_POPS/all_pop_but_${pop}.removelist
         
@@ -619,17 +648,6 @@ case $MODE in
 
           echo "germline -min_m ${MATCH} -err_hom ${HOM} -err_het ${HET} -bits ${BITS} -h_extend -homoz < ${file}.run" | bsub -J"LOGS/ibd_${file}" -o"LOGS/%J_ibd_${file}.o" -q basement -M8000 -R"span[hosts=1] select[mem>=8000] rusage[mem=8000]"
         done
-        
-        # #we need to create the input file for GERMLINE (WTF!!)
-        # echo "1" > ${pop}.${CHR}.run
-        # echo "${ped_path}/${pop}.${CHR}.non_missing.filtered.map" >> ${pop}.${CHR}.run
-        # echo "${ped_path}/${pop}.${CHR}.non_missing.filtered.ped" >> ${pop}.${CHR}.run
-        # echo "${outdir}/${pop}.${CHR}.non_missing.filtered" >> ${pop}.${CHR}.run
-
-        # commented to use the ALL population files
-        # echo "germline -min_m ${MATCH} -err_hom ${HOM} -err_het ${HET} -bits ${BITS} -h_extend -homoz -from_snp rs62224610 -to_snp rs7410320 < ${pop}.${CHR}.run" | bsub -J"LOGS/ibd_${pop}_${CHR}" -o"LOGS/%J_ibd_${pop}_${CHR}.o" -q basement -M8000 -R"span[hosts=1] select[mem>=8000] rusage[mem=8000]"
-        # echo "germline -min_m ${MATCH} -err_hom ${HOM} -err_het ${HET} -bits ${BITS} -h_extend -homoz < ${pop}.${CHR}.run" | bsub -J"LOGS/ibd_${pop}_${CHR}" -o"LOGS/%J_ibd_${pop}_${CHR}.o" -q basement -M8000 -R"span[hosts=1] select[mem>=8000] rusage[mem=8000]"
-      
     done
 
   ;;
