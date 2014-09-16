@@ -12,6 +12,7 @@ CHR=$2
 # define the output folder relative to the chromosome, if specified
 outdir=CHR${CHR}
 mkdir -p LOGS
+mkdir -p ${outdir}
 
 case $MODE in
   ROH*)
@@ -59,10 +60,9 @@ case $MODE in
     HOM=$3
     HET=$4
     BITS=$5
+    rm -r ${outdir}
   ;;
 esac
-
-mkdir -p ${outdir}
 
 # Merge different popuplation together
 # TODO: add code!!!
