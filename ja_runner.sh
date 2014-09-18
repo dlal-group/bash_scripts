@@ -427,9 +427,10 @@ BEGIN{
 { print $0,pop[$1]"_"pop[$3] }' ${region} | tr " " "\t" > ${region}.pop_added
 # { print $0,pop[$1]"_"pop[$3] }' ALL.9.non_missing_rs75838906-rs9792573.ped.filtered.match | tr " " "\t" > ALL.9.non_missing_rs75838906-rs9792573.ped.filtered.match.pop_added
 # for group in `awk '{print $(NF)}' ALL.9.non_missing_rs75838906-rs9792573.ped.filtered.match.pop_added|sort| uniq`
+region_name=`basename ${region}`
 for group in `awk '{print $(NF)}' ${region}.pop_added |sort| uniq`
 do 
-  fgrep -w ${group} ${region}.pop_added > /lustre/scratch113/projects/esgi-vbseq/20140430_purging/UNRELATED/RESULTS/IBD/GERMLINE/FILTERED/POP_SPLIT/${region}.${group}
+  fgrep -w ${group} ${region}.pop_added > /lustre/scratch113/projects/esgi-vbseq/20140430_purging/UNRELATED/RESULTS/IBD/GERMLINE/FILTERED/POP_SPLIT/${region_name}.${group}
 done
 
 #clean up a littlebit
