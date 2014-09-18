@@ -85,8 +85,10 @@ echo -e "Arguments and parameters:
 #modify to extract start and end snp to extract region from plink
 for reg_file in `ls ${MATCH}.shareDens_R*.to_include`
 do
-    start_r=`head -1 ${reg_file} | awk '{print $1*0.5}'`
-    end_r=`tail -1 ${reg_file} | awk '{print ($1)*0.5}'`
+    # start_r=`head -1 ${reg_file} | awk '{print $1*0.5}'`
+    # end_r=`tail -1 ${reg_file} | awk '{print $1*0.5}'`
+    start_r=`head -1 ${reg_file} | cut -f 1`
+    end_r=`tail -1 ${reg_file} | cut -f 1`
     reg_start=`awk -v rstrt=$start_r -v rnd=$end_r '{if($3 >= rstrt && $3<= rnd ) print $2}' $MAP|head -1`
     reg_end=`awk -v rstrt=$start_r -v rnd=$end_r '{if($3 >= rstrt && $3<= rnd ) print $2}' $MAP|tail -1`
     echo "${reg_start} ${reg_end}" > ${reg_file}.keepsnps
