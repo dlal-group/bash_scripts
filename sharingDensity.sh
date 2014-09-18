@@ -12,7 +12,7 @@ N=`wc -l ${MAP%.map}.ped | cut -f 1 -d " "`
 
 first=`head -n 1 $MAP | awk '{print $3}'`
 last=`tail -n 1 $MAP | awk '{print $3}'`
-minDens=0;
+minDens=75;
 resolution=0.5 #dimensione bin
 
 echo -e "Arguments and parameters:
@@ -63,7 +63,7 @@ END{
   for (i=begin; i<=finish; i++) {
     print i*resolution "\t" 0+dens[i]/(N*(N-1)/2 - N/2);
   } 
-}' > $MATCH.shareDens
+}' > $MATCH.${minDens}.shareDens
 
 # La sharing density probabilità che una coppia in quel bin abbia IBD
 # prendo histogrammi tolgo regioni che deviano dalla densità media di un 5sd
