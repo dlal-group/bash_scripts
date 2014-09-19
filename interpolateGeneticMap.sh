@@ -11,7 +11,7 @@ BEGIN{
 				lastMb = $4;
 			}
 			else {
-                                firstCm = $3;
+        firstCm = $3;
 				firstMb = $4;
 				lastCm = $3;
 				lastMb = $4;
