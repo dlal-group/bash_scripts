@@ -71,6 +71,10 @@ esac
 
 #create a case statement to select the operation to do:
 case $MODE in
+  CSQEXTRACT )
+  #extract number of variants per sample belonging to a particular category (syn/missense)
+  
+  ;;
   IBD )
     #Extract IBD information for each population. Here we are using plink2 (1.9)
     echo "Calculate IBD...."
@@ -644,7 +648,7 @@ case $MODE in
           echo "1" > ${file}.run
           echo "${filename%*.ped}.map" >> ${file}.run
           echo "${filename}" >> ${file}.run
-          echo "${filename}.filtered" >> ${file}.run
+          echo "${file}.filtered" >> ${file}.run
 
           echo "germline -min_m ${MATCH} -err_hom ${HOM} -err_het ${HET} -bits ${BITS} -h_extend -homoz < ${file}.run" | bsub -J"LOGS/ibd_${file}" -o"LOGS/%J_ibd_${file}.o" -q normal -M8000 -R"span[hosts=1] select[mem>=8000] rusage[mem=8000]"
         done
