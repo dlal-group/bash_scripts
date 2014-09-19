@@ -5,6 +5,7 @@
 # Environment variables: LSB_JOBINDEX
 # mkdir -p LOGS;size=`wc -l result.list|cut -f 1 -d " "`;bsub -J "p_check[1-${size}]" -o "LOGS/%J_p_check.%I.o" -M 5000 -R"select[mem>5000] rusage[mem=5000]" -q normal -- ~/Work/bash_scripts/ja_runner.sh result.list
 file=`sed -n "${LSB_JOBINDEX}p" $1`
+file2=`sed -n "${LSB_JOBINDEX}p" $2`
 #added for population control
 # pop=$2
 
@@ -384,7 +385,8 @@ file=`sed -n "${LSB_JOBINDEX}p" $1`
 # create files of filtered regions in splitted files
 # g++ hom_to_ped.cpp -o hom_to_ped
 chr=${file}
-MATCH=/lustre/scratch113/projects/esgi-vbseq/20140430_purging/UNRELATED/RESULTS/IBD/GERMLINE/ALL_TOGETHER/CHR${chr}/ALL.${chr}.non_missing.match
+# MATCH=/lustre/scratch113/projects/esgi-vbseq/20140430_purging/UNRELATED/RESULTS/IBD/GERMLINE/ALL_TOGETHER/CHR${chr}/ALL.${chr}.non_missing.match
+MATCH=${file2}
 # pop=$2
 minDens=75
 
