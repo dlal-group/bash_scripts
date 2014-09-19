@@ -389,7 +389,8 @@ chr=${file}
 reg_file=${file2}
 # pop=$2
 minDens=75
-
+echo ${chr}
+echo ${reg_file}
 # for reg_file in `ls ${MATCH}.${minDens}.shareDens_R*.to_include.keepsnps`
 # do
   rs_start=`cut -f 1 -d " " ${reg_file}`
