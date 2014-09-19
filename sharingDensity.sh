@@ -55,6 +55,7 @@ $10/$11>=minDens {
   # print start,end > "/dev/stderr";
   for (i=start; i<=end; i++) {
     dens[i]=dens[i]+1;
+    # sum+=$2
     # print start, i, end;
   }
   # print gen[$8],gen[$9],start_w[gen[$8]], end_w[gen[$9]] > "check_f.check";

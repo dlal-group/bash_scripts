@@ -72,8 +72,8 @@ esac
 #create a case statement to select the operation to do:
 case $MODE in
   CSQEXTRACT )
-  #extract number of variants per sample belonging to a particular category (syn/missense)
-  
+  #extract number of variants per sample belonging to a particular category (syn/missense eventually already stratified by novel/shared)
+
   ;;
   IBD )
     #Extract IBD information for each population. Here we are using plink2 (1.9)
