@@ -384,27 +384,27 @@ file2=`sed -n "${LSB_JOBINDEX}p" $2`
 # 12/09/2014
 # create files of filtered regions in splitted files
 # g++ hom_to_ped.cpp -o hom_to_ped
-chr=${file}
-# MATCH=/lustre/scratch113/projects/esgi-vbseq/20140430_purging/UNRELATED/RESULTS/IBD/GERMLINE/ALL_TOGETHER/CHR${chr}/ALL.${chr}.non_missing.match
-reg_file=${file2}
-# pop=$2
-minDens=75
-echo ${chr}
-echo ${reg_file}
-# for reg_file in `ls ${MATCH}.${minDens}.shareDens_R*.to_include.keepsnps`
-# do
-  rs_start=`cut -f 1 -d " " ${reg_file}`
-  rs_end=`cut -f 2 -d " " ${reg_file}`
+# chr=${file}
+# # MATCH=/lustre/scratch113/projects/esgi-vbseq/20140430_purging/UNRELATED/RESULTS/IBD/GERMLINE/ALL_TOGETHER/CHR${chr}/ALL.${chr}.non_missing.match
+# reg_file=${file2}
+# # pop=$2
+# minDens=75
+# echo ${chr}
+# echo ${reg_file}
+# # for reg_file in `ls ${MATCH}.${minDens}.shareDens_R*.to_include.keepsnps`
+# # do
+#   rs_start=`cut -f 1 -d " " ${reg_file}`
+#   rs_end=`cut -f 2 -d " " ${reg_file}`
 
-  # cat /lustre/scratch113/projects/esgi-vbseq/20140430_purging/UNRELATED/INPUT_FILES/FIVE_POPS/IBD_INPUT/GERMLINE/ALL.${chr}.non_missing.ped | ped_to_hom > /lustre/scratch113/projects/esgi-vbseq/20140430_purging/UNRELATED/INPUT_FILES/FIVE_POPS/IBD_INPUT/GERMLINE/PED2HOM/ALL.${chr}.non_missing.hom.ped
-  # cp /lustre/scratch113/projects/esgi-vbseq/20140430_purging/UNRELATED/INPUT_FILES/FIVE_POPS/IBD_INPUT/GERMLINE/ALL.${chr}.non_missing.map /lustre/scratch113/projects/esgi-vbseq/20140430_purging/UNRELATED/INPUT_FILES/FIVE_POPS/IBD_INPUT/GERMLINE/PED2HOM/ALL.${chr}.non_missing.hom.map
+#   # cat /lustre/scratch113/projects/esgi-vbseq/20140430_purging/UNRELATED/INPUT_FILES/FIVE_POPS/IBD_INPUT/GERMLINE/ALL.${chr}.non_missing.ped | ped_to_hom > /lustre/scratch113/projects/esgi-vbseq/20140430_purging/UNRELATED/INPUT_FILES/FIVE_POPS/IBD_INPUT/GERMLINE/PED2HOM/ALL.${chr}.non_missing.hom.ped
+#   # cp /lustre/scratch113/projects/esgi-vbseq/20140430_purging/UNRELATED/INPUT_FILES/FIVE_POPS/IBD_INPUT/GERMLINE/ALL.${chr}.non_missing.map /lustre/scratch113/projects/esgi-vbseq/20140430_purging/UNRELATED/INPUT_FILES/FIVE_POPS/IBD_INPUT/GERMLINE/PED2HOM/ALL.${chr}.non_missing.hom.map
 
-  plink2 --file /lustre/scratch113/projects/esgi-vbseq/20140430_purging/UNRELATED/INPUT_FILES/FIVE_POPS/IBD_INPUT/GERMLINE/PED2HOM/ALL.${chr}.non_missing.hom --from ${rs_start} --to ${rs_end} --recode 12 --out /lustre/scratch113/projects/esgi-vbseq/20140430_purging/UNRELATED/INPUT_FILES/FIVE_POPS/IBD_INPUT/GERMLINE/PED2HOM/ALL.${chr}.non_missing_${rs_start}-${rs_end}.hom
+#   plink2 --file /lustre/scratch113/projects/esgi-vbseq/20140430_purging/UNRELATED/INPUT_FILES/FIVE_POPS/IBD_INPUT/GERMLINE/PED2HOM/ALL.${chr}.non_missing.hom --from ${rs_start} --to ${rs_end} --recode 12 --out /lustre/scratch113/projects/esgi-vbseq/20140430_purging/UNRELATED/INPUT_FILES/FIVE_POPS/IBD_INPUT/GERMLINE/PED2HOM/ALL.${chr}.non_missing_${rs_start}-${rs_end}.hom
 
-  # g++ ped_to_hom.cpp -o ped_to_hom
-  cat /lustre/scratch113/projects/esgi-vbseq/20140430_purging/UNRELATED/INPUT_FILES/FIVE_POPS/IBD_INPUT/GERMLINE/PED2HOM/ALL.${chr}.non_missing_${rs_start}-${rs_end}.hom.ped | hom_to_ped > /lustre/scratch113/projects/esgi-vbseq/20140430_purging/UNRELATED/INPUT_FILES/FIVE_POPS/IBD_INPUT/GERMLINE/HOM2PED/ALL.${chr}.non_missing_${rs_start}-${rs_end}.ped
-  mv /lustre/scratch113/projects/esgi-vbseq/20140430_purging/UNRELATED/INPUT_FILES/FIVE_POPS/IBD_INPUT/GERMLINE/PED2HOM/ALL.${chr}.non_missing_${rs_start}-${rs_end}.hom.map /lustre/scratch113/projects/esgi-vbseq/20140430_purging/UNRELATED/INPUT_FILES/FIVE_POPS/IBD_INPUT/GERMLINE/HOM2PED/ALL.${chr}.non_missing_${rs_start}-${rs_end}.map
-# done
+#   # g++ ped_to_hom.cpp -o ped_to_hom
+#   cat /lustre/scratch113/projects/esgi-vbseq/20140430_purging/UNRELATED/INPUT_FILES/FIVE_POPS/IBD_INPUT/GERMLINE/PED2HOM/ALL.${chr}.non_missing_${rs_start}-${rs_end}.hom.ped | hom_to_ped > /lustre/scratch113/projects/esgi-vbseq/20140430_purging/UNRELATED/INPUT_FILES/FIVE_POPS/IBD_INPUT/GERMLINE/HOM2PED/ALL.${chr}.non_missing_${rs_start}-${rs_end}.ped
+#   mv /lustre/scratch113/projects/esgi-vbseq/20140430_purging/UNRELATED/INPUT_FILES/FIVE_POPS/IBD_INPUT/GERMLINE/PED2HOM/ALL.${chr}.non_missing_${rs_start}-${rs_end}.hom.map /lustre/scratch113/projects/esgi-vbseq/20140430_purging/UNRELATED/INPUT_FILES/FIVE_POPS/IBD_INPUT/GERMLINE/HOM2PED/ALL.${chr}.non_missing_${rs_start}-${rs_end}.map
+# # done
 
 #17/09/2014
 #update cm map position
@@ -440,3 +440,9 @@ echo ${reg_file}
 
 # #clean up a littlebit
 # rm ${region}.pop_added
+
+#extract shared/private sites overlap with some categories
+#we need to work with each population
+filename=`basename ${file}`
+chr=${file2}
+zcat ${file} | bedtools intersect -a /lustre/scratch113/projects/esgi-vbseq/20140430_purging/enza/listsites/miss/miss.${chr}.alt.bed -b stdin -wa -wb > /lustre/scratch113/projects/esgi-vbseq/20140430_purging/UNRELATED/RESULTS/CONSEQUENCES/miss/${filename}.miss
