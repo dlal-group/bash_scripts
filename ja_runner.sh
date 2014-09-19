@@ -443,6 +443,7 @@ file2=`sed -n "${LSB_JOBINDEX}p" $2`
 
 #extract shared/private sites overlap with some categories
 #we need to work with each population
+cat=$3
 filename=`basename ${file}`
 chr=${file2}
-zcat ${file} | bedtools intersect -a /lustre/scratch113/projects/esgi-vbseq/20140430_purging/enza/listsites/miss/miss.${chr}.alt.bed -b stdin -wa -wb > /lustre/scratch113/projects/esgi-vbseq/20140430_purging/UNRELATED/RESULTS/CONSEQUENCES/miss/${filename}.miss
+zcat ${file} | bedtools intersect -a /lustre/scratch113/projects/esgi-vbseq/20140430_purging/enza/listsites/${cat}/${cat}.${chr}.alt.bed -b stdin -wa -wb > /lustre/scratch113/projects/esgi-vbseq/20140430_purging/UNRELATED/RESULTS/CONSEQUENCES/${cat}/${filename}.${cat}
