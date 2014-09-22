@@ -377,24 +377,29 @@ case $MODE in
     #extract data in bed format for different populations in a separate way
     echo "Create bed formatted files..."
     pops_updated="Erto Resia Illegio Sauris"
-    # for pop in $pops
-    for pop in $pops_updated
+    # for pop in $pops_updated
+    for pop in $pops
     do
       case $pop in
         FVG )
-          pop_path=/lustre/scratch113/projects/esgi-vbseq/20140430_purging/UNRELATED/listpop/FVG_unrelated.list
+          # pop_path=/lustre/scratch113/projects/esgi-vbseq/20140430_purging/UNRELATED/listpop/FVG_unrelated.list
+          pop_path=/lustre/scratch113/projects/esgi-vbseq/20140430_purging/80_SAMPLES/listpop/FVG_unrelated.list
           ;;
         VBI )
-          pop_path=/lustre/scratch113/projects/esgi-vbseq/20140430_purging/UNRELATED/listpop/VBI_unrelated.list
+          # pop_path=/lustre/scratch113/projects/esgi-vbseq/20140430_purging/UNRELATED/listpop/VBI_unrelated.list
+          pop_path=/lustre/scratch113/projects/esgi-vbseq/20140430_purging/80_SAMPLES/listpop/VBI_unrelated.list
           ;;
         CARL )
-          pop_path=/lustre/scratch113/projects/esgi-vbseq/20140430_purging/UNRELATED/listpop/CARL_unrelated.list
+          # pop_path=/lustre/scratch113/projects/esgi-vbseq/20140430_purging/UNRELATED/listpop/CARL_unrelated.list
+          pop_path=/lustre/scratch113/projects/esgi-vbseq/20140430_purging/80_SAMPLES/listpop/CARL_unrelated.list
           ;;
         TSI )
-          pop_path=/lustre/scratch113/projects/esgi-vbseq/20140430_purging/UNRELATED/listpop/TSI.list
+          # pop_path=/lustre/scratch113/projects/esgi-vbseq/20140430_purging/UNRELATED/listpop/TSI.list
+          pop_path=/lustre/scratch113/projects/esgi-vbseq/20140430_purging/80_SAMPLES/listpop/TSI_unrelated.list
           ;;
         CEU )
-          pop_path=/lustre/scratch113/projects/esgi-vbseq/20140430_purging/UNRELATED/listpop/CEU.list
+          # pop_path=/lustre/scratch113/projects/esgi-vbseq/20140430_purging/UNRELATED/listpop/CEU.list
+          pop_path=/lustre/scratch113/projects/esgi-vbseq/20140430_purging/80_SAMPLES/listpop/CEU_unrelated.list
           ;;
         Erto )
           pop_path=/lustre/scratch113/projects/esgi-vbseq/20140430_purging/UNRELATED/listpop/Erto_unrelated.list
