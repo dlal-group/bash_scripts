@@ -13,8 +13,8 @@ echo ${file2}
 script=$1
 
 #bash $script ${file} $3 $4 $5 $6 $7 $8
-$script ${file} $3 $4 $5 $6 $7 $8
-# $script ${file} ${file2} $4 $5 $6 $7 $8
+# $script ${file} $3 $4 $5 $6 $7 $8
+$script ${file} ${file2} $4 $5 $6 $7 $8
 
 #06/06/2014
 #order inverted ONLY FOR consequence list file splitting
