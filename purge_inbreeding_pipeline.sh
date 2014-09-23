@@ -66,6 +66,10 @@ case $MODE in
     # set up args for germline command line, no need for CHR!
     in_path=$3
   ;;
+  EXTRMAF )
+    pop_path=$3
+    # in_path=$4
+  ;;
 esac
 
 # Merge different popuplation together
@@ -452,8 +456,7 @@ case $MODE in
       esac
       #those are the files I need to use to extract the info splitted by chr
       # pop_path=/lustre/scratch113/projects/esgi-vbseq/20140430_purging/UNRELATED/RESULTS/DAF/FIVE_POP
-      pop_path=/lustre/scratch113/projects/esgi-vbseq/20140430_purging/UNRELATED/RESULTS/DAF/FIVE_POP
-
+      
       private=${pop_path}/${pop}/${pop}_private.merged_daf.tab
       private_fixed=${pop_path}/${pop}/${pop}_private.merged_daf.fixed.tab
       shared=${pop_path}/${pop}/${pop}_shared.merged_daf.tab
@@ -466,7 +469,7 @@ case $MODE in
       # awk '{print $1"O"$2"O"$3}' ${shared_fixed} | tr " " "\t" | dos2unix > ${shared_fixed}.list
 
       #create temporary files to do the extraction
-      in_file=/lustre/scratch113/projects/esgi-vbseq/20140430_purging/UNRELATED/INPUT_FILES/FIVE_POPS/WG/CHR${CHR}/INGI_chr${CHR}.merged_maf.tab.gz
+      in_file=${pop_path}/CHR${CHR}/INGI_chr${CHR}.merged_maf.tab.gz
       # zcat ${in_file} | awk '{print $1"O"$2"O"$3,$0}' | tr " " "\t" | dos2unix > ${in_file}.tmp
 
       zcat ${in_file} |awk '{print $1"O"$2"O"$3"O"$4,$0}'|tr " " "\t" | fgrep -w -f <(awk -v cro=${CHR} '{if($1==cro) print $1"O"$2"O"$3"O"$4}' ${private})|cut -f 2- |gzip -c > ${in_file}.${pop}.private.tab.gz
