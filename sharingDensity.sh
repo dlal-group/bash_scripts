@@ -12,7 +12,7 @@ N=`wc -l ${MAP%.map}.ped | cut -f 1 -d " "`
 
 first=`head -n 1 $MAP | awk '{print $3}'`
 last=`tail -n 1 $MAP | awk '{print $3}'`
-minDens=75;
+minDens=0;
 resolution=0.5 #dimensione bin
 
 echo -e "Arguments and parameters:
