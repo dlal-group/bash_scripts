@@ -1,7 +1,6 @@
 #!/usr/local/bin/bash
 
-reg_file=$1 #germline format
-# MATCH=/lustre/scratch113/projects/esgi-vbseq/20140430_purging/UNRELATED/RESULTS/IBD/GERMLINE/CHR10/FVG.10.non_missing.match
+reg_file=$1 #format:${MATCH}.${minDens}.shareDens_R*.to_include
 
 MAP=$2 #PATH of plink format files in cM
 # MAP=/lustre/scratch113/projects/esgi-vbseq/20140430_purging/UNRELATED/INPUT_FILES/FIVE_POPS/IBD_INPUT/GERMLINE/
