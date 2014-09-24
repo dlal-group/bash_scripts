@@ -6,15 +6,27 @@
 #Example command:
 #mkdir -p LOGS;size=`wc -l result.list|cut -f 1 -d " "`;bsub -J "p_check[1-${size}]" -o "LOGS/%J_p_check.%I.o" -M 5000 -R"select[mem>5000] rusage[mem=5000]" -q normal -- ~/Work/bash_scripts/ja_runner_par.sh ~/Work/bash_scripts/check_pvals_test.sh result.list
 #mkdir -p LOGS;size=`wc -l match_file.list|cut -f 1 -d " "`;bsub -J "sh_dens[1-${size}]" -o "LOGS/%J_sh_dens.%I.o" -M 5000 -R"select[mem>5000] rusage[mem=5000]" -q normal -- ~/Work/bash_scripts/ja_runner_par.sh ~/Work/bash_scripts/sharingDensity.sh match_file.list map.list
-file=`sed -n "${LSB_JOBINDEX}p" $2`
-# file2=`sed -n "${LSB_JOBINDEX}p" $3`
-echo ${file}
-# echo ${file2}
-script=$1
-
+while getopts ":ds" opt; do
+  case $opt in
+    d)
+      echo "Double list mode triggered!" >&2
+      file=`sed -n "${LSB_JOBINDEX}p" $2`
+      file2=`sed -n "${LSB_JOBINDEX}p" $3`
+      echo ${file}
+      echo ${file2}
+      script=$1
+      echo '$script ${file} ${file2} $4 $5 $6 $7 $8'
+      ;;
+    s)
+      echo "Single list mode triggered!!" >&2
+      file=`sed -n "${LSB_JOBINDEX}p" $2`
+      echo ${file}
+      script=$1
+      echo '$script ${file} $3 $4 $5 $6 $7 $8'
+      ;;
+  esac
+done
 #bash $script ${file} $3 $4 $5 $6 $7 $8
-$script ${file} $3 $4 $5 $6 $7 $8
-# $script ${file} ${file2} $4 $5 $6 $7 $8
 
 #06/06/2014
 #order inverted ONLY FOR consequence list file splitting
