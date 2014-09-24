@@ -10,20 +10,20 @@ while getopts ":ds" opt; do
   case $opt in
     d)
       echo "Double list mode triggered!" >&2
-      file=`sed -n "${LSB_JOBINDEX}p" $2`
-      file2=`sed -n "${LSB_JOBINDEX}p" $3`
+      file=`sed -n "${LSB_JOBINDEX}p" $3`
+      file2=`sed -n "${LSB_JOBINDEX}p" $4`
       echo ${file}
       echo ${file2}
-      script=$1
-      echo $script ${file} ${file2} $4 $5 $6 $7 $8
+      script=$2
+      echo $script ${file} ${file2} $5 $6 $7 $8
       ;;
     s)
       echo "Single list mode triggered!!" >&2
       # file=`sed -n "${LSB_JOBINDEX}p" $2`
-      file=`sed -n "1p" $2`
+      file=`sed -n "1p" $3`
       echo ${file}
-      script=$1
-      echo $script ${file} $3 $4 $5 $6 $7 $8
+      script=$2
+      echo $script ${file} $4 $5 $6 $7 $8
       ;;
   esac
 done
