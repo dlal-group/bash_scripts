@@ -15,15 +15,14 @@ while getopts ":ds" opt; do
       echo ${file}
       echo ${file2}
       script=$2
-      echo $script ${file} ${file2} $5 $6 $7 $8
+      $script ${file} ${file2} $5 $6 $7 $8
       ;;
     s)
       echo "Single list mode triggered!!" >&2
-      # file=`sed -n "${LSB_JOBINDEX}p" $2`
-      file=`sed -n "1p" $3`
+      file=`sed -n "${LSB_JOBINDEX}p" $3`
       echo ${file}
       script=$2
-      echo $script ${file} $4 $5 $6 $7 $8
+      $script ${file} $4 $5 $6 $7 $8
       ;;
   esac
 done
