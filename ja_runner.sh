@@ -422,42 +422,42 @@ file=`sed -n "${LSB_JOBINDEX}p" $1`
 
 #18/09/2014
 # assign pairs of IBD match to different population files
-mkdir -p /lustre/scratch113/projects/esgi-vbseq/20140430_purging/UNRELATED/RESULTS/IBD/GERMLINE/FILTERED_20140924_234/POP_SPLIT
+# mkdir -p /lustre/scratch113/projects/esgi-vbseq/20140430_purging/UNRELATED/RESULTS/IBD/GERMLINE/FILTERED_20140924_234/POP_SPLIT
 
-region=${file}
-pop_file=$2
-# pop_file=/lustre/scratch113/projects/esgi-vbseq/20140430_purging/UNRELATED/listpop/ALL_unrelated_8cohort.list
-# pop_file=/lustre/scratch113/projects/esgi-vbseq/20140430_purging/UNRELATED/listpop/ALL_unrelated_5cohort.list
-awk -v cohort=${pop_file} '
-BEGIN{
-  while (getline < cohort) {
-    pop[$1]=$2;
-  }
-}
-{ print $0,pop[$1]"_"pop[$3] }' ${region} | tr " " "\t" > ${region}.pop_added
+# region=${file}
+# pop_file=$2
+# # pop_file=/lustre/scratch113/projects/esgi-vbseq/20140430_purging/UNRELATED/listpop/ALL_unrelated_8cohort.list
+# # pop_file=/lustre/scratch113/projects/esgi-vbseq/20140430_purging/UNRELATED/listpop/ALL_unrelated_5cohort.list
+# awk -v cohort=${pop_file} '
+# BEGIN{
+#   while (getline < cohort) {
+#     pop[$1]=$2;
+#   }
+# }
+# { print $0,pop[$1]"_"pop[$3] }' ${region} | tr " " "\t" > ${region}.pop_added
 
-region_name=`basename ${region}`
-for group in `awk '{print $(NF)}' ${region}.pop_added |sort| uniq`
-do 
-  fgrep -w ${group} ${region}.pop_added > /lustre/scratch113/projects/esgi-vbseq/20140430_purging/UNRELATED/RESULTS/IBD/GERMLINE/FILTERED_20140924_234/POP_SPLIT/${region_name}.${group}
-done
+# region_name=`basename ${region}`
+# for group in `awk '{print $(NF)}' ${region}.pop_added |sort| uniq`
+# do 
+#   fgrep -w ${group} ${region}.pop_added > /lustre/scratch113/projects/esgi-vbseq/20140430_purging/UNRELATED/RESULTS/IBD/GERMLINE/FILTERED_20140924_234/POP_SPLIT/${region_name}.${group}
+# done
 
-#clean up a littlebit
-rm ${region}.pop_added
+# #clean up a littlebit
+# rm ${region}.pop_added
 
 #extract shared/private sites overlap with some categories
 #we need to work with each population
-# cat=$3
-# filename=`basename ${file}`
-# chr=${file2}
-# zcat ${file} | bedtools intersect -a /lustre/scratch113/projects/esgi-vbseq/20140430_purging/enza/listsites/${cat}/${cat}.${chr}.alt.bed -b stdin -wa -wb > /lustre/scratch113/projects/esgi-vbseq/20140430_purging/UNRELATED/RESULTS/CONSEQUENCES/${cat}/${filename}.${cat}
+cat=$2
+filename=`basename ${file}`
+chr=`echo ${file#*CHR}| cut -f 1 -d "/"`
+zcat ${file} | bedtools intersect -a /lustre/scratch113/projects/esgi-vbseq/20140430_purging/enza/listsites/${cat}/${cat}.${chr}.alt.bed -b stdin -wa -wb > /lustre/scratch113/projects/esgi-vbseq/20140430_purging/UNRELATED/RESULTS/CONSEQUENCES/${cat}/${filename}.${cat}
 
-# awk '{OFS="\t"}{print $1,$3,$3}' /lustre/scratch113/projects/esgi-vbseq/20140430_purging/UNRELATED/RESULTS/CONSEQUENCES/${cat}/${filename}.${cat} > /lustre/scratch113/projects/esgi-vbseq/20140430_purging/UNRELATED/RESULTS/CONSEQUENCES/${cat}/${filename}.${cat}.regions
+awk '{OFS="\t"}{print $1,$3,$3}' /lustre/scratch113/projects/esgi-vbseq/20140430_purging/UNRELATED/RESULTS/CONSEQUENCES/${cat}/${filename}.${cat} > /lustre/scratch113/projects/esgi-vbseq/20140430_purging/UNRELATED/RESULTS/CONSEQUENCES/${cat}/${filename}.${cat}.regions
 
-# #extract for each category, a vcf file with data for populations
-# fil=${filename}.${cat}.regions
-# pop=${fil%%_*}
-# mkdir -p VCF
+#extract for each category, a vcf file with data for populations
+fil=${filename}.${cat}.regions
+pop=${fil%%_*}
+mkdir -p VCF
 
-# bcftools view -V indels -S /lustre/scratch113/projects/esgi-vbseq/20140430_purging/UNRELATED/listpop/${pop}_unrelated.list -R /lustre/scratch113/projects/esgi-vbseq/20140430_purging/UNRELATED/RESULTS/CONSEQUENCES/${cat}/${fil} /lustre/scratch113/projects/esgi-vbseq/20140430_purging/UNRELATED/POP_MERGED_FILES/FIVE_POPS/20140711_ANNOTATED/${chr}.vcf.gz -O z -o /lustre/scratch113/projects/esgi-vbseq/20140430_purging/UNRELATED/RESULTS/CONSEQUENCES/${cat}/VCF/${chr}.${fil}.vcf.gz
-# tabix -p vcf /lustre/scratch113/projects/esgi-vbseq/20140430_purging/UNRELATED/RESULTS/CONSEQUENCES/${cat}/VCF/${chr}.${fil}.vcf.gz
+bcftools view -V indels -S /lustre/scratch113/projects/esgi-vbseq/20140430_purging/UNRELATED/listpop/${pop}_unrelated.list -R /lustre/scratch113/projects/esgi-vbseq/20140430_purging/UNRELATED/RESULTS/CONSEQUENCES/${cat}/${fil} /lustre/scratch113/projects/esgi-vbseq/20140430_purging/UNRELATED/POP_MERGED_FILES/FIVE_POPS/20140711_ANNOTATED/${chr}.vcf.gz -O z -o /lustre/scratch113/projects/esgi-vbseq/20140430_purging/UNRELATED/RESULTS/CONSEQUENCES/${cat}/VCF/${chr}.${fil}.vcf.gz
+tabix -p vcf /lustre/scratch113/projects/esgi-vbseq/20140430_purging/UNRELATED/RESULTS/CONSEQUENCES/${cat}/VCF/${chr}.${fil}.vcf.gz
