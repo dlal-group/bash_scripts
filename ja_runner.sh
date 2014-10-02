@@ -450,9 +450,12 @@ file=`sed -n "${LSB_JOBINDEX}p" $1`
 cat=$2
 filename=`basename ${file}`
 chr=`echo ${file#*CHR}| cut -f 1 -d "/"`
+
+echo -e "Processing CHR${chr} \n category:${cat}\n"
 zcat ${file} | bedtools intersect -a /lustre/scratch113/projects/esgi-vbseq/20140430_purging/enza/listsites/${cat}/${cat}.${chr}.alt.bed -b stdin -wa -wb > /lustre/scratch113/projects/esgi-vbseq/20140430_purging/UNRELATED/RESULTS/CONSEQUENCES/${cat}/${filename}.${cat}
 
 awk '{OFS="\t"}{print $1,$3,$3}' /lustre/scratch113/projects/esgi-vbseq/20140430_purging/UNRELATED/RESULTS/CONSEQUENCES/${cat}/${filename}.${cat} > /lustre/scratch113/projects/esgi-vbseq/20140430_purging/UNRELATED/RESULTS/CONSEQUENCES/${cat}/${filename}.${cat}.regions
+echo -e "Generated regions file....\n"
 
 #extract for each category, a vcf file with data for populations
 fil=${filename}.${cat}.regions
@@ -461,3 +464,4 @@ mkdir -p VCF
 
 bcftools view -V indels -S /lustre/scratch113/projects/esgi-vbseq/20140430_purging/UNRELATED/listpop/${pop}_unrelated.list -R /lustre/scratch113/projects/esgi-vbseq/20140430_purging/UNRELATED/RESULTS/CONSEQUENCES/${cat}/${fil} /lustre/scratch113/projects/esgi-vbseq/20140430_purging/UNRELATED/POP_MERGED_FILES/FIVE_POPS/20140711_ANNOTATED/${chr}.vcf.gz -O z -o /lustre/scratch113/projects/esgi-vbseq/20140430_purging/UNRELATED/RESULTS/CONSEQUENCES/${cat}/VCF/${chr}.${fil}.vcf.gz
 tabix -p vcf /lustre/scratch113/projects/esgi-vbseq/20140430_purging/UNRELATED/RESULTS/CONSEQUENCES/${cat}/VCF/${chr}.${fil}.vcf.gz
+echo -e "Extracted sample's data in VCF format....\n"
