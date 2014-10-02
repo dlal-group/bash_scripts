@@ -460,7 +460,8 @@ echo -e "Generated regions file....\n"
 #extract for each category, a vcf file with data for populations
 fil=${filename}.${cat}.regions
 # fil=CARL_private_chr10.merged_daf.tab.gz.miss.regions
-pop=${fil%%_*}
+# pop=${fil%%_*}
+pop=`echo ${fil#INGI_chr11.merged_maf.tab.gz.*} | cut -f 1 -d "."`
 mkdir -p VCF
 
 bcftools view --phased -U -V indels -S /lustre/scratch113/projects/esgi-vbseq/20140430_purging/UNRELATED/listpop/${pop}_unrelated.list -R /lustre/scratch113/projects/esgi-vbseq/20140430_purging/UNRELATED/RESULTS/CONSEQUENCES/${cat}/${fil} /lustre/scratch113/projects/esgi-vbseq/20140430_purging/UNRELATED/POP_MERGED_FILES/FIVE_POPS/20140711_ANNOTATED/${chr}.vcf.gz -O z -o /lustre/scratch113/projects/esgi-vbseq/20140430_purging/UNRELATED/RESULTS/CONSEQUENCES/${cat}/VCF/${chr}.${fil}.vcf.gz
