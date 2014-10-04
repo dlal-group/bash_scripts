@@ -463,6 +463,9 @@ fil=${filename}.${cat}.regions
 # pop=${fil%%_*}
 pop=`echo ${fil#*.merged_maf.tab.gz.} | cut -f 1 -d "."` #if it doesn't match the correct path, it gives back the whole name, which is formatted like POP.stuff [if you're lucky]
 mkdir -p VCF
+if [[ $pop == "CAR" ]]; then
+  pop="CARL"
+fi
 # /lustre/scratch113/projects/esgi-vbseq/20140430_purging/UNRELATED/INPUT_FILES/FIVE_POPS/WG/CHR13/INGI_chr13.merged_maf.tab.gz.FVG.private.tab.
 bcftools view --phased -U -V indels -S /lustre/scratch113/projects/esgi-vbseq/20140430_purging/UNRELATED/listpop/${pop}_unrelated.list -R /lustre/scratch113/projects/esgi-vbseq/20140430_purging/UNRELATED/RESULTS/CONSEQUENCES/${cat}/${fil} /lustre/scratch113/projects/esgi-vbseq/20140430_purging/UNRELATED/POP_MERGED_FILES/FIVE_POPS/20140711_ANNOTATED/${chr}.vcf.gz -O z -o /lustre/scratch113/projects/esgi-vbseq/20140430_purging/UNRELATED/RESULTS/CONSEQUENCES/${cat}/VCF/${chr}.${fil}.vcf.gz
 tabix -p vcf /lustre/scratch113/projects/esgi-vbseq/20140430_purging/UNRELATED/RESULTS/CONSEQUENCES/${cat}/VCF/${chr}.${fil}.vcf.gz
