@@ -508,7 +508,7 @@ filename=`basename ${file}`
 chr=`echo ${file#*CHR}| cut -f 1 -d "/"`
 
 # echo -e "Processing CHR${chr} \n"
-for pop in CARL FVG VBI
+for pop in CAR FVG VBI
 do
   zcat ${file} | bedtools intersect -b /lustre/scratch113/projects/esgi-vbseq/20140430_purging/enza/NOVEL/INTERSECT/${pop}.${chr}.novel.bed -a stdin | fgrep -v -w MULTI|fgrep -v -w INDEL | gzip -c > /lustre/scratch113/projects/esgi-vbseq/20140430_purging/UNRELATED/INPUT_FILES/FIVE_POPS/WG/CHR${chr}/${filename}.${pop}.novel.tab.gz
 done
