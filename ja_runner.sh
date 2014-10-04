@@ -497,12 +497,12 @@ file=`sed -n "${LSB_JOBINDEX}p" $1`
 # file=${in_dir}/CHR${CHR}/INGI_chr${CHR}.merged_daf.tab.gz
 #CEU
 #non fixed
-zcat ${file} | awk '$5 != "NA" && $5 > 0 && ($7 > 0 || $8 > 0 || $9 > 0)'| gzip -c > ${file}.CEU.shared.tab.gz
+zcat ${file} | awk '$5 != "NA" && $5 > 0 && $7 !="NA" && $8!="NA" && $9!="NA" && ($7 > 0 || $8 > 0 || $9 > 0)'| gzip -c > ${file}.CEU.shared.tab.gz
 #fixed
-zcat ${file} | awk '$5 != "NA" && $5 == 0 && ($7 > 0 || $8 > 0 || $9 > 0)'| gzip -c > ${file}.CEU.shared_fixed.tab.gz
+zcat ${file} | awk '$5 != "NA" && $5 == 0 && $7 !="NA" && $8!="NA" && $9!="NA" && ($7 > 0 || $8 > 0 || $9 > 0)'| gzip -c > ${file}.CEU.shared_fixed.tab.gz
 
 #TSI
 #non fixed
-zcat ${file} | awk '$6 != "NA" && $6 > 0 && ($7 > 0 || $8 > 0 || $9 > 0)'| gzip -c > ${file}.TSI.shared.tab.gz
+zcat ${file} | awk '$6 != "NA" && $6 > 0 && $7 !="NA" && $8!="NA" && $9!="NA" && ($7 > 0 || $8 > 0 || $9 > 0)'| gzip -c > ${file}.TSI.shared.tab.gz
 #fixed
-zcat ${file} | awk '$6 != "NA" && $6 == 0 && ($7 > 0 || $8 > 0 || $9 > 0)'| gzip -c > ${file}.TSI.shared_fixed.tab.gz
+zcat ${file} | awk '$6 != "NA" && $6 == 0 && $7 !="NA" && $8!="NA" && $9!="NA" && ($7 > 0 || $8 > 0 || $9 > 0)'| gzip -c > ${file}.TSI.shared_fixed.tab.gz
