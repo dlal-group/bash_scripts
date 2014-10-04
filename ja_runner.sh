@@ -491,3 +491,18 @@ outfile=/lustre/scratch113/projects/esgi-vbseq/20140430_purging/UNRELATED/RESULT
 # do
 #   zcat ${file} | bedtools intersect -b /lustre/scratch113/projects/esgi-vbseq/20140430_purging/enza/NOVEL/INTERSECT/${pop}.${chr}.novel.bed -a stdin | fgrep -v -w MULTI|fgrep -v -w INDEL | gzip -c > /lustre/scratch113/projects/esgi-vbseq/20140430_purging/UNRELATED/INPUT_FILES/FIVE_POPS/WG/CHR${chr}/${filename}.${pop}.novel.tab.gz
 # done
+
+# 4/10/2014
+# Extract shared sites for CEU and TSI: all those sites with maf != 0 for CEU or TSI and maf > 0 at least in one isolate
+# file=${in_dir}/CHR${CHR}/INGI_chr${CHR}.merged_daf.tab.gz
+#CEU
+#non fixed
+zcat ${file} | awk '$5 != NA && $5 > 0 && ($7 > 0 || $8 > 0 || $9 > 0)'| gzip -c > ${file}.CEU.shared.tab.gz
+#fixed
+zcat ${file} | awk '$5 != NA && $5 == 0 && ($7 > 0 || $8 > 0 || $9 > 0)'| gzip -c > ${file}.CEU.shared_fixed.tab.gz
+
+#TSI
+#non fixed
+zcat ${file} | awk '$6 != NA && $6 > 0 && ($7 > 0 || $8 > 0 || $9 > 0)'| gzip -c > ${file}.TSI.shared.tab.gz
+#fixed
+zcat ${file} | awk '$6 != NA && $6 == 0 && ($7 > 0 || $8 > 0 || $9 > 0)'| gzip -c > ${file}.TSI.shared_fixed.tab.gz
