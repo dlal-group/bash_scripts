@@ -452,7 +452,7 @@ filename=`basename ${file}`
 chr=`echo ${file#*CHR}| cut -f 1 -d "/"`
 
 echo -e "Processing CHR${chr} \n category:${cat}\n"
-awk '$6=="ref' /lustre/scratch113/projects/esgi-vbseq/20140430_purging/enza/listsites/${cat}/${cat}.${chr}.bed > /lustre/scratch113/projects/esgi-vbseq/20140430_purging/UNRELATED/RESULTS/CONSEQUENCES/listsites/${cat}.${chr}.ref.bed
+awk '$6=="ref"' /lustre/scratch113/projects/esgi-vbseq/20140430_purging/enza/listsites/${cat}/${cat}.${chr}.bed > /lustre/scratch113/projects/esgi-vbseq/20140430_purging/UNRELATED/RESULTS/CONSEQUENCES/listsites/${cat}.${chr}.ref.bed
 csq_file=/lustre/scratch113/projects/esgi-vbseq/20140430_purging/UNRELATED/RESULTS/CONSEQUENCES/listsites/${cat}.${chr}.ref.bed 
 #if we want the alt conseq, uncomment
 # csq_file=/lustre/scratch113/projects/esgi-vbseq/20140430_purging/enza/listsites/${cat}/${cat}.${chr}.alt.bed
