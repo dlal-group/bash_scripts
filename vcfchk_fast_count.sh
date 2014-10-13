@@ -2,7 +2,7 @@
 vcfchk_path=$1
 
 (echo -e "CHR\tVARIANTS\tSNPS\tSingleton_SNPS\tMONO_SNPS\tINDELS\tSingleton_INDELS\tMONO_INDELS\tMULTI_SITES\tMULTI_SNPS\tMULTI_INDELS";
-for i in {1..22}
+for i in {1..22} X
 do
 snps=`grep "^SN" ${vcfchk_path}/${i}.vcf.gz.vchk| grep "number of SNPs"|cut -f 4`
 indels=`grep "^SN" ${vcfchk_path}/${i}.vcf.gz.vchk| grep "number of indels"|cut -f 4`
