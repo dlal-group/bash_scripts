@@ -83,6 +83,10 @@ case $MODE in
   #extract number of variants per sample belonging to a particular category (syn/missense eventually already stratified by novel/shared)
   /lustre/scratch113/projects/esgi-vbseq/20140430_purging/enza/listsites/miss
   ;;
+  ROHENR)
+    # check if ROH are enriched in deleterious mutations
+    #first select
+  ;;
   IBD )
     #Extract IBD information for each population. Here we are using plink2 (1.9)
     echo "Calculate IBD...."
