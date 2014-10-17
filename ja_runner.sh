@@ -448,6 +448,7 @@ file=`sed -n "${LSB_JOBINDEX}p" $1`
 #extract shared/private sites overlap with some categories
 #we need to work with each population
 cat=$2
+variants=$3
 filename=`basename ${file}`
 chr=`echo ${file#*CHR}| cut -f 1 -d "/"`
 
@@ -460,12 +461,12 @@ echo -e "Processing CHR${chr} \n category:${cat}\n"
 csq_file=/lustre/scratch113/projects/esgi-vbseq/20140430_purging/enza/listsites/${cat}/${cat}.${chr}.bed
 # csq_file=/lustre/scratch113/projects/esgi-vbseq/20140430_purging/UNRELATED/INPUT_FILES/FIVE_POPS/WG/listsites/${cat}/${cat}.${chr}.bed
 # mkdir -p  /lustre/scratch113/projects/esgi-vbseq/20140430_purging/UNRELATED/RESULTS/CONSEQUENCES/${cat}
-mkdir -p  /lustre/scratch113/projects/esgi-vbseq/20140430_purging/46_SAMPLES/RESULTS/CONSEQUENCES/${cat}
+mkdir -p  /lustre/scratch113/projects/esgi-vbseq/20140430_purging/46_SAMPLES/RESULTS/CONSEQUENCES/${cat}/${variants}
 # zcat ${file} | cut -f -4 | bedtools intersect -a ${csq_file} -b stdin -wa -wb | fgrep -v -w MULTI|fgrep -v -w INDEL > /lustre/scratch113/projects/esgi-vbseq/20140430_purging/UNRELATED/RESULTS/CONSEQUENCES/${cat}/${filename}.${cat}
-zcat ${file} | cut -f -4 | bedtools intersect -a ${csq_file} -b stdin -wa -wb | fgrep -v -w MULTI|fgrep -v -w INDEL > /lustre/scratch113/projects/esgi-vbseq/20140430_purging/46_SAMPLES/RESULTS/CONSEQUENCES/${cat}/${filename}.${cat}
+zcat ${file} | cut -f -4 | bedtools intersect -a ${csq_file} -b stdin -wa -wb | fgrep -v -w MULTI|fgrep -v -w INDEL > /lustre/scratch113/projects/esgi-vbseq/20140430_purging/46_SAMPLES/RESULTS/CONSEQUENCES/${cat}/${variants}/${filename}.${cat}
 
 # awk '{OFS="\t"}{print $1,$3,$3}' /lustre/scratch113/projects/esgi-vbseq/20140430_purging/UNRELATED/RESULTS/CONSEQUENCES/${cat}/${filename}.${cat} | sort -g -k1,1 -k2,2 > /lustre/scratch113/projects/esgi-vbseq/20140430_purging/UNRELATED/RESULTS/CONSEQUENCES/${cat}/${filename}.${cat}.regions
-awk '{OFS="\t"}{print $1,$3,$3}' /lustre/scratch113/projects/esgi-vbseq/20140430_purging/46_SAMPLES/RESULTS/CONSEQUENCES/${cat}/${filename}.${cat} | sort -g -k1,1 -k2,2 > /lustre/scratch113/projects/esgi-vbseq/20140430_purging/46_SAMPLES/RESULTS/CONSEQUENCES/${cat}/${filename}.${cat}.regions
+awk '{OFS="\t"}{print $1,$3,$3}' /lustre/scratch113/projects/esgi-vbseq/20140430_purging/46_SAMPLES/RESULTS/CONSEQUENCES/${cat}/${variants}/${filename}.${cat} | sort -g -k1,1 -k2,2 > /lustre/scratch113/projects/esgi-vbseq/20140430_purging/46_SAMPLES/RESULTS/CONSEQUENCES/${cat}/${variants}/${filename}.${cat}.regions
 echo -e "Generated regions file....\n"
 
 #extract for each category, a vcf file with data for populations
@@ -473,18 +474,18 @@ fil=${filename}.${cat}.regions
 # fil=CARL_private_chr10.merged_daf.tab.gz.miss.regions
 # pop=${fil%%_*}
 pop=`echo ${fil#*.merged_maf.tab.gz.} | cut -f 1 -d "."` #if it doesn't match the correct path, it gives back the whole name, which is formatted like POP.stuff [if you're lucky]
-mkdir -p VCF
+mkdir -p /lustre/scratch113/projects/esgi-vbseq/20140430_purging/46_SAMPLES/RESULTS/CONSEQUENCES/${cat}/${variants}/VCF
 if [[ $pop == "CAR" ]]; then
   pop="CARL"
 fi
 # /lustre/scratch113/projects/esgi-vbseq/20140430_purging/UNRELATED/INPUT_FILES/FIVE_POPS/WG/CHR13/INGI_chr13.merged_maf.tab.gz.FVG.private.tab.
 # bcftools view --phased -U -V indels -S /lustre/scratch113/projects/esgi-vbseq/20140430_purging/UNRELATED/listpop/${pop}_unrelated.list -R /lustre/scratch113/projects/esgi-vbseq/20140430_purging/UNRELATED/RESULTS/CONSEQUENCES/${cat}/${fil} /lustre/scratch113/projects/esgi-vbseq/20140430_purging/UNRELATED/POP_MERGED_FILES/FIVE_POPS/20140711_ANNOTATED/${chr}.vcf.gz -O z -o /lustre/scratch113/projects/esgi-vbseq/20140430_purging/UNRELATED/RESULTS/CONSEQUENCES/${cat}/VCF/${chr}.${fil}.vcf.gz
-bcftools view --phased -U -V indels -S /lustre/scratch113/projects/esgi-vbseq/20140430_purging/46_SAMPLES/listpop/${pop}_unrelated.list -R /lustre/scratch113/projects/esgi-vbseq/20140430_purging/46_SAMPLES/RESULTS/CONSEQUENCES/${cat}/${fil} /lustre/scratch113/projects/esgi-vbseq/20140430_purging/UNRELATED/POP_MERGED_FILES/FIVE_POPS/20140711_ANNOTATED/${chr}.vcf.gz -O z -o /lustre/scratch113/projects/esgi-vbseq/20140430_purging/46_SAMPLES/RESULTS/CONSEQUENCES/${cat}/VCF/${chr}.${fil}.vcf.gz
-tabix -p vcf /lustre/scratch113/projects/esgi-vbseq/20140430_purging/46_SAMPLES/RESULTS/CONSEQUENCES/${cat}/VCF/${chr}.${fil}.vcf.gz
+bcftools view --phased -U -V indels -S /lustre/scratch113/projects/esgi-vbseq/20140430_purging/46_SAMPLES/listpop/${pop}_unrelated.list -R /lustre/scratch113/projects/esgi-vbseq/20140430_purging/46_SAMPLES/RESULTS/CONSEQUENCES/${cat}/${variants}/${fil} /lustre/scratch113/projects/esgi-vbseq/20140430_purging/UNRELATED/POP_MERGED_FILES/FIVE_POPS/20140711_ANNOTATED/${chr}.vcf.gz -O z -o /lustre/scratch113/projects/esgi-vbseq/20140430_purging/46_SAMPLES/RESULTS/CONSEQUENCES/${cat}/${variants}/VCF/${chr}.${fil}.vcf.gz
+tabix -p vcf /lustre/scratch113/projects/esgi-vbseq/20140430_purging/46_SAMPLES/RESULTS/CONSEQUENCES/${cat}/${variants}/VCF/${chr}.${fil}.vcf.gz
 echo -e "Extracted sample's data in VCF format....\n"
 
 # outfile=/lustre/scratch113/projects/esgi-vbseq/20140430_purging/UNRELATED/RESULTS/CONSEQUENCES/${cat}/VCF/${chr}.${fil}.vcf.gz
-outfile=/lustre/scratch113/projects/esgi-vbseq/20140430_purging/46_SAMPLES/RESULTS/CONSEQUENCES/${cat}/VCF/${chr}.${fil}.vcf.gz
+outfile=/lustre/scratch113/projects/esgi-vbseq/20140430_purging/46_SAMPLES/RESULTS/CONSEQUENCES/${cat}/${variants}/VCF/${chr}.${fil}.vcf.gz
 #now extract genotypes for each sample 
 ( (echo -e "CHROM\nPOS\nREF\nALT\nAC\nAN\n";bcftools query -l ${outfile})| tr "\n" "\t";echo "";bcftools query -f '%CHROM\t%POS\t%REF\t%ALT\t%AC\t%AN[\t%GT]\n' ${outfile} ) > ${outfile}.tab
 
