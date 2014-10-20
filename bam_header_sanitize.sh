@@ -5,6 +5,8 @@
 #
 bam_path=$1
 out_path=$2
+old_id=$3
+new_id=$4
 
 mkdir -p ${out_path}
 
@@ -17,7 +19,7 @@ bam_name=`basename ${bam_path}`
 samtools view -H ${bam_path} > ${out_path}/${bam_name}.header
 
 #sanitize header
-sed 's/CL:$//g' ${out_path}/${bam_name}.header > ${out_path}/${bam_name}.header.sanitized
+sed "s/@RG	ID:${old_id}	SM:${old_id}/@RG	ID:${new_id}	SM:${new_id}/g" ${out_path}/${bam_name}.header > ${out_path}/${bam_name}.header.sanitized
 
 #rehead the bam files
 samtools reheader ${out_path}/${bam_name}.header.sanitized ${bam_path} > ${out_path}/${bam_name}.reheaded.bam
