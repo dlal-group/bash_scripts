@@ -1,4 +1,4 @@
-#!/usr/local/bin/bash
+#!/bin/bash
 #
 #
 #Script to rehead bam files and remove empty CL: field from header
