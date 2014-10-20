@@ -59,10 +59,10 @@ then
 	#if we already have all the chr files we need no dependecies for vqsr job
         touch $OUTF/1.call.done
 	echo "Launch VQSR step"
-	qsub -N "multicall_VQSR" -o "$2/LOGS/multicall_VQSR.o" -e "$2/LOGS/multicall_VQSR.e" -l h_rt=80:00:00 -l virtual_free=16Gb -cwd -q long /nfs/users/xe/ggirotto/max/scripts/bash_scripts/multisample_crg_vqsr.sh $2
+	qsub -N "multicall_VQSR" -o "$2/LOGS/multicall_VQSR.o" -e "$2/LOGS/multicall_VQSR.e" -l h_rt=80:00:00 -l virtual_free=16Gb -cwd -q xe-el6 /nfs/users/xe/ggirotto/max/scripts/bash_scripts/multisample_crg_vqsr.sh $2
 else
 	echo "Launch VQSR step"
-	qsub -N "multicall_VQSR" -o "$2/LOGS/multicall_VQSR.o" -e "$2/LOGS/multicall_VQSR.e" -hold_jid "chr*_multicall" -l h_rt=80:00:00 -l virtual_free=16Gb -cwd -q long /nfs/users/xe/ggirotto/max/scripts/bash_scripts/multisample_crg_vqsr.sh $2
+	qsub -N "multicall_VQSR" -o "$2/LOGS/multicall_VQSR.o" -e "$2/LOGS/multicall_VQSR.e" -hold_jid "chr*_multicall" -l h_rt=80:00:00 -l virtual_free=16Gb -cwd -q xe-el6 /nfs/users/xe/ggirotto/max/scripts/bash_scripts/multisample_crg_vqsr.sh $2
 fi
 
 
