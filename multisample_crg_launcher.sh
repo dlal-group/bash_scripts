@@ -32,7 +32,7 @@ do
 		echo ${reg_file}
 		#echo "echo \"bash $1/multisample_crg_call.sh ${chr} ${reg_file}\" | qsub -N \"chr${chr}_multicall\" -o \"${log}/chr${chr}_multicall.o\" -e \"${log}/chr${chr}_multicall.e\" -l h_rt=200:00:00 -l h_vmem=30Gb -cwd -q long" > $1/${chr}/.jobs/${chr}_r${reg}_job.sh
 		#echo "echo \"bash /nfs/users/xe/ggirotto/multisample/scripts/multisample_crg_call.sh ${chr} ${reg_file}\" | qsub -N \"chr${chr}_multicall\" -o \"${log}/chr${chr}_multicall.o\" -e \"${log}/chr${chr}_multicall.e\" -l h_rt=200:00:00 -l virtual_free=20Gb -cwd -q long -pe smp 8" > $1/${chr}/.jobs/${chr}_job.sh
-		echo "echo \"bash /nfs/users/xe/ggirotto/multisample/scripts/multisample_crg_call.sh ${chr} ${reg_file} $1 $2\" | qsub -N \"chr${chr}_multicall\" -o \"${log}/chr${chr}_multicall.o\" -e \"${log}/chr${chr}_multicall.e\" -l h_rt=200:00:00 -l virtual_free=40Gb -cwd -q xe-el6 -pe smp 8" > $2/${chr}/.jobs/${chr}_job.sh
+		echo "echo \"bash multisample_crg_call.sh ${chr} ${reg_file} $1 $2\" | qsub -N \"chr${chr}_multicall\" -o \"${log}/chr${chr}_multicall.o\" -e \"${log}/chr${chr}_multicall.e\" -l h_rt=200:00:00 -l virtual_free=40Gb -cwd -q xe-el6 -pe smp 8" > $2/${chr}/.jobs/${chr}_job.sh
 		if [ ! -f $OUTF/${chr}.multisampleinitial.allregions.snps.done ]
 		then
 			echo ${OUTF}
@@ -44,7 +44,7 @@ do
 done
 
 #now we need to launch the concat jobs for each chr
-	#qsub -N "test_multicall_concat_chr${chr}" -o "${log}/test_multicall_concat_chr${chr}.$JOB_ID.o" -e "${log}/test_multicall_concat_chr${chr}.$JOB_ID.e"  -hold_jid "chr${chr}_multicall" -l h_rt=80:00:00 -l virtual_free=16Gb -cwd -q long /nfs/users/xe/ggirotto/multisample/scripts/multisample_crg_chr_concat.sh ${chr} $1
+#qsub -N "test_multicall_concat_chr${chr}" -o "${log}/test_multicall_concat_chr${chr}.$JOB_ID.o" -e "${log}/test_multicall_concat_chr${chr}.$JOB_ID.e"  -hold_jid "chr${chr}_multicall" -l h_rt=80:00:00 -l virtual_free=16Gb -cwd -q long /nfs/users/xe/ggirotto/multisample/scripts/multisample_crg_chr_concat.sh ${chr} $1
 #	qsub -N "test_multicall_concat_chr${chr}" -o "${log}/test_multicall_concat_chr${chr}.o" -e "${log}/test_multicall_concat_chr${chr}.e" -l h_rt=80:00:00 -cwd -q long ./multisample_crg_chr_concat.sh ${chr}
 #done
 
@@ -59,10 +59,10 @@ then
 	#if we already have all the chr files we need no dependecies for vqsr job
         touch $OUTF/1.call.done
 	echo "Launch VQSR step"
-	qsub -N "multicall_VQSR" -o "$2/LOGS/multicall_VQSR.o" -e "$2/LOGS/multicall_VQSR.e" -l h_rt=80:00:00 -l virtual_free=16Gb -cwd -q long /nfs/users/xe/ggirotto/multisample/scripts/multisample_crg_vqsr.sh $2
+	qsub -N "multicall_VQSR" -o "$2/LOGS/multicall_VQSR.o" -e "$2/LOGS/multicall_VQSR.e" -l h_rt=80:00:00 -l virtual_free=16Gb -cwd -q long multisample_crg_vqsr.sh $2
 else
 	echo "Launch VQSR step"
-	qsub -N "multicall_VQSR" -o "$2/LOGS/multicall_VQSR.o" -e "$2/LOGS/multicall_VQSR.e" -hold_jid "chr*_multicall" -l h_rt=80:00:00 -l virtual_free=16Gb -cwd -q long /nfs/users/xe/ggirotto/multisample/scripts/multisample_crg_vqsr.sh $2
+	qsub -N "multicall_VQSR" -o "$2/LOGS/multicall_VQSR.o" -e "$2/LOGS/multicall_VQSR.e" -hold_jid "chr*_multicall" -l h_rt=80:00:00 -l virtual_free=16Gb -cwd -q long multisample_crg_vqsr.sh $2
 fi
 
 
