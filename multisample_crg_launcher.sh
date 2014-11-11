@@ -35,11 +35,11 @@ do
 	echo ${reg_file}
 	#echo "echo \"bash $1/multisample_crg_call.sh ${chr} ${reg_file}\" | qsub -N \"chr${chr}_multicall\" -o \"${log}/chr${chr}_multicall.o\" -e \"${log}/chr${chr}_multicall.e\" -l h_rt=200:00:00 -l h_vmem=30Gb -cwd -q long" > $1/${chr}/.jobs/${chr}_r${reg}_job.sh
 	#echo "echo \"bash /nfs/users/xe/ggirotto/multisample/scripts/multisample_crg_call.sh ${chr} ${reg_file}\" | qsub -N \"chr${chr}_multicall\" -o \"${log}/chr${chr}_multicall.o\" -e \"${log}/chr${chr}_multicall.e\" -l h_rt=200:00:00 -l virtual_free=20Gb -cwd -q long -pe smp 8" > $1/${chr}/.jobs/${chr}_job.sh
-	echo "echo \"bash multisample_crg_call.sh ${chr} ${reg_file} $1 ${OUTF} \$1\" | qsub -N \"chr${chr}_multicall\" -o \"${log}/chr${chr}_multicall.o\" -e \"${log}/chr${chr}_multicall.e\" -l h_rt=200:00:00 -l virtual_free=40Gb -cwd -q xe-el6 -pe smp 8" > $2/${chr}/.jobs/${chr}_job.sh
+	echo "echo \"bash multisample_crg_call.sh ${chr} ${reg_file} $1 ${OUTF} ${TYPE}\" | qsub -N \"chr${chr}_multicall\" -o \"${log}/chr${chr}_multicall.o\" -e \"${log}/chr${chr}_multicall.e\" -l h_rt=200:00:00 -l virtual_free=40Gb -cwd -q xe-el6 -pe smp 8" > $2/${chr}/.jobs/${chr}_job.${TYPE}.sh
 	if [ ! -f $OUTF/${chr}.multisampleinitial.allregions.${TYPE}.done ]
 	then
 		echo ${OUTF}
-		bash $2/${chr}/.jobs/${chr}_job.sh ${TYPE}
+		bash $2/${chr}/.jobs/${chr}_job.${TYPE}.sh
 	else
 		echo "Chr ${chr} already successfully processed for ${TYPE}s!"
 	fi
