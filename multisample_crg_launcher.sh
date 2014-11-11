@@ -35,7 +35,7 @@ do
 	echo ${reg_file}
 	#echo "echo \"bash $1/multisample_crg_call.sh ${chr} ${reg_file}\" | qsub -N \"chr${chr}_multicall\" -o \"${log}/chr${chr}_multicall.o\" -e \"${log}/chr${chr}_multicall.e\" -l h_rt=200:00:00 -l h_vmem=30Gb -cwd -q long" > $1/${chr}/.jobs/${chr}_r${reg}_job.sh
 	#echo "echo \"bash /nfs/users/xe/ggirotto/multisample/scripts/multisample_crg_call.sh ${chr} ${reg_file}\" | qsub -N \"chr${chr}_multicall\" -o \"${log}/chr${chr}_multicall.o\" -e \"${log}/chr${chr}_multicall.e\" -l h_rt=200:00:00 -l virtual_free=20Gb -cwd -q long -pe smp 8" > $1/${chr}/.jobs/${chr}_job.sh
-	echo "echo \"bash multisample_crg_call.sh ${chr} ${reg_file} $1 ${OUTF} ${TYPE}\" | qsub -N \"chr${chr}_multicall\" -o \"${log}/chr${chr}_multicall.o\" -e \"${log}/chr${chr}_multicall.e\" -l h_rt=200:00:00 -l vf=40Gb -cwd -q xe-el6 -pe smp 8" > $2/${chr}/.jobs/${chr}_job.${TYPE}.sh
+	echo "echo \"bash multisample_crg_call.sh ${chr} ${reg_file} $1 ${OUTF} ${TYPE}\" | qsub -N \"chr${chr}_multicall\" -o \"${log}/chr${chr}_multicall.o\" -e \"${log}/chr${chr}_multicall.e\" -l h_rt=200:00:00 -l vf=40G -cwd -q xe-el6 -pe smp 8" > $2/${chr}/.jobs/${chr}_job.${TYPE}.sh
 	if [ ! -f $OUTF/${chr}.multisampleinitial.allregions.${TYPE}.done ]
 	then
 		echo ${OUTF}
@@ -63,8 +63,8 @@ then
 	#if we already have all the chr files we need no dependecies for vqsr job
   touch $OUTF/1.call.${TYPE}.done
 	echo "Launch VQSR step"
-	qsub -N "multicall_VQSR" -o "$2/LOGS/multicall_VQSR.o" -e "$2/LOGS/multicall_VQSR.e" -l h_rt=80:00:00 -l vf=16Gb -cwd -q xe-el6 /nfs/users/xe/ggirotto/max/scripts/bash_scripts/multisample_crg_vqsr.sh $2 ${TYPE}
+	qsub -N "multicall_VQSR" -o "$2/LOGS/multicall_VQSR.o" -e "$2/LOGS/multicall_VQSR.e" -l h_rt=80:00:00 -l vf=16G -cwd -q xe-el6 /nfs/users/xe/ggirotto/max/scripts/bash_scripts/multisample_crg_vqsr.sh $2 ${TYPE}
 else
 	echo "Launch VQSR step"
-	qsub -N "multicall_VQSR" -o "$2/LOGS/multicall_VQSR.o" -e "$2/LOGS/multicall_VQSR.e" -hold_jid "chr*_multicall" -l h_rt=80:00:00 -l vf=16Gb -cwd -q xe-el6 /nfs/users/xe/ggirotto/max/scripts/bash_scripts/multisample_crg_vqsr.sh $2 ${TYPE}
+	qsub -N "multicall_VQSR" -o "$2/LOGS/multicall_VQSR.o" -e "$2/LOGS/multicall_VQSR.e" -hold_jid "chr*_multicall" -l h_rt=80:00:00 -l vf=16G -cwd -q xe-el6 /nfs/users/xe/ggirotto/max/scripts/bash_scripts/multisample_crg_vqsr.sh $2 ${TYPE}
 fi
