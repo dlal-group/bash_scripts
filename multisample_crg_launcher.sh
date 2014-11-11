@@ -1,7 +1,7 @@
 #!/bin/bash
 
 #script to submit multicall jobs in batches with dependency
-if [ $# -lt 1 ]
+if [ $# -lt 3 ]
 then
 	echo "ATTENTION!!Missing argument!!!"
 	echo "Usage: "
