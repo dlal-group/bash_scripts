@@ -56,6 +56,7 @@ done
 
 #check if we have all chr called:
 chr_num=`ls ${OUTF}/*.multisampleinitial.allregions.${TYPE}.done | wc -l`
+echo "Done ${chr_num} chr!"
    
 if [ ${chr_num} -eq "23" ]
 then
