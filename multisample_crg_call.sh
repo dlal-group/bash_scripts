@@ -2,12 +2,21 @@
 
 #modified script to work using region for calling the chromosome,so we can work in parallel
 
-reg=$2
 chr=$1
+reg=$2
+## file containing all the bams
+#BAMS=/nfs/users/xe/ggirotto/multisample/all_pooled.list
+BAMS=$3
+
+#out folder
 OUTF=$4
+
+#variant type
+VARTYPE=$5
 
 echo $reg
 echo $chr
+echo ${VARTYPE}
 echo ${OUTF}
 
 mkdir -p ${OUTF}/${chr}
@@ -24,10 +33,6 @@ PROBE=${reg}
 GATKRS=/users/GD/resource/human/hg19/databases/GATK_resources/bundle/2.8/hg19
 CPU=8
 
-## file containing all the bams
-#BAMS=/nfs/users/xe/ggirotto/multisample/all_pooled.list
-BAMS=$3
-
 ## GATK initial multisample call
 
 #java -jar $GATK -U LENIENT_VCF_PROCESSING -l INFO -R $REF -T UnifiedGenotyper -I $OUTF/$BAMS -nt $CPU -o $OUTF/${chr}/1.mutisampleInitialCall_r${reg}.vcf -A DepthPerAlleleBySample -A QualByDepth -A HaplotypeScore -A MappingQualityRankSumTest -A ReadPosRankSumTest -A FisherStrand -A InbreedingCoeff -A Coverage --intervals $PROBE -glm BOTH
@@ -36,10 +41,10 @@ java -jar $GATK -U LENIENT_VCF_PROCESSING -l INFO -R $REF -T UnifiedGenotyper -I
 ## Seprate SNPs and INDELs from main multisample call vcf file
 
 #java -jar $GATK -R $REF -T SelectVariants --variant $OUTF/${chr}/1.mutisampleInitialCall_r${reg}.vcf -o $OUTF/${chr}/2.multisampleinitial.allregions.snps.r${reg}.vcf -selectType SNP
-java -jar $GATK -R $REF -T SelectVariants --variant $OUTF/${chr}/1.mutisampleInitialCall_all.vcf -o $OUTF/${chr}.multisampleinitial.allregions.snps.vcf -selectType SNP
+# java -jar $GATK -R $REF -T SelectVariants --variant $OUTF/${chr}/1.mutisampleInitialCall_all.vcf -o $OUTF/${chr}.multisampleinitial.allregions.indels.vcf -selectType INDEL
+java -jar $GATK -R $REF -T SelectVariants --variant $OUTF/${chr}/1.mutisampleInitialCall_all.vcf -o $OUTF/${chr}.multisampleinitial.allregions.${VARTYPE}.vcf -selectType ${VARTYPE}
 
-if [ -s $OUTF/${chr}.multisampleinitial.allregions.snps.vcf ]
+if [ -s $OUTF/${chr}.multisampleinitial.allregions.${VARTYPE}.vcf ]
 then
-	touch $OUTF/${chr}.multisampleinitial.allregions.snps.done
+	touch $OUTF/${chr}.multisampleinitial.allregions.${VARTYPE}.done
 fi
-
