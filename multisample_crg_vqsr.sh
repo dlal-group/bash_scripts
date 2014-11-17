@@ -33,10 +33,10 @@ then
   for c in {1..22} X
   do
   ls $OUTF/${c}.multisampleinitial.allregions.${VARTYPE}.vcf
-  done > $OUTF/all_vcf.list
+  done > $OUTF/all_vcf.${VARTYPE}.list
 
   ##concat all files together
-  vcf-concat -f $OUTF/all_vcf.list > $OUTF/All.multisampleinitial.allregions.${VARTYPE}.vcf
+  vcf-concat -f $OUTF/all_vcf.${VARTYPE}.list > $OUTF/All.multisampleinitial.allregions.${VARTYPE}.vcf
   echo "Created concat file for ${VARTYPE}.."
 
   ## Variant Recalibration : we need to use different criteria for SNPs and INDELs
@@ -49,7 +49,8 @@ then
       -U LENIENT_VCF_PROCESSING --maxGaussians 6 \
       -resource:hapmap,known=false,training=true,truth=true,prior=15.0 $GATKRS/hapmap_3.3.hg19.vcf \
       -resource:omni,known=false,training=true,truth=true,prior=12.0 $GATKRS/1000G_omni2.5.hg19.vcf \
-      -resource:dbsnp,known=true,training=false,truth=false,prior=6.0 $GATKRS/dbsnp_138.hg19.excluding_sites_after_129.vcf \
+      # -resource:dbsnp,known=true,training=false,truth=false,prior=6.0 $GATKRS/dbsnp_138.hg19.excluding_sites_after_129.vcf \
+      -resource:dbsnp,known=true,training=false,truth=false,prior=6.0 /nfs/users/xe/ggirotto/annotations/dbsnp_138.hg19.excluding_sites_after_129.vcf.gz \
       -resource:1000g,known=false,training=true,truth=false,prior=10.0 $GATKRS/1000G_phase1.snps.high_confidence.hg19.vcf \
       -an QD -an HaplotypeScore -an MQRankSum -an ReadPosRankSum -an FS -an MQ -an InbreedingCoeff \
       -mode ${VARTYPE} \
@@ -63,7 +64,8 @@ then
       -tranchesFile $OUTF/All.multisampleinitial.allregions.${VARTYPE}.vcf.tranches \
       -U LENIENT_VCF_PROCESSING --maxGaussians 6 \
       -resource:mills,VCF,known=true,training=true,truth=true,prior=12.0 $GATKRS/Mills_and_1000G_gold_standard.indels.hg19.vcf \
-      -resource:dbsnp,known=true,training=false,truth=false,prior=2.0 $GATKRS/dbsnp_138.hg19.excluding_sites_after_129.vcf \
+      # -resource:dbsnp,known=true,training=false,truth=false,prior=2.0 $GATKRS/dbsnp_138.hg19.excluding_sites_after_129.vcf \
+      -resource:dbsnp,known=true,training=false,truth=false,prior=2.0 /nfs/users/xe/ggirotto/annotations/dbsnp_138.hg19.excluding_sites_after_129.vcf.gz \
       -an DP -an FS -an ReadPosRankSum -an MQRankSum \
       -mode ${VARTYPE} --target_titv 3.0 \
       -tranche 10 -tranche 15 -tranche 20 -tranche 25 -tranche 30 -tranche 35 -tranche 40 -tranche 45 -tranche 50 -tranche 55 -tranche 60 -tranche 65 -tranche 70 -tranche 75 -tranche 80 -tranche 85 -tranche 90 -tranche 95 -tranche 98.0 -tranche 99.0 --tranche 99.9 -tranche 100
