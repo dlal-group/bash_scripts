@@ -62,7 +62,7 @@ java -jar $GATK \
 --target_titv 3.0 \
 -tranche 70.0 -tranche 71.0 -tranche 72.0 -tranche 73.0 -tranche 74.0 -tranche 75.0 -tranche 76.0 -tranche 77.0 -tranche 78.0 -tranche 79.0 -tranche 80.0 -tranche 81.0 -tranche 82.0 -tranche 83.0 -tranche 84.0 -tranche 85.0 -tranche 86.0 -tranche 87.0 -tranche 88.0 -tranche 89.0 -tranche 90.0 -tranche 91.0 -tranche 92.0 -tranche 93.0 -tranche 94.0 -tranche 95.0 -tranche 96.0 -tranche 96.2 -tranche 96.4 -tranche 96.6 -tranche 96.8 -tranche 97.0 -tranche 97.2 -tranche 97.4 -tranche 97.6 -tranche 97.8 -tranche 98.0 -tranche 98.2 -tranche 98.4 -tranche 98.6 -tranche 98.8 -tranche 99.0 -tranche 99.2 -tranche 99.4 -tranche 99.6 -tranche 99.8 -tranche 100.0 \
 --rscript_file $OUTF/All.multisampleinitial.allregions.${VARTYPE}.r
-      # -resource:dbsnp,known=true,training=false,truth=false,prior=6.0 $GATKRS/dbsnp_138.hg19.excluding_sites_after_129.vcf \
+# -resource:dbsnp,known=true,training=false,truth=false,prior=6.0 $GATKRS/dbsnp_138.hg19.excluding_sites_after_129.vcf \
     ;;
     INDEL)
 java -jar $GATK \
@@ -72,7 +72,7 @@ java -jar $GATK \
 -U LENIENT_VCF_PROCESSING --maxGaussians 6 \
 -resource:mills,VCF,known=true,training=true,truth=true,prior=12.0 $GATKRS/Mills_and_1000G_gold_standard.indels.hg19.vcf \
 -resource:dbsnp,known=true,training=false,truth=false,prior=2.0 /nfs/users/xe/ggirotto/annotations/dbsnp_138.hg19.excluding_sites_after_129.vcf.gz \
--an DP -an FS -an ReadPosRankSum -an MQRankSum \
+-an QD -an FS -an ReadPosRankSum -an MQRankSum \
 -mode ${VARTYPE} --target_titv 3.0 \
 -tranche 10 -tranche 15 -tranche 20 -tranche 25 -tranche 30 -tranche 35 -tranche 40 -tranche 45 -tranche 50 -tranche 55 -tranche 60 -tranche 65 -tranche 70 -tranche 75 -tranche 80 -tranche 85 -tranche 90 -tranche 95 -tranche 98.0 -tranche 99.0 --tranche 99.9 -tranche 100 \
 --rscript_file $OUTF/All.multisampleinitial.allregions.${VARTYPE}.r

@@ -37,10 +37,17 @@ CPU=8
 
 #java -jar $GATK -U LENIENT_VCF_PROCESSING -l INFO -R $REF -T UnifiedGenotyper -I $OUTF/$BAMS -nt $CPU -o $OUTF/${chr}/1.mutisampleInitialCall_r${reg}.vcf -A DepthPerAlleleBySample -A QualByDepth -A HaplotypeScore -A MappingQualityRankSumTest -A ReadPosRankSumTest -A FisherStrand -A InbreedingCoeff -A Coverage --intervals $PROBE -glm BOTH
 #use old UnifiedGenotyper method
-java -jar $GATK -U LENIENT_VCF_PROCESSING -l INFO -R $REF -T UnifiedGenotyper -I $BAMS -nt $CPU -o $OUTF/${chr}/1.mutisampleInitialCall_all.vcf -A DepthPerAlleleBySample -A QualByDepth -A HaplotypeScore -A MappingQualityRankSumTest -A ReadPosRankSumTest -A FisherStrand -A InbreedingCoeff -A Coverage --intervals $PROBE -glm BOTH
+java -jar $GATK -U LENIENT_VCF_PROCESSING -l INFO -R $REF -T UnifiedGenotyper \
+-I $BAMS \
+-nt $CPU \
+-o $OUTF/${chr}/1.mutisampleInitialCall_all.vcf \
+-A DepthPerAlleleBySample -A QualByDepth -A HaplotypeScore \
+-A MappingQualityRankSumTest -A ReadPosRankSumTest -A FisherStrand \
+-A InbreedingCoeff -A Coverage \
+--intervals $PROBE -glm BOTH
 
 #use new Haplotype caller in gVCF mode
-java -jar $GATK -U LENIENT_VCF_PROCESSING -l INFO -R $REF -T UnifiedGenotyper -I $BAMS -nt $CPU -o $OUTF/${chr}/1.mutisampleInitialCall_all.vcf -A DepthPerAlleleBySample -A QualByDepth -A HaplotypeScore -A MappingQualityRankSumTest -A ReadPosRankSumTest -A FisherStrand -A InbreedingCoeff -A Coverage --intervals $PROBE -glm BOTH
+#java -jar $GATK -U LENIENT_VCF_PROCESSING -l INFO -R $REF -T UnifiedGenotyper -I $BAMS -nt $CPU -o $OUTF/${chr}/1.mutisampleInitialCall_all.vcf -A DepthPerAlleleBySample -A QualByDepth -A HaplotypeScore -A MappingQualityRankSumTest -A ReadPosRankSumTest -A FisherStrand -A InbreedingCoeff -A Coverage --intervals $PROBE -glm BOTH
 
 ## Seprate SNPs and INDELs from main multisample call vcf file
 
