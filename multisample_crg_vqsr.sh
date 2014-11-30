@@ -36,14 +36,14 @@ then
   done > $OUTF/all_vcf.${VARTYPE}.list
 
   ##concat all files together
-  if [ ! -s $OUTF/All.multisampleinitial.allregions.${VARTYPE}.vcf ]
-  then
-    echo "Already created concat file for ${VARTYPE}.."
-  else
+  #if [ ! -s $OUTF/All.multisampleinitial.allregions.${VARTYPE}.vcf ]
+  #then
+    #echo "Already created concat file for ${VARTYPE}.."
+  #else
     echo "Create concat file for ${VARTYPE}.."
     bcftools2 concat -f $OUTF/all_vcf.${VARTYPE}.list -O v -o $OUTF/All.multisampleinitial.allregions.${VARTYPE}.vcf
     echo "..DONE!"
-  fi
+  #fi
 
   ## Variant Recalibration : we need to use different criteria for SNPs and INDELs
   case ${VARTYPE} in
