@@ -51,7 +51,7 @@ then
 java -jar $GATK \
 -T VariantRecalibrator -R $REF -input $OUTF/All.multisampleinitial.allregions.${VARTYPE}.vcf \
 -recalFile $OUTF/All.multisampleinitial.allregions.${VARTYPE}.vcf.recal \
--tranchesFile $OUTF/All.multisampleinitial.allregions.${VARTYPE}.vcf.tranches \
+--TStranchesFile $OUTF/All.multisampleinitial.allregions.${VARTYPE}.vcf.tranches \
 -U LENIENT_VCF_PROCESSING --maxGaussians 6 \
 -resource:hapmap,known=false,training=true,truth=true,prior=15.0 $GATKRS/hapmap_3.3.hg19.vcf \
 -resource:omni,known=false,training=true,truth=true,prior=12.0 $GATKRS/1000G_omni2.5.hg19.vcf \
@@ -60,7 +60,7 @@ java -jar $GATK \
 -an QD -an HaplotypeScore -an MQRankSum -an ReadPosRankSum -an FS -an MQ -an InbreedingCoeff \
 -mode ${VARTYPE} \
 --target_titv 3.0 \
--tranche 70.0 -tranche 71.0 -tranche 72.0 -tranche 73.0 -tranche 74.0 -tranche 75.0 -tranche 76.0 -tranche 77.0 -tranche 78.0 -tranche 79.0 -tranche 80.0 -tranche 81.0 -tranche 82.0 -tranche 83.0 -tranche 84.0 -tranche 85.0 -tranche 86.0 -tranche 87.0 -tranche 88.0 -tranche 89.0 -tranche 90.0 -tranche 91.0 -tranche 92.0 -tranche 93.0 -tranche 94.0 -tranche 95.0 -tranche 96.0 -tranche 96.2 -tranche 96.4 -tranche 96.6 -tranche 96.8 -tranche 97.0 -tranche 97.2 -tranche 97.4 -tranche 97.6 -tranche 97.8 -tranche 98.0 -tranche 98.2 -tranche 98.4 -tranche 98.6 -tranche 98.8 -tranche 99.0 -tranche 99.2 -tranche 99.4 -tranche 99.6 -tranche 99.8 -tranche 100.0 \
+--TStranche 70.0 --TStranche 71.0 --TStranche 72.0 --TStranche 73.0 --TStranche 74.0 --TStranche 75.0 --TStranche 76.0 --TStranche 77.0 --TStranche 78.0 --TStranche 79.0 --TStranche 80.0 --TStranche 81.0 --TStranche 82.0 --TStranche 83.0 --TStranche 84.0 --TStranche 85.0 --TStranche 86.0 --TStranche 87.0 --TStranche 88.0 --TStranche 89.0 --TStranche 90.0 --TStranche 91.0 --TStranche 92.0 --TStranche 93.0 --TStranche 94.0 --TStranche 95.0 --TStranche 96.0 --TStranche 96.2 --TStranche 96.4 --TStranche 96.6 --TStranche 96.8 --TStranche 97.0 --TStranche 97.2 --TStranche 97.4 --TStranche 97.6 --TStranche 97.8 --TStranche 98.0 --TStranche 98.2 --TStranche 98.4 --TStranche 98.6 --TStranche 98.8 --TStranche 99.0 --TStranche 99.2 --TStranche 99.4 --TStranche 99.6 --TStranche 99.8 --TStranche 100.0 \
 --rscript_file $OUTF/All.multisampleinitial.allregions.${VARTYPE}.r
 # -resource:dbsnp,known=true,training=false,truth=false,prior=6.0 $GATKRS/dbsnp_138.hg19.excluding_sites_after_129.vcf \
     ;;
@@ -68,13 +68,13 @@ java -jar $GATK \
 java -jar $GATK \
 -T VariantRecalibrator -R $REF -input $OUTF/All.multisampleinitial.allregions.${VARTYPE}.vcf \
 -recalFile $OUTF/All.multisampleinitial.allregions.${VARTYPE}.vcf.recal \
--tranchesFile $OUTF/All.multisampleinitial.allregions.${VARTYPE}.vcf.tranches \
+--TStranchesFile $OUTF/All.multisampleinitial.allregions.${VARTYPE}.vcf.tranches \
 -U LENIENT_VCF_PROCESSING --maxGaussians 6 \
 -resource:mills,VCF,known=true,training=true,truth=true,prior=12.0 $GATKRS/Mills_and_1000G_gold_standard.indels.hg19.vcf \
 -resource:dbsnp,known=true,training=false,truth=false,prior=2.0 /nfs/users/xe/ggirotto/annotations/dbsnp_138.hg19.excluding_sites_after_129.vcf.gz \
 -an QD -an FS -an ReadPosRankSum -an MQRankSum \
 -mode ${VARTYPE} --target_titv 3.0 \
--tranche 10 -tranche 15 -tranche 20 -tranche 25 -tranche 30 -tranche 35 -tranche 40 -tranche 45 -tranche 50 -tranche 55 -tranche 60 -tranche 65 -tranche 70 -tranche 75 -tranche 80 -tranche 85 -tranche 90 -tranche 95 -tranche 98.0 -tranche 99.0 --tranche 99.9 -tranche 100 \
+--TStranche 10 --TStranche 15 --TStranche 20 --TStranche 25 --TStranche 30 --TStranche 35 --TStranche 40 --TStranche 45 --TStranche 50 --TStranche 55 --TStranche 60 --TStranche 65 --TStranche 70 --TStranche 75 --TStranche 80 --TStranche 85 --TStranche 90 --TStranche 95 --TStranche 98.0 --TStranche 99.0 ---TStranche 99.9 --TStranche 100 \
 --rscript_file $OUTF/All.multisampleinitial.allregions.${VARTYPE}.r
 # -resource:dbsnp,known=true,training=false,truth=false,prior=2.0 $GATKRS/dbsnp_138.hg19.excluding_sites_after_129.vcf \
     ;;
@@ -86,7 +86,7 @@ java -jar $GATK \
     ## Apply Recalibration
     echo "Apply Recalibration on ${VARTYPE} data.."
 
-    java -jar $GATK -T ApplyRecalibration -R $REF -input $OUTF/All.multisampleinitial.allregions.${VARTYPE}.vcf -tranchesFile $OUTF/All.multisampleinitial.allregions.${VARTYPE}.vcf.tranches -recalFile $OUTF/All.multisampleinitial.allregions.${VARTYPE}.vcf.recal -o $OUTF/All.multisampleinitial.allregions.${VARTYPE}.recalibrated.filtered.vcf -ts_filter_level 99.0 -mode ${VARTYPE}
+    java -jar $GATK -T ApplyRecalibration -R $REF -input $OUTF/All.multisampleinitial.allregions.${VARTYPE}.vcf --TStranchesFile $OUTF/All.multisampleinitial.allregions.${VARTYPE}.vcf.tranches -recalFile $OUTF/All.multisampleinitial.allregions.${VARTYPE}.vcf.recal -o $OUTF/All.multisampleinitial.allregions.${VARTYPE}.recalibrated.filtered.vcf -ts_filter_level 99.0 -mode ${VARTYPE}
     ## grep PASS snps from the recalibration
     egrep 'PASS|^#' $OUTF/All.multisampleinitial.allregions.${VARTYPE}.recalibrated.filtered.vcf > $OUTF/All.multisampleinitial.allregions.${VARTYPE}.recalibrated.filtered.clean.vcf
     
