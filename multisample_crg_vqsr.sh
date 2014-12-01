@@ -69,7 +69,7 @@ java -jar $GATK \
 java -jar $GATK \
 -T VariantRecalibrator -R $REF -input $OUTF/All.multisampleinitial.allregions.${VARTYPE}.vcf \
 -recalFile $OUTF/All.multisampleinitial.allregions.${VARTYPE}.vcf.recal \
---tranchesFile $OUTF/All.multisampleinitial.allregions.${VARTYPE}.vcf.tranches \
+-tranchesFile $OUTF/All.multisampleinitial.allregions.${VARTYPE}.vcf.tranches \
 -U LENIENT_VCF_PROCESSING --maxGaussians 6 \
 -resource:mills,VCF,known=true,training=true,truth=true,prior=12.0 $GATKRS/Mills_and_1000G_gold_standard.indels.hg19.vcf \
 -resource:dbsnp,known=true,training=false,truth=false,prior=2.0 /nfs/users/xe/ggirotto/annotations/dbsnp_138.hg19.excluding_sites_after_129.vcf.gz \
