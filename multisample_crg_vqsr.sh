@@ -44,7 +44,8 @@ then
     bcftools2 concat -f $OUTF/all_vcf.${VARTYPE}.list -O v -o $OUTF/All.multisampleinitial.allregions.${VARTYPE}.vcf
     echo "..DONE!"
   #fi
-
+if [ ! -s $OUTF/All.multisampleinitial.allregions.${VARTYPE}.vcf.tranches ]
+then
   ## Variant Recalibration : we need to use different criteria for SNPs and INDELs
   case ${VARTYPE} in
     SNP)
@@ -79,8 +80,8 @@ java -jar $GATK \
 # -resource:dbsnp,known=true,training=false,truth=false,prior=2.0 $GATKRS/dbsnp_138.hg19.excluding_sites_after_129.vcf \
     ;;
   esac
-
-  if [ ! -s $OUTF/All.multisampleinitial.allregions.${VARTYPE}.vcf.tranches ]
+fi
+  if [ -s $OUTF/All.multisampleinitial.allregions.${VARTYPE}.vcf.tranches ]
   then
     echo "Recalibration of ${VARTYPE} done"
     ## Apply Recalibration
