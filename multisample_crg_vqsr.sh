@@ -75,7 +75,7 @@ java -jar $GATK \
 -resource:dbsnp,known=true,training=false,truth=false,prior=2.0 /nfs/users/xe/ggirotto/annotations/dbsnp_138.hg19.excluding_sites_after_129.vcf.gz \
 -an QD -an FS -an ReadPosRankSum -an MQRankSum \
 -mode ${VARTYPE} --target_titv 3.0 \
---TStranche 10 --TStranche 15 --TStranche 20 --TStranche 70 --TStranche 75 --TStranche 80 --TStranche 85 --TStranche 90 --TStranche 95 --TStranche 98.0 --TStranche 99.0 ---TStranche 99.9 --TStranche 100 \
+--TStranche 10 --TStranche 15 --TStranche 20 --TStranche 70 --TStranche 75 --TStranche 80 --TStranche 85 --TStranche 90 --TStranche 95 --TStranche 98.0 --TStranche 99.0 --TStranche 99.9 --TStranche 100 \
 --rscript_file $OUTF/All.multisampleinitial.allregions.${VARTYPE}.r
 # -resource:dbsnp,known=true,training=false,truth=false,prior=2.0 $GATKRS/dbsnp_138.hg19.excluding_sites_after_129.vcf \
     ;;
