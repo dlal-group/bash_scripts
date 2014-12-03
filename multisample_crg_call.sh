@@ -14,6 +14,9 @@ OUTF=$4
 #variant type
 VARTYPE=$5
 
+#output mode
+OMODE=$6
+
 echo $reg
 echo $chr
 echo ${VARTYPE}
@@ -33,6 +36,8 @@ PROBE=${reg}
 GATKRS=/users/GD/resource/human/hg19/databases/GATK_resources/bundle/2.8/hg19
 CPU=8
 
+filename=`basename ${reg}`
+reg_name=`echo $filename|cut -f 4 -d "_"|cut -f 1 -d "."`
 ## GATK initial multisample call
 
 #java -jar $GATK -U LENIENT_VCF_PROCESSING -l INFO -R $REF -T UnifiedGenotyper -I $OUTF/$BAMS -nt $CPU -o $OUTF/${chr}/1.mutisampleInitialCall_r${reg}.vcf -A DepthPerAlleleBySample -A QualByDepth -A HaplotypeScore -A MappingQualityRankSumTest -A ReadPosRankSumTest -A FisherStrand -A InbreedingCoeff -A Coverage --intervals $PROBE -glm BOTH
@@ -40,11 +45,12 @@ CPU=8
 java -jar $GATK -U LENIENT_VCF_PROCESSING -l INFO -R $REF -T UnifiedGenotyper \
 -I $BAMS \
 -nt $CPU \
--o $OUTF/${chr}/1.mutisampleInitialCall_all.vcf \
+-dbsnp $DBSNP \
+-o $OUTF/${chr}/1.${reg_name}.mutisampleInitialCall_all.vcf \
 -A DepthPerAlleleBySample -A QualByDepth -A HaplotypeScore \
 -A MappingQualityRankSumTest -A ReadPosRankSumTest -A FisherStrand \
 -A InbreedingCoeff -A Coverage \
---intervals $PROBE -glm BOTH
+--intervals $PROBE -glm BOTH --output_mode $OMODE
 
 #use new Haplotype caller in gVCF mode
 #java -jar $GATK -U LENIENT_VCF_PROCESSING -l INFO -R $REF -T UnifiedGenotyper -I $BAMS -nt $CPU -o $OUTF/${chr}/1.mutisampleInitialCall_all.vcf -A DepthPerAlleleBySample -A QualByDepth -A HaplotypeScore -A MappingQualityRankSumTest -A ReadPosRankSumTest -A FisherStrand -A InbreedingCoeff -A Coverage --intervals $PROBE -glm BOTH
@@ -53,9 +59,9 @@ java -jar $GATK -U LENIENT_VCF_PROCESSING -l INFO -R $REF -T UnifiedGenotyper \
 
 #java -jar $GATK -R $REF -T SelectVariants --variant $OUTF/${chr}/1.mutisampleInitialCall_r${reg}.vcf -o $OUTF/${chr}/2.multisampleinitial.allregions.snps.r${reg}.vcf -selectType SNP
 # java -jar $GATK -R $REF -T SelectVariants --variant $OUTF/${chr}/1.mutisampleInitialCall_all.vcf -o $OUTF/${chr}.multisampleinitial.allregions.indels.vcf -selectType INDEL
-java -jar $GATK -R $REF -T SelectVariants --variant $OUTF/${chr}/1.mutisampleInitialCall_all.vcf -o $OUTF/${chr}.multisampleinitial.allregions.${VARTYPE}.vcf -selectType ${VARTYPE}
+java -jar $GATK -R $REF -T SelectVariants --variant $OUTF/${chr}/1.${reg_name}.mutisampleInitialCall_all.vcf -o $OUTF/${chr}/${chr}.${reg_name}.multisampleinitial.allregions.${VARTYPE}.vcf -selectType ${VARTYPE}
 
-if [ -s $OUTF/${chr}.multisampleinitial.allregions.${VARTYPE}.vcf ]
+if [ -s $OUTF/${chr}/${chr}.${reg_name}.multisampleinitial.allregions.${VARTYPE}.vcf ]
 then
-	touch $OUTF/${chr}.multisampleinitial.allregions.${VARTYPE}.done
+	touch $OUTF/${chr}/${chr}.${reg_name}.multisampleinitial.allregions.${VARTYPE}.done
 fi
