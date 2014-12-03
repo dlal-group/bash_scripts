@@ -34,7 +34,7 @@ GATK=/users/GD/tools/GATK/GenomeAnalysisTK-3.1-1/GenomeAnalysisTK.jar
 #PROBE=/nfs/users/xe/ggirotto/multisample/test_multisample_chr17_WES_WGS/REGIONS/nimblegen_plus50_chr${chr}_r${reg}.bed
 PROBE=${reg}
 GATKRS=/users/GD/resource/human/hg19/databases/GATK_resources/bundle/2.8/hg19
-CPU=8
+CPU=4
 
 filename=`basename ${reg}`
 reg_name=`echo $filename|cut -f 4 -d "_"|cut -f 1 -d "."`
@@ -58,7 +58,7 @@ java -jar $GATK -U LENIENT_VCF_PROCESSING -l INFO -R $REF -T UnifiedGenotyper \
 ## Seprate SNPs and INDELs from main multisample call vcf file
 
 #java -jar $GATK -R $REF -T SelectVariants --variant $OUTF/${chr}/1.mutisampleInitialCall_r${reg}.vcf -o $OUTF/${chr}/2.multisampleinitial.allregions.snps.r${reg}.vcf -selectType SNP
-# java -jar $GATK -R $REF -T SelectVariants --variant $OUTF/${chr}/1.mutisampleInitialCall_all.vcf -o $OUTF/${chr}.multisampleinitial.allregions.indels.vcf -selectType INDEL
+#java -jar $GATK -R $REF -T SelectVariants --variant $OUTF/${chr}/1.mutisampleInitialCall_all.vcf -o $OUTF/${chr}.multisampleinitial.allregions.indels.vcf -selectType INDEL
 java -jar $GATK -R $REF -T SelectVariants --variant $OUTF/${chr}/1.${reg_name}.mutisampleInitialCall_all.vcf -o $OUTF/${chr}/${chr}.${reg_name}.multisampleinitial.allregions.${VARTYPE}.vcf -selectType ${VARTYPE}
 
 if [ -s $OUTF/${chr}/${chr}.${reg_name}.multisampleinitial.allregions.${VARTYPE}.vcf ]

@@ -27,7 +27,7 @@ then
   #PROBE=/nfs/users/xe/ggirotto/multisample/test_multisample_chr17_WES_WGS/nimblegen_plus50.bed
   #PROBE=/nfs/users/xe/ggirotto/multisample/test_multisample_chr17_WES_WGS/nimblegen_plus50_chr${chr}_r${reg}.bed
   GATKRS=/users/GD/resource/human/hg19/databases/GATK_resources/bundle/2.8/hg19
-  CPU=8
+  CPU=4
 
   #this has to be general, so we need to concat all chr together to have a full file with all the data to filter
   for c in {1..22} X
