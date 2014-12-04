@@ -44,7 +44,7 @@ do
 		#echo "echo \"bash multisample_crg_call.sh ${chr} ${reg_file} $1 ${OUTF} ${TYPE} ${CALLER}\" | qsub -N \"chr${chr}_multicall\" -o \"${log}/chr${chr}_multicall.o\" -e \"${log}/chr${chr}_multicall.e\" -l h_rt=200:00:00 -l vf=40G -cwd -q xe-el6 -pe smp 8" > ${OUTF}/${chr}/.jobs/${chr}_job.${TYPE}.sh
 		case ${CALLER} in
 			GATK)
-			echo "echo \"bash multisample_crg_call.sh ${chr} ${reg_file} $1 ${OUTF} ${TYPE} ${OMODE}\" | qsub -N \"chr${chr}_${reg}_multicall\" -o \"${log}/chr${chr}_${reg}_multicall.o\" -e \"${log}/chr${chr}_${reg}_multicall.e\" -l h_rt=200:00:00 -l vf=40G -cwd -q xe-el6 -pe smp 4" > ${OUTF}/${chr}/.jobs/${chr}_${reg}_job.${TYPE}.sh
+			echo "echo \"bash multisample_crg_call.sh ${chr} ${reg_file} $1 ${OUTF} ${TYPE} ${OMODE}\" | qsub -N \"chr${chr}_${reg}_multicall\" -o \"${log}/chr${chr}_${reg}_multicall.o\" -e \"${log}/chr${chr}_${reg}_multicall.e\" -l h_rt=200:00:00 -l vf=30G -cwd -q xe-el6 -pe smp 4" > ${OUTF}/${chr}/.jobs/${chr}_${reg}_job.${TYPE}.sh
 			;;
 			
 			SAMTOOLS)
