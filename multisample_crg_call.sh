@@ -45,7 +45,7 @@ reg_name=`echo $filename|cut -f 4 -d "_"|cut -f 1 -d "."`
 java -jar $GATK -U LENIENT_VCF_PROCESSING -l INFO -R $REF -T UnifiedGenotyper \
 -I $BAMS \
 -nt $CPU \
--dbsnp $DBSNP \
+--dbsnp $DBSNP \
 -o $OUTF/${chr}/1.${reg_name}.mutisampleInitialCall_all.vcf \
 -A DepthPerAlleleBySample -A QualByDepth -A HaplotypeScore \
 -A MappingQualityRankSumTest -A ReadPosRankSumTest -A FisherStrand \
