@@ -15,9 +15,11 @@ while getopts :l:o:t:c:m:f opt; do
 		l )
 		#bam file list
 		BAMLIST=$OPTARG
+		echo "${$OPTARG}"		
 			;;
 		o )
 		#define output folder
+		echo "${$OPTARG}"		
 		OUTF=$OPTARG
 		#launch jobs by chromosome based on how many region on each of them
 		mkdir -p $OUTF/LOGS
@@ -25,18 +27,22 @@ while getopts :l:o:t:c:m:f opt; do
 		t )
 		#variant type
 		TYPE=$OPTARG
+		echo "${$OPTARG}"		
 			;;
 		c )
 		#select the caller
 		CALLER=$OPTARG
+		echo "${$OPTARG}"		
 			;;
 		m )
 		#define the output mode
 		OMODE=$OPTARG
+		echo "${$OPTARG}"		
 			;;
 		f )
 		#set a flag for vqsr filtering
 		VQSR='true'
+		echo "${$OPTARG}"		
 			;;
 
 	esac
