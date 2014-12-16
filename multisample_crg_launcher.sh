@@ -53,8 +53,8 @@ do
 	mkdir -p ${OUTF}/${chr}/LOGS
 	log=${OUTF}/${chr}/LOGS
 	#reg_file="REGIONS/nimblegen_plus50_chr${chr}_r*.bed"
-	reg_filelist=`ls /nfs/users/xe/ggirotto/multisample/REGIONS/splitted/nimblegen_plus50_chr${chr}_*.bed`
-	#reg_file="/nfs/users/xe/ggirotto/multisample/REGIONS_SAMTOOLS/exome_region_for_coverage_enriched_samtools_chr${chr}.bed"
+	#reg_filelist=`ls /nfs/users/xe/ggirotto/multisample/REGIONS/splitted/nimblegen_plus50_chr${chr}_*.bed`
+	reg_filelist=`ls /nfs/users/xe/ggirotto/multisample/REGIONS_150/exome_region_for_coverage_enriched_150bp_chr${chr}.bed`
 
 	for reg_file in $reg_filelist
 	do
