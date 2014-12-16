@@ -5,7 +5,8 @@ if [ $# -lt 4 ]
 then
 	echo "ATTENTION!!Missing argument!!!"
 	echo "Usage: "
-	echo "multisample_crg_launcher.sh <bam list file> <output_folder> <VARIANT TYPE> <CALLER> <Output mode (for GATK)> "
+	echo "multisample_crg_launcher.sh <bam list file> <output_folder> <VARIANT TYPE> <CALLER> [Output mode (for GATK)| VQSR] "
+	echo "Use VQSR flag if you want to launch VQSR filtering after calling"
 	exit 1
 fi
 
@@ -79,6 +80,7 @@ done
 #check if we have all chr called and merged:if not, we'll have some errors and use job dependency
 chr_num=`ls ${OUTF}/*.multisampleinitial.allregions.${TYPE}.done | wc -l`
 echo "Done ${chr_num} chr!"
+
 
 if [ ${chr_num} -eq "23" ]
 then
