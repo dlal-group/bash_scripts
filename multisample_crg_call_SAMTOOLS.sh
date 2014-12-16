@@ -38,7 +38,7 @@ GATKRS=/users/GD/resource/human/hg19/databases/GATK_resources/bundle/2.8/hg19
 CPU=4
 
 filename=`basename ${reg}`
-reg_name=`echo $filename|cut -f 4 -d "_"|cut -f 1 -d "."`
+reg_name=`echo ${filename%.*}|awk 'BEGIN{FS="_"};{print $(NF)}'`
 
 #we need to work in a different way with respect to GATK: we need to tell what class of variants to skip rather than to keep
 case ${VARTYPE} in

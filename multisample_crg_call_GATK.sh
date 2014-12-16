@@ -38,7 +38,7 @@ GATKRS=/users/GD/resource/human/hg19/databases/GATK_resources/bundle/2.8/hg19
 CPU=4
 
 filename=`basename ${reg}`
-reg_name=`echo $filename|cut -f 4 -d "_"|cut -f 1 -d "."`
+reg_name=`echo ${filename%.*}|awk 'BEGIN{FS="_"};{print $(NF)}'`
 ## GATK initial multisample call
 
 #java -jar $GATK -U LENIENT_VCF_PROCESSING -l INFO -R $REF -T UnifiedGenotyper -I $OUTF/$BAMS -nt $CPU -o $OUTF/${chr}/1.mutisampleInitialCall_r${reg}.vcf -A DepthPerAlleleBySample -A QualByDepth -A HaplotypeScore -A MappingQualityRankSumTest -A ReadPosRankSumTest -A FisherStrand -A InbreedingCoeff -A Coverage --intervals $PROBE -glm BOTH
