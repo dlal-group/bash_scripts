@@ -54,13 +54,15 @@ do
 	log=${OUTF}/${chr}/LOGS
 	#reg_file="REGIONS/nimblegen_plus50_chr${chr}_r*.bed"
 	#reg_filelist=`ls /nfs/users/xe/ggirotto/multisample/REGIONS/splitted/nimblegen_plus50_chr${chr}_*.bed`
-	reg_filelist=`ls /nfs/users/xe/ggirotto/multisample/REGIONS_150/exome_region_for_coverage_enriched_150bp_chr${chr}.bed`
+	#reg_filelist=`ls /nfs/users/xe/ggirotto/multisample/REGIONS_150/splitted/exome_region_for_coverage_enriched_150bp_chr${chr}.bed`
+	reg_filelist=`ls /nfs/users/xe/ggirotto/multisample/REGIONS_150/splitted/exome_region_for_coverage_enriched_150bp_chr${chr}_*.bed`
 
 	for reg_file in $reg_filelist
 	do
 		echo ${reg_file}
 		filename=`basename ${reg_file}`
-		reg=`echo $filename|cut -f 4 -d "_"|cut -f 1 -d "."`
+		#reg=`echo $filename|cut -f 4 -d "_"|cut -f 1 -d "."`
+		reg=`echo ${filename%.*}|awk 'BEGIN{FS="_"};{print $(NF)}'`
 		
 		#echo "echo \"bash $1/multisample_crg_call.sh ${chr} ${reg_file}\" | qsub -N \"chr${chr}_multicall\" -o \"${log}/chr${chr}_multicall.o\" -e \"${log}/chr${chr}_multicall.e\" -l h_rt=200:00:00 -l h_vmem=30Gb -cwd -q long" > $1/${chr}/.jobs/${chr}_r${reg}_job.sh
 		#echo "echo \"bash /nfs/users/xe/ggirotto/multisample/scripts/multisample_crg_call.sh ${chr} ${reg_file}\" | qsub -N \"chr${chr}_multicall\" -o \"${log}/chr${chr}_multicall.o\" -e \"${log}/chr${chr}_multicall.e\" -l h_rt=200:00:00 -l virtual_free=20Gb -cwd -q long -pe smp 8" > $1/${chr}/.jobs/${chr}_job.sh
