@@ -10,7 +10,7 @@ then
 	exit 1
 fi
 
-while getopts :l:o:t:c:m:f opt; do
+while getopts l:o:t:c:m:f opt; do
 	case $opt in
 		l )
 		#bam file list
