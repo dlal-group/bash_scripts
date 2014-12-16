@@ -50,6 +50,7 @@ case ${VARTYPE} in
 		;;
 esac
 
+echo "${BAMS}"
 ## SAMTOOLS multisample call
 samtools2 mpileup -b ${BAMS} -l ${PROBE} -t DP,SP,DV -C50 -pm1 -F0.2 -d 100000 | bcftools call -vmO v -f GQ,GP -o $OUTF/${chr}/${chr}.${reg_name}.multisampleinitial.allregions.${VARTYPE}.vcf
 
