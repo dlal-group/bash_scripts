@@ -5,25 +5,44 @@ if [ $# -lt 4 ]
 then
 	echo "ATTENTION!!Missing argument!!!"
 	echo "Usage: "
-	echo "multisample_crg_launcher.sh <bam list file> <output_folder> <VARIANT TYPE> <CALLER> [Output mode (for GATK)| VQSR] "
-	echo "Use VQSR flag if you want to launch VQSR filtering after calling"
+	echo "multisample_crg_launcher.sh -l <bam list file> -o <output_folder> -t <VARIANT TYPE> -c <CALLER> [-m <Output mode (for GATK)>| -f <filter option>]"
+	echo "Use -f flag if you want to launch VQSR filtering after calling"
 	exit 1
 fi
 
-#launch jobs by chromosome based on how many region on each of them
-mkdir -p $2/LOGS
+while getopts :l:o:t:c:m:f opt; do
+	case $opt in
+		l )
+		#bam file list
+		BAMLIST=$OPTARG
+			;;
+		o )
+		#define output folder
+		OUTF=$OPTARG
+		#launch jobs by chromosome based on how many region on each of them
+		mkdir -p $OUTF/LOGS
+			;;
+		t )
+		#variant type
+		TYPE=$OPTARG
+			;;
+		c )
+		#select the caller
+		CALLER=$OPTARG
+			;;
+		m )
+		#define the output mode
+		OMODE=$OPTARG
+			;;
+		f )
+		#set a flag for vqsr filtering
+		VQSR='true'
+			;;
 
-#bam file list
-BAMLIST=$1
-#define output folder
-OUTF=$2
+	esac
 
-#variant type
-TYPE=$3
-#select the caller
-CALLER=$4
-#define the output mode
-OMODE=$5
+done
+
 
 #let's start with autosomal data
 for chr in {1..22}
@@ -77,19 +96,26 @@ done
 #last step: concat all chr together and apply VQSR
 #qsub -N "test_multicall_VQSR" -o "LOGS/test_multicall_VQSR.$JOB_ID.o" -e "LOGS/test_multicall_VQSR.$JOB_ID.e" -hold_jid "test_multicall_concat_chr*" -l h_rt=80:00:00 -l virtual_free=16Gb -cwd -q long /nfs/users/xe/ggirotto/multisample/scripts/multisample_crg_vqsr.sh $1
 
-#check if we have all chr called and merged:if not, we'll have some errors and use job dependency
-chr_num=`ls ${OUTF}/*.multisampleinitial.allregions.${TYPE}.done | wc -l`
-echo "Done ${chr_num} chr!"
 
-
-if [ ${chr_num} -eq "23" ]
-then
-	#if we already have all the chr files we need no dependecies for vqsr job
-	touch $OUTF/1.call.${TYPE}.done
-	echo "Launch VQSR step"
-	qsub -N "multicall_VQSR" -o "$2/LOGS/multicall_${TYPE}_VQSR.o" -e "$2/LOGS/multicall_${TYPE}_VQSR.e" -l h_rt=80:00:00 -l vf=16G -cwd -q xe-el6 /nfs/users/xe/ggirotto/max/scripts/bash_scripts/multisample_crg_vqsr.sh $2 ${TYPE}
+if [[ -z ${VQSR+x}]]; then
+	echo "No filtering step required!"
 else
-	echo "Launch VQSR step"
-	#qsub -N "multicall_VQSR" -o "$2/LOGS/multicall_${TYPE}_VQSR.o" -e "$2/LOGS/multicall_${TYPE}_VQSR.e" -hold_jid "chr*_multicall" -l h_rt=80:00:00 -l vf=16G -cwd -q xe-el6 /nfs/users/xe/ggirotto/max/scripts/bash_scripts/multisample_crg_vqsr.sh $2 ${TYPE}
-	qsub -N "multicall_VQSR" -o "$2/LOGS/multicall_${TYPE}_VQSR.o" -e "$2/LOGS/multicall_${TYPE}_VQSR.e" -hold_jid "multicall_concat_chr*_${TYPE}" -l h_rt=80:00:00 -l vf=16G -cwd -q xe-el6 /nfs/users/xe/ggirotto/max/scripts/bash_scripts/multisample_crg_vqsr.sh $2 ${TYPE}
+	#check if we have all chr called and merged:if not, we'll have some errors and use job dependency
+	echo "Filtering step required!"
+	chr_num=`ls ${OUTF}/*.multisampleinitial.allregions.${TYPE}.done | wc -l`
+	echo "Done ${chr_num} chr!"
+	
+	if [ ${chr_num} -eq "23" ]
+	then
+		#if we already have all the chr files we need no dependecies for vqsr job
+		touch $OUTF/1.call.${TYPE}.done
+		echo "Launch VQSR step"
+		qsub -N "multicall_VQSR" -o "$2/LOGS/multicall_${TYPE}_VQSR.o" -e "$2/LOGS/multicall_${TYPE}_VQSR.e" -l h_rt=80:00:00 -l vf=16G -cwd -q xe-el6 /nfs/users/xe/ggirotto/max/scripts/bash_scripts/multisample_crg_vqsr.sh $2 ${TYPE}
+	else
+		echo "Launch VQSR step"
+		#qsub -N "multicall_VQSR" -o "$2/LOGS/multicall_${TYPE}_VQSR.o" -e "$2/LOGS/multicall_${TYPE}_VQSR.e" -hold_jid "chr*_multicall" -l h_rt=80:00:00 -l vf=16G -cwd -q xe-el6 /nfs/users/xe/ggirotto/max/scripts/bash_scripts/multisample_crg_vqsr.sh $2 ${TYPE}
+		qsub -N "multicall_VQSR" -o "$2/LOGS/multicall_${TYPE}_VQSR.o" -e "$2/LOGS/multicall_${TYPE}_VQSR.e" -hold_jid "multicall_concat_chr*_${TYPE}" -l h_rt=80:00:00 -l vf=16G -cwd -q xe-el6 /nfs/users/xe/ggirotto/max/scripts/bash_scripts/multisample_crg_vqsr.sh $2 ${TYPE}
+	fi
+	
 fi
+
