@@ -24,7 +24,8 @@ CALLER=$4
 #define the output mode
 OMODE=$5
 
-for chr in {1..22} X
+#let's start with autosomal data
+for chr in {1..22}
 #for chr in 3 9 13 16 20
 #for chr in 20
 do
