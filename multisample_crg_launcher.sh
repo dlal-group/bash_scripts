@@ -73,7 +73,7 @@ do
 			;;
 			
 			SAMTOOLS)
-			echo "echo \"bash multisample_crg_call_${CALLER}.sh ${chr} ${reg_file} ${BAMLIST} ${OUTF} ${TYPE} \" | qsub -N \"chr${chr}_${reg}_${CALLER}_multicall\" -o \"${log}/chr${chr}_${reg}_${CALLER}_multicall.o\" -e \"${log}/chr${chr}_${reg}_${CALLER}_multicall.e\" -l h_rt=200:00:00 -l vf=30G -cwd -q xe-el6 -pe smp 4" > ${OUTF}/${chr}/.jobs/${chr}_${reg}_${CALLER}_job.${TYPE}.sh
+			echo "echo \"bash multisample_crg_call_${CALLER}.sh ${chr} ${reg_file} ${BAMLIST} ${OUTF} ${TYPE} \" | qsub -N \"chr${chr}_${reg}_${CALLER}_multicall\" -o \"${log}/chr${chr}_${reg}_${CALLER}_multicall.o\" -e \"${log}/chr${chr}_${reg}_${CALLER}_multicall.e\" -l h_rt=200:00:00 -l vf=30G -cwd -q xe-el6" > ${OUTF}/${chr}/.jobs/${chr}_${reg}_${CALLER}_job.${TYPE}.sh
 			;;
 		esac
 
