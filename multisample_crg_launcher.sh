@@ -97,7 +97,8 @@ done
 #qsub -N "test_multicall_VQSR" -o "LOGS/test_multicall_VQSR.$JOB_ID.o" -e "LOGS/test_multicall_VQSR.$JOB_ID.e" -hold_jid "test_multicall_concat_chr*" -l h_rt=80:00:00 -l virtual_free=16Gb -cwd -q long /nfs/users/xe/ggirotto/multisample/scripts/multisample_crg_vqsr.sh $1
 
 
-if [[ -z ${VQSR+x}]]; then
+if [ -z ${VQSR+x} ]
+then
 	echo "No filtering step required!"
 else
 	#check if we have all chr called and merged:if not, we'll have some errors and use job dependency
