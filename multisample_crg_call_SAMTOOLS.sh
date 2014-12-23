@@ -26,7 +26,7 @@ echo ${OUTF}
 mkdir -p ${OUTF}/${chr}
 
 #REF=/users/GD/resource/human/hg19/databases/GATK_resources/bundle/2.8/hg19/ucsc.hg19.fasta <- this file generate errors during the contig header check: mismatch of contig names
-REF=/nfs/users/GD/resource/human/hg19/hg19.fasta
+REF=/nfs/users/GD/resource/human/hg19/hg19.fa
 DBSNP=/users/GD/resource/human/hg19/databases/dbSNP/dbsnp_138.hg19.vcf
 #GATK=/users/GD/tools/GATK/GenomeAnalysisTK-2.8-1-g932cd3a/GenomeAnalysisTK.jar
 GATK=/users/GD/tools/GATK/GenomeAnalysisTK-3.1-1/GenomeAnalysisTK.jar
@@ -44,15 +44,16 @@ reg_name=`echo ${filename%.*}|awk 'BEGIN{FS="_"};{print $(NF)}'`
 case ${VARTYPE} in
 	INDEL )
 		SKIPTYPE='snps'
+		## SAMTOOLS multisample call
 		;;
 	SNP)
 		SKIPTYPE='indels'
 		;;
 esac
+		## SAMTOOLS multisample call
+		samtools2 mpileup -b ${BAMS} -l ${PROBE} -f ${REF} -t DP,SP,DV -s -C50 -pm1 -F0.2 -d 100000 -g -u | bcftools call --skip-variants ${SKIPTYPE} -vmO v -f GQ,GP -o $OUTF/${chr}/${chr}.${reg_name}.multisampleinitial.allregions.${VARTYPE}.vcf
 
 echo "${BAMS}"
-## SAMTOOLS multisample call
-samtools2 mpileup -b ${BAMS} -l ${PROBE} -f ${REF} -t DP,SP,DV -s -C50 -pm1 -F0.2 -d 100000 | bcftools call -vmO v -f GQ,GP -o $OUTF/${chr}/${chr}.${reg_name}.multisampleinitial.allregions.${VARTYPE}.vcf
 
 
 if [ -s $OUTF/${chr}/${chr}.${reg_name}.multisampleinitial.allregions.${VARTYPE}.vcf ]
