@@ -4,8 +4,8 @@
 filepath=$1
 TYPE=$2
 
-ls ${filepath}.*.multisampleinitial.allregions.${TYPE}.vcf > ${filepath}.all_reg.list
+ls ${filepath}.*.multisampleinitial.allregions.${TYPE}.vcf > ${filepath}.all_reg.${TYPE}.list
 
 echo "Create concat file for ${filepath} of ${TYPE}.."
-bcftools concat -f ${filepath}.all_reg.list -O v -o ${filepath}.multisampleinitial.allregions.${TYPE}.vcf
+bcftools concat -f ${filepath}.all_reg.${TYPE}.list -O v -o ${filepath}.multisampleinitial.allregions.${TYPE}.vcf
 echo "..DONE!"
