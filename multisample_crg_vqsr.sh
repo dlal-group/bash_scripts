@@ -41,7 +41,7 @@ then
     #echo "Already created concat file for ${VARTYPE}.."
   #else
     echo "Create concat file for ${VARTYPE}.."
-    bcftools2 concat -f $OUTF/all_vcf.${VARTYPE}.list -O v -o $OUTF/All.multisampleinitial.allregions.${VARTYPE}.vcf
+    bcftools concat -f $OUTF/all_vcf.${VARTYPE}.list -O v -o $OUTF/All.multisampleinitial.allregions.${VARTYPE}.vcf
     echo "..DONE!"
   #fi
 if [ ! -s $OUTF/All.multisampleinitial.allregions.${VARTYPE}.vcf.tranches ]
