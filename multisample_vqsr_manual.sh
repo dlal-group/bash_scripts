@@ -6,6 +6,8 @@ OUTF=$2
 
 #variation type
 VARTYPE=$3
+#path of the file to wich apply the vqsr filtering
+TOAPPF=$4
 
 #REF=/users/GD/resource/human/hg19/databases/GATK_resources/bundle/2.8/hg19/ucsc.hg19.fasta <- this file generate errors during the contig header check: mismatch of contig names
 REF=/nfs/users/GD/resource/human/hg19/hg19.fasta
@@ -62,7 +64,7 @@ java -jar $GATK \
     ## Apply Recalibration
     echo "Apply Recalibration on ${VARTYPE} data.."
 
-    java -jar $GATK -T ApplyRecalibration -R $REF -input $INF -tranchesFile $OUTF/All.multisampleinitial.allregions.${VARTYPE}.vcf.tranches -recalFile $OUTF/All.multisampleinitial.allregions.${VARTYPE}.vcf.recal -o $OUTF/All.multisampleinitial.allregions.${VARTYPE}.recalibrated.filtered.vcf -ts_filter_level 99.0 -mode ${VARTYPE}
+    java -jar $GATK -T ApplyRecalibration -R $REF -input $TOAPPF -tranchesFile $OUTF/All.multisampleinitial.allregions.${VARTYPE}.vcf.tranches -recalFile $OUTF/All.multisampleinitial.allregions.${VARTYPE}.vcf.recal -o $OUTF/All.multisampleinitial.allregions.${VARTYPE}.recalibrated.filtered.vcf -ts_filter_level 99.0 -mode ${VARTYPE}
     ## grep PASS snps from the recalibration
     egrep 'PASS|^#' $OUTF/All.multisampleinitial.allregions.${VARTYPE}.recalibrated.filtered.vcf > $OUTF/All.multisampleinitial.allregions.${VARTYPE}.recalibrated.filtered.clean.vcf
     
