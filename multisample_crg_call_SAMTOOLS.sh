@@ -37,7 +37,8 @@ PROBE=${reg}
 GATKRS=/users/GD/resource/human/hg19/databases/GATK_resources/bundle/2.8/hg19
 CPU=4
 #hard code ped file location
-pedfile=/nfs/users/xe/ggirotto/multisample/FVG_WES_samples_no_fam_20102014_IDS_sorted_uniq.ped
+# pedfile=/nfs/users/xe/ggirotto/multisample/FVG_WES_samples_no_fam_20102014_IDS_sorted_uniq.ped
+pedfile=/nfs/users/xe/ggirotto/multisample/FVG_WES_samples_no_fam_20102014_sex.samples
 
 
 filename=`basename ${reg}`
@@ -53,18 +54,18 @@ case ${VARTYPE} in
 		SKIPTYPE='indels'
 		;;
 esac
-		if [ $chr = "X" ]
-		then
-			## SAMTOOLS multisample call
-			samtools mpileup -b ${BAMS} -l ${PROBE} -f ${REF} -t DP,SP,DV -s -C50 -pm1 -F0.2 -d 100000 -g -u | bcftools call --skip-variants ${SKIPTYPE} -X -t X:1-60000 -S ${pedfile} -vmO v -f GQ,GP -o $OUTF/${chr}/${chr}.NON_PAR_1.multisampleinitial.allregions.${VARTYPE}.vcf
-			samtools mpileup -b ${BAMS} -l ${PROBE} -f ${REF} -t DP,SP,DV -s -C50 -pm1 -F0.2 -d 100000 -g -u | bcftools call --skip-variants ${SKIPTYPE} -t X:60001-2699520 -S ${pedfile} -vmO v -f GQ,GP -o $OUTF/${chr}/${chr}.PAR_1.multisampleinitial.allregions.${VARTYPE}.vcf
-			samtools mpileup -b ${BAMS} -l ${PROBE} -f ${REF} -t DP,SP,DV -s -C50 -pm1 -F0.2 -d 100000 -g -u | bcftools call --skip-variants ${SKIPTYPE} -X -t X:2699521-154931043 -S ${pedfile} -vmO v -f GQ,GP -o $OUTF/${chr}/${chr}.NON_PAR_2.multisampleinitial.allregions.${VARTYPE}.vcf
-			samtools mpileup -b ${BAMS} -l ${PROBE} -f ${REF} -t DP,SP,DV -s -C50 -pm1 -F0.2 -d 100000 -g -u | bcftools call --skip-variants ${SKIPTYPE} -t X:154931044-155270560 -S ${pedfile} -vmO v -f GQ,GP -o $OUTF/${chr}/${chr}.PAR_2.multisampleinitial.allregions.${VARTYPE}.vcf
-			bcftools concat $OUTF/${chr}/${chr}.NON_PAR_1.multisampleinitial.allregions.${VARTYPE}.vcf $OUTF/${chr}/${chr}.PAR_1.multisampleinitial.allregions.${VARTYPE}.vcf $OUTF/${chr}/${chr}.NON_PAR_2.multisampleinitial.allregions.${VARTYPE}.vcf $OUTF/${chr}/${chr}.PAR_2.multisampleinitial.allregions.${VARTYPE}.vcf -O v -o $OUTF/${chr}/${chr}.${reg_name}.multisampleinitial.allregions.${VARTYPE}.vcf
-		else
-			## SAMTOOLS multisample call
-			samtools mpileup -b ${BAMS} -l ${PROBE} -f ${REF} -t DP,SP,DV -s -C50 -pm1 -F0.2 -d 100000 -g -u | bcftools call --skip-variants ${SKIPTYPE} -vmO v -f GQ,GP -o $OUTF/${chr}/${chr}.${reg_name}.multisampleinitial.allregions.${VARTYPE}.vcf
-		fi
+if [ $chr = "X" ]
+then
+	## SAMTOOLS multisample call
+	samtools mpileup -b ${BAMS} -l ${PROBE} -f ${REF} -t DP,SP,DV -s -C50 -pm1 -F0.2 -d 100000 -g -u | bcftools call --skip-variants ${SKIPTYPE} -X -t X:1-60000 -S ${pedfile} -vmO v -f GQ,GP -o $OUTF/${chr}/${chr}.NON_PAR_1.multisampleinitial.allregions.${VARTYPE}.vcf
+	samtools mpileup -b ${BAMS} -l ${PROBE} -f ${REF} -t DP,SP,DV -s -C50 -pm1 -F0.2 -d 100000 -g -u | bcftools call --skip-variants ${SKIPTYPE} -t X:60001-2699520 -S ${pedfile} -vmO v -f GQ,GP -o $OUTF/${chr}/${chr}.PAR_1.multisampleinitial.allregions.${VARTYPE}.vcf
+	samtools mpileup -b ${BAMS} -l ${PROBE} -f ${REF} -t DP,SP,DV -s -C50 -pm1 -F0.2 -d 100000 -g -u | bcftools call --skip-variants ${SKIPTYPE} -X -t X:2699521-154931043 -S ${pedfile} -vmO v -f GQ,GP -o $OUTF/${chr}/${chr}.NON_PAR_2.multisampleinitial.allregions.${VARTYPE}.vcf
+	samtools mpileup -b ${BAMS} -l ${PROBE} -f ${REF} -t DP,SP,DV -s -C50 -pm1 -F0.2 -d 100000 -g -u | bcftools call --skip-variants ${SKIPTYPE} -t X:154931044-155270560 -S ${pedfile} -vmO v -f GQ,GP -o $OUTF/${chr}/${chr}.PAR_2.multisampleinitial.allregions.${VARTYPE}.vcf
+	bcftools concat $OUTF/${chr}/${chr}.NON_PAR_1.multisampleinitial.allregions.${VARTYPE}.vcf $OUTF/${chr}/${chr}.PAR_1.multisampleinitial.allregions.${VARTYPE}.vcf $OUTF/${chr}/${chr}.NON_PAR_2.multisampleinitial.allregions.${VARTYPE}.vcf $OUTF/${chr}/${chr}.PAR_2.multisampleinitial.allregions.${VARTYPE}.vcf -O v -o $OUTF/${chr}/${chr}.${reg_name}.multisampleinitial.allregions.${VARTYPE}.vcf
+else
+	## SAMTOOLS multisample call
+	samtools mpileup -b ${BAMS} -l ${PROBE} -f ${REF} -t DP,SP,DV -s -C50 -pm1 -F0.2 -d 100000 -g -u | bcftools call --skip-variants ${SKIPTYPE} -vmO v -f GQ,GP -o $OUTF/${chr}/${chr}.${reg_name}.multisampleinitial.allregions.${VARTYPE}.vcf
+fi
 		
 
 echo "${BAMS}"
