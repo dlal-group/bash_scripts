@@ -36,6 +36,9 @@ GATK=/users/GD/tools/GATK/GenomeAnalysisTK-3.1-1/GenomeAnalysisTK.jar
 PROBE=${reg}
 GATKRS=/users/GD/resource/human/hg19/databases/GATK_resources/bundle/2.8/hg19
 CPU=4
+#hard code ped file location
+ped_file=/nfs/users/xe/ggirotto/multisample/FVG_WES_samples_no_fam_20102014_IDS_sorted_uniq.ped
+
 
 filename=`basename ${reg}`
 reg_name=`echo ${filename%.*}|awk 'BEGIN{FS="_"};{print $(NF)}'`
@@ -50,8 +53,19 @@ case ${VARTYPE} in
 		SKIPTYPE='indels'
 		;;
 esac
-		## SAMTOOLS multisample call
-		samtools2 mpileup -b ${BAMS} -l ${PROBE} -f ${REF} -t DP,SP,DV -s -C50 -pm1 -F0.2 -d 100000 -g -u | bcftools call --skip-variants ${SKIPTYPE} -vmO v -f GQ,GP -o $OUTF/${chr}/${chr}.${reg_name}.multisampleinitial.allregions.${VARTYPE}.vcf
+		if [ $chr = "X" ]
+		then
+			## SAMTOOLS multisample call
+			samtools mpileup -b ${BAMS} -l ${PROBE} -f ${REF} -t DP,SP,DV -s -C50 -pm1 -F0.2 -d 100000 -g -u | bcftools call --skip-variants ${SKIPTYPE} -X -t X:1-60000 -s ${pedfile} -vmO v -f GQ,GP -o $OUTF/${chr}/${chr}.NON_PAR_1.multisampleinitial.allregions.${VARTYPE}.vcf
+			samtools mpileup -b ${BAMS} -l ${PROBE} -f ${REF} -t DP,SP,DV -s -C50 -pm1 -F0.2 -d 100000 -g -u | bcftools call --skip-variants ${SKIPTYPE} -t X:60001-2699520 -s ${pedfile} -vmO v -f GQ,GP -o $OUTF/${chr}/${chr}.PAR_1.multisampleinitial.allregions.${VARTYPE}.vcf
+			samtools mpileup -b ${BAMS} -l ${PROBE} -f ${REF} -t DP,SP,DV -s -C50 -pm1 -F0.2 -d 100000 -g -u | bcftools call --skip-variants ${SKIPTYPE} -X -t X:2699521-154931043 -s ${pedfile} -vmO v -f GQ,GP -o $OUTF/${chr}/${chr}.NON_PAR_2.multisampleinitial.allregions.${VARTYPE}.vcf
+			samtools mpileup -b ${BAMS} -l ${PROBE} -f ${REF} -t DP,SP,DV -s -C50 -pm1 -F0.2 -d 100000 -g -u | bcftools call --skip-variants ${SKIPTYPE} -t X:154931044-155270560 -s ${pedfile} -vmO v -f GQ,GP -o $OUTF/${chr}/${chr}.PAR_2.multisampleinitial.allregions.${VARTYPE}.vcf
+			bcftools concat $OUTF/${chr}/${chr}.NON_PAR_1.multisampleinitial.allregions.${VARTYPE}.vcf $OUTF/${chr}/${chr}.PAR_1.multisampleinitial.allregions.${VARTYPE}.vcf $OUTF/${chr}/${chr}.NON_PAR_2.multisampleinitial.allregions.${VARTYPE}.vcf $OUTF/${chr}/${chr}.PAR_2.multisampleinitial.allregions.${VARTYPE}.vcf -O v -o $OUTF/${chr}/${chr}.${reg_name}.multisampleinitial.allregions.${VARTYPE}.vcf
+		else
+			## SAMTOOLS multisample call
+			samtools mpileup -b ${BAMS} -l ${PROBE} -f ${REF} -t DP,SP,DV -s -C50 -pm1 -F0.2 -d 100000 -g -u | bcftools call --skip-variants ${SKIPTYPE} -vmO v -f GQ,GP -o $OUTF/${chr}/${chr}.${reg_name}.multisampleinitial.allregions.${VARTYPE}.vcf
+		fi
+		
 
 echo "${BAMS}"
 
