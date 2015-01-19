@@ -37,7 +37,7 @@ PROBE=${reg}
 GATKRS=/users/GD/resource/human/hg19/databases/GATK_resources/bundle/2.8/hg19
 CPU=4
 #hard code ped file location
-ped_file=/nfs/users/xe/ggirotto/multisample/FVG_WES_samples_no_fam_20102014_IDS_sorted_uniq.ped
+pedfile=/nfs/users/xe/ggirotto/multisample/FVG_WES_samples_no_fam_20102014_IDS_sorted_uniq.ped
 
 
 filename=`basename ${reg}`
