@@ -51,7 +51,7 @@ while getopts l:o:t:c:m:f opt; do
 		CALLING='false'
 		echo "${OPTARG}"		
 		;;
-		chr)
+		r)
 		CHROM=$OPTARG
 		;;
 	esac
