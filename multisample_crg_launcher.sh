@@ -64,7 +64,7 @@ then
 	echo "No calling step required!"
 else
 	#let's start with autosomal data
-	if [-z ${CHROM+x}]
+	if [-z ${CHROM+r}]
 	then
 		for chr in {1..22}
 		do
