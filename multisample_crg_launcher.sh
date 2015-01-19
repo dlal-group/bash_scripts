@@ -53,18 +53,20 @@ while getopts l:o:t:c:m:r:fx opt; do
 		;;
 		r )
 		CHROM=$OPTARG
+		echo "${OPTARG}"		
 		;;
 	esac
 
 done
 
 #we're going to perform the calling step only if required
+echo ${x}
 if [ -z ${CALLING+x} ]
 then
 	echo "No calling step required!"
 else
 	#let's start with autosomal data
-	if [-z ${CHROM+x}]
+	if [ -z ${CHROM+x} ]
 	then
 		for chr in {1..22}
 		do
