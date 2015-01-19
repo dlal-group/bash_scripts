@@ -134,11 +134,11 @@ else
 			#echo "echo \"bash multisample_crg_call.sh ${chr} ${reg_file} $1 ${OUTF} ${TYPE} ${CALLER}\" | qsub -N \"chr${chr}_multicall\" -o \"${log}/chr${chr}_multicall.o\" -e \"${log}/chr${chr}_multicall.e\" -l h_rt=200:00:00 -l vf=40G -cwd -q xe-el6 -pe smp 8" > ${OUTF}/${chr}/.jobs/${chr}_job.${TYPE}.sh
 			case ${CALLER} in
 				GATK)
-				echo "echo \"bash multisample_crg_call_${CALLER}.sh ${chr} ${reg_file} ${BAMLIST} ${OUTF} ${TYPE} ${OMODE}\" | qsub -N \"chr${chr}_${reg}_${CALLER}_multicall\" -o \"${log}/chr${chr}_${reg}_${CALLER}_multicall.o\" -e \"${log}/chr${chr}_${reg}_${CALLER}_multicall.e\" -l h_rt=200:00:00 -l vf=30G -cwd -q xe-el6 -pe smp 4" > ${OUTF}/${chr}/.jobs/${chr}_${reg}_${CALLER}_job.${TYPE}.sh
+				echo "echo \"bash multisample_crg_call_${CALLER}.sh ${chr} ${reg_file} ${BAMLIST} ${OUTF} ${TYPE} ${OMODE}\" | qsub -N \"chr${chr}_${reg}_${CALLER}_${TYPE}_multicall\" -o \"${log}/chr${chr}_${reg}_${CALLER}${TYPE}__multicall.o\" -e \"${log}/chr${chr}_${reg}_${CALLER}_${TYPE}_multicall.e\" -l h_rt=200:00:00 -l vf=30G -cwd -q xe-el6 -pe smp 4" > ${OUTF}/${chr}/.jobs/${chr}_${reg}_${CALLER}_job.${TYPE}.sh
 				;;
 				
 				SAMTOOLS)
-				echo "echo \"bash multisample_crg_call_${CALLER}.sh ${chr} ${reg_file} ${BAMLIST} ${OUTF} ${TYPE} \" | qsub -N \"chr${chr}_${reg}_${CALLER}_multicall\" -o \"${log}/chr${chr}_${reg}_${CALLER}_multicall.o\" -e \"${log}/chr${chr}_${reg}_${CALLER}_multicall.e\" -l h_rt=200:00:00 -l vf=10G -cwd -q xe-el6" > ${OUTF}/${chr}/.jobs/${chr}_${reg}_${CALLER}_job.${TYPE}.sh
+				echo "echo \"bash multisample_crg_call_${CALLER}.sh ${chr} ${reg_file} ${BAMLIST} ${OUTF} ${TYPE} \" | qsub -N \"chr${chr}_${reg}_${CALLER}_${TYPE}_multicall\" -o \"${log}/chr${chr}_${reg}_${CALLER}_${TYPE}_multicall.o\" -e \"${log}/chr${chr}_${reg}_${CALLER}_${TYPE}_multicall.e\" -l h_rt=200:00:00 -l vf=10G -cwd -q xe-el6" > ${OUTF}/${chr}/.jobs/${chr}_${reg}_${CALLER}_job.${TYPE}.sh
 				;;
 			esac
 
