@@ -50,17 +50,17 @@ while getopts l:o:t:c:m:r:fx opt; do
 		VQSR='true'
 		CALLING='false'
 		echo "${OPTARG}"		
-		;;
+			;;
 		r )
 		CHROM=$OPTARG
 		echo "${OPTARG}"		
-		;;
+			;;
 	esac
 
 done
 
 #we're going to perform the calling step only if required
-if [ -z ${CALLING+x} ]
+if [ $CALLING = "false" ]
 then
 	echo "No calling step required!"
 	echo ${CALLING}
