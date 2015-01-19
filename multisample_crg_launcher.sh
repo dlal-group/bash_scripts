@@ -60,10 +60,10 @@ while getopts l:o:t:c:m:r:fx opt; do
 done
 
 #we're going to perform the calling step only if required
-echo ${x}
 if [ -z ${CALLING+x} ]
 then
 	echo "No calling step required!"
+	echo ${CALLING}
 else
 	#let's start with autosomal data
 	if [ -z ${CHROM+x} ]
