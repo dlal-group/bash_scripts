@@ -27,13 +27,13 @@ bcftools view -i "QUAL>=30" ${INF}/All.multisampleinitial.allregions.${TYPE}.rec
 tabix -p vcf ${INF}/All.multisampleinitial.allregions.${TYPE}.recalibrated.filtered.clean.Q30.vcf.gz
 bcftools stats -s - ${INF}/All.multisampleinitial.allregions.${TYPE}.recalibrated.filtered.clean.Q30.vcf.gz > ${INF}/WES_${TYPE}_stats_VQSR99_Q30.txt
 
-# All variants called, filtered By QUAL >= 30 AND VQSLOD 98.2%:
+# All variants called, filtered By QUAL >= 30 AND CUSTOM VQSLOD :
 bcftools view -i "QUAL>=30 && MIN(VQSLOD)>${THRS}" ${INF}/All.multisampleinitial.allregions.${TYPE}.recalibrated.filtered.ann.vcf.gz -O z -o ${INF}/All.multisampleinitial.allregions.${TYPE}.recalibrated.filtered.Q30.VQSLOD_CUSTOM.vcf.gz 
 tabix -p vcf ${INF}/All.multisampleinitial.allregions.${TYPE}.recalibrated.filtered.Q30.VQSLOD_CUSTOM.vcf.gz 
 bcftools stats -s - ${INF}/All.multisampleinitial.allregions.${TYPE}.recalibrated.filtered.Q30.VQSLOD_CUSTOM.vcf.gz > ${INF}/WES_${TYPE}_stats_VQSR_CUSTOM_Q30.txt
 
 # All CCDS variants:
-bcftools view -R /nfs/users/xe/ggirotto/multisample/REGIONS/CCDS/GENCODE_presbio_comprehensive_coding_clean.bed ${INF}/All.multisampleinitial.allregions.${TYPE}.recalibrated.filtered.ann.vcf.gz -O z -o ${INF}/All.multisampleinitial.allregions.${TYPE}.recalibrated.filtered.CCDS.vcf.gz
+bcftools view -R /nfs/users/xe/ggirotto/multisample/REGIONS/CCDS/GENCODE_presbio_comprehensive_coding_clean_SORTED.bed ${INF}/All.multisampleinitial.allregions.${TYPE}.recalibrated.filtered.ann.vcf.gz -O z -o ${INF}/All.multisampleinitial.allregions.${TYPE}.recalibrated.filtered.CCDS.vcf.gz
 tabix -p vcf ${INF}/All.multisampleinitial.allregions.${TYPE}.recalibrated.filtered.CCDS.vcf.gz
 bcftools stats -s - ${INF}/All.multisampleinitial.allregions.${TYPE}.recalibrated.filtered.CCDS.vcf.gz > ${INF}/WES_${TYPE}_CCDS_stats_ALL.txt
   
@@ -43,12 +43,12 @@ tabix -p vcf ${INF}/All.multisampleinitial.allregions.${TYPE}.recalibrated.filte
 bcftools stats -s - ${INF}/All.multisampleinitial.allregions.${TYPE}.recalibrated.filtered.CCDS.Q30.vcf.gz > ${INF}/WES_${TYPE}_CCDS_stats_ALL_Q30.txt
   
 # All CCDS variants filtered by QUAL >= 30 AND VQSLOD 99%:
-bcftools view -R /nfs/users/xe/ggirotto/multisample/REGIONS/CCDS/GENCODE_presbio_comprehensive_coding_clean.bed ${INF}/All.multisampleinitial.allregions.${TYPE}.recalibrated.filtered.clean.Q30.vcf.gz -O z -o ${INF}/All.multisampleinitial.allregions.${TYPE}.recalibrated.filtered.clean.CCDS.Q30.vcf.gz
+bcftools view -R /nfs/users/xe/ggirotto/multisample/REGIONS/CCDS/GENCODE_presbio_comprehensive_coding_clean_SORTED.bed ${INF}/All.multisampleinitial.allregions.${TYPE}.recalibrated.filtered.clean.Q30.vcf.gz -O z -o ${INF}/All.multisampleinitial.allregions.${TYPE}.recalibrated.filtered.clean.CCDS.Q30.vcf.gz
 tabix -p vcf ${INF}/All.multisampleinitial.allregions.${TYPE}.recalibrated.filtered.clean.CCDS.Q30.vcf.gz
 bcftools stats -s - ${INF}/All.multisampleinitial.allregions.${TYPE}.recalibrated.filtered.clean.CCDS.Q30.vcf.gz > ${INF}/WES_${TYPE}_CCDS_stats_VQSR99_Q30.txt
 
 # All CCDS variants filtered by QUAL >= 30 AND VQSLOD 98.2%:
-bcftools view -R /nfs/users/xe/ggirotto/multisample/REGIONS/CCDS/GENCODE_presbio_comprehensive_coding_clean.bed ${INF}/All.multisampleinitial.allregions.${TYPE}.recalibrated.filtered.Q30.VQSLOD_CUSTOM.vcf.gz -O z -o ${INF}/All.multisampleinitial.allregions.${TYPE}.recalibrated.filtered.CCDS.Q30.VQSLOD_CUSTOM.vcf.gz
+bcftools view -R /nfs/users/xe/ggirotto/multisample/REGIONS/CCDS/GENCODE_presbio_comprehensive_coding_clean_SORTED.bed ${INF}/All.multisampleinitial.allregions.${TYPE}.recalibrated.filtered.Q30.VQSLOD_CUSTOM.vcf.gz -O z -o ${INF}/All.multisampleinitial.allregions.${TYPE}.recalibrated.filtered.CCDS.Q30.VQSLOD_CUSTOM.vcf.gz
 tabix -p vcf ${INF}/All.multisampleinitial.allregions.${TYPE}.recalibrated.filtered.CCDS.Q30.VQSLOD_CUSTOM.vcf.gz
 bcftools stats -s - ${INF}/All.multisampleinitial.allregions.${TYPE}.recalibrated.filtered.CCDS.Q30.VQSLOD_CUSTOM.vcf.gz > ${INF}/WES_${TYPE}_CCDS_stats_VQSR_CUSTOM_Q30.txt
   
