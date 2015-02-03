@@ -249,7 +249,7 @@ for current_pos in ref_all.keys():
 	current_seq=seq_conversion[current_pos]
 	#first check if the two list are equal by size
 	if len(current_gwas)==len(current_seq):
-		print "Same length check passed!!"
+		# print "Same length check passed!!"
 		#FIXME:use a more elegant way to do it.
 		for code_index in xrange (0,len(current_seq)):
 #			snp_cohord=table_counter(current_gwas[code_index],current_seq[code_index],classes)

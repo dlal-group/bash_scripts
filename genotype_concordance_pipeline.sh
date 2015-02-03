@@ -49,11 +49,15 @@ bsub -J "format_freq_table_f2" -o "%J_format_freq_table_f2.log" -w "ended(create
 bsub -J "sort_genotype_table" -o "%J_sort_genotype_table.log" -w "ended(format_freq_table_f*)" -M4000 -R"select[mem>4000] rusage[mem=4000]" \
 -q normal "sort -k1 ${outname_f1}.ped > ${outname_f1}.sorted;mv ${outname_f1}.ped ${outname_f1}.unsorted;mv ${outname_f1}.sorted ${outname_f1}.ped;sort -k1 ${outname_f2}.ped > ${outname_f2}.sorted;mv ${outname_f2}.ped ${outname_f2}.unsorted;mv ${outname_f2}.sorted ${outname_f2}.ped"
 
+#we need to flip data after check on freq tables
+bsub -J "gt_flipping" -w "ended(sort_genotype_table)" -o "%J_gt_flipping.log" -M4000 -R"select[mem>4000] rusage[mem=4000]" \
+-q normal genotype_concordance_variant_flipping.sh ${outname_f1}.frq ${outname_f2}.frq ${outname_f2}
 
 #create the ref table for  REF/ALT allele:basically this contains the frequencies and the major allele because usually this is the REF allele in GWAS data
 if [ $# -lt 4 ]
 then
-	bsub -J "ref_discordance_table_creator" -w "done(sort_genotype_table)" -o "%J_ref_discordance_table_creator.log" -M8000 -R"select[mem>8000] rusage[mem=8000]" \
+	# bsub -J "ref_discordance_table_creator" -w "done(sort_genotype_table)" -o "%J_ref_discordance_table_creator.log" -M8000 -R"select[mem>8000] rusage[mem=8000]" \
+	bsub -J "ref_discordance_table_creator" -w "done(gt_flipping)" -o "%J_ref_discordance_table_creator.log" -M8000 -R"select[mem>8000] rusage[mem=8000]" \
 -q normal R CMD BATCH "--args ${outname_f1}.frq ${outname_f1}.map" /nfs/users/nfs_m/mc14/Work/r_scripts/gt_discordance.r
 fi
 
@@ -66,11 +70,11 @@ do
 		#if we provide the 4th argument we are going to use our own REF table:this apply for data as WES or WGS
 	then
 		bsub -J "gt_calculator_chr${chr}" -o "%J_gt_calculator_chr${chr}.log" -M8000 -R"select[mem>8000] rusage[mem=8000]" \
-		-q normal discordance_inner_cicle.sh ${outname_f1} ${outname_f2} ${chr} $3 $4
+		-q normal discordance_inner_cicle.sh ${outname_f1} ${outname_f2}.flipped ${chr} $3 $4
 	else
 		#use the automatically created ref discordance table
 		bsub -J "gt_calculator_chr${chr}" -w "ended(ref_discordance_table_creator)" -o "%J_gt_calculator_chr${chr}.log" -M8000 -R"select[mem>8000] rusage[mem=8000]" \
-		-q normal discordance_inner_cicle.sh ${outname_f1} ${outname_f2} ${chr} $3 ref_discordance_table.txt
+		-q normal discordance_inner_cicle.sh ${outname_f1} ${outname_f2}.flipped ${chr} $3 ref_discordance_table.txt
 	fi
 done
 
