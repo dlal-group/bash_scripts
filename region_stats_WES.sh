@@ -4,7 +4,7 @@
 IN_VCF=$1 #input vcf folder
 REG_F=$2 #region file
 OUT_F=$3 #output folder
-$FORMAT=$4 #based on format of our file
+FORMAT=$4 #based on format of our file
 
 while read line
 do
