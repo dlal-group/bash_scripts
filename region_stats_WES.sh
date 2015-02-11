@@ -5,6 +5,7 @@ IN_VCF=$1 #input vcf folder
 REG_F=$2 #region file
 OUT_F=$3 #output folder
 FORMAT=$4 #based on format of our file
+TYPE=$5 #variation type : SNP / INDEL
 
 while read line
 do
@@ -26,17 +27,19 @@ do
 	esac
 			gene_length=$[end - start]
 
-echo $FORMAT
+echo "$FORMAT,$TYPE"
 echo "Analyzing region => ${chr}:${start}-${end} ,"
+echo "Length: ${gene_length}."
 echo "Gene: ${gene_name},"
 echo "NExons: ${exon_count}."
 
-# # we need to read from our region file and save the extracted region, than we're going to extract stats for that region
-# bcftools view ${INF}/All.multisampleinitial.allregions.${TYPE}.recalibrated.filtered.vcf -O z -o ${INF}/All.multisampleinitial.allregions.${TYPE}.recalibrated.filtered.vcf.gz
-# tabix -p vcf ${INF}/All.multisampleinitial.allregions.${TYPE}.recalibrated.filtered.vcf.gz
-# bcftools annotate -a /nfs/users/xe/ggirotto/annotations/All_20150102.vcf.gz -c CHROM,POS,ID,REF,ALT ${INF}/All.multisampleinitial.allregions.${TYPE}.recalibrated.filtered.vcf.gz -O z -o ${INF}/All.multisampleinitial.allregions.${TYPE}.recalibrated.filtered.ann.vcf.gz
-# tabix -p vcf ${INF}/All.multisampleinitial.allregions.${TYPE}.recalibrated.filtered.ann.vcf.gz
-# bcftools stats -s - ${INF}/All.multisampleinitial.allregions.${TYPE}.recalibrated.filtered.ann.vcf.gz > ${INF}/WES_${TYPE}_stats_ALL.txt
+mkdir -p ${OUT_F}/${gene_name}
+OUT_VCF=${OUT_F}/${gene_name}/All.multisampleinitial.${TYPE}.${FORMAT}.${gene_name}.${chr}.${start}.${end}.recalibrated.filtered.vcf.gz
+
+# we need to read from our region file and save the extracted region, than we're going to extract stats for that region
+bcftools view ${IN_VCF} -O z -o ${OUT_VCF}
+tabix -f -p vcf ${OUT_VCF}
+bcftools stats -s - ${OUT_VCF} > ${OUT_F}/${gene_name}/WES.${TYPE}.${FORMAT}.${gene_name}.${chr}.${start}.${end}.stats
 			
 
 done < <(zcat $REG_F)
