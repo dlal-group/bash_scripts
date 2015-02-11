@@ -42,5 +42,33 @@ bcftools view ${IN_VCF} -r ${chr}:${start}-${end} -O z -o ${OUT_VCF}
 tabix -f -p vcf ${OUT_VCF}
 bcftools stats -s - ${OUT_VCF} > ${OUT_F}/${gene_name}/WES.${TYPE}.${FORMAT}.${gene_name}.${chr}.${start}.${end}.stats
 			
+#we need to extract the Per Sample Count section of our stat
+#and than calculate how many samples have nNonRefHom mutations and how many nHets
+#and how many singletons and add also gene informations (size,region, number of sites)
+# case TYPE in
+# 	SNP )
+# 		var_num=`egrep "^SN" ${OUT_F}/${gene_name}/WES.${TYPE}.${FORMAT}.${gene_name}.${chr}.${start}.${end}.stats| fgrep "number of SNPs"| cut -f 4`
+# 		;;
+# 	INDEL )
+# 		var_num=`egrep "^SN" ${OUT_F}/${gene_name}/WES.${TYPE}.${FORMAT}.${gene_name}.${chr}.${start}.${end}.stats| fgrep "number of SNPs"| cut -f 4`
+# 		;;
+# esac
+var_num=`egrep "^SN" ${OUT_F}/${gene_name}/WES.${TYPE}.${FORMAT}.${gene_name}.${chr}.${start}.${end}.stats| fgrep "number of records"| cut -f 4`
+#first a count of HET sites
+tot_samples=`egrep "^PSC" ${OUT_F}/${gene_name}/WES.${TYPE}.${FORMAT}.${gene_name}.${chr}.${start}.${end}.stats | awk 'END{print NR}'`
+n_het=`egrep "^PSC" ${OUT_F}/${gene_name}/WES.${TYPE}.${FORMAT}.${gene_name}.${chr}.${start}.${end}.stats | awk '$6!=0'| awk 'END{print NR}'`
+
+#than a count of altHOM sites
+n_althom=`egrep "^PSC" ${OUT_F}/${gene_name}/WES.${TYPE}.${FORMAT}.${gene_name}.${chr}.${start}.${end}.stats | awk '$5!=0'| awk 'END{print NR}'`
+
+perc_het_nsites= $( bc -l <<< "${n_het}/${var_num}")
+perc_althom_nsites= $( bc -l <<< "${n_althom}/${var_num}")
+perc_het_length= $( bc -l <<< "${n_het}/${gene_length}")
+perc_althom_length= $( bc -l <<< "${n_althom}/${gene_length}")
+
+
+#now print a resume line for this gene
+(echo "GENE_NAME CHR START END EXON_COUNT GENE_LENGTH VARIANT_NUMBER TOT_SAMPLES HET_SAMPLES ALT_HOM_SAMPLES FREQ_HET_BY_SITE FREQ_ALT_HOM_BY_SITE FREQ_HET_BY_LENGTH FREQ_ALT_HOM_BY_LENGTH"
+echo ${gene_name} ${chr} ${start} ${end} ${exon_count} ${gene_length} ${var_num} ${tot_samples} ${n_het} ${n_althom} ${perc_het_nsites} ${perc_althom_nsites} ${perc_het_length} ${perc_althom_length}) > ${OUT_F}/${gene_name}/WES.${TYPE}.${FORMAT}.${gene_name}.${chr}.${start}.${end}.stats.resume
 
 done < <(zcat $REG_F)
