@@ -61,10 +61,10 @@ n_het=`egrep "^PSC" ${OUT_F}/${gene_name}/WES.${TYPE}.${FORMAT}.${gene_name}.${c
 #than a count of altHOM sites
 n_althom=`egrep "^PSC" ${OUT_F}/${gene_name}/WES.${TYPE}.${FORMAT}.${gene_name}.${chr}.${start}.${end}.stats | awk '$5!=0'| awk 'END{print NR}'`
 
-perc_het_nsites= $( bc -l <<< "${n_het}/${var_num}")
-perc_althom_nsites= $( bc -l <<< "${n_althom}/${var_num}")
-perc_het_length= $( bc -l <<< "${n_het}/${gene_length}")
-perc_althom_length= $( bc -l <<< "${n_althom}/${gene_length}")
+perc_het_nsites=$( bc -l <<< "${n_het}/${var_num}")
+perc_althom_nsites=$( bc -l <<< "${n_althom}/${var_num}")
+perc_het_length=$( bc -l <<< "${n_het}/${gene_length}")
+perc_althom_length=$( bc -l <<< "${n_althom}/${gene_length}")
 
 
 #now print a resume line for this gene
