@@ -18,7 +18,7 @@ do
 			exon_count=`echo ${line}| cut -f 8 -d " "`
 			;;
 		GENCODE )
-			chr=`echo ${line}| cut -f 3 -d " "|sed 's/chr//g`
+			chr=`echo ${line}| cut -f 3 -d " "|sed 's/chr//g'`
 			start=`echo ${line}| cut -f 5 -d " "`
 			end=`echo ${line}| cut -f 6 -d " "`
 			gene_name=`echo ${line}| cut -f 2 -d " "`
