@@ -10,18 +10,18 @@ while read line
 do
 	case ${FORMAT} in
 		UCSC )
-			chr=`echo ${line}| cut -f 2`
-			start=`echo ${line}| cut -f 4`
-			end=`echo ${line}| cut -f 5`
-			gene_name=`echo ${line}| cut -f 1`
-			exon_count=`echo ${line}| cut -f 8`
+			chr=`echo ${line}| cut -f 2 -d " "`
+			start=`echo ${line}| cut -f 4 -d " "`
+			end=`echo ${line}| cut -f 5 -d " "`
+			gene_name=`echo ${line}| cut -f 1 -d " "`
+			exon_count=`echo ${line}| cut -f 8 -d " "`
 			;;
 		GENCODE )
-			chr=`echo ${line}| cut -f 3`
-			start=`echo ${line}| cut -f 5`
-			end=`echo ${line}| cut -f 6`
-			gene_name=`echo ${line}| cut -f 2`
-			exon_count=`echo ${line}| cut -f 9`
+			chr=`echo ${line}| cut -f 3 -d " "`
+			start=`echo ${line}| cut -f 5 -d " "`
+			end=`echo ${line}| cut -f 6 -d " "`
+			gene_name=`echo ${line}| cut -f 2 -d " "`
+			exon_count=`echo ${line}| cut -f 9 -d " "`
 			;;
 	esac
 			gene_length=$[end - start]
