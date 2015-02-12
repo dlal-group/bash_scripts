@@ -54,6 +54,9 @@ bcftools stats -s - ${OUT_VCF} > ${OUT_F}/${gene_name}/WES.${TYPE}.${FORMAT}.${g
 # 		;;
 # esac
 var_num=`egrep "^SN" ${OUT_F}/${gene_name}/WES.${TYPE}.${FORMAT}.${gene_name}.${chr}.${start}.${end}.stats| fgrep "number of records"| cut -f 4`
+all_inds=`egrep "^SN" ${OUT_F}/${gene_name}/WES.${TYPE}.${FORMAT}.${gene_name}.${chr}.${start}.${end}.stats| fgrep "number of samples"| cut -f 4`
+#we don't want to keep all regions with 0 variants found, so...
+if [[ $var_num -gt 0 ]]; then
 #first a count of HET sites
 tot_samples=`egrep "^PSC" ${OUT_F}/${gene_name}/WES.${TYPE}.${FORMAT}.${gene_name}.${chr}.${start}.${end}.stats | awk 'END{print NR}'`
 n_het=`egrep "^PSC" ${OUT_F}/${gene_name}/WES.${TYPE}.${FORMAT}.${gene_name}.${chr}.${start}.${end}.stats | awk '$6!=0'| awk 'END{print NR}'`
@@ -61,6 +64,7 @@ n_het=`egrep "^PSC" ${OUT_F}/${gene_name}/WES.${TYPE}.${FORMAT}.${gene_name}.${c
 #than a count of altHOM sites
 n_althom=`egrep "^PSC" ${OUT_F}/${gene_name}/WES.${TYPE}.${FORMAT}.${gene_name}.${chr}.${start}.${end}.stats | awk '$5!=0'| awk 'END{print NR}'`
 
+perc_samples=$( bc -l <<< "${tot_samples}/${all_inds}")
 perc_het_nsites=$( bc -l <<< "${n_het}/${var_num}")
 perc_althom_nsites=$( bc -l <<< "${n_althom}/${var_num}")
 perc_het_length=$( bc -l <<< "${n_het}/${gene_length}")
@@ -68,7 +72,11 @@ perc_althom_length=$( bc -l <<< "${n_althom}/${gene_length}")
 
 
 #now print a resume line for this gene
-(echo "GENE_NAME CHR START END EXON_COUNT GENE_LENGTH VARIANT_NUMBER TOT_SAMPLES HET_SAMPLES ALT_HOM_SAMPLES FREQ_HET_BY_SITE FREQ_ALT_HOM_BY_SITE FREQ_HET_BY_LENGTH FREQ_ALT_HOM_BY_LENGTH"
-echo ${gene_name} ${chr} ${start} ${end} ${exon_count} ${gene_length} ${var_num} ${tot_samples} ${n_het} ${n_althom} ${perc_het_nsites} ${perc_althom_nsites} ${perc_het_length} ${perc_althom_length}) > ${OUT_F}/${gene_name}/WES.${TYPE}.${FORMAT}.${gene_name}.${chr}.${start}.${end}.stats.resume
+(echo "GENE_NAME CHR START END EXON_COUNT GENE_LENGTH VARIANT_NUMBER TOT_SAMPLES PERC_SAMPLES HET_SAMPLES ALT_HOM_SAMPLES FREQ_HET_BY_SITE FREQ_ALT_HOM_BY_SITE FREQ_HET_BY_LENGTH FREQ_ALT_HOM_BY_LENGTH"
+echo ${gene_name} ${chr} ${start} ${end} ${exon_count} ${gene_length} ${var_num} ${tot_samples} ${perc_samples} ${n_het} ${n_althom} ${perc_het_nsites} ${perc_althom_nsites} ${perc_het_length} ${perc_althom_length}) > ${OUT_F}/${gene_name}/WES.${TYPE}.${FORMAT}.${gene_name}.${chr}.${start}.${end}.stats.resume
+else
+	echo "Empty region!!Removing useless files!!"
+	rm -rf ${OUT_F}/${gene_name}/
+fi
 
 done < <(zcat $REG_F)
