@@ -14,7 +14,7 @@ do
 			chr=`echo ${line}| cut -f 2 -d " "| sed 's/chr//g'`
 			start=`echo ${line}| cut -f 4 -d " "`
 			end=`echo ${line}| cut -f 5 -d " "`
-			gene_name=`echo ${line}| cut -f 1 -d " "`
+			gene=`echo ${line}| cut -f 1 -d " "`
 			exon_count=`echo ${line}| cut -f 8 -d " "`
 			;;
 		GENCODE )
@@ -22,8 +22,24 @@ do
 			start=`echo ${line}| cut -f 5 -d " "`
 			end=`echo ${line}| cut -f 6 -d " "`
 			gene_name=`echo ${line}| cut -f 2 -d " "`
+			gene=`echo ${line}| cut -f 2 -d " "`
 			exon_count=`echo ${line}| cut -f 9 -d " "`
 			;;
+		GENCODE19 )
+			chr=`echo ${line}| cut -f 1 -d " "|sed 's/chr//g'`
+			start=`echo ${line}| cut -f 4 -d " "`
+			end=`echo ${line}| cut -f 5 -d " "`
+			gene_name=`echo ${line}| cut -f 9 -d " "| cut -f 5 -d ";" | awk '{print $2}'|sed 's/^"\(.*\)"$/\1/'`
+			gene=`echo ${line}| cut -f 9 -d " "| cut -f 5 -d ";" | awk '{print $2}'|sed 's/^"\(.*\)"$/\1/'`
+			exon_count="NA"
+			;;
+		TRANSCRIPT19 )
+			chr=`echo ${line}| cut -f 1 -d " "|sed 's/chr//g'`
+			start=`echo ${line}| cut -f 4 -d " "`
+			end=`echo ${line}| cut -f 5 -d " "`
+			gene_name=`echo ${line}| cut -f 9 -d " "| cut -f 2 -d ";" | awk '{print $2}'|sed 's/^"\(.*\)"$/\1/'`
+			gene=`echo ${line}| cut -f 9 -d " "| cut -f 5 -d ";" | awk '{print $2}'|sed 's/^"\(.*\)"$/\1/'`
+		;;
 	esac
 			gene_length=$[end - start]
 
@@ -45,14 +61,7 @@ bcftools stats -s - ${OUT_VCF} > ${OUT_F}/${gene_name}/WES.${TYPE}.${FORMAT}.${g
 #we need to extract the Per Sample Count section of our stat
 #and than calculate how many samples have nNonRefHom mutations and how many nHets
 #and how many singletons and add also gene informations (size,region, number of sites)
-# case TYPE in
-# 	SNP )
-# 		var_num=`egrep "^SN" ${OUT_F}/${gene_name}/WES.${TYPE}.${FORMAT}.${gene_name}.${chr}.${start}.${end}.stats| fgrep "number of SNPs"| cut -f 4`
-# 		;;
-# 	INDEL )
-# 		var_num=`egrep "^SN" ${OUT_F}/${gene_name}/WES.${TYPE}.${FORMAT}.${gene_name}.${chr}.${start}.${end}.stats| fgrep "number of SNPs"| cut -f 4`
-# 		;;
-# esac
+
 var_num=`egrep "^SN" ${OUT_F}/${gene_name}/WES.${TYPE}.${FORMAT}.${gene_name}.${chr}.${start}.${end}.stats| fgrep "number of records"| cut -f 4`
 all_inds=`egrep "^SN" ${OUT_F}/${gene_name}/WES.${TYPE}.${FORMAT}.${gene_name}.${chr}.${start}.${end}.stats| fgrep "number of samples"| cut -f 4`
 #we don't want to keep all regions with 0 variants found, so...
@@ -72,8 +81,8 @@ perc_althom_length=$( bc -l <<< "${n_althom}/${gene_length}")
 
 
 #now print a resume line for this gene
-(echo "GENE_NAME CHR START END EXON_COUNT GENE_LENGTH VARIANT_NUMBER TOT_SAMPLES HET_SAMPLES ALT_HOM_SAMPLES FREQ_HET_BY_SAMPLE FREQ_ALT_HOM_BY_SAMPLE FREQ_HET_BY_SITE FREQ_ALT_HOM_BY_SITE FREQ_HET_BY_LENGTH FREQ_ALT_HOM_BY_LENGTH"
-echo ${gene_name} ${chr} ${start} ${end} ${exon_count} ${gene_length} ${var_num} ${all_inds} ${n_het} ${n_althom} ${perc_het_samples} ${perc_althom_samples} ${perc_het_nsites} ${perc_althom_nsites} ${perc_het_length} ${perc_althom_length}) > ${OUT_F}/${gene_name}/WES.${TYPE}.${FORMAT}.${gene_name}.${chr}.${start}.${end}.stats.resume
+(echo "ID CHR START END EXON_COUNT GENE_LENGTH VARIANT_NUMBER TOT_SAMPLES HET_SAMPLES ALT_HOM_SAMPLES FREQ_HET_BY_SAMPLE FREQ_ALT_HOM_BY_SAMPLE FREQ_HET_BY_SITE FREQ_ALT_HOM_BY_SITE FREQ_HET_BY_LENGTH FREQ_ALT_HOM_BY_LENGTH GENE"
+echo ${gene_name} ${chr} ${start} ${end} ${exon_count} ${gene_length} ${var_num} ${all_inds} ${n_het} ${n_althom} ${perc_het_samples} ${perc_althom_samples} ${perc_het_nsites} ${perc_althom_nsites} ${perc_het_length} ${perc_althom_length} ${gene}) > ${OUT_F}/${gene_name}/WES.${TYPE}.${FORMAT}.${gene_name}.${chr}.${start}.${end}.stats.resume
 else
 	echo "Empty region!!Removing useless files!!"
 	rm -rf ${OUT_F}/${gene_name}/
