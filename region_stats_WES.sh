@@ -73,10 +73,12 @@ perc_althom_length=$( bc -l <<< "${n_althom}/${gene_length}")
 
 #now print a resume line for this gene
 (echo "GENE_NAME CHR START END EXON_COUNT GENE_LENGTH VARIANT_NUMBER TOT_SAMPLES HET_SAMPLES ALT_HOM_SAMPLES FREQ_HET_BY_SAMPLE FREQ_ALT_HOM_BY_SAMPLE FREQ_HET_BY_SITE FREQ_ALT_HOM_BY_SITE FREQ_HET_BY_LENGTH FREQ_ALT_HOM_BY_LENGTH"
-echo ${gene_name} ${chr} ${start} ${end} ${exon_count} ${gene_length} ${var_num} ${tot_samples} ${n_het} ${n_althom} ${perc_het_samples} ${perc_althom_samples} ${perc_het_nsites} ${perc_althom_nsites} ${perc_het_length} ${perc_althom_length}) > ${OUT_F}/${gene_name}/WES.${TYPE}.${FORMAT}.${gene_name}.${chr}.${start}.${end}.stats.resume
+echo ${gene_name} ${chr} ${start} ${end} ${exon_count} ${gene_length} ${var_num} ${all_inds} ${n_het} ${n_althom} ${perc_het_samples} ${perc_althom_samples} ${perc_het_nsites} ${perc_althom_nsites} ${perc_het_length} ${perc_althom_length}) > ${OUT_F}/${gene_name}/WES.${TYPE}.${FORMAT}.${gene_name}.${chr}.${start}.${end}.stats.resume
 else
 	echo "Empty region!!Removing useless files!!"
 	rm -rf ${OUT_F}/${gene_name}/
 fi
 
 done < <(zcat $REG_F)
+
+
