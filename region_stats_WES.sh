@@ -29,16 +29,17 @@ do
 			chr=`echo ${line}| cut -f 1 -d " "|sed 's/chr//g'`
 			start=`echo ${line}| cut -f 4 -d " "`
 			end=`echo ${line}| cut -f 5 -d " "`
-			gene_name=`echo ${line}| cut -f 9 -d " "| cut -f 5 -d ";" | awk '{print $2}'|sed 's/^"\(.*\)"$/\1/'`
-			gene=`echo ${line}| cut -f 9 -d " "| cut -f 5 -d ";" | awk '{print $2}'|sed 's/^"\(.*\)"$/\1/'`
+			gene_name=`echo ${line}| cut -f 9 | cut -f 5 -d ";" | awk '{print $2}'|sed 's/^"\(.*\)"$/\1/'`
+			gene=`echo ${line}| cut -f 9 | cut -f 5 -d ";" | awk '{print $2}'|sed 's/^"\(.*\)"$/\1/'`
 			exon_count="NA"
 			;;
 		TRANSCRIPT19 )
 			chr=`echo ${line}| cut -f 1 -d " "|sed 's/chr//g'`
 			start=`echo ${line}| cut -f 4 -d " "`
 			end=`echo ${line}| cut -f 5 -d " "`
-			gene_name=`echo ${line}| cut -f 9 -d " "| cut -f 2 -d ";" | awk '{print $2}'|sed 's/^"\(.*\)"$/\1/'`
-			gene=`echo ${line}| cut -f 9 -d " "| cut -f 5 -d ";" | awk '{print $2}'|sed 's/^"\(.*\)"$/\1/'`
+			gene_name=`echo ${line}| cut -f 9 | cut -f 2 -d ";" | awk '{print $2}'|sed 's/^"\(.*\)"$/\1/'`
+			gene=`echo ${line}| cut -f 9 | cut -f 5 -d ";" | awk '{print $2}'|sed 's/^"\(.*\)"$/\1/'`
+			exon_count="NA"
 		;;
 	esac
 			gene_length=$[end - start]
