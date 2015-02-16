@@ -40,7 +40,7 @@ do
 			gene_name=`echo ${line}| cut -f 9 | cut -f 2 -d ";" | awk '{print $2}'|sed 's/^"\(.*\)"$/\1/'`
 			gene=`echo ${line}| cut -f 9 | cut -f 5 -d ";" | awk '{print $2}'|sed 's/^"\(.*\)"$/\1/'`
 			exon_count="NA"
-		;;
+			;;
 	esac
 			gene_length=$[end - start]
 
