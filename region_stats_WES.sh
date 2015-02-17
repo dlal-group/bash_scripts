@@ -73,8 +73,12 @@ n_het=`egrep "^PSC" ${OUT_F}/${gene_name}/WES.${TYPE}.${FORMAT}.${gene_name}.${c
 #than a count of altHOM sites
 n_althom=`egrep "^PSC" ${OUT_F}/${gene_name}/WES.${TYPE}.${FORMAT}.${gene_name}.${chr}.${start}.${end}.stats | awk '$5!=0'| awk 'END{print NR}'`
 
-perc_het_samples=$( bc -l <<< "${n_het}/${var_num}")
-perc_althom_samples=$( bc -l <<< "${n_althom}/${var_num}")
+#this is the only number that makes sense, because we're divinding the number of samples with het or hom mutation, by the total number of samples
+perc_het_samples=$( bc -l <<< "${n_het}/${all_inds}")
+perc_althom_samples=$( bc -l <<< "${n_althom}/${all_inds}")
+
+#we should also normalize by the number of variants in our gene
+#but this should be done on the sample frequency
 perc_het_nsites=$( bc -l <<< "${n_het}/${var_num}")
 perc_althom_nsites=$( bc -l <<< "${n_althom}/${var_num}")
 perc_het_length=$( bc -l <<< "${n_het}/${gene_length}")
@@ -90,5 +94,3 @@ else
 fi
 
 done < <(zcat $REG_F)
-
-
