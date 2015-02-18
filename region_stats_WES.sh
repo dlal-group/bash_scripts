@@ -14,6 +14,7 @@ do
 			chr=`echo ${line}| cut -f 2 -d " "| sed 's/chr//g'`
 			start=`echo ${line}| cut -f 4 -d " "`
 			end=`echo ${line}| cut -f 5 -d " "`
+			gene_name=`echo ${line}| cut -f 1 -d " "`
 			gene=`echo ${line}| cut -f 1 -d " "`
 			exon_count=`echo ${line}| cut -f 8 -d " "`
 			;;
