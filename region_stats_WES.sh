@@ -76,15 +76,15 @@ n_het=`egrep "^PSC" ${OUT_F}/${gene_name}/WES.${TYPE}.${FORMAT}.${gene_name}.${c
 n_althom=`egrep "^PSC" ${OUT_F}/${gene_name}/WES.${TYPE}.${FORMAT}.${gene_name}.${chr}.${start}.${end}.stats | awk '$5!=0'| awk 'END{print NR}'`
 
 #this is the only number that makes sense, because we're divinding the number of samples with het or hom mutation, by the total number of samples
-perc_het_samples=`echo $( bc -l <<< "${n_het}/${all_inds}")| awk {printf "%f",$0}`
-perc_althom_samples=`echo $( bc -l <<< "${n_althom}/${all_inds}")| awk {printf "%f",$0}`
+perc_het_samples=`printf "%f\n" $( bc -l <<< "${n_het}/${all_inds}")`
+perc_althom_samples=`printf "%f\n" $( bc -l <<< "${n_althom}/${all_inds}")`
 
 #we should also normalize by the number of variants in our gene
 #but this should be done on the sample frequency
-perc_het_nsites=`echo $( bc -l <<< "${n_het}/${var_num}")| awk {printf "%f",$0}`
-perc_althom_nsites=`echo $( bc -l <<< "${n_althom}/${var_num}")| awk {printf "%f",$0}`
-perc_het_length=`echo $( bc -l <<< "${n_het}/${gene_length}")| awk {printf "%f",$0}`
-perc_althom_length=`echo $( bc -l <<< "${n_althom}/${gene_length}")| awk {printf "%f",$0}`
+perc_het_nsites=`printf "%f\n" $( bc -l <<< "${n_het}/${var_num}")`
+perc_althom_nsites=`printf "%f\n" $( bc -l <<< "${n_althom}/${var_num}")`
+perc_het_length=`printf "%f\n" $( bc -l <<< "${n_het}/${gene_length}")`
+perc_althom_length=`printf "%f\n" $( bc -l <<< "${n_althom}/${gene_length}")`
 
 
 #now print a resume line for this gene
