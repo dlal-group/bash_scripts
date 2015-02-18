@@ -45,15 +45,8 @@ do
 	esac
 			gene_length=$[end - start]
 
-echo "$FORMAT,$TYPE"
-echo "Analyzing region => ${chr}:${start}-${end} ,"
-echo "Length: ${gene_length}."
-echo "Gene: ${gene_name},"
-echo "NExons: ${exon_count}."
-
 mkdir -p ${OUT_F}/${gene_name}
 OUT_VCF=${OUT_F}/${gene_name}/All.multisampleinitial.${TYPE}.${FORMAT}.${gene_name}.${chr}.${start}.${end}.recalibrated.filtered.vcf.gz
-
 
 # we need to read from our region file and save the extracted region, than we're going to extract stats for that region
 bcftools view ${IN_VCF} -r ${chr}:${start}-${end} -O z -o ${OUT_VCF}
@@ -66,6 +59,14 @@ bcftools stats -s - ${OUT_VCF} > ${OUT_F}/${gene_name}/WES.${TYPE}.${FORMAT}.${g
 
 var_num=`egrep "^SN" ${OUT_F}/${gene_name}/WES.${TYPE}.${FORMAT}.${gene_name}.${chr}.${start}.${end}.stats| fgrep "number of records"| cut -f 4`
 all_inds=`egrep "^SN" ${OUT_F}/${gene_name}/WES.${TYPE}.${FORMAT}.${gene_name}.${chr}.${start}.${end}.stats| fgrep "number of samples"| cut -f 4`
+
+echo "$FORMAT,$TYPE"
+echo "Analyzing region => ${chr}:${start}-${end} ,"
+echo "Length: ${gene_length}."
+echo "Var number: ${var_num}."
+echo "Gene: ${gene_name},"
+echo "NExons: ${exon_count}."
+
 #we don't want to keep all regions with 0 variants found, so...
 if [[ $var_num -gt 0 ]]; then
 #first a count of HET sites
