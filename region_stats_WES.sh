@@ -87,7 +87,7 @@ mean_cov=`egrep "^PSC" ${OUT_F}/${gene_name}/WES.${TYPE}.${FORMAT}.${gene_name}.
 #this is the only number that makes sense, because we're divinding the number of samples with het or hom mutation, by the total number of samples
 perc_het_samples=`printf "%f\n" $( bc -l <<< "${n_het}/${all_inds}")`
 perc_althom_samples=`printf "%f\n" $( bc -l <<< "${n_althom}/${all_inds}")`
-perc_tot_mut_samples=`printf "%f\n" $( bc -l <<< "${n_althom}/${n_tot_mut}")`
+perc_tot_mut_samples=`printf "%f\n" $( bc -l <<< "${n_tot_mut}/${all_inds}")`
 perc_indels_samples=`printf "%f\n" $( bc -l <<< "${n_indels}/${all_inds}")`
 
 #we should also normalize by the number of variants in our gene
