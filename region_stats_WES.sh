@@ -75,6 +75,9 @@ n_het=`egrep "^PSC" ${OUT_F}/${gene_name}/WES.${TYPE}.${FORMAT}.${gene_name}.${c
 #than a count of altHOM sites
 n_althom=`egrep "^PSC" ${OUT_F}/${gene_name}/WES.${TYPE}.${FORMAT}.${gene_name}.${chr}.${start}.${end}.stats | awk '$5!=0'| awk 'END{print NR}'`
 
+#add the count of samples with either het or hom mutations
+n_tot_mut=`egrep "^PSC" ${OUT_F}/${gene_name}/WES.${TYPE}.${FORMAT}.${gene_name}.${chr}.${start}.${end}.stats | awk '{print $5+$6}'|awk '$1!=0'| awk 'END{print NR}'`
+
 #check indels number
 n_indels=`egrep "^PSC" ${OUT_F}/${gene_name}/WES.${TYPE}.${FORMAT}.${gene_name}.${chr}.${start}.${end}.stats | awk '$9!=0'| awk 'END{print NR}'`
 
@@ -84,6 +87,7 @@ mean_cov=`egrep "^PSC" ${OUT_F}/${gene_name}/WES.${TYPE}.${FORMAT}.${gene_name}.
 #this is the only number that makes sense, because we're divinding the number of samples with het or hom mutation, by the total number of samples
 perc_het_samples=`printf "%f\n" $( bc -l <<< "${n_het}/${all_inds}")`
 perc_althom_samples=`printf "%f\n" $( bc -l <<< "${n_althom}/${all_inds}")`
+perc_tot_mut_samples=`printf "%f\n" $( bc -l <<< "${n_althom}/${n_tot_mut}")`
 perc_indels_samples=`printf "%f\n" $( bc -l <<< "${n_indels}/${all_inds}")`
 
 #we should also normalize by the number of variants in our gene
@@ -97,8 +101,8 @@ perc_althom_length=`printf "%f\n" $( bc -l <<< "${n_althom}/${gene_length}")`
 case ${TYPE} in
 	SNP )
 	#now print a resume line for this gene
-	(echo "ID CHR START END EXON_COUNT GENE_LENGTH VARIANT_NUMBER TOT_SAMPLES HET_SAMPLES ALT_HOM_SAMPLES FREQ_HET_BY_SAMPLE FREQ_ALT_HOM_BY_SAMPLE FREQ_HET_BY_SITE FREQ_ALT_HOM_BY_SITE FREQ_HET_BY_LENGTH FREQ_ALT_HOM_BY_LENGTH GENE MEAN_COVERAGE"
-	echo ${gene_name} ${chr} ${start} ${end} ${exon_count} ${gene_length} ${var_num} ${all_inds} ${n_het} ${n_althom} ${perc_het_samples} ${perc_althom_samples} ${perc_het_nsites} ${perc_althom_nsites} ${perc_het_length} ${perc_althom_length} ${gene} ${mean_cov}) > ${OUT_F}/${gene_name}/WES.${TYPE}.${FORMAT}.${gene_name}.${chr}.${start}.${end}.stats.resume
+	(echo "ID CHR START END EXON_COUNT GENE_LENGTH VARIANT_NUMBER TOT_SAMPLES HET_SAMPLES ALT_HOM_SAMPLES TOT_MUT_SAMPLES FREQ_HET_BY_SAMPLE FREQ_ALT_HOM_BY_SAMPLE FREQ_TOT_MUT_BY_SAMPLE FREQ_HET_BY_SITE FREQ_ALT_HOM_BY_SITE FREQ_HET_BY_LENGTH FREQ_ALT_HOM_BY_LENGTH GENE MEAN_COVERAGE"
+	echo ${gene_name} ${chr} ${start} ${end} ${exon_count} ${gene_length} ${var_num} ${all_inds} ${n_het} ${n_althom} ${n_tot_mut} ${perc_het_samples} ${perc_althom_samples} ${perc_tot_mut_samples} ${perc_het_nsites} ${perc_althom_nsites} ${perc_het_length} ${perc_althom_length} ${gene} ${mean_cov}) > ${OUT_F}/${gene_name}/WES.${TYPE}.${FORMAT}.${gene_name}.${chr}.${start}.${end}.stats.resume
 		;;
 	INDEL )
 	#now print a resume line for this gene
