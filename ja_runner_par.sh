@@ -20,7 +20,7 @@ while getopts ":ds" opt; do
     s)
       echo "Single list mode triggered!!" >&2
       file=`sed -n "${LSB_JOBINDEX}p" $3`
-      echo ${file}
+      # echo ${file}
       script=$2
       $script ${file} $4 $5 $6 $7 $8
       ;;
