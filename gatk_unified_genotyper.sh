@@ -16,7 +16,7 @@ fi
 input=$1
 OUTF=$2
 MODE=$3
-REF=/lustre/scratch111/resources/ref/Homo_sapiens/1000Genomes_hs37d5/hs37d5.fa
+REF=/lustre/scratch114/resources/ref/Homo_sapiens/1000Genomes_hs37d5/hs37d5.fa
 
 mkdir -p $OUTF/LOGS
 

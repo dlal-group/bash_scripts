@@ -517,12 +517,14 @@ file=`sed -n "${LSB_JOBINDEX}p" $1`
 
 #Extract only significative results from analyses
 filename=`basename ${file}`
-zcat ${file} | awk '$10<0.05' | gzip -c > ${filename}.sig.gz
-zcat ${file} | awk '{if ($10<0.05) print $3,$4,$5,$6,$2}'| awk '{if ($3=="-" || length($3) < length($4)) print $1,$2,$2+1,$3"/"$4,"+",$5;else if ($4=="-" || length($3) > length($4)) print $1,$2,$2+length($3)-1,$3"/"$4,"+",$5;else print $1,$2,$2,$3"/"$4,"+",$5;}' | gzip -c > ${filename}.sig.vep.gz
+# zcat ${file} | awk '$10<0.05' | gzip -c > ${filename}.sig.gz
+# zcat ${file} | awk '{if ($10<0.05) print $3,$4,$5,$6,$2}'| awk '{if ($3=="-" || length($3) < length($4)) print $1,$2,$2+1,$3"/"$4,"+",$5;else if ($4=="-" || length($3) > length($4)) print $1,$2,$2+length($3)-1,$3"/"$4,"+",$5;else print $1,$2,$2,$3"/"$4,"+",$5;}' | gzip -c > ${filename}.sig.vep.gz
 
-#Annotate with VEP
-zcat ${filename}.sig.vep.gz | /nfs/team151/software/ensembl-tools-release-79/scripts/variant_effect_predictor/variant_effect_predictor.pl --format ensembl --o ${filename}.vep.annotated.tab --merged --all_refseq --gmaf --maf_esp --maf_1kg --quiet --regulatory --ccds --protein --uniprot --sift b --polyphen b --plugin Condel,/software/vertres/bin-external/VEP_plugins/config/Condel/config/,b --symbol --force_overwrite --html --cache --dir /data/blastdb/Ensembl/vep
+# #Annotate with VEP
+# zcat ${filename}.sig.vep.gz | /nfs/team151/software/ensembl-tools-release-79/scripts/variant_effect_predictor/variant_effect_predictor.pl --format ensembl --o ${filename}.vep.annotated.tab --merged --all_refseq --gmaf --maf_esp --maf_1kg --quiet --regulatory --ccds --protein --uniprot --sift b --polyphen b --plugin Condel,/software/vertres/bin-external/VEP_plugins/config/Condel/config/,b --symbol --force_overwrite --html --cache --dir /data/blastdb/Ensembl/vep
 # zcat ${filename}.sig.vep.gz | /nfs/team151/software/ensembl-tools-release-79/scripts/variant_effect_predictor/variant_effect_predictor.pl --format ensembl --o ${filename}.vep.annotated.tab --gmaf --maf_esp --quiet --regulatory --ccds --protein --uniprot --database --sift b --polyphen b --plugin Condel,/software/vertres/bin-external/VEP_plugins/config/Condel/config/,b --symbol --force_overwrite --html
-#--cache 
-#--dir /nfs/team151/software/VEP
-
+#extract different consequences data
+for conseq in missense UTR_variant stop_gained
+do
+	(grep ^# ${filename}.vep.annotated.tab;fgrep $conseq ${filename}.vep.annotated.tab) | gzip -c > ${filename}.$conseq.vep.annotated.tab.gz
+done
