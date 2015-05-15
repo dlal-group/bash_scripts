@@ -31,7 +31,6 @@ for pop in poplist[contofinterest]:
 	for vt in vartype:  dic_xac[vt][pop]={}
 
 	# for line in gzip.open('%s.chr%s.not_fixed.not_MAC1.tab.gz'%(pop, chr ), 'r'):
-	# for line in gzip.open('%s.chr%s.test.gz'%(pop, chr ), 'r'):
 	for line in gzip.open('%s.chr%s.tab.gz'%(pop, chr ), 'r'):
 		if re.match('#CHROM', line): 
 			y=line.rstrip().split('\t')

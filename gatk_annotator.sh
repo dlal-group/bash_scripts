@@ -43,3 +43,8 @@ rm ${infolder}/${chr}.fixed.vcf.gz
 rm ${infolder}/${chr}.fixed.cleaned.vcf.gz
 rm ${infolder}/${chr}.fixed.vcf.gz.tbi
 rm ${infolder}/${chr}.fixed.cleaned.vcf.gz.tbi
+
+
+seq_carl: 3 windows (created Tue Mar 31 15:47:34 2015) [274x72]
+seq_fvg: 2 windows (created Tue Mar 31 15:47:29 2015) [274x72]
+seq_vbi: 1 windows (created Tue Mar 31 15:47:20 2015) [142x36]

@@ -70,6 +70,10 @@ case $MODE in
     pop_path=$3
     # in_path=$4
   ;;
+  RANDLIST )
+  ROUNDS=$2
+  SIZE=$3
+  ;;
 esac
 
 # Merge different popuplation together
@@ -79,6 +83,17 @@ esac
 
 #create a case statement to select the operation to do:
 case $MODE in
+  RANDLIST )
+  #create random list for subsampling
+  for pop in CARL CEU Erto FVG Illegio Resia Sauris TSI VBI
+  do 
+    for i in {1..10}
+    do 
+        mkdir -p /lustre/scratch113/projects/esgi-vbseq/20140430_purging/46_SAMPLES_rounds/${i}/listpop
+        sort -R /lustre/scratch113/projects/esgi-vbseq/20140430_purging/UNRELATED/listpop/${pop}_unrelated.list | head -n ${SIZE} > /lustre/scratch113/projects/esgi-vbseq/20140430_purging/46_SAMPLES_rounds/${i}/listpop/${pop}_unrelated.list
+    done
+  done
+  ;;
   CSQEXTRACT )
   #extract number of variants per sample belonging to a particular category (syn/missense eventually already stratified by novel/shared)
   /lustre/scratch113/projects/esgi-vbseq/20140430_purging/enza/listsites/miss

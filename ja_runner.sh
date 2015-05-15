@@ -330,7 +330,7 @@ file=`sed -n "${LSB_JOBINDEX}p" $1`
 # bcftools merge /lustre/scratch113/projects/esgi-vbseq/20140430_purging/ALL/POPULATIONS/TGP/CEU/21.vcf.gz /lustre/scratch113/projects/esgi-vbseq/20140430_purging/ALL/POPULATIONS/TGP/TSI/21.vcf.gz /lustre/scratch113/projects/esgi-vbseq/20140430_purging/ALL/POPULATIONS/INGI/FVG/21.vcf.gz /lustre/scratch113/projects/esgi-vbseq/20140430_purging/ALL/POPULATIONS/INGI/VBI/21.vcf.gz /lustre/scratch113/projects/esgi-vbseq/20140430_purging/ALL/POPULATIONS/INGI/CARL/21.vcf.gz
 
 
-#06/04/2014
+#06/08/2014
 #create bed files from vcf
 # chr=${file}
 
@@ -515,6 +515,7 @@ file=`sed -n "${LSB_JOBINDEX}p" $1`
 #fixed
 # zcat ${file} | awk '$6 != "NA" && $6 == 0 && $7 !="NA" && $8!="NA" && $9!="NA" && ($7 > 0 || $8 > 0 || $9 > 0)'| gzip -c > ${file}.TSI.shared_fixed.tab.gz
 
+#Commands for CARLANTINO's project
 #Extract only significative results from analyses
 filename=`basename ${file}`
 # zcat ${file} | awk '$10<0.05' | gzip -c > ${filename}.sig.gz

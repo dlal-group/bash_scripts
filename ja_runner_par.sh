@@ -11,13 +11,13 @@ while getopts ":ds" opt; do
   case $opt in
     d)
       echo $opt
-      echo "Double list mode triggered!" >&2
-      file=`sed -n "${LSB_JOBINDEX}p" $3`
-      file2=`sed -n "${LSB_JOBINDEX}p" $4`
+      echo "Double column list mode triggered!" >&2
+      file=`sed -n "${LSB_JOBINDEX}p" $3 | awk '{print $1}'`
+      file2=`sed -n "${LSB_JOBINDEX}p" $3 | awk '{print $2}'`
       echo ${file}
       echo ${file2}
       script=$2
-      $script ${file} ${file2} "${@:5}"
+      $script ${file} ${file2} "${@:4}"
       ;;
     s)
       echo $opt

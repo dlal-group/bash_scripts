@@ -5,28 +5,45 @@
 ###############
 #Args:
 #$1:bam file
+#$2:out dir
 #
 #2.1 Run binnie
+bam_name=$(basename ${1})
+bam=${1}
+remap=$(echo ${2}/${bam_name}"_remap.bam")
+bridged=$(echo ${2}/${bam_name}"_bridged.bam")
+unchanged=$(echo ${2}/${bam_name}"_unchanged.bam")
+module unload hgi/bwa/latest
+module unload hgi/bwa/0.5.9
+module add hgi/bwa/0.5.10
+
 echo "Run Binnie-ing"
-~jr17/local/bin/binnie -i -s 50000 -m 10000 -v -a ${1} ${1}\_bridge.bam
+~jr17/local/bin/binnie -i -s 50000 -m 10000 -v -a -u ${unchanged} -b ${bridged} -r ${remap} ${1} ${2}/${bam_name}_bridge.bam
 
 #Run reheader
-bam=${1}
-remap=$(echo $bam"_remap.bam")
-bridged=$(echo $bam"_bridged.bam")
-unchanged=$(echo $bam"_unchanged.bam")
 
+echo $bam
+echo $bam_name
+echo ${2}
+echo $remap
+echo $bridged
+echo $unchanged
 
 if [ -f ${remap} ]; then
         echo "Binnie-ing finished"
+        REF=/lustre/scratch114/resources/ref/Homo_sapiens/1000Genomes_hs37d5/hs37d5.fa
         #we need to sort remap.bam according to read name before realignment
         samtools sort -n $remap $remap\_readname\_sorted
-        /lustre/scratch113/projects/crohns/software/samtools-fixmate/samtools fixmate $remap\_readname\_sorted.bam $remap\_fixmate.bam
+        # /lustre/scratch113/projects/crohns/software/samtools-fixmate/samtools fixmate $remap\_readname\_sorted.bam $remap\_fixmate.bam
+        samtools fixmate $remap\_readname\_sorted.bam $remap\_fixmate.bam
         mv $remap\_fixmate.bam $remap
         #2.2 remap reads in the *_remap.bam to target reference (hs37d5) pair-end
-        /lustre/scratch113/projects/crohns/software/bwa.0.5.10_fixes/bwa aln -q 15 -b1 /lustre/scratch109/srpipe/references/Homo_sapiens/1000Genomes_hs37d5/all/bwa/hs37d5.fa $remap > $remap.1.sai;
-        /lustre/scratch113/projects/crohns/software/bwa.0.5.10_fixes/bwa aln -q 15 -b2 /lustre/scratch109/srpipe/references/Homo_sapiens/1000Genomes_hs37d5/all/bwa/hs37d5.fa $remap > $remap.2.sai;
-        /lustre/scratch113/projects/crohns/software/bwa.0.5.10_fixes/bwa sampe /lustre/scratch109/srpipe/references/Homo_sapiens/1000Genomes_hs37d5/all/bwa/hs37d5.fa $remap.1.sai $remap.2.sai $remap $remap | samtools view -h -Sb - > $remap\_hs37d5.bam
+        # /lustre/scratch113/projects/crohns/software/bwa.0.5.10_fixes/bwa aln -q 15 -b1 /lustre/scratch109/srpipe/references/Homo_sapiens/1000Genomes_hs37d5/all/bwa/hs37d5.fa $remap > $remap.1.sai;
+        bwa aln -q 15 -b1 $REF $remap > $remap.1.sai;
+        # /lustre/scratch113/projects/crohns/software/bwa.0.5.10_fixes/bwa aln -q 15 -b2 /lustre/scratch109/srpipe/references/Homo_sapiens/1000Genomes_hs37d5/all/bwa/hs37d5.fa $remap > $remap.2.sai;
+        bwa aln -q 15 -b2 $REF $remap > $remap.2.sai;
+        # /lustre/scratch113/projects/crohns/software/bwa.0.5.10_fixes/bwa sampe /lustre/scratch109/srpipe/references/Homo_sapiens/1000Genomes_hs37d5/all/bwa/hs37d5.fa $remap.1.sai $remap.2.sai $remap $remap | samtools view -h -Sb - > $remap\_hs37d5.bam
+        bwa sampe $REF $remap.1.sai $remap.2.sai $remap $remap | samtools view -h -Sb - > $remap\_hs37d5.bam
         echo "remapping finished"
         rm $remap.[12].sai
         rm $remap

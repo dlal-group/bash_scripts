@@ -9,13 +9,13 @@
 
 ## from Shane: /lustre/scratch106/projects/uk10k/RELEASE/UK10K_COHORT/REL-2012-06-02/v3/
 
-k_hap=10000
+k_hap=10000 #numbers of haplotypes used by Impute
 geno=vb121_X
 genodir=/lustre/scratch113/projects/uk10k/users/jh21/imputed/vb/${geno}
 refname=uk10k1kg ## 1kg, uk10k, uk10k1kg
 postfix=".shapeit" ## "" or ".shapeit"
 by_chunk=Y  ## "Y" or "N"
-scratch113=/lustre/scratch113/projects/uk10k/users/jh21
+scratch113=/lustre/scratch113/projects/uk10k/users/jh21/jh21
 refdir=$scratch113/references_panel
 phasedir=$scratch113/imputed/$geno/shapeit
 imputedir=$scratch113/imputed/$geno/${refname}$postfix
@@ -33,7 +33,7 @@ extra_str="-verbose" #"-verbose" #"-phase"
 
 # for chr in {1..22}; do
 # for chr in X_PAR1 X_PAR2 X ; do
-for chr in X; do
+for chr in {1..22} X_PAR1 X_PAR2 X; do
 	if [[ "$chr" == "X_PAR1" ]]; then # (60,001 - 2,699,520)
 		plink_str="--chr X --from-bp 60001 --to-bp 2699520"
 		chrX_phase_str=""
