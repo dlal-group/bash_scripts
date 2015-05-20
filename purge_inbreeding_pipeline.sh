@@ -521,7 +521,7 @@ case $MODE in
           ;;
         
       esac
-    
+    done
     
   ;;
   PRISHCOUNT )
