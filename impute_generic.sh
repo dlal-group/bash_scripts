@@ -81,8 +81,10 @@ for chr in {1..22} X_PAR1 X_PAR2 X; do
 		chunk_num=1
 	fi
 	for chunk in `seq 1 $chunk_num`; do
+
 		chunkStr=`printf "%02d" $chunk`
-		if [[ -e $imputedir/chr$chr.$chunkStr.log ]]; then
+		# if [[ -e $imputedir/chr$chr.$chunkStr.log ]]; then
+		if [[ -e $imputedir/chr$chr.$chunkStr.gen.gz ]]; then
 			continue # in case this chunk already run, skip to the next one
 		fi
 		if [[ $chunk -gt 1 ]]; then
