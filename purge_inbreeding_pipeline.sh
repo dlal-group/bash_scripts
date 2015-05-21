@@ -439,7 +439,7 @@ case $MODE in
           # Fixed in Isolate and shared
           zcat ${in_file} | awk '$6 !="NA" && $6 == 1 && ($5 > 0 || $4 > 0)'| gzip -c > ${outdir}/${pop}_shared_chr${CHR}.merged_frq.fixed.tab.gz
           # NOVEL in Isolate
-          zcat ${in_file} | awk '$6 =="NA" && ($5 == "NA" && $4 == "NA")'| gzip -c > ${outdir}/${pop}_novel_chr${CHR}.merged_frq.tab.gz
+          zcat ${in_file} | awk '$6 !="NA" && ($5 == "NA" && $4 == "NA")'| gzip -c > ${outdir}/${pop}_novel_chr${CHR}.merged_frq.tab.gz
           # pop_path=/lustre/scratch113/projects/esgi-vbseq/20140430_purging/UNRELATED/RESULTS/DAF/FIVE_POP
           ;;
         FVG )
@@ -453,7 +453,7 @@ case $MODE in
           # Fixed in Isolate and shared
           zcat ${in_file} | awk '$7 !="NA" && $7 == 1 && ($5 > 0 || $4 > 0)'| gzip -c > ${outdir}/${pop}_shared_chr${CHR}.merged_frq.fixed.tab.gz
           # NOVEL in Isolate
-          zcat ${in_file} | awk '$7 =="NA" && ($5 == "NA" && $4 == "NA")'| gzip -c > ${outdir}/${pop}_novel_chr${CHR}.merged_frq.tab.gz
+          zcat ${in_file} | awk '$7 !="NA" && ($5 == "NA" && $4 == "NA")'| gzip -c > ${outdir}/${pop}_novel_chr${CHR}.merged_frq.tab.gz
           ;;
     
         CARL )
@@ -467,7 +467,7 @@ case $MODE in
           # Fixed in Isolate and shared
           zcat ${in_file} | awk '$8 !="NA" && $8 == 1 && ($5 > 0 || $4 > 0)'| gzip -c > ${outdir}/${pop}_shared_chr${CHR}.merged_frq.fixed.tab.gz
           # NOVEL in Isolate
-          zcat ${in_file} | awk '$8 =="NA" && ($5 == "NA" && $4 == "NA")'| gzip -c > ${outdir}/${pop}_novel_chr${CHR}.merged_frq.tab.gz
+          zcat ${in_file} | awk '$8 !="NA" && ($5 == "NA" && $4 == "NA")'| gzip -c > ${outdir}/${pop}_novel_chr${CHR}.merged_frq.tab.gz
     
           ;;
         Erto )
@@ -480,7 +480,7 @@ case $MODE in
           # Fixed in Isolate and shared
           zcat ${in_file} | awk '$9 !="NA" && $9 == 1 && ($5 > 0 || $4 > 0)'| gzip -c > ${outdir}/${pop}_shared_chr${CHR}.merged_frq.fixed.tab.gz
           # NOVEL in Isolate
-          zcat ${in_file} | awk '$9 =="NA" && ($5 == "NA" && $4 == "NA")'| gzip -c > ${outdir}/${pop}_novel_chr${CHR}.merged_frq.tab.gz
+          zcat ${in_file} | awk '$9 !="NA" && ($5 == "NA" && $4 == "NA")'| gzip -c > ${outdir}/${pop}_novel_chr${CHR}.merged_frq.tab.gz
           ;;
         Illegio )
          #Private calculation without fixed sites
@@ -492,7 +492,7 @@ case $MODE in
           # Fixed in Isolate and shared
           zcat ${in_file} | awk '$10 !="NA" && $10 == 1 && ($5 > 0 || $4 > 0)'| gzip -c > ${outdir}/${pop}_shared_chr${CHR}.merged_frq.fixed.tab.gz
           # NOVEL in Isolate
-          zcat ${in_file} | awk '$10 =="NA" && ($5 == "NA" && $4 == "NA")'| gzip -c > ${outdir}/${pop}_novel_chr${CHR}.merged_frq.tab.gz 
+          zcat ${in_file} | awk '$10 !="NA" && ($5 == "NA" && $4 == "NA")'| gzip -c > ${outdir}/${pop}_novel_chr${CHR}.merged_frq.tab.gz 
           ;;
         Resia )
           #Private calculation without fixed sites
@@ -505,7 +505,7 @@ case $MODE in
           # Fixed in Isolate and shared
           zcat ${in_file} | awk '$11 !="NA" && $11 == 1 && ($5 > 0 || $4 > 0)'| gzip -c > ${outdir}/${pop}_shared_chr${CHR}.merged_frq.fixed.tab.gz
           # NOVEL in Isolate
-          zcat ${in_file} | awk '$11 =="NA" && ($5 == "NA" && $4 == "NA")'| gzip -c > ${outdir}/${pop}_novel_chr${CHR}.merged_frq.tab.gz
+          zcat ${in_file} | awk '$11 !="NA" && ($5 == "NA" && $4 == "NA")'| gzip -c > ${outdir}/${pop}_novel_chr${CHR}.merged_frq.tab.gz
           ;;
         Sauris )
          #Private calculation without fixed sites
@@ -517,7 +517,7 @@ case $MODE in
           # Fixed in Isolate and shared
           zcat ${in_file} | awk '$12 !="NA" && $12 == 1 && ($5 > 0 || $4 > 0)'| gzip -c > ${outdir}/${pop}_shared_chr${CHR}.merged_frq.fixed.tab.gz
           # NOVEL in Isolate
-          zcat ${in_file} | awk '$12 =="NA" && ($5 == "NA" && $4 == "NA")'| gzip -c > ${outdir}/${pop}_novel_chr${CHR}.merged_frq.tab.gz 
+          zcat ${in_file} | awk '$12 !="NA" && ($5 == "NA" && $4 == "NA")'| gzip -c > ${outdir}/${pop}_novel_chr${CHR}.merged_frq.tab.gz 
           ;;
         
       esac
