@@ -471,7 +471,7 @@ case $MODE in
         FVG )
           # pop_path=/lustre/scratch113/projects/esgi-vbseq/20140430_purging/UNRELATED/RESULTS/DAF/FIVE_POP
           #Private calculation without fixed sites
-          zcat ${in_file} |cut -f 1,3-| awk '$7 !="NA" && $7 > 0 && $7 < 1 && $5 == 0 && $4 == 0'| gzip -c > ${outdir}/${pop}_private_chr${CHR}.merged_frq.tab.gz
+          zcat ${in_file} |cut -f 1,3- | awk '$7 !="NA" && $7 > 0 && $7 < 1 && $5 == 0 && $4 == 0'| gzip -c > ${outdir}/${pop}_private_chr${CHR}.merged_frq.tab.gz
           # Fixed in Isolate and private
           zcat ${in_file} |cut -f 1,3- | awk '$7 !="NA" && $7 == 1 && $5 == 0 && $4 == 0'| gzip -c > ${outdir}/${pop}_private_chr${CHR}.merged_frq.fixed.tab.gz
           # Shared calculation without fixed sites
