@@ -63,7 +63,7 @@ for chr in {1..22} X_PAR1 X_PAR2 X; do
 		\n$shapeit2 --thread $thread --window $window_size --states 200 --effective-size 11418 -B chr$chr --input-map /lustre/scratch114/resources/imputation/impute2/1000GP_Phase3_v1a/genetic_map_chr${chr}_combined_b37.txt --output-log chr$chr.shapeit --output-max chr$chr.hap.gz chr$chr.sample $chrX_phase_str
 		" > $phasedir/chr$chr.cmd
 		cd $phasedir
-		bsub -J $geno.shapeit.chr$chr -q long -o chr$chr.shapeit.log -e chr$chr.shapeit.err -n$thread -R "span[ptile=$thread] select[mem>18000] rusage[mem=18000]" -M18000 < chr$chr.cmd
+		bsub -J $geno.shapeit.chr$chr -q long -o chr$chr.shapeit.log -e chr$chr.shapeit.err -n$thread -R "span[ptile=$thread] select[mem>7000] rusage[mem=7000]" -M7000 < chr$chr.cmd
 		continue
 	fi
 
