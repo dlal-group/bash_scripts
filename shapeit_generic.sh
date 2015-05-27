@@ -17,7 +17,8 @@ postfix=".shapeit" ## "" or ".shapeit"
 by_chunk=Y  ## "Y" or "N"
 scratch113=/lustre/scratch113/projects/carl_seq/05272015_MERGED_REF_PANEL/GWAS
 # refdir=$scratch113/references_panel
-phasedir=/lustre/scratch113/projects/carl_seq/05272015_MERGED_REF_PANEL/GWAS/FVG/shapeit
+phasedir=$3
+# phasedir=/lustre/scratch113/projects/carl_seq/05272015_MERGED_REF_PANEL/GWAS/FVG/shapeit
 # imputedir=$scratch113/imputed/$geno/${refname}$postfix
 mkdir -p ${phasedir}
 # mkdir -p ${imputedir}
