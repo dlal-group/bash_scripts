@@ -25,6 +25,7 @@ mkdir -p ${phasedir}
 
 impute2=/nfs/team151/software/impute_v2.3.1_x86_64_static/impute
 shapeit2=/nfs/team151/software/shapeit.v2.r790/shapeit
+plink2=/nfs/team151/software/plink2_18_April_2015/plink
 chunk_size=3000000
 buffer_size=250
 window_size=2
@@ -59,8 +60,8 @@ for chr in {1..22} X_PAR1 X_PAR2 X; do
 		echo phase $geno chr$chr
 		echo -e "#!/usr/local/bin/bash
 		\necho \"Starting on : \$(date); Running on : \$(hostname); Job ID : \$LSB_JOBID\"
-		\nplink --noweb --bfile $genodir/$geno  $plink_str --make-bed --out chr$chr\n\n
-		\n$shapeit2 --thread $thread --window $window_size --states 200 --effective-size 11418 -B chr$chr --input-map /lustre/scratch114/resources/imputation/impute2/1000GP_Phase3_v1a/genetic_map_chr${chr}_combined_b37.txt --output-log chr$chr.shapeit --output-max chr$chr.hap.gz chr$chr.sample $chrX_phase_str
+		\n$plink2 --noweb --bfile $genodir/$geno  $plink_str --make-bed --out $genodir/chr$chr\n\n
+		\n$shapeit2 --thread $thread --window $window_size --states 200 --effective-size 11418 -B $genodir/chr$chr --input-map /lustre/scratch114/resources/imputation/impute2/1000GP_Phase3_v1a/genetic_map_chr${chr}_combined_b37.txt --output-log chr$chr.shapeit --output-max chr$chr.hap.gz chr$chr.sample $chrX_phase_str
 		" > $phasedir/chr$chr.cmd
 		cd $phasedir
 		bsub -J $geno.shapeit.chr$chr -q long -o chr$chr.shapeit.log -e chr$chr.shapeit.err -n$thread -R "span[ptile=$thread] select[mem>7000] rusage[mem=7000]" -M7000 < chr$chr.cmd
