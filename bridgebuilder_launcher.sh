@@ -3,7 +3,9 @@
 #launcher for BridgeBuilder from Yang's script
 
 # mkdir -p LOGS;size=`wc -l /lustre/scratch113/projects/fvg_seq/04092015/BRIDGED/new_batch_misaligned_files.list|cut -f 1 -d " "`;bsub -J "bridge[1-${size}]" -o "LOGS/%J_bridge.%I.o" -M 2000 -R"select[mem>2000] rusage[mem=2000]" -q normal -- ~/Work/bash_scripts/ja_runner_par.sh -s ~/Work/bash_scripts/bridgebuilder_launcher.sh /lustre/scratch113/projects/fvg_seq/04092015/BRIDGED/new_batch_misaligned_files.list /lustre/scratch113/projects/fvg_seq/04092015/BRIDGED
-# mkdir -p LOGS;size=`wc -l /lustre/scratch113/projects/fvg_seq/04092015/BRIDGED/new_batch_misaligned_files_1.list|cut -f 1 -d " "`;bsub -J "bridge[1-${size}]" -o "LOGS/%J_bridge.%I.o" -q normal -- ~/Work/bash_scripts/ja_runner_par.sh -s ~/Work/bash_scripts/bridgebuilder_launcher.sh /lustre/scratch113/projects/fvg_seq/04092015/BRIDGED/new_batch_misaligned_files_1.list /lustre/scratch113/projects/fvg_seq/04092015/BRIDGED
+# mkdir -p LOGS;size=`wc -l /lustre/scratch113/projects/fvg_seq/04092015/BRIDGED/new_batch_misaligned_files_1.list|cut -f 1 -d " "`;bsub -J "bridge[1-${size}]" -o "LOGS/%J_bridge.%I.o" -q normal -- ~/Work/bash_scripts/ja_runner_par.sh -s ~/Work/bash_scripts/bridgebuilder_launcher.sh /lustre/scratch113/projects/fvg_seq/04092015/BRIDGED/new_batch_misaligned_files_1.list /lustre/scratch113/projects/carl_seq/05262015/BRIDGED_FVG
+# mkdir -p LOGS;size=`wc -l /lustre/scratch113/projects/fvg_seq/04092015/BRIDGED/new_batch_misaligned_files.list|cut -f 1 -d " "`;bsub -J "bridge[1-${size}]" -o "LOGS/%J_bridge.%I.o" -q normal -- ~/Work/bash_scripts/ja_runner_par.sh -s ~/Work/bash_scripts/bridgebuilder_launcher.sh /lustre/scratch113/projects/fvg_seq/04092015/BRIDGED/new_batch_misaligned_files.list /lustre/scratch113/projects/carl_seq/05262015/BRIDGED_FVG
+
 #$1= bam file path
 #$2= out dir
 
