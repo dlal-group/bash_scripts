@@ -11,7 +11,7 @@
 
 k_hap=10000 #numbers of haplotypes used by Impute
 geno=$1
-genodir=$2/${geno}
+genodir=$2
 refname=uk10k1kg ## 1kg, uk10k, uk10k1kg
 postfix=".shapeit" ## "" or ".shapeit"
 by_chunk=Y  ## "Y" or "N"
