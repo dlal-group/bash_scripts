@@ -158,7 +158,7 @@ case $MODE in
     # shared_bed=/lustre/scratch113/projects/esgi-vbseq/20140430_purging/46_SAMPLES/INPUT_FILES/FIVE_POPS/WG/sharedsites/Illegio_shared_chr17.bed
     awk 'FNR==NR { a[$2]=$0; next } $2 in a { print a[$2] }' ${shared_bed} ${snplist} | sort -g -k2,2 |uniq| tr " " "\t" > /lustre/scratch113/projects/esgi-vbseq/20140430_purging/46_SAMPLES/RESULTS/HOMCOUNT/shared/${cat}/shared.${pop}.${cat}.${chr}.bed
     # the second file is the one which gives you the items's order
-    shared_cat=/lustre/scratch113/projects/esgi-vbseq/20140430_purging/46_SAMPLES/RESULTS/HOMCOUNT/shared/${cat}/shared.${pop}.${cat}.${chr}.bed
+    shared_cat=/lustre/scratch113/projects/esgi-vbseq/20140430_purging/46_SAMPLES/RESULTS/HOMCOUNT/shared/${cat}/shared.${pop}.${cat}.${CHR}.bed
     # --derived
     # For use with the previous four frequency and count options only. Re-orders the output file columns so that the ancestral allele appears first.
     # This option relies on the ancestral allele being specified in the VCF file using the AA tag in the INFO field
