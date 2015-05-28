@@ -147,6 +147,9 @@ case $MODE in
 
     # snplist=/lustre/scratch113/projects/esgi-vbseq/20140430_purging/enza/listsites/syn/syn.17.bed
     snplist=${list_path}/${cat}/${cat}.${CHR}.bed
+    mkdir -p /lustre/scratch113/projects/esgi-vbseq/20140430_purging/46_SAMPLES/RESULTS/HOMCOUNT/shared/${cat}
+    mkdir -p /lustre/scratch113/projects/esgi-vbseq/20140430_purging/46_SAMPLES/RESULTS/HOMCOUNT/shared/${cat}/${pop}
+
     vcf=/lustre/scratch113/projects/esgi-vbseq/20140430_purging/ALL/POP_MERGED_FILES/FIVE_POPS/20140730_ANNOTATED/${CHR}.clean_annotated.vcf.gz
     out_name=/lustre/scratch113/projects/esgi-vbseq/20140430_purging/46_SAMPLES/RESULTS/HOMCOUNT/shared/${cat}/${pop}_${cat}_${sample}
     shared_bed=/lustre/scratch113/projects/esgi-vbseq/20140430_purging/46_SAMPLES/INPUT_FILES/FIVE_POPS/WG/sharedsites/${pop}_shared_chr${CHR}.bed
@@ -164,7 +167,7 @@ case $MODE in
       # sample_hom=`tail -n+2 ${out_name}.frq.count | awk '{split($5,ref,":");split($6,alt,":")}{if(ref[2]==2 || alt[2]==2) print ref[2],alt[2]}' | wc -l `
       sample_hom=`tail -n+2 ${out_name}.frq.count | awk '{split($5,aa,":")}{if(aa[2]==2) print aa[2]}' | wc -l `
       tot_snp=`wc -l ${shared_bed}|cut -f 1 -d " "`
-      echo "${sample} ${CHR} ${sample_hom} ${pop} ${tot_snp}" > ${pop}_${cat}_${CHR}_${sample}.tab
+      echo "${sample} ${CHR} ${sample_hom} ${pop} ${tot_snp}" > /lustre/scratch113/projects/esgi-vbseq/20140430_purging/46_SAMPLES/RESULTS/HOMCOUNT/shared/${cat}/${pop}/${pop}_${cat}_${CHR}_${sample}.tab
     done < <(cat ${pop_path})
   done
   ;;
