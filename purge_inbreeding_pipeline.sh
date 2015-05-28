@@ -7,8 +7,8 @@ pops="FVG VBI TSI CEU CARL"
 # pops="FVG VBI"
 
 #retrieve the MODE parameter to select the correct operation
-MODE=$1
-CHR=$2
+MODE=$2
+CHR=$3
 # define the output folder relative to the chromosome, if specified
 outdir=CHR${CHR}
 mkdir -p LOGS
@@ -16,8 +16,10 @@ mkdir -p ${outdir}
 
 case $MODE in
   HOMDAC)
-  list_path=$3
-  cat=$4
+  sample=$1
+  list_path=$4
+  cat=$5
+  pop=$6
   rm -r ${outdir}
   ;;
   ROH*)
@@ -98,9 +100,9 @@ case $MODE in
   HOMDAC)
   #extract counts for alternative alleles count from vcf files fo a subset of variants on a subset of samples
   #out path : /lustre/scratch113/projects/esgi-vbseq/20140430_purging/46_SAMPLES/RESULTS/HOMCOUNT
-  pops_updated="FVG VBI CARL TSI CEU Erto Resia Illegio Sauris"
-  for pop in $pops_updated
-    do
+  # pops_updated="FVG VBI CARL TSI CEU Erto Resia Illegio Sauris"
+  # for pop in $pops_updated
+  #   do
       case $pop in
         FVG )
           # pop_path=/lustre/scratch113/projects/esgi-vbseq/20140430_purging/UNRELATED/listpop/FVG_unrelated.list
@@ -160,16 +162,16 @@ case $MODE in
     # --derived
     # For use with the previous four frequency and count options only. Re-orders the output file columns so that the ancestral allele appears first.
     # This option relies on the ancestral allele being specified in the VCF file using the AA tag in the INFO field
-    while read line
-    do
+    # while read line
+    # do
       /nfs/team151/software/vcftools/bin/vcftools --gzvcf ${vcf} --bed ${shared_cat} --indv ${sample} --counts --derived --out ${out_name} # --> conte per locus per individuo  
       
       # sample_hom=`tail -n+2 ${out_name}.frq.count | awk '{split($5,ref,":");split($6,alt,":")}{if(ref[2]==2 || alt[2]==2) print ref[2],alt[2]}' | wc -l `
       sample_hom=`tail -n+2 ${out_name}.frq.count | awk '{split($5,aa,":")}{if(aa[2]==2) print aa[2]}' | wc -l `
       tot_snp=`wc -l ${shared_bed}|cut -f 1 -d " "`
       echo "${sample} ${CHR} ${sample_hom} ${pop} ${tot_snp}" > /lustre/scratch113/projects/esgi-vbseq/20140430_purging/46_SAMPLES/RESULTS/HOMCOUNT/shared/${cat}/${pop}/${pop}_${cat}_${CHR}_${sample}.tab
-    done < <(cat ${pop_path})
-  done
+    # done < <(cat ${pop_path})
+  # done
   ;;
   RANDLIST )
   #create random list for subsampling
