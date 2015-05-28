@@ -147,8 +147,8 @@ case $MODE in
             ;;
       esac
 
-    # snplist=/lustre/scratch113/projects/esgi-vbseq/20140430_purging/enza/listsites/syn/syn.17.bed
-    snplist=${list_path}/${cat}/${cat}.${CHR}.bed
+    # snplist=/lustre/scratch113/projects/esgi-vbseq/20140430_purging/enza/listsites/neutral/neut.17.bed
+    snplist=${list_path}/${cat}*/${cat}.${CHR}.bed
     mkdir -p /lustre/scratch113/projects/esgi-vbseq/20140430_purging/46_SAMPLES/RESULTS/HOMCOUNT/shared/${cat}
     mkdir -p /lustre/scratch113/projects/esgi-vbseq/20140430_purging/46_SAMPLES/RESULTS/HOMCOUNT/shared/${cat}/${pop}
 
