@@ -157,7 +157,7 @@ case $MODE in
     out_name=/lustre/scratch113/projects/esgi-vbseq/20140430_purging/46_SAMPLES/RESULTS/HOMCOUNT/shared/${cat}/${pop}_${cat}_${sample}
     shared_bed=/lustre/scratch113/projects/esgi-vbseq/20140430_purging/46_SAMPLES/INPUT_FILES/FIVE_POPS/WG/sharedsites/${pop}_shared_chr${CHR}.bed
     # shared_bed=/lustre/scratch113/projects/esgi-vbseq/20140430_purging/46_SAMPLES/INPUT_FILES/FIVE_POPS/WG/sharedsites/Illegio_shared_chr17.bed
-    awk 'FNR==NR { a[$2]=$0; next } $2 in a { print a[$2] }' ${shared_bed} ${snplist} | sort -g -k2,2 |uniq| tr " " "\t" > /lustre/scratch113/projects/esgi-vbseq/20140430_purging/46_SAMPLES/RESULTS/HOMCOUNT/shared/${cat}/shared.${pop}.${cat}.${chr}.bed
+    awk 'FNR==NR { a[$2]=$0; next } $2 in a { print a[$2] }' ${shared_bed} ${snplist} | sort -g -k2,2 |uniq| tr " " "\t" > /lustre/scratch113/projects/esgi-vbseq/20140430_purging/46_SAMPLES/RESULTS/HOMCOUNT/shared/${cat}/shared.${pop}.${cat}.${CHR}.bed
     # the second file is the one which gives you the items's order
     shared_cat=/lustre/scratch113/projects/esgi-vbseq/20140430_purging/46_SAMPLES/RESULTS/HOMCOUNT/shared/${cat}/shared.${pop}.${cat}.${CHR}.bed
     # --derived
