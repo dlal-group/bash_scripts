@@ -170,14 +170,15 @@ case $MODE in
     # This option relies on the ancestral allele being specified in the VCF file using the AA tag in the INFO field
     # while read line
     # do
-      /nfs/team151/software/vcftools/bin/vcftools --gzvcf ${vcf} --bed ${shared_cat} --indv ${sample} --counts --derived --out ${out_name} # --> conte per locus per individuo  
-      
+      # /nfs/team151/software/vcftools/bin/vcftools --gzvcf ${vcf} --bed ${shared_cat} --indv ${sample} --counts --derived --out ${out_name} # --> conte per locus per individuo  
+      # bcftools query -s ${sample} -R ${shared_cat} -f 
       # sample_hom=`tail -n+2 ${out_name}.frq.count | awk '{split($5,ref,":");split($6,alt,":")}{if(ref[2]==2 || alt[2]==2) print ref[2],alt[2]}' | wc -l `
-      sample_hom=`tail -n+2 ${out_name}.frq.count | awk '{split($5,aa,":")}{if(aa[2]==2) print aa[2]}' | wc -l `
+      sample_hom=`tail -n+2 ${out_name}.frq.count | awk '{split($6,aa,":")}{if(aa[2]==2) print aa[2]}' | wc -l `
+      sample_count=`tail -n+2 ${out_name}.frq.count | awk '{split($6,aa,":")}{if(aa[2]==2) print 2;else print 1}' | awk '{sum+=$1}END{print sum}' `
       tot_shared=`wc -l ${shared_bed}|cut -f 1 -d " "`
       tot_shared_cat=`wc -l ${shared_cat}|cut -f 1 -d " "`
       # Header: sample CHR sample_hom pop tot_shared tot_shared_cat
-      echo "${sample} ${CHR} ${sample_hom} ${pop} ${tot_shared} ${tot_shared_cat}" > /lustre/scratch113/projects/esgi-vbseq/20140430_purging/46_SAMPLES/RESULTS/HOMCOUNT/${date}/shared/${cat}/${pop}/${pop}_${cat}_${CHR}_${sample}.tab
+      echo "${sample} ${CHR} ${sample_hom} ${sample_count} ${pop} ${tot_shared} ${tot_shared_cat}" > /lustre/scratch113/projects/esgi-vbseq/20140430_purging/46_SAMPLES/RESULTS/HOMCOUNT/${date}/shared/${cat}/${pop}/${pop}_${cat}_${CHR}_${sample}.tab
     # done < <(cat ${pop_path})
   # done
   ;;
