@@ -155,7 +155,7 @@ case $MODE in
 
     # vcf=/lustre/scratch113/projects/esgi-vbseq/20140430_purging/ALL/POP_MERGED_FILES/FIVE_POPS/20140730_ANNOTATED/${CHR}.clean_annotated.vcf.gz
     vcf=/lustre/scratch113/projects/esgi-vbseq/20140430_purging/UNRELATED/POP_MERGED_FILES/FIVE_POPS/20140711_ANNOTATED/${CHR}.vcf.gz
-    out_name=/lustre/scratch113/projects/esgi-vbseq/20140430_purging/46_SAMPLES/RESULTS/HOMCOUNT/${date}/shared/${cat}/${pop}_${cat}_${sample}
+    out_name=/lustre/scratch113/projects/esgi-vbseq/20140430_purging/46_SAMPLES/RESULTS/HOMCOUNT/${date}/shared/${cat}/${pop}_${cat}_${CHR}_${sample}
     shared_bed=/lustre/scratch113/projects/esgi-vbseq/20140430_purging/46_SAMPLES/INPUT_FILES/FIVE_POPS/WG/sharedsites/${pop}_shared_chr${CHR}.bed
     # shared_bed=/lustre/scratch113/projects/esgi-vbseq/20140430_purging/46_SAMPLES/INPUT_FILES/FIVE_POPS/WG/sharedsites/Illegio_shared_chr17.bed
     if [[ ! -e /lustre/scratch113/projects/esgi-vbseq/20140430_purging/46_SAMPLES/RESULTS/HOMCOUNT/${date}/shared/${cat}/shared.${pop}.${cat}.${CHR}.bed ]]; then
