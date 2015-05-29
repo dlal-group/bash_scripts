@@ -174,8 +174,10 @@ case $MODE in
       
       # sample_hom=`tail -n+2 ${out_name}.frq.count | awk '{split($5,ref,":");split($6,alt,":")}{if(ref[2]==2 || alt[2]==2) print ref[2],alt[2]}' | wc -l `
       sample_hom=`tail -n+2 ${out_name}.frq.count | awk '{split($5,aa,":")}{if(aa[2]==2) print aa[2]}' | wc -l `
-      tot_snp=`wc -l ${shared_bed}|cut -f 1 -d " "`
-      echo "${sample} ${CHR} ${sample_hom} ${pop} ${tot_snp}" > /lustre/scratch113/projects/esgi-vbseq/20140430_purging/46_SAMPLES/RESULTS/HOMCOUNT/${date}/shared/${cat}/${pop}/${pop}_${cat}_${CHR}_${sample}.tab
+      tot_shared=`wc -l ${shared_bed}|cut -f 1 -d " "`
+      tot_shared_cat=`wc -l ${shared_cat}|cut -f 1 -d " "`
+      # Header: sample CHR sample_hom pop tot_shared tot_shared_cat
+      echo "${sample} ${CHR} ${sample_hom} ${pop} ${tot_shared} ${tot_shared_cat}" > /lustre/scratch113/projects/esgi-vbseq/20140430_purging/46_SAMPLES/RESULTS/HOMCOUNT/${date}/shared/${cat}/${pop}/${pop}_${cat}_${CHR}_${sample}.tab
     # done < <(cat ${pop_path})
   # done
   ;;
