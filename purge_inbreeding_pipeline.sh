@@ -24,6 +24,15 @@ case $MODE in
   rm -r ${outdir}
   fi
   ;;
+  ALTDAC)
+  sample=$1
+  list_path=$4
+  cat=$5
+  pop=$6
+  if [ -d "${outdir}" ]; then
+  rm -r ${outdir}
+  fi
+  ;;
   ROH*)
     #set parameters for beagle:
     window=$3
@@ -150,8 +159,8 @@ case $MODE in
       esac
 
     # snplist=/lustre/scratch113/projects/esgi-vbseq/20140430_purging/enza/listsites/neutral/neut.17.bed
-    date=05292015
-    # date=05302015
+    # date=05292015
+    date=05302015
     snplist=${list_path}/${cat}*/${cat}.${CHR}.bed
     mkdir -p /lustre/scratch113/projects/esgi-vbseq/20140430_purging/46_SAMPLES/RESULTS/HOMCOUNT/${date}/shared/${cat}
     mkdir -p /lustre/scratch113/projects/esgi-vbseq/20140430_purging/46_SAMPLES/RESULTS/HOMCOUNT/${date}/shared/${cat}/${pop}
@@ -175,6 +184,7 @@ case $MODE in
     # while read line
     # do
       # /nfs/team151/software/vcftools/bin/vcftools --gzvcf ${vcf} --bed ${shared_cat} --indv ${sample} --counts --derived --out ${out_name} # --> conte per locus per individuo  
+      /nfs/team151/software/vcftools/bin/vcftools --gzvcf ${vcf} --bed ${shared_cat} --indv ${sample} --counts --out ${out_name} # --> conte per locus per individuo  
       #implemented the allele count with bcftools
       if [[ ! -s ${out_name}.frq.count ]]
         then
@@ -224,6 +234,90 @@ fi
       echo "${sample} ${CHR} ${sample_hom} ${sample_count} ${pop} ${tot_shared} ${tot_shared_cat} ${tot_shared_cat_sample_chr}" > /lustre/scratch113/projects/esgi-vbseq/20140430_purging/46_SAMPLES/RESULTS/HOMCOUNT/${date}/shared/${cat}/${pop}/${pop}_${cat}_${CHR}_${sample}.tab
     # done < <(cat ${pop_path})
   # done
+  ;;
+  ALTDAC)
+  #extract counts for alternative alleles count from vcf files fo a subset of variants on a subset of samples
+  #out path : /lustre/scratch113/projects/esgi-vbseq/20140430_purging/46_SAMPLES/RESULTS/HOMCOUNT
+  # pops_updated="FVG VBI CARL TSI CEU Erto Resia Illegio Sauris"
+  # for pop in $pops_updated
+  #   do
+      case $pop in
+        FVG )
+          # pop_path=/lustre/scratch113/projects/esgi-vbseq/20140430_purging/UNRELATED/listpop/FVG_unrelated.list
+          # pop_path=/lustre/scratch113/projects/esgi-vbseq/20140430_purging/46_SAMPLES/listpop/FVG_unrelated.list
+          pop_path=/lustre/scratch113/projects/esgi-vbseq/20140430_purging/46_SAMPLES/listpop/FVG_unrelated.list_1
+          ;;
+        VBI )
+          # pop_path=/lustre/scratch113/projects/esgi-vbseq/20140430_purging/UNRELATED/listpop/VBI_unrelated.list
+          # pop_path=/lustre/scratch113/projects/esgi-vbseq/20140430_purging/46_SAMPLES/listpop/VBI_unrelated.list
+          pop_path=/lustre/scratch113/projects/esgi-vbseq/20140430_purging/46_SAMPLES/listpop/VBI_unrelated.list_1
+          ;;
+        CARL )
+          # pop_path=/lustre/scratch113/projects/esgi-vbseq/20140430_purging/UNRELATED/listpop/CARL_unrelated.list
+          # pop_path=/lustre/scratch113/projects/esgi-vbseq/20140430_purging/46_SAMPLES/listpop/CARL_unrelated.list
+          pop_path=/lustre/scratch113/projects/esgi-vbseq/20140430_purging/46_SAMPLES/listpop/CARL_unrelated.list_1
+          ;;
+        TSI )
+          # pop_path=/lustre/scratch113/projects/esgi-vbseq/20140430_purging/UNRELATED/listpop/TSI.list
+          # pop_path=/lustre/scratch113/projects/esgi-vbseq/20140430_purging/46_SAMPLES/listpop/TSI_unrelated.list
+          pop_path=/lustre/scratch113/projects/esgi-vbseq/20140430_purging/46_SAMPLES/listpop/TSI_unrelated.list_1
+          ;;
+        CEU )
+          # pop_path=/lustre/scratch113/projects/esgi-vbseq/20140430_purging/UNRELATED/listpop/CEU.list
+          # pop_path=/lustre/scratch113/projects/esgi-vbseq/20140430_purging/46_SAMPLES/listpop/CEU_unrelated.list
+          pop_path=/lustre/scratch113/projects/esgi-vbseq/20140430_purging/46_SAMPLES/listpop/CEU_unrelated.list_1
+          ;;
+        Erto )
+          # pop_path=/lustre/scratch113/projects/esgi-vbseq/20140430_purging/46_SAMPLES/listpop/Erto_unrelated.list
+          pop_path=/lustre/scratch113/projects/esgi-vbseq/20140430_purging/46_SAMPLES/listpop/Erto_unrelated.list_1
+            ;;
+        Sauris )
+          # pop_path=/lustre/scratch113/projects/esgi-vbseq/20140430_purging/46_SAMPLES/listpop/Sauris_unrelated.list
+          pop_path=/lustre/scratch113/projects/esgi-vbseq/20140430_purging/46_SAMPLES/listpop/Sauris_unrelated.list_1
+            ;;
+        Illegio )
+          # pop_path=/lustre/scratch113/projects/esgi-vbseq/20140430_purging/46_SAMPLES/listpop/Illegio_unrelated.list
+          pop_path=/lustre/scratch113/projects/esgi-vbseq/20140430_purging/46_SAMPLES/listpop/Illegio_unrelated.list_1
+            ;;
+        Resia )
+          # pop_path=/lustre/scratch113/projects/esgi-vbseq/20140430_purging/46_SAMPLES/listpop/Resia_unrelated.list
+          pop_path=/lustre/scratch113/projects/esgi-vbseq/20140430_purging/46_SAMPLES/listpop/Resia_unrelated.list_1
+            ;;
+      esac
+
+    # snplist=/lustre/scratch113/projects/esgi-vbseq/20140430_purging/enza/listsites/neutral/neut.17.bed
+    # date=05292015
+    # date=05302015
+    date=05302015_ALT
+    snplist=${list_path}/${cat}*/${cat}.${CHR}.bed
+    mkdir -p /lustre/scratch113/projects/esgi-vbseq/20140430_purging/46_SAMPLES/RESULTS/ALTCOUNT/${date}/shared/${cat}
+    mkdir -p /lustre/scratch113/projects/esgi-vbseq/20140430_purging/46_SAMPLES/RESULTS/ALTCOUNT/${date}/shared/${cat}/${pop}
+
+    # vcf=/lustre/scratch113/projects/esgi-vbseq/20140430_purging/ALL/POP_MERGED_FILES/FIVE_POPS/20140730_ANNOTATED/${CHR}.clean_annotated.vcf.gz
+    vcf=/lustre/scratch113/projects/esgi-vbseq/20140430_purging/UNRELATED/POP_MERGED_FILES/FIVE_POPS/20140711_ANNOTATED/${CHR}.vcf.gz
+    out_name=/lustre/scratch113/projects/esgi-vbseq/20140430_purging/46_SAMPLES/RESULTS/ALTCOUNT/${date}/shared/${cat}/${pop}_${cat}_${CHR}_${sample}
+    shared_bed=/lustre/scratch113/projects/esgi-vbseq/20140430_purging/46_SAMPLES/INPUT_FILES/FIVE_POPS/WG/sharedsites/${pop}_shared_chr${CHR}.bed
+    # shared_bed=/lustre/scratch113/projects/esgi-vbseq/20140430_purging/46_SAMPLES/INPUT_FILES/FIVE_POPS/WG/sharedsites/Illegio_shared_chr17.bed
+    if [[ ! -e /lustre/scratch113/projects/esgi-vbseq/20140430_purging/46_SAMPLES/RESULTS/ALTCOUNT/${date}/shared/${cat}/shared.${pop}.${cat}.${CHR}.bed ]]; then
+
+      awk 'FNR==NR { a[$2]=$0; next } $2 in a { print a[$2] }' ${shared_bed} ${snplist} | sort -g -k2,2 |uniq| tr " " "\t" > /lustre/scratch113/projects/esgi-vbseq/20140430_purging/46_SAMPLES/RESULTS/ALTCOUNT/${date}/shared/${cat}/shared.${pop}.${cat}.${CHR}.bed
+      awk '{print $1,$3}' /lustre/scratch113/projects/esgi-vbseq/20140430_purging/46_SAMPLES/RESULTS/ALTCOUNT/${date}/shared/${cat}/shared.${pop}.${cat}.${CHR}.bed | tr " " "\t" > /lustre/scratch113/projects/esgi-vbseq/20140430_purging/46_SAMPLES/RESULTS/ALTCOUNT/${date}/shared/${cat}/shared.${pop}.${cat}.${CHR}.bcftools.list
+    fi
+    # the second file is the one which gives you the items's order
+    # shared_cat=/lustre/scratch113/projects/esgi-vbseq/20140430_purging/46_SAMPLES/RESULTS/ALTCOUNT/${date}/shared/${cat}/shared.${pop}.${cat}.${CHR}.bed -> bed format for VCFTOOLS ONLY!!
+    shared_cat=/lustre/scratch113/projects/esgi-vbseq/20140430_purging/46_SAMPLES/RESULTS/ALTCOUNT/${date}/shared/${cat}/shared.${pop}.${cat}.${CHR}.bcftools.list # -> list format for BCFTOOLS
+    # --derived
+    # For use with the previous four frequency and count options only. Re-orders the output file columns so that the ancestral allele appears first.
+    # This option relies on the ancestral allele being specified in the VCF file using the AA tag in the INFO field
+      /nfs/team151/software/vcftools/bin/vcftools --gzvcf ${vcf} --bed ${shared_cat} --indv ${sample} --counts --out ${out_name} # --> conte per locus per individuo  
+
+      sample_hom=`fgrep -v CHROM ${out_name}.frq.count | awk '{split($6,aa,":")}{if(aa[2]==2) print aa[2]}' | wc -l `
+      sample_count=`fgrep -v CHROM ${out_name}.frq.count | awk '{split($6,aa,":")}{if(aa[2]==2) print 2;else print 1}' | awk '{sum+=$1}END{print sum}' `
+      tot_shared=`wc -l ${shared_bed}|cut -f 1 -d " "`
+      tot_shared_cat=`wc -l ${shared_cat}|cut -f 1 -d " "`
+      tot_shared_cat_sample_chr=`fgrep -v CHROM ${out_name}.frq.count | wc -l |cut -f 1 -d " "`
+      # Header: sample CHR sample_hom pop tot_shared tot_shared_cat
+      echo "${sample} ${CHR} ${sample_hom} ${sample_count} ${pop} ${tot_shared} ${tot_shared_cat} ${tot_shared_cat_sample_chr}" > /lustre/scratch113/projects/esgi-vbseq/20140430_purging/46_SAMPLES/RESULTS/ALTCOUNT/${date}/shared/${cat}/${pop}/${pop}_${cat}_${CHR}_${sample}.tab
   ;;
   RANDLIST )
   #create random list for subsampling
