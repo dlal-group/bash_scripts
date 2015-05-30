@@ -20,7 +20,9 @@ case $MODE in
   list_path=$4
   cat=$5
   pop=$6
+  if [ -d "${outdir}" ]; then
   rm -r ${outdir}
+  fi
   ;;
   ROH*)
     #set parameters for beagle:
