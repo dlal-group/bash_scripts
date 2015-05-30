@@ -174,7 +174,7 @@ case $MODE in
     # do
       # /nfs/team151/software/vcftools/bin/vcftools --gzvcf ${vcf} --bed ${shared_cat} --indv ${sample} --counts --derived --out ${out_name} # --> conte per locus per individuo  
       #implemented the allele count with bcftools
-      bcftools query -s ${sample} -R ${shared_cat} -f '%CHROM\t%POS\t%REF\t%ALT\t%INFO/AA[\t%TGT]\n' ${vcf} | awk '{split($4,a,",")} $5!="." && $5!="-" && $5!="N" && ($5~$3 || $5~$4 || $5~tolower($3) || $5~tolower($4)||$5~tolower(a[1])||$5~tolower(a[2]))' | awk '{if ($5 == $3) print $0,$3,$4;else print $0,$4,$3}'| awk '
+      bcftools query -s ${sample} -R ${shared_cat} -f '%CHROM\t%POS\t%REF\t%ALT\t%INFO/AA[\t%TGT]\n' ${vcf} | awk '{split($4,a,",")} $5!="." && $5!="-" && $5!="N" && ($5==$3 || $5==$4 || $5==tolower($3) || $5==tolower($4)||$5==tolower(a[1])||$5==tolower(a[2]))' | awk '{if ($5 == $3 || $5 == tolower($3)) print $0,$3,$4;else print $0,$4,$3}'| awk '
 {split($6,a,"|");split($4,b,",")}
 {if(b[2]==""){
 if (a[1]==a[2] && a[1] == $7) {
