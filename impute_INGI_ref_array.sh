@@ -10,17 +10,10 @@
 ## from Shane: /lustre/scratch106/projects/uk10k/RELEASE/UK10K_COHORT/REL-2012-06-02/v3/
 
 k_hap=10000 #numbers of haplotypes used by Impute
-geno=vb121_X
-genodir=/lustre/scratch113/projects/uk10k/users/jh21/imputed/vb/${geno}
-refname=uk10k1kg ## 1kg, uk10k, uk10k1kg
+# refname=uk10k1kg ## 1kg, uk10k, uk10k1kg
 postfix=".shapeit" ## "" or ".shapeit"
 by_chunk=Y  ## "Y" or "N"
-scratch113=/lustre/scratch113/projects/uk10k/users/jh21/jh21
-refdir=$scratch113/references_panel
-phasedir=$scratch113/imputed/$geno/shapeit
-imputedir=$scratch113/imputed/$geno/${refname}$postfix
-mkdir -p ${phasedir}
-mkdir -p ${imputedir}
+# phasedir=$scratch113/imputed/$geno/shapeit
 
 impute2=/nfs/team151/software/impute_v2.3.1_x86_64_static/impute2
 shapeit2=/nfs/team151/software/shapeit.v2.r790/shapeit
@@ -30,23 +23,79 @@ buffer_size=250
 window_size=2
 thread=8
 extra_str="-verbose" #"-verbose" #"-phase"
-chr=$1
-MODE=$2 #set this to PHASE, if you want to phase and impute; set this to IMPUTE, if you're providing already phased genotypes
-pop=$3
+pop=$1
+PANEL=$2
+chr=$3
+MODE=$4 #set this to PHASE, if you want to phase and impute; set this to IMPUTE, if you're providing already phased genotypes
+
+imputedir=/lustre/scratch113/projects/carl_seq/05272015_MERGED_REF_PANEL/IMPUTED/${pop}/${PANEL}$postfix
+# mkdir -p ${phasedir}
+mkdir -p ${imputedir}
 
 case $pop in
 	VBI)
-	# extra_str="-exclude_samples_g /nfs/team151/jh21/data/uk10kgwas/uk10kgwas.1000.excluded -sample_h $refdir/$refname/$refname.sample_h.sample -exclude_samples_h /nfs/team151/jh21/data/uk10kgwas/uk10kgwas.1000.included"
+	extra_str_excl_samples="-exclude_samples_g /lustre/scratch113/projects/carl_seq/05272015_MERGED_REF_PANEL/listpop/VBI_seq_samples.exclusion"
+	extra_str_excl_snps="-exclude_snps_g /lustre/scratch113/projects/carl_seq/05272015_MERGED_REF_PANEL/snplist/${pop}_chr${chr}.exclude -impute_excluded"
+	genodir=/lustre/scratch113/projects/carl_seq/MERGED_REF_PANEL_Feb2015/VBI_geno
+	phasedir=/lustre/scratch113/projects/carl_seq/MERGED_REF_PANEL_Feb2015/VBI_geno
 	;;
 	FVG)
-	# extra_str="-exclude_samples_g /nfs/team151/jh21/data/uk10kgwas/uk10kgwas.1000.excluded -sample_h $refdir/$refname/$refname.sample_h.sample -exclude_samples_h /nfs/team151/jh21/data/uk10kgwas/uk10kgwas.1000.included"
+	extra_str_excl_samples="-exclude_samples_g /lustre/scratch113/projects/carl_seq/05272015_MERGED_REF_PANEL/listpop/FVG_seq_samples.exclusion"
+	extra_str_excl_snps="-exclude_snps_g /lustre/scratch113/projects/carl_seq/05272015_MERGED_REF_PANEL/snplist/${pop}_chr${chr}.exclude -impute_excluded"
+	genodir=/lustre/scratch113/projects/carl_seq/05272015_MERGED_REF_PANEL/GWAS/FVG/shapeit
+	phasedir=/lustre/scratch113/projects/carl_seq/05272015_MERGED_REF_PANEL/GWAS/FVG/shapeit
 	;;
 	CARL)
-	# extra_str="-exclude_samples_g /nfs/team151/jh21/data/uk10kgwas/uk10kgwas.1000.excluded -sample_h $refdir/$refname/$refname.sample_h.sample -exclude_samples_h /nfs/team151/jh21/data/uk10kgwas/uk10kgwas.1000.included"
+	extra_str_excl_samples="-exclude_samples_g /lustre/scratch113/projects/carl_seq/05272015_MERGED_REF_PANEL/listpop/CARL_seq_samples.exclusion"
+	extra_str_excl_snps="-exclude_snps_g /lustre/scratch113/projects/carl_seq/05272015_MERGED_REF_PANEL/snplist/${pop}_chr${chr}.exclude -impute_excluded"
+	genodir=/lustre/scratch113/teams/soranzo/users/jh21/imputed/carl/shapeit
+	phasedir=/lustre/scratch113/teams/soranzo/users/jh21/imputed/carl/shapeit
+	;;
+	INCIPE2 )
+	extra_str_excl_snps="-exclude_snps_g /lustre/scratch113/projects/carl_seq/05272015_MERGED_REF_PANEL/snplist/${pop}_chr${chr}.exclude -impute_excluded"
+	genodir=/lustre/scratch113/teams/soranzo/users/jh21/imputed/incipe2/shapeit
+	phasedir=/lustre/scratch113/teams/soranzo/users/jh21/imputed/incipe2/shapeit
+	;;
+esac
+case $PANEL in
+	FVG )
+	refdir=/lustre/scratch113/projects/carl_seq/MERGED_REF_PANEL_Feb2015/SHAPEIT/FVG_HAP_LEGEND
+	refhap=$refdir/${PANEL}.chr$chr.hap.gz
+	reflegend=$refdir/${PANEL}.chr$chr.legend.gz
+	;;
+	CARL )
+	refdir=/lustre/scratch113/projects/carl_seq/MERGED_REF_PANEL_Feb2015/SHAPEIT/CARL_HAP_LEGEND
+	refhap=$refdir/${PANEL}.chr$chr.hap.gz
+	reflegend=$refdir/${PANEL}.chr$chr.legend.gz
+	;;
+	VBI )
+	refdir=/lustre/scratch113/projects/carl_seq/MERGED_REF_PANEL_Feb2015/SHAPEIT/VBI_HAP_LEGEND
+	refhap=$refdir/${PANEL}.chr$chr.hap.gz
+	reflegend=$refdir/${PANEL}.chr$chr.legend.gz
+	;;
+	INGI )
+	refdir=/lustre/scratch113/projects/carl_seq/MERGED_REF_PANEL_Feb2015/MERGER_CARL_VBI_FVG
+	refhap=$refdir/${PANEL}.chr$chr.hap.gz
+	reflegend=$refdir/${PANEL}.chr$chr.legend.gz
+	;;
+	1000Gph1 )
+	refdir=/lustre/scratch114/resources/imputation/impute2/2015-05-08/ALL_1000G_phase1interim_jun2011_impute
+	refhap=$refdir/ALL_1000G_phase1interim_jun2011_chr${chr}_impute.hap.gz
+	reflegend=$refdir/ALL_1000G_phase1interim_jun2011_chr${chr}_impute.legend.gz
+	;;
+	INGI_1000GPh3 )
+	refdir=/lustre/scratch113/projects/carl_seq/MERGED_REF_PANEL_Feb2015/MERGER_INGI_1000GPh3
+	refhap=$refdir/${PANEL}.chr$chr.hap.gz
+	reflegend=$refdir/${PANEL}.chr$chr.legend.gz
+	;;
+	1000GP_Phase3)
+	refdir=/lustre/scratch114/resources/imputation/impute2/1000GP_Phase3_v1a
+	refhap=$refdir/${PANEL}_chr$chr.hap.gz
+	reflegend=$refdir/${PANEL}_chr$chr.legend.gz
 	;;
 esac
 
-# extra_str="-exclude_samples_g $scratch113/references_panel/uk10k/uk10k.sample.ids"
+extra_str=`echo $extra_str_excl_snps $extra_str_excl_samples`
 
 if [[ "$chr" == "X_PAR1" ]]; then # (60,001 - 2,699,520)
 	plink_str="--chr X --from-bp 60001 --to-bp 2699520"
@@ -80,9 +129,6 @@ if [[ $MODE=="PHASE" ]]; then
 fi
 
 ### step 2: impute ###
-refhap=$refdir/$refname/chr$chr.hap.gz
-# reflegend=$refdir/$refname/chr$chr.legend.gz	
-reflegend=$refdir/$refname/chrX.legend.gz	
 chr_begin=`zcat $reflegend | awk 'NR==2 {printf \$2}'`
 chr_end=`zcat $reflegend | tail -1 | awk '{printf \$2}'`
 let "chunk_num=($chr_end - $chr_begin)/$chunk_size" # bash rounds automatically
@@ -101,11 +147,11 @@ for chunk in `seq 1 $chunk_num`; do
 	fi
 	if [[ $chunk -eq $chunk_num ]]; then
 		mem=9000
-		queue=normal
+		queue=long
 		chunk_end=$chr_end
 	else
 		mem=9000
-		queue=normal
+		queue=long
 		chunk_end=`echo "$chr_begin+($chunk*$chunk_size)" | bc`
 	fi
 	if [[ $chr.$chunkStr == 8.02 ]]; then
@@ -117,7 +163,7 @@ for chunk in `seq 1 $chunk_num`; do
 		reflegend=$refdir/$refname/chr$chr.${chunkStr}$postfix.legend.gz
 	fi
 	echo -e "#!/usr/local/bin/bash
-	\n$impute2 -allow_large_regions -m $scratch113/references_panel/1kg/genetic_map_chrX_combined_b37.txt -h $refhap -l $reflegend -known_haps_g $phasedir/chr$chr.hap.gz -sample_g $phasedir/chr$chr.sample $extra_str -use_prephased_g -k_hap $k_hap -int $chunk_begin $chunk_end -Ne 20000 -buffer $buffer_size -o chr$chr.$chunkStr.gen $chrX_impute_str
+	\n$impute2 -allow_large_regions -m /lustre/scratch113/projects/carl_seq/MERGED_REF_PANEL_Feb2015/GENETIC_MAP/genetic_map_chr${chr}_combined_b37.txt -h $refhap -l $reflegend -known_haps_g $phasedir/chr$chr.hap.gz -sample_g $phasedir/chr$chr.sample $extra_str -use_prephased_g -k_hap $k_hap -int $chunk_begin $chunk_end -Ne 20000 -buffer $buffer_size -o chr$chr.$chunkStr.gen $chrX_impute_str
 	\ngzip -f chr$chr.$chunkStr.gen
 	\nif [[ -e chr$chr.$chunkStr.gen_allele_probs ]]; then
 	\ngzip chr$chr.$chunkStr.gen_allele_probs chr$chr.$chunkStr.gen_haps
