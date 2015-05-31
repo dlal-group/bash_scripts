@@ -12,7 +12,7 @@
 k_hap=10000 #numbers of haplotypes used by Impute
 # refname=uk10k1kg ## 1kg, uk10k, uk10k1kg
 postfix=".shapeit" ## "" or ".shapeit"
-by_chunk=Y  ## "Y" or "N"
+by_chunk=N  ## "Y" or "N"
 # phasedir=$scratch113/imputed/$geno/shapeit
 
 impute2=/nfs/team151/software/impute_v2.3.1_x86_64_static/impute2
