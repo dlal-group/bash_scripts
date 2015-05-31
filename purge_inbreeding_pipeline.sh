@@ -302,9 +302,10 @@ fi
 
       awk 'FNR==NR { a[$2]=$0; next } $2 in a { print a[$2] }' ${shared_bed} ${snplist} | sort -g -k2,2 |uniq| tr " " "\t" > /lustre/scratch113/projects/esgi-vbseq/20140430_purging/46_SAMPLES/RESULTS/ALTCOUNT/${date}/shared/${cat}/shared.${pop}.${cat}.${CHR}.bed
       awk '{print $1,$3}' /lustre/scratch113/projects/esgi-vbseq/20140430_purging/46_SAMPLES/RESULTS/ALTCOUNT/${date}/shared/${cat}/shared.${pop}.${cat}.${CHR}.bed | tr " " "\t" > /lustre/scratch113/projects/esgi-vbseq/20140430_purging/46_SAMPLES/RESULTS/ALTCOUNT/${date}/shared/${cat}/shared.${pop}.${cat}.${CHR}.bcftools.list
-    fi
     # the second file is the one which gives you the items's order
-    shared_cat=/lustre/scratch113/projects/esgi-vbseq/20140430_purging/46_SAMPLES/RESULTS/ALTCOUNT/${date}/shared/${cat}/shared.${pop}.${cat}.${CHR}.bed -> bed format for VCFTOOLS ONLY!!
+    fi
+    #-> bed format for VCFTOOLS ONLY!!
+    shared_cat=/lustre/scratch113/projects/esgi-vbseq/20140430_purging/46_SAMPLES/RESULTS/ALTCOUNT/${date}/shared/${cat}/shared.${pop}.${cat}.${CHR}.bed 
     # shared_cat=/lustre/scratch113/projects/esgi-vbseq/20140430_purging/46_SAMPLES/RESULTS/ALTCOUNT/${date}/shared/${cat}/shared.${pop}.${cat}.${CHR}.bcftools.list # -> list format for BCFTOOLS
     # --derived
     # For use with the previous four frequency and count options only. Re-orders the output file columns so that the ancestral allele appears first.
