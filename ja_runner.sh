@@ -4,6 +4,7 @@
 # Arguments: runner.sh filelist
 # Environment variables: LSB_JOBINDEX
 # mkdir -p LOGS;size=`wc -l result.list|cut -f 1 -d " "`;bsub -J "p_check[1-${size}]" -o "LOGS/%J_p_check.%I.o" -M 5000 -R"select[mem>5000] rusage[mem=5000]" -q normal -- ~/Work/bash_scripts/ja_runner.sh result.list
+# mkdir -p LOGS;size=`wc -l file_list|cut -f 1 -d " "`;bsub -J "sort[1-${size}]" -o "LOGS/%J_sort.%I.o" -M 100 -R"select[mem>100] rusage[mem=100]" -q yesterday -- ~/Work/bash_scripts/ja_runner.sh file_list
 file=`sed -n "${LSB_JOBINDEX}p" $1`
 # file2=`sed -n "${LSB_JOBINDEX}p" $2`
 #added for population control

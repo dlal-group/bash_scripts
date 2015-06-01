@@ -160,7 +160,8 @@ case $MODE in
 
     # snplist=/lustre/scratch113/projects/esgi-vbseq/20140430_purging/enza/listsites/neutral/neut.17.bed
     # date=05292015
-    date=05302015
+    # date=05302015
+    date=06012015
     snplist=${list_path}/${cat}*/${cat}.${CHR}.bed
     mkdir -p /lustre/scratch113/projects/esgi-vbseq/20140430_purging/46_SAMPLES/RESULTS/HOMCOUNT/${date}/shared/${cat}
     mkdir -p /lustre/scratch113/projects/esgi-vbseq/20140430_purging/46_SAMPLES/RESULTS/HOMCOUNT/${date}/shared/${cat}/${pop}
@@ -168,7 +169,7 @@ case $MODE in
     # vcf=/lustre/scratch113/projects/esgi-vbseq/20140430_purging/ALL/POP_MERGED_FILES/FIVE_POPS/20140730_ANNOTATED/${CHR}.clean_annotated.vcf.gz
     vcf=/lustre/scratch113/projects/esgi-vbseq/20140430_purging/UNRELATED/POP_MERGED_FILES/FIVE_POPS/20140711_ANNOTATED/${CHR}.vcf.gz
     out_name=/lustre/scratch113/projects/esgi-vbseq/20140430_purging/46_SAMPLES/RESULTS/HOMCOUNT/${date}/shared/${cat}/${pop}_${cat}_${CHR}_${sample}
-    shared_bed=/lustre/scratch113/projects/esgi-vbseq/20140430_purging/46_SAMPLES/INPUT_FILES/FIVE_POPS/WG/sharedsites/${pop}_shared_chr${CHR}.bed
+    shared_bed=/lustre/scratch113/projects/esgi-vbseq/20140430_purging/46_SAMPLES/INPUT_FILES/FIVE_POPS/WG/sharedsites/${pop}_shared_chr${CHR}.bed.sorted.bed
     # shared_bed=/lustre/scratch113/projects/esgi-vbseq/20140430_purging/46_SAMPLES/INPUT_FILES/FIVE_POPS/WG/sharedsites/Illegio_shared_chr17.bed
     if [[ ! -e /lustre/scratch113/projects/esgi-vbseq/20140430_purging/46_SAMPLES/RESULTS/HOMCOUNT/${date}/shared/${cat}/shared.${pop}.${cat}.${CHR}.bed ]]; then
       awk 'FNR==NR { a[$2]=$0; next } $2 in a { print a[$2] }' ${shared_bed} ${snplist} | sort -g -k2,2 |uniq| tr " " "\t" > /lustre/scratch113/projects/esgi-vbseq/20140430_purging/46_SAMPLES/RESULTS/HOMCOUNT/${date}/shared/${cat}/shared.${pop}.${cat}.${CHR}.bed
@@ -183,7 +184,7 @@ case $MODE in
     # while read line
     # do
       # /nfs/team151/software/vcftools/bin/vcftools --gzvcf ${vcf} --bed ${shared_cat} --indv ${sample} --counts --derived --out ${out_name} # --> conte per locus per individuo  
-      /nfs/team151/software/vcftools/bin/vcftools --gzvcf ${vcf} --bed ${shared_cat} --indv ${sample} --counts --out ${out_name} # --> conte per locus per individuo  
+      # /nfs/team151/software/vcftools/bin/vcftools --gzvcf ${vcf} --bed ${shared_cat} --indv ${sample} --counts --out ${out_name} # --> conte per locus per individuo  
       #implemented the allele count with bcftools
       if [[ ! -s ${out_name}.frq.count ]]
         then
@@ -295,7 +296,7 @@ fi
     # vcf=/lustre/scratch113/projects/esgi-vbseq/20140430_purging/ALL/POP_MERGED_FILES/FIVE_POPS/20140730_ANNOTATED/${CHR}.clean_annotated.vcf.gz
     vcf=/lustre/scratch113/projects/esgi-vbseq/20140430_purging/UNRELATED/POP_MERGED_FILES/FIVE_POPS/20140711_ANNOTATED/${CHR}.vcf.gz
     out_name=/lustre/scratch113/projects/esgi-vbseq/20140430_purging/46_SAMPLES/RESULTS/ALTCOUNT/${date}/shared/${cat}/${pop}_${cat}_${CHR}_${sample}
-    shared_bed=/lustre/scratch113/projects/esgi-vbseq/20140430_purging/46_SAMPLES/INPUT_FILES/FIVE_POPS/WG/sharedsites/${pop}_shared_chr${CHR}.bed
+    shared_bed=/lustre/scratch113/projects/esgi-vbseq/20140430_purging/46_SAMPLES/INPUT_FILES/FIVE_POPS/WG/sharedsites/${pop}_shared_chr${CHR}.bed.sorted.bed
     # shared_bed=/lustre/scratch113/projects/esgi-vbseq/20140430_purging/46_SAMPLES/INPUT_FILES/FIVE_POPS/WG/sharedsites/Illegio_shared_chr17.bed
     if [[ ! -e /lustre/scratch113/projects/esgi-vbseq/20140430_purging/46_SAMPLES/RESULTS/ALTCOUNT/${date}/shared/${cat}/shared.${pop}.${cat}.${CHR}.bed ]]; then
 
