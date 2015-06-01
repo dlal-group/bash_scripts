@@ -165,7 +165,7 @@ case $MODE in
     date=06012015_filt
     if [ $cat == "neutral" ]
     then
-      snplist=${list_path}/${cat}/neut.${CHR}.alt.bed
+      snplist=${list_path}/${cat}/neut.${CHR}.bed
     else
       snplist=${list_path}/${cat}/${cat}.${CHR}.alt.bed
     fi
@@ -296,7 +296,12 @@ fi
     # date=05302015
     # date=05302015_ALT
     date=06012015_ALT
-    snplist=${list_path}/${cat}/${cat}.${CHR}.bed
+    if [ $cat == "neutral" ]
+    then
+      snplist=${list_path}/${cat}/neut.${CHR}.bed
+    else
+      snplist=${list_path}/${cat}/${cat}.${CHR}.bed
+    fi
     mkdir -p /lustre/scratch113/projects/esgi-vbseq/20140430_purging/46_SAMPLES/RESULTS/ALTCOUNT/${date}/shared/${cat}
     mkdir -p /lustre/scratch113/projects/esgi-vbseq/20140430_purging/46_SAMPLES/RESULTS/ALTCOUNT/${date}/shared/${cat}/${pop}
 
