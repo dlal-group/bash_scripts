@@ -163,7 +163,12 @@ case $MODE in
     # date=05302015
     # date=06012015
     date=06012015_filt
-    snplist=${list_path}/${cat}/${cat}.${CHR}.alt.bed
+    if [ $cat == "neutral" ]
+    then
+      snplist=${list_path}/${cat}/neut.${CHR}.alt.bed
+    else
+      snplist=${list_path}/${cat}/${cat}.${CHR}.alt.bed
+    fi
     mkdir -p /lustre/scratch113/projects/esgi-vbseq/20140430_purging/46_SAMPLES/RESULTS/HOMCOUNT/${date}/shared/${cat}
     mkdir -p /lustre/scratch113/projects/esgi-vbseq/20140430_purging/46_SAMPLES/RESULTS/HOMCOUNT/${date}/shared/${cat}/${pop}
 
