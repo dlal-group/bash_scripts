@@ -163,9 +163,9 @@ case $MODE in
     # date=05302015
     # date=06012015
     date=06012015_filt
-    if [ $cat == "neutral" ]
+    if [ $cat == "neut" ]
     then
-      snplist=${list_path}/${cat}/neut.${CHR}.bed
+      snplist=${list_path}/neutral/${cat}.${CHR}.bed
     else
       snplist=${list_path}/${cat}/${cat}.${CHR}.alt.bed
     fi
@@ -178,6 +178,11 @@ case $MODE in
     shared_bed=/lustre/scratch113/projects/esgi-vbseq/20140430_purging/46_SAMPLES/INPUT_FILES/FIVE_POPS/WG/sharedsites/${pop}_shared_chr${CHR}.bed.sorted.bed
     # shared_bed=/lustre/scratch113/projects/esgi-vbseq/20140430_purging/46_SAMPLES/INPUT_FILES/FIVE_POPS/WG/sharedsites/Illegio_shared_chr17.bed
     if [[ ! -e /lustre/scratch113/projects/esgi-vbseq/20140430_purging/46_SAMPLES/RESULTS/HOMCOUNT/${date}/shared/${cat}/shared.${pop}.${cat}.${CHR}.bed ]]; then
+      if [ $cat == "neutral" ]
+      then
+        # we match the derived allele with the alternative!
+        bcftools query -R ${list_path}/neutral/${cat}.${CHR}.list -f '%CHROM\t%POS\t%REF\t%ALT\t%INFO/AA[\t%TGT]\n' ${vcf} | awk '{if($4==$5) print $1,$2-1,$2}' > /lustre/scratch113/projects/esgi-vbseq/20140430_purging/46_SAMPLES/RESULTS/HOMCOUNT/${date}/shared/${cat}/shared.${pop}.${cat}.${CHR}.bed
+      fi
       awk 'FNR==NR { a[$2]=$0; next } $2 in a { print a[$2] }' ${shared_bed} ${snplist} | sort -g -k2,2 |uniq| tr " " "\t" > /lustre/scratch113/projects/esgi-vbseq/20140430_purging/46_SAMPLES/RESULTS/HOMCOUNT/${date}/shared/${cat}/shared.${pop}.${cat}.${CHR}.bed
       awk '{print $1,$3}' /lustre/scratch113/projects/esgi-vbseq/20140430_purging/46_SAMPLES/RESULTS/HOMCOUNT/${date}/shared/${cat}/shared.${pop}.${cat}.${CHR}.bed | tr " " "\t" > /lustre/scratch113/projects/esgi-vbseq/20140430_purging/46_SAMPLES/RESULTS/HOMCOUNT/${date}/shared/${cat}/shared.${pop}.${cat}.${CHR}.bcftools.list
     fi

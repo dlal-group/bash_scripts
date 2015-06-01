@@ -531,4 +531,10 @@ file=`sed -n "${LSB_JOBINDEX}p" $1`
 # 	(grep ^# ${filename}.vep.annotated.tab;fgrep $conseq ${filename}.vep.annotated.tab) | gzip -c > ${filename}.$conseq.vep.annotated.tab.gz
 # done
 #31/05/2015 created sorted bed files
-sort -n -k2,2 $file > $file.sorted.bed
+# sort -n -k2,2 $file > $file.sorted.bed
+CHR=$file
+snplist=/lustre/scratch113/projects/esgi-vbseq/20140430_purging/enza/listsites/neutral/neut.${CHR}.list
+vcf=/lustre/scratch113/projects/esgi-vbseq/20140430_purging/UNRELATED/POP_MERGED_FILES/FIVE_POPS/20140711_ANNOTATED/${CHR}.vcf.gz
+
+bcftools query -R ${snplist} -f '%CHROM\t%POS\t%REF\t%ALT\t%INFO/AA[\t%TGT]\n' ${vcf} | awk '{if($4==$5) print $1,$2-1,$2}' | tr " " "\t" > /lustre/scratch113/projects/esgi-vbseq/20140430_purging/46_SAMPLES/RESULTS/HOMCOUNT/listsites/neut/neut.${CHR}.bed
+bcftools query -R ${snplist} -f '%CHROM\t%POS\t%REF\t%ALT\t%INFO/AA[\t%TGT]\n' ${vcf} | awk '{if($4==$5) print $1,$2}' | tr " " "\t" > /lustre/scratch113/projects/esgi-vbseq/20140430_purging/46_SAMPLES/RESULTS/HOMCOUNT/listsites/neut/neut.${CHR}.list
