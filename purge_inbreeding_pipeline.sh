@@ -162,7 +162,7 @@ case $MODE in
     # date=05292015
     # date=05302015
     date=06012015
-    snplist=${list_path}/${cat}*/${cat}.${CHR}.bed
+    snplist=${list_path}/${cat}/${cat}.${CHR}.bed
     mkdir -p /lustre/scratch113/projects/esgi-vbseq/20140430_purging/46_SAMPLES/RESULTS/HOMCOUNT/${date}/shared/${cat}
     mkdir -p /lustre/scratch113/projects/esgi-vbseq/20140430_purging/46_SAMPLES/RESULTS/HOMCOUNT/${date}/shared/${cat}/${pop}
 
@@ -288,8 +288,9 @@ fi
     # snplist=/lustre/scratch113/projects/esgi-vbseq/20140430_purging/enza/listsites/neutral/neut.17.bed
     # date=05292015
     # date=05302015
-    date=05302015_ALT
-    snplist=${list_path}/${cat}*/${cat}.${CHR}.bed
+    # date=05302015_ALT
+    date=06012015_ALT
+    snplist=${list_path}/${cat}/${cat}.${CHR}.bed
     mkdir -p /lustre/scratch113/projects/esgi-vbseq/20140430_purging/46_SAMPLES/RESULTS/ALTCOUNT/${date}/shared/${cat}
     mkdir -p /lustre/scratch113/projects/esgi-vbseq/20140430_purging/46_SAMPLES/RESULTS/ALTCOUNT/${date}/shared/${cat}/${pop}
 
