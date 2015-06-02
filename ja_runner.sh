@@ -536,4 +536,7 @@ CHR=$file
 snplist=/lustre/scratch113/projects/esgi-vbseq/20140430_purging/enza/listsites/neutral/neut.${CHR}.list
 vcf=/lustre/scratch113/projects/esgi-vbseq/20140430_purging/UNRELATED/POP_MERGED_FILES/FIVE_POPS/20140711_ANNOTATED/${CHR}.vcf.gz
 
-bcftools query -R ${snplist} -f '%CHROM\t%POS\t%REF\t%ALT\t%INFO/AA[\t%TGT]\n' ${vcf} | awk '{if($4==$5) print $1,$2-1,$2}' | tr " " "\t" > /lustre/scratch113/projects/esgi-vbseq/20140430_purging/46_SAMPLES/RESULTS/HOMCOUNT/listsites/neut/neut.${CHR}.bed
+bcftools query -R ${snplist} -f '%CHROM\t%POS\t%REF\t%ALT\t%INFO/AA\n' ${vcf} > /lustre/scratch113/projects/esgi-vbseq/20140430_purging/46_SAMPLES/RESULTS/HOMCOUNT/listsites/neut/neut.${CHR}.all_list
+#we need to check if the ANCESTRAL ALLELE IS EQUAL TO THE REFERENCE, so that the DERIVED is the ALTERNATIVE!!
+awk '{if($3==$5) print $1,$2-1,$2}' /lustre/scratch113/projects/esgi-vbseq/20140430_purging/46_SAMPLES/RESULTS/HOMCOUNT/listsites/neut/neut.${CHR}.all_list | tr " " "\t" > /lustre/scratch113/projects/esgi-vbseq/20140430_purging/46_SAMPLES/RESULTS/HOMCOUNT/listsites/neut/neut.${CHR}.bed
+rm /lustre/scratch113/projects/esgi-vbseq/20140430_purging/46_SAMPLES/RESULTS/HOMCOUNT/listsites/neut/neut.${CHR}.all_list

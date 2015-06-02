@@ -20,7 +20,7 @@ case $MODE in
   list_path=$4
   cat=$5
   pop=$6
-  if [ -d "${outdir}" ]; then
+  if [[ -d "${outdir}" ]]; then
   rm -r ${outdir}
   fi
   ;;
@@ -29,7 +29,7 @@ case $MODE in
   list_path=$4
   cat=$5
   pop=$6
-  if [ -d "${outdir}" ]; then
+  if [[ -d "${outdir}" ]]; then
   rm -r ${outdir}
   fi
   ;;
@@ -295,12 +295,13 @@ fi
     # date=05292015
     # date=05302015
     # date=05302015_ALT
-    date=06012015_ALT
-    if [ $cat == "neutral" ]
+    # date=06012015_ALT
+    date=06012015_ALT_filt
+    if [ $cat == "neut" ]
     then
-      snplist=${list_path}/${cat}/neut.${CHR}.bed
+      snplist=/lustre/scratch113/projects/esgi-vbseq/20140430_purging/46_SAMPLES/RESULTS/HOMCOUNT/listsites/${cat}/${cat}.${CHR}.bed
     else
-      snplist=${list_path}/${cat}/${cat}.${CHR}.bed
+      snplist=${list_path}/${cat}/${cat}.${CHR}.alt.bed
     fi
     mkdir -p /lustre/scratch113/projects/esgi-vbseq/20140430_purging/46_SAMPLES/RESULTS/ALTCOUNT/${date}/shared/${cat}
     mkdir -p /lustre/scratch113/projects/esgi-vbseq/20140430_purging/46_SAMPLES/RESULTS/ALTCOUNT/${date}/shared/${cat}/${pop}

@@ -146,11 +146,11 @@ for chunk in `seq 1 $chunk_num`; do
 		chunk_begin=$chr_begin
 	fi
 	if [[ $chunk -eq $chunk_num ]]; then
-		mem=9000
+		mem=20000
 		queue=long
 		chunk_end=$chr_end
 	else
-		mem=9000
+		mem=20000
 		queue=long
 		chunk_end=`echo "$chr_begin+($chunk*$chunk_size)" | bc`
 	fi
