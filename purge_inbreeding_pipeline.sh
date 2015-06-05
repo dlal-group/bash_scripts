@@ -162,8 +162,9 @@ case $MODE in
     # date=05292015
     # date=05302015
     # date=06012015
-    date=06012015_filt
-    if [ $cat == "neut" ]
+    #date=06012015_filt
+    date=06052015_filt
+    if [ $cat == "inter" ]
     then
       snplist=/lustre/scratch113/projects/esgi-vbseq/20140430_purging/46_SAMPLES/RESULTS/HOMCOUNT/listsites/${cat}/${cat}.${CHR}.bed
     else
@@ -177,10 +178,10 @@ case $MODE in
     out_name=/lustre/scratch113/projects/esgi-vbseq/20140430_purging/46_SAMPLES/RESULTS/HOMCOUNT/${date}/shared/${cat}/${pop}_${cat}_${CHR}_${sample}
     shared_bed=/lustre/scratch113/projects/esgi-vbseq/20140430_purging/46_SAMPLES/INPUT_FILES/FIVE_POPS/WG/sharedsites/${pop}_shared_chr${CHR}.bed.sorted.bed
     # shared_bed=/lustre/scratch113/projects/esgi-vbseq/20140430_purging/46_SAMPLES/INPUT_FILES/FIVE_POPS/WG/sharedsites/Illegio_shared_chr17.bed
-    # if [[ ! -e /lustre/scratch113/projects/esgi-vbseq/20140430_purging/46_SAMPLES/RESULTS/HOMCOUNT/${date}/shared/${cat}/shared.${pop}.${cat}.${CHR}.bed ]]; then
-    #   awk 'FNR==NR { a[$2]=$0; next } $2 in a { print a[$2] }' ${shared_bed} ${snplist} | sort -g -k2,2 |uniq| tr " " "\t" > /lustre/scratch113/projects/esgi-vbseq/20140430_purging/46_SAMPLES/RESULTS/HOMCOUNT/${date}/shared/${cat}/shared.${pop}.${cat}.${CHR}.bed
-    #   awk '{print $1,$3}' /lustre/scratch113/projects/esgi-vbseq/20140430_purging/46_SAMPLES/RESULTS/HOMCOUNT/${date}/shared/${cat}/shared.${pop}.${cat}.${CHR}.bed | tr " " "\t" > /lustre/scratch113/projects/esgi-vbseq/20140430_purging/46_SAMPLES/RESULTS/HOMCOUNT/${date}/shared/${cat}/shared.${pop}.${cat}.${CHR}.bcftools.list
-    # fi
+    if [[ ! -e /lustre/scratch113/projects/esgi-vbseq/20140430_purging/46_SAMPLES/RESULTS/HOMCOUNT/${date}/shared/${cat}/shared.${pop}.${cat}.${CHR}.bed ]]; then
+      awk 'FNR==NR { a[$2]=$0; next } $2 in a { print a[$2] }' ${shared_bed} ${snplist} | sort -g -k2,2 |uniq| tr " " "\t" > /lustre/scratch113/projects/esgi-vbseq/20140430_purging/46_SAMPLES/RESULTS/HOMCOUNT/${date}/shared/${cat}/shared.${pop}.${cat}.${CHR}.bed
+      awk '{print $1,$3}' /lustre/scratch113/projects/esgi-vbseq/20140430_purging/46_SAMPLES/RESULTS/HOMCOUNT/${date}/shared/${cat}/shared.${pop}.${cat}.${CHR}.bed | tr " " "\t" > /lustre/scratch113/projects/esgi-vbseq/20140430_purging/46_SAMPLES/RESULTS/HOMCOUNT/${date}/shared/${cat}/shared.${pop}.${cat}.${CHR}.bcftools.list
+    fi
     # the second file is the one which gives you the items's order
     # shared_cat=/lustre/scratch113/projects/esgi-vbseq/20140430_purging/46_SAMPLES/RESULTS/HOMCOUNT/${date}/shared/${cat}/shared.${pop}.${cat}.${CHR}.bed -> bed format for VCFTOOLS ONLY!!
     shared_cat=/lustre/scratch113/projects/esgi-vbseq/20140430_purging/46_SAMPLES/RESULTS/HOMCOUNT/${date}/shared/${cat}/shared.${pop}.${cat}.${CHR}.bcftools.list # -> list format for BCFTOOLS
@@ -194,38 +195,38 @@ case $MODE in
       #implemented the allele count with bcftools
       if [[ ! -s ${out_name}.frq.count ]]
         then
-#       bcftools query -s ${sample} -R ${shared_cat} -f '%CHROM\t%POS\t%REF\t%ALT\t%INFO/AA[\t%TGT]\n' ${vcf} | awk '{split($4,a,",")} $5!="." && $5!="-" && $5!="N" && ($5==$3 || $5==$4 || $5==tolower($3) || $5==tolower($4)||$5==tolower(a[1])||$5==tolower(a[2])||$5==a[1]||$5==a[2])' | awk '{if ($5 == $3 || $5 == tolower($3)) print $0,$3,$4;else print $0,$4,$3}'| awk '
-# {split($6,a,"|");split($4,b,",")}
-# {if(b[2]==""){
-# if (a[1]==a[2] && a[1] == $7) {
-# print $0, $7":2",$8":0";
-# } else if (a[1]==a[2] && a[1] == $8){
-# print $0, $7":0",$8":2";
-# } else if (a[1]!=a[2]) {
-# if( a[2] == ""){
-# print $0, $7":0",$8":0";
-# } else{
-# print $0, $7":1",$8":1";
-# }
-# }
+      bcftools query -s ${sample} -R ${shared_cat} -f '%CHROM\t%POS\t%REF\t%ALT\t%INFO/AA[\t%TGT]\n' ${vcf} | awk '{split($4,a,",")} $5!="." && $5!="-" && $5!="N" && ($5==$3 || $5==$4 || $5==tolower($3) || $5==tolower($4)||$5==tolower(a[1])||$5==tolower(a[2])||$5==a[1]||$5==a[2])' | awk '{if ($5 == $3 || $5 == tolower($3)) print $0,$3,$4;else print $0,$4,$3}'| awk '
+{split($6,a,"|");split($4,b,",")}
+{if(b[2]==""){
+if (a[1]==a[2] && a[1] == $7) {
+print $0, $7":2",$8":0";
+} else if (a[1]==a[2] && a[1] == $8){
+print $0, $7":0",$8":2";
+} else if (a[1]!=a[2]) {
+if( a[2] == ""){
+print $0, $7":0",$8":0";
+} else{
+print $0, $7":1",$8":1";
+}
+}
 
-# }else{
-# if (a[1]==a[2] && a[1] == $7) {
-# print $0, $7":2",b[1]":0",b[2]":0";
-# } else if (a[1]==a[2] && a[1] == b[1]){
-# print $0, $7":0",b[1]":2";
-# } else if (a[1]==a[2] && a[1] == b[2]){
-# print $0, $7":0",b[2]":2";
-# }else if (a[1]!=a[2]) {
-# if( a[2] == ""){
-# print $0, $7":0",b[1]":0",b[2]":0";
-# } else{
-# print $0, $7":1",b[1]":1",b[2]":0";
-# }
-# }
+}else{
+if (a[1]==a[2] && a[1] == $7) {
+print $0, $7":2",b[1]":0",b[2]":0";
+} else if (a[1]==a[2] && a[1] == b[1]){
+print $0, $7":0",b[1]":2";
+} else if (a[1]==a[2] && a[1] == b[2]){
+print $0, $7":0",b[2]":2";
+}else if (a[1]!=a[2]) {
+if( a[2] == ""){
+print $0, $7":0",b[1]":0",b[2]":0";
+} else{
+print $0, $7":1",b[1]":1",b[2]":0";
+}
+}
 
-# }
-# }'|awk '{print $1,$2,2,2,$9,$10,$11}'| tr " " "\t" > ${out_name}.frq.count
+}
+}'|awk '{print $1,$2,2,2,$9,$10,$11}'| tr " " "\t" > ${out_name}.frq.count
 
 #count all homozygous sites for that sample
 all_hom=`bcftools query -s ${sample} -R ${shared_cat} -f '%CHROM\t%POS\t%REF\t%ALT[\t%TGT]\n' ${vcf} | awk '{split($5,a,"|");}{if(a[1]==a[2]) print $0}'|wc -l`
