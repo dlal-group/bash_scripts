@@ -167,6 +167,7 @@ case $MODE in
     
 	CHECKREF2)
 	mkdir -p ${out_dir}
+	# use one of the sample bams present here, for VBI cohort: ~/esgi_vbseq/release-vb_sanger/20130807/sample_improved_bams_hgi_2/
 	file2=$4
 
 	echo -e "comparing file headers through diff\nfile1:${file}\nfile2:${file2}"
