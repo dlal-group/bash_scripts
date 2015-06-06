@@ -300,7 +300,8 @@ fi
     # date=05302015
     # date=05302015_ALT
     # date=06012015_ALT
-    date=06012015_ALT_filt
+    # date=06012015_ALT_filt
+    date=06062015_ALT_filt
     if [ $cat == "neut" ]
     then
       snplist=/lustre/scratch113/projects/esgi-vbseq/20140430_purging/46_SAMPLES/RESULTS/HOMCOUNT/listsites/${cat}/${cat}.${CHR}.bed
@@ -329,13 +330,16 @@ fi
     # This option relies on the ancestral allele being specified in the VCF file using the AA tag in the INFO field
       /nfs/team151/software/vcftools/bin/vcftools --gzvcf ${vcf} --bed ${shared_cat} --indv ${sample} --counts --out ${out_name} # --> conte per locus per individuo  
 
+      #count all homozygous sites for that sample
+      all_hom=`bcftools query -s ${sample} -R ${shared_cat} -f '%CHROM\t%POS\t%REF\t%ALT[\t%TGT]\n' ${vcf} | awk '{split($5,a,"|");}{if(a[1]==a[2]) print $0}'|wc -l`
+
       sample_hom=`fgrep -v CHROM ${out_name}.frq.count | awk '{split($6,aa,":")}{if(aa[2]==2) print aa[2]}' | wc -l `
       sample_count=`fgrep -v CHROM ${out_name}.frq.count | awk '{split($6,aa,":")}{if(aa[2]==2) print 2;else print 1}' | awk '{sum+=$1}END{print sum}' `
       tot_shared=`wc -l ${shared_bed}|cut -f 1 -d " "`
       tot_shared_cat=`wc -l ${shared_cat}|cut -f 1 -d " "`
       tot_shared_cat_sample_chr=`fgrep -v CHROM ${out_name}.frq.count | wc -l |cut -f 1 -d " "`
       # Header: sample CHR sample_hom pop tot_shared tot_shared_cat
-      echo "${sample} ${CHR} ${sample_hom} ${sample_count} ${pop} ${tot_shared} ${tot_shared_cat} ${tot_shared_cat_sample_chr}" > /lustre/scratch113/projects/esgi-vbseq/20140430_purging/46_SAMPLES/RESULTS/ALTCOUNT/${date}/shared/${cat}/${pop}/${pop}_${cat}_${CHR}_${sample}.tab
+      echo "${sample} ${CHR} ${sample_hom} ${sample_count} ${pop} ${tot_shared} ${tot_shared_cat} ${tot_shared_cat_sample_chr} ${all_hom}" > /lustre/scratch113/projects/esgi-vbseq/20140430_purging/46_SAMPLES/RESULTS/ALTCOUNT/${date}/shared/${cat}/${pop}/${pop}_${cat}_${CHR}_${sample}.tab
   ;;
   RANDLIST )
   #create random list for subsampling
