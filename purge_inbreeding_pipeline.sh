@@ -302,7 +302,7 @@ fi
     # date=06012015_ALT
     # date=06012015_ALT_filt
     date=06062015_ALT_filt
-    if [ $cat == "neut" ]
+    if [ $cat == "inter" ]
     then
       snplist=/lustre/scratch113/projects/esgi-vbseq/20140430_purging/46_SAMPLES/RESULTS/HOMCOUNT/listsites/${cat}/${cat}.${CHR}.bed
     else
