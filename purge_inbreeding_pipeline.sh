@@ -236,7 +236,7 @@ fi
       # sample_hom=`tail -n+2 ${out_name}.frq.count | awk '{split($6,aa,":")}{if(aa[2]==2) print aa[2]}' | wc -l `
       # sample_count=`tail -n+2 ${out_name}.frq.count | awk '{split($6,aa,":")}{if(aa[2]==2) print 2;else print 1}' | awk '{sum+=$1}END{print sum}' `
       sample_hom=`fgrep -v CHROM ${out_name}.frq.count | awk '{split($6,aa,":")}{if(aa[2]==2) print aa[2]}' | wc -l `
-      sample_count=`fgrep -v CHROM ${out_name}.frq.count | awk '{split($6,aa,":")}{if(aa[2]==2) print 2;else print 1}' | awk '{sum+=$1}END{print sum}' `
+      sample_count=`fgrep -v CHROM ${out_name}.frq.count | awk '{split($6,aa,":")}{if(aa[2]!=0) print aa[2]}' | awk '{sum+=$1}END{print sum}'`
       tot_shared=`wc -l ${shared_bed}|cut -f 1 -d " "`
       tot_shared_cat=`wc -l ${shared_cat}|cut -f 1 -d " "`
       tot_shared_cat_sample_chr=`fgrep -v CHROM ${out_name}.frq.count | wc -l |cut -f 1 -d " "`
@@ -334,7 +334,7 @@ fi
       all_hom=`bcftools query -s ${sample} -R ${shared_cat} -f '%CHROM\t%POS\t%REF\t%ALT[\t%TGT]\n' ${vcf} | awk '{split($5,a,"|");}{if(a[1]==a[2]) print $0}'|wc -l`
 
       sample_hom=`fgrep -v CHROM ${out_name}.frq.count | awk '{split($6,aa,":")}{if(aa[2]==2) print aa[2]}' | wc -l `
-      sample_count=`fgrep -v CHROM ${out_name}.frq.count | awk '{split($6,aa,":")}{if(aa[2]==2) print 2;else print 1}' | awk '{sum+=$1}END{print sum}' `
+      sample_count=`fgrep -v CHROM ${out_name}.frq.count | awk '{split($6,aa,":")}{if(aa[2]!=0) print aa[2]}' | awk '{sum+=$1}END{print sum}' `
       tot_shared=`wc -l ${shared_bed}|cut -f 1 -d " "`
       tot_shared_cat=`wc -l ${shared_cat}|cut -f 1 -d " "`
       tot_shared_cat_sample_chr=`fgrep -v CHROM ${out_name}.frq.count | wc -l |cut -f 1 -d " "`
