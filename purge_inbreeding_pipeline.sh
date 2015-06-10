@@ -193,48 +193,47 @@ case $MODE in
     # This option relies on the ancestral allele being specified in the VCF file using the AA tag in the INFO field
     # while read line
     # do
-      # /nfs/team151/software/vcftools/bin/vcftools --gzvcf ${vcf} --bed ${shared_cat} --indv ${sample} --counts --derived --out ${out_name} # --> conte per locus per individuo  
-      # /nfs/team151/software/vcftools/bin/vcftools --gzvcf ${vcf} --bed ${shared_cat} --indv ${sample} --counts --out ${out_name} # --> conte per locus per individuo  
+      /nfs/team151/software/vcftools/bin/vcftools --gzvcf ${vcf} --bed ${shared_cat} --indv ${sample} --counts --derived --out ${out_name} # --> conte per locus per individuo  
       #implemented the allele count with bcftools
       if [[ ! -s ${out_name}.frq.count ]]
         then
-      bcftools query -s ${sample} -R ${shared_cat} -f '%CHROM\t%POS\t%REF\t%ALT\t%INFO/AA[\t%TGT]\n' ${vcf} | awk '{split($4,a,",")} $5!="." && $5!="-" && $5!="N" && ($5==$3 || $5==$4 || $5==tolower($3) || $5==tolower($4)||$5==tolower(a[1])||$5==tolower(a[2])||$5==a[1]||$5==a[2])' | awk '{if ($5 == $3 || $5 == tolower($3)) print $0,$3,$4;else print $0,$4,$3}'| awk '
-{split($6,a,"|");split($4,b,",")}
-{if(b[2]==""){
-if (a[1]==a[2] && a[1] == $7) {
-print $0, $7":2",$8":0";
-} else if (a[1]==a[2] && a[1] == $8){
-print $0, $7":0",$8":2";
-} else if (a[1]!=a[2]) {
-if( a[2] == ""){
-print $0, $7":0",$8":0";
-} else{
-print $0, $7":1",$8":1";
-}
-}
+#       bcftools query -s ${sample} -R ${shared_cat} -f '%CHROM\t%POS\t%REF\t%ALT\t%INFO/AA[\t%TGT]\n' ${vcf} | awk '{split($4,a,",")} $5!="." && $5!="-" && $5!="N" && ($5==$3 || $5==$4 || $5==tolower($3) || $5==tolower($4)||$5==tolower(a[1])||$5==tolower(a[2])||$5==a[1]||$5==a[2])' | awk '{if ($5 == $3 || $5 == tolower($3)) print $0,$3,$4;else print $0,$4,$3}'| awk '
+# {split($6,a,"|");split($4,b,",")}
+# {if(b[2]==""){
+# if (a[1]==a[2] && a[1] == $7) {
+# print $0, $7":2",$8":0";
+# } else if (a[1]==a[2] && a[1] == $8){
+# print $0, $7":0",$8":2";
+# } else if (a[1]!=a[2]) {
+# if( a[2] == ""){
+# print $0, $7":0",$8":0";
+# } else{
+# print $0, $7":1",$8":1";
+# }
+# }
 
-}else{
-if (a[1]==a[2] && a[1] == $7) {
-print $0, $7":2",b[1]":0",b[2]":0";
-} else if (a[1]==a[2] && a[1] == b[1]){
-print $0, $7":0",b[1]":2";
-} else if (a[1]==a[2] && a[1] == b[2]){
-print $0, $7":0",b[2]":2";
-}else if (a[1]!=a[2]) {
-if( a[2] == ""){
-print $0, $7":0",b[1]":0",b[2]":0";
-} else{
-print $0, $7":1",b[1]":1",b[2]":0";
-}
-}
+# }else{
+# if (a[1]==a[2] && a[1] == $7) {
+# print $0, $7":2",b[1]":0",b[2]":0";
+# } else if (a[1]==a[2] && a[1] == b[1]){
+# print $0, $7":0",b[1]":2";
+# } else if (a[1]==a[2] && a[1] == b[2]){
+# print $0, $7":0",b[2]":2";
+# }else if (a[1]!=a[2]) {
+# if( a[2] == ""){
+# print $0, $7":0",b[1]":0",b[2]":0";
+# } else{
+# print $0, $7":1",b[1]":1",b[2]":0";
+# }
+# }
 
-}
-}'|awk '{print $1,$2,2,2,$9,$10,$11}'| tr " " "\t" > ${out_name}.frq.count
+# }
+# }'|awk '{print $1,$2,2,2,$9,$10,$11}'| tr " " "\t" > ${out_name}.frq.count
 
-#count all homozygous sites for that sample
-all_hom=`bcftools query -s ${sample} -R ${shared_cat} -f '%CHROM\t%POS\t%REF\t%ALT[\t%TGT]\n' ${vcf} | awk '{split($5,a,"|");}{if(a[1]==a[2]) print $0}'|wc -l`
 
 fi
+#count all homozygous sites for that sample
+all_hom=`bcftools query -s ${sample} -R ${shared_cat} -f '%CHROM\t%POS\t%REF\t%ALT[\t%TGT]\n' ${vcf} | awk '{split($5,a,"|");}{if(a[1]==a[2]) print $0}'|wc -l`
       # sample_hom=`tail -n+2 ${out_name}.frq.count | awk '{split($5,ref,":");split($6,alt,":")}{if(ref[2]==2 || alt[2]==2) print ref[2],alt[2]}' | wc -l `
       # sample_hom=`tail -n+2 ${out_name}.frq.count | awk '{split($6,aa,":")}{if(aa[2]==2) print aa[2]}' | wc -l `
       # sample_count=`tail -n+2 ${out_name}.frq.count | awk '{split($6,aa,":")}{if(aa[2]==2) print 2;else print 1}' | awk '{sum+=$1}END{print sum}' `
