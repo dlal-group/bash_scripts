@@ -11,7 +11,7 @@ import random
 
 """
 - take as input file a list of "CHR POSITION " (test-list); mandatory no header; chromosome and position must appear in this order 
-- give as output a list of sites on the chromosme passed as argument matched for allele  frequency to the test-list
+- give as output a list of sites on the chromosme passed as argument matched for allele frequency to the test-list
 - require a file with allele frequencies in the minumun format CHROM POS DAF where 
 	CHROM <- chromosome 
 	POS <- position 

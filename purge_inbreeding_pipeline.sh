@@ -164,8 +164,9 @@ case $MODE in
     # date=06012015
     #date=06012015_filt
     # date=06052015_filt
-    date=06082015_filt
-    if [ $cat == "na" ]
+    # date=06082015_filt
+    date=06102015_filt
+    if [ $cat == "lof" ]
     then
       # LOAD/INGI_PURGING_REVISION_1/siteslists/naall
       snplist=/lustre/scratch113/projects/esgi-vbseq/20140430_purging/46_SAMPLES/RESULTS/HOMCOUNT/listsites/${cat}/${cat}.${CHR}.bed
