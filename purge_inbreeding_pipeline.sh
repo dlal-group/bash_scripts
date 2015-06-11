@@ -7,8 +7,8 @@ pops="FVG VBI TSI CEU CARL"
 # pops="FVG VBI"
 
 #retrieve the MODE parameter to select the correct operation
-MODE=$2
-CHR=$3
+MODE=$1
+CHR=$2
 # define the output folder relative to the chromosome, if specified
 outdir=CHR${CHR}
 mkdir -p LOGS
@@ -944,7 +944,7 @@ all_hom=`bcftools query -s ${sample} -R ${shared_cat} -f '%CHROM\t%POS\t%REF\t%A
   MAFSPEC )
     #extract MAF data different populations from a given list
     echo "Extract data for af/maf spectrum plot"
-    pops_updated="FVG VBI CARL TSI CEU Erto Resia Illegio Sauris"
+    pops_updated="VBI CARL TSI CEU Erto Resia Illegio Sauris"
     # for pop in $pops
     # for pop in $pops_updated
     # do
