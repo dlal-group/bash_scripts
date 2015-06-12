@@ -690,120 +690,120 @@ all_hom=`bcftools query -s ${sample} -R ${shared_cat} -f '%CHROM\t%POS\t%REF\t%A
         TSI )
           #Private calculation without fixed sites
           # zcat ${in_file} | awk '$6 !="NA" && $6 > 0 && $6 < 1 && $5 == 0 && $4 == 0'| gzip -c > ${outdir}/${pop}_private_chr${CHR}.merged_frq.tab.gz
-          zcat ${in_file} |cut -f 1,3-| awk '$5 !="NA" && $5 > 0 && ($6 == 0 || $7 == 0 || $8 == 0 || $9 == 0 || $10 == 0 || $11 == 0 || $12 == 0)'| gzip -c > ${outdir}/${pop}_private_chr${CHR}.merged_frq.tab.gz
+          zcat ${in_file} | awk '$5 !="NA" && $5 > 0 && ($6 == 0 || $7 == 0 || $8 == 0 || $9 == 0 || $10 == 0 || $11 == 0 || $12 == 0)'| gzip -c > ${outdir}/${pop}_private_chr${CHR}.merged_frq.tab.gz
           # # Fixed in Isolate and private
           # zcat ${in_file} | awk '$6 !="NA" && $6 == 1 && $5 == 0 && $4 == 0'| gzip -c > ${outdir}/${pop}_private_chr${CHR}.merged_frq.fixed.tab.gz
           # # Shared calculation without fixed sites
-          zcat ${in_file}|cut -f 1,3- | awk '$5 !="NA" && $5 > 0 && $5 < 1 && ($6 > 0 || $7 > 0 || $8 > 0 || $9 > 0 || $10 > 0 || $11 > 0 || $12 > 0)'| gzip -c > ${outdir}/${pop}_shared_chr${CHR}.merged_frq.tab.gz
+          zcat ${in_file} | awk '$5 !="NA" && $5 > 0 && $5 < 1 && ($6 > 0 || $7 > 0 || $8 > 0 || $9 > 0 || $10 > 0 || $11 > 0 || $12 > 0)'| gzip -c > ${outdir}/${pop}_shared_chr${CHR}.merged_frq.tab.gz
           # # Fixed in Isolate and shared
           # zcat ${in_file} | awk '$6 !="NA" && $6 == 1 && ($5 > 0 || $4 > 0)'| gzip -c > ${outdir}/${pop}_shared_chr${CHR}.merged_frq.fixed.tab.gz
           # # NOVEL in my population
-          zcat ${in_file} |cut -f 1,3-| awk '$5 !="NA" && ($6 == "NA" || $7 == "NA" || $8 == "NA" || $9 == "NA" || $10 == "NA" || $11 == "NA" || $12 == "NA")'| gzip -c > ${outdir}/${pop}_novel_chr${CHR}.merged_frq.tab.gz
+          zcat ${in_file} | awk '$5 !="NA" && ($6 == "NA" || $7 == "NA" || $8 == "NA" || $9 == "NA" || $10 == "NA" || $11 == "NA" || $12 == "NA")'| gzip -c > ${outdir}/${pop}_novel_chr${CHR}.merged_frq.tab.gz
           # pop_path=/lustre/scratch113/projects/esgi-vbseq/20140430_purging/UNRELATED/RESULTS/DAF/FIVE_POP
           ;;
         CEU )
           #Private calculation without fixed sites
           # zcat ${in_file} | awk '$4 !="NA" && $4 > 0 && $6 < 1 && $5 == 0 && $4 == 0'| gzip -c > ${outdir}/${pop}_private_chr${CHR}.merged_frq.tab.gz
-          zcat ${in_file} |cut -f 1,3-| awk '$4 !="NA" && $4 > 0 && ($6 == 0 || $7 == 0 || $8 == 0 || $9 == 0 || $10 == 0 || $11 == 0 || $12 == 0)'| gzip -c > ${outdir}/${pop}_private_chr${CHR}.merged_frq.tab.gz
+          zcat ${in_file} | awk '$4 !="NA" && $4 > 0 && ($6 == 0 || $7 == 0 || $8 == 0 || $9 == 0 || $10 == 0 || $11 == 0 || $12 == 0)'| gzip -c > ${outdir}/${pop}_private_chr${CHR}.merged_frq.tab.gz
           # # Fixed in Isolate and private
           # zcat ${in_file} | awk '$4 !="NA" && $4 == 1 && $5 == 0 && $4 == 0'| gzip -c > ${outdir}/${pop}_private_chr${CHR}.merged_frq.fixed.tab.gz
           # # Shared calculation without fixed sites
-          zcat ${in_file}|cut -f 1,3- | awk '$4 !="NA" && $4 > 0 && $4 < 1 && ($6 > 0 || $7 > 0 || $8 > 0 || $9 > 0 || $10 > 0 || $11 > 0 || $12 > 0)'| gzip -c > ${outdir}/${pop}_shared_chr${CHR}.merged_frq.tab.gz
+          zcat ${in_file}| awk '$4 !="NA" && $4 > 0 && $4 < 1 && ($6 > 0 || $7 > 0 || $8 > 0 || $9 > 0 || $10 > 0 || $11 > 0 || $12 > 0)'| gzip -c > ${outdir}/${pop}_shared_chr${CHR}.merged_frq.tab.gz
           # # Fixed in Isolate and shared
           # zcat ${in_file} | awk '$4 !="NA" && $4 == 1 && ($5 > 0 || $4 > 0)'| gzip -c > ${outdir}/${pop}_shared_chr${CHR}.merged_frq.fixed.tab.gz
           # NOVEL in my population
-          zcat ${in_file} |cut -f 1,3-| awk '$4 !="NA" && ($6 == "NA" || $7 == "NA" || $8 == "NA" || $9 == "NA" || $10 == "NA" || $11 == "NA" || $12 == "NA")'| gzip -c > ${outdir}/${pop}_novel_chr${CHR}.merged_frq.tab.gz
+          zcat ${in_file} | awk '$4 !="NA" && ($6 == "NA" || $7 == "NA" || $8 == "NA" || $9 == "NA" || $10 == "NA" || $11 == "NA" || $12 == "NA")'| gzip -c > ${outdir}/${pop}_novel_chr${CHR}.merged_frq.tab.gz
           # pop_path=/lustre/scratch113/projects/esgi-vbseq/20140430_purging/UNRELATED/RESULTS/DAF/FIVE_POP
           ;;
         VBI )
           #Private calculation without fixed sites
-          zcat ${in_file}|cut -f 1,3- | awk '$6 !="NA" && $6 > 0 && $6 < 1 && $5 == 0 && $4 == 0'| gzip -c > ${outdir}/${pop}_private_chr${CHR}.merged_frq.tab.gz
+          zcat ${in_file} | awk '$6 !="NA" && $6 > 0 && $6 < 1 && $5 == 0 && $4 == 0'| gzip -c > ${outdir}/${pop}_private_chr${CHR}.merged_frq.tab.gz
           # Fixed in Isolate and private
-          zcat ${in_file}|cut -f 1,3- | awk '$6 !="NA" && $6 == 1 && $5 == 0 && $4 == 0'| gzip -c > ${outdir}/${pop}_private_chr${CHR}.merged_frq.fixed.tab.gz
+          zcat ${in_file} | awk '$6 !="NA" && $6 == 1 && $5 == 0 && $4 == 0'| gzip -c > ${outdir}/${pop}_private_chr${CHR}.merged_frq.fixed.tab.gz
           # Shared calculation without fixed sites
-          zcat ${in_file}|cut -f 1,3- | awk '$6 !="NA" && $6 > 0 && $6 < 1 && ($5 > 0 || $4 > 0)'| gzip -c > ${outdir}/${pop}_shared_chr${CHR}.merged_frq.tab.gz
+          zcat ${in_file} | awk '$6 !="NA" && $6 > 0 && $6 < 1 && ($5 > 0 || $4 > 0)'| gzip -c > ${outdir}/${pop}_shared_chr${CHR}.merged_frq.tab.gz
           # Fixed in Isolate and shared
-          zcat ${in_file}|cut -f 1,3- | awk '$6 !="NA" && $6 == 1 && ($5 > 0 || $4 > 0)'| gzip -c > ${outdir}/${pop}_shared_chr${CHR}.merged_frq.fixed.tab.gz
+          zcat ${in_file} | awk '$6 !="NA" && $6 == 1 && ($5 > 0 || $4 > 0)'| gzip -c > ${outdir}/${pop}_shared_chr${CHR}.merged_frq.fixed.tab.gz
           # NOVEL in Isolate
-          zcat ${in_file}|cut -f 1,3- | awk '$6 !="NA" && ($5 == "NA" && $4 == "NA")'| gzip -c > ${outdir}/${pop}_novel_chr${CHR}.merged_frq.tab.gz
+          zcat ${in_file} | awk '$6 !="NA" && ($5 == "NA" && $4 == "NA")'| gzip -c > ${outdir}/${pop}_novel_chr${CHR}.merged_frq.tab.gz
           # pop_path=/lustre/scratch113/projects/esgi-vbseq/20140430_purging/UNRELATED/RESULTS/DAF/FIVE_POP
           ;;
         FVG )
           # pop_path=/lustre/scratch113/projects/esgi-vbseq/20140430_purging/UNRELATED/RESULTS/DAF/FIVE_POP
           #Private calculation without fixed sites
-          zcat ${in_file} |cut -f 1,3- | awk '$7 !="NA" && $7 > 0 && $7 < 1 && $5 == 0 && $4 == 0'| gzip -c > ${outdir}/${pop}_private_chr${CHR}.merged_frq.tab.gz
+          zcat ${in_file} | awk '$7 !="NA" && $7 > 0 && $7 < 1 && $5 == 0 && $4 == 0'| gzip -c > ${outdir}/${pop}_private_chr${CHR}.merged_frq.tab.gz
           # Fixed in Isolate and private
-          zcat ${in_file} |cut -f 1,3- | awk '$7 !="NA" && $7 == 1 && $5 == 0 && $4 == 0'| gzip -c > ${outdir}/${pop}_private_chr${CHR}.merged_frq.fixed.tab.gz
+          zcat ${in_file} | awk '$7 !="NA" && $7 == 1 && $5 == 0 && $4 == 0'| gzip -c > ${outdir}/${pop}_private_chr${CHR}.merged_frq.fixed.tab.gz
           # Shared calculation without fixed sites
-          zcat ${in_file} |cut -f 1,3- | awk '$7 !="NA" && $7 > 0 && $7 < 1 && ($5 > 0 || $4 > 0)'| gzip -c > ${outdir}/${pop}_shared_chr${CHR}.merged_frq.tab.gz
+          zcat ${in_file} | awk '$7 !="NA" && $7 > 0 && $7 < 1 && ($5 > 0 || $4 > 0)'| gzip -c > ${outdir}/${pop}_shared_chr${CHR}.merged_frq.tab.gz
           # Fixed in Isolate and shared
-          zcat ${in_file} |cut -f 1,3- | awk '$7 !="NA" && $7 == 1 && ($5 > 0 || $4 > 0)'| gzip -c > ${outdir}/${pop}_shared_chr${CHR}.merged_frq.fixed.tab.gz
+          zcat ${in_file} | awk '$7 !="NA" && $7 == 1 && ($5 > 0 || $4 > 0)'| gzip -c > ${outdir}/${pop}_shared_chr${CHR}.merged_frq.fixed.tab.gz
           # NOVEL in Isolate
-          zcat ${in_file} |cut -f 1,3- | awk '$7 !="NA" && ($5 == "NA" && $4 == "NA")'| gzip -c > ${outdir}/${pop}_novel_chr${CHR}.merged_frq.tab.gz
+          zcat ${in_file} | awk '$7 !="NA" && ($5 == "NA" && $4 == "NA")'| gzip -c > ${outdir}/${pop}_novel_chr${CHR}.merged_frq.tab.gz
           ;;
     
         CARL )
           # pop_path=/lustre/scratch113/projects/esgi-vbseq/20140430_purging/UNRELATED/RESULTS/DAF/FIVE_POP
           #Private calculation without fixed sites
-          zcat ${in_file} |cut -f 1,3- | awk '$8 !="NA" && $8 > 0 && $8 < 1 && $5 == 0 && $4 == 0'| gzip -c > ${outdir}/${pop}_private_chr${CHR}.merged_frq.tab.gz
+          zcat ${in_file} | awk '$8 !="NA" && $8 > 0 && $8 < 1 && $5 == 0 && $4 == 0'| gzip -c > ${outdir}/${pop}_private_chr${CHR}.merged_frq.tab.gz
           # Fixed in Isolate and private
-          zcat ${in_file} |cut -f 1,3- | awk '$8 !="NA" && $8 == 1 && $5 == 0 && $4 == 0'| gzip -c > ${outdir}/${pop}_private_chr${CHR}.merged_frq.fixed.tab.gz
+          zcat ${in_file} | awk '$8 !="NA" && $8 == 1 && $5 == 0 && $4 == 0'| gzip -c > ${outdir}/${pop}_private_chr${CHR}.merged_frq.fixed.tab.gz
           # Shared calculation without fixed sites
-          zcat ${in_file} |cut -f 1,3- | awk '$8 !="NA" && $8 > 0 && $8 < 1 && ($5 > 0 || $4 > 0)'| gzip -c > ${outdir}/${pop}_shared_chr${CHR}.merged_frq.tab.gz
+          zcat ${in_file} | awk '$8 !="NA" && $8 > 0 && $8 < 1 && ($5 > 0 || $4 > 0)'| gzip -c > ${outdir}/${pop}_shared_chr${CHR}.merged_frq.tab.gz
           # Fixed in Isolate and shared
-          zcat ${in_file} |cut -f 1,3- | awk '$8 !="NA" && $8 == 1 && ($5 > 0 || $4 > 0)'| gzip -c > ${outdir}/${pop}_shared_chr${CHR}.merged_frq.fixed.tab.gz
+          zcat ${in_file} | awk '$8 !="NA" && $8 == 1 && ($5 > 0 || $4 > 0)'| gzip -c > ${outdir}/${pop}_shared_chr${CHR}.merged_frq.fixed.tab.gz
           # NOVEL in Isolate
-          zcat ${in_file} |cut -f 1,3- | awk '$8 !="NA" && ($5 == "NA" && $4 == "NA")'| gzip -c > ${outdir}/${pop}_novel_chr${CHR}.merged_frq.tab.gz
+          zcat ${in_file} | awk '$8 !="NA" && ($5 == "NA" && $4 == "NA")'| gzip -c > ${outdir}/${pop}_novel_chr${CHR}.merged_frq.tab.gz
     
           ;;
         Erto )
           #Private calculation without fixed sites
-          zcat ${in_file} |cut -f 1,3- | awk '$9 !="NA" && $9 > 0 && $9 < 1 && $5 == 0 && $4 == 0'| gzip -c > ${outdir}/${pop}_private_chr${CHR}.merged_frq.tab.gz
+          zcat ${in_file} | awk '$9 !="NA" && $9 > 0 && $9 < 1 && $5 == 0 && $4 == 0'| gzip -c > ${outdir}/${pop}_private_chr${CHR}.merged_frq.tab.gz
           # Fixed in Isolate and private
-          zcat ${in_file} |cut -f 1,3- | awk '$9 !="NA" && $9 == 1 && $5 == 0 && $4 == 0'| gzip -c > ${outdir}/${pop}_private_chr${CHR}.merged_frq.fixed.tab.gz
+          zcat ${in_file} | awk '$9 !="NA" && $9 == 1 && $5 == 0 && $4 == 0'| gzip -c > ${outdir}/${pop}_private_chr${CHR}.merged_frq.fixed.tab.gz
           # Shared calculation without fixed sites
-          zcat ${in_file} |cut -f 1,3- | awk '$9 !="NA" && $9 > 0 && $9 < 1 && ($5 > 0 || $4 > 0)'| gzip -c > ${outdir}/${pop}_shared_chr${CHR}.merged_frq.tab.gz
+          zcat ${in_file} | awk '$9 !="NA" && $9 > 0 && $9 < 1 && ($5 > 0 || $4 > 0)'| gzip -c > ${outdir}/${pop}_shared_chr${CHR}.merged_frq.tab.gz
           # Fixed in Isolate and shared
-          zcat ${in_file} |cut -f 1,3- | awk '$9 !="NA" && $9 == 1 && ($5 > 0 || $4 > 0)'| gzip -c > ${outdir}/${pop}_shared_chr${CHR}.merged_frq.fixed.tab.gz
+          zcat ${in_file} | awk '$9 !="NA" && $9 == 1 && ($5 > 0 || $4 > 0)'| gzip -c > ${outdir}/${pop}_shared_chr${CHR}.merged_frq.fixed.tab.gz
           # NOVEL in Isolate
-          zcat ${in_file} |cut -f 1,3- | awk '$9 !="NA" && ($5 == "NA" && $4 == "NA")'| gzip -c > ${outdir}/${pop}_novel_chr${CHR}.merged_frq.tab.gz
+          zcat ${in_file} | awk '$9 !="NA" && ($5 == "NA" && $4 == "NA")'| gzip -c > ${outdir}/${pop}_novel_chr${CHR}.merged_frq.tab.gz
           ;;
         Illegio )
          #Private calculation without fixed sites
-          zcat ${in_file} |cut -f 1,3- | awk '$10 !="NA" && $10 > 0 && $10 < 1 && $5 == 0 && $4 == 0'| gzip -c > ${outdir}/${pop}_private_chr${CHR}.merged_frq.tab.gz
+          zcat ${in_file} | awk '$10 !="NA" && $10 > 0 && $10 < 1 && $5 == 0 && $4 == 0'| gzip -c > ${outdir}/${pop}_private_chr${CHR}.merged_frq.tab.gz
           # Fixed in Isolate and private
-          zcat ${in_file} |cut -f 1,3- | awk '$10 !="NA" && $10 == 1 && $5 == 0 && $4 == 0'| gzip -c > ${outdir}/${pop}_private_chr${CHR}.merged_frq.fixed.tab.gz
+          zcat ${in_file} | awk '$10 !="NA" && $10 == 1 && $5 == 0 && $4 == 0'| gzip -c > ${outdir}/${pop}_private_chr${CHR}.merged_frq.fixed.tab.gz
           # Shared calculation without fixed sites
-          zcat ${in_file} |cut -f 1,3- | awk '$10 !="NA" && $10 > 0 && $10 < 1 && ($5 > 0 || $4 > 0)'| gzip -c > ${outdir}/${pop}_shared_chr${CHR}.merged_frq.tab.gz
+          zcat ${in_file} | awk '$10 !="NA" && $10 > 0 && $10 < 1 && ($5 > 0 || $4 > 0)'| gzip -c > ${outdir}/${pop}_shared_chr${CHR}.merged_frq.tab.gz
           # Fixed in Isolate and shared
-          zcat ${in_file} |cut -f 1,3- | awk '$10 !="NA" && $10 == 1 && ($5 > 0 || $4 > 0)'| gzip -c > ${outdir}/${pop}_shared_chr${CHR}.merged_frq.fixed.tab.gz
+          zcat ${in_file} | awk '$10 !="NA" && $10 == 1 && ($5 > 0 || $4 > 0)'| gzip -c > ${outdir}/${pop}_shared_chr${CHR}.merged_frq.fixed.tab.gz
           # NOVEL in Isolate
-          zcat ${in_file} |cut -f 1,3- | awk '$10 !="NA" && ($5 == "NA" && $4 == "NA")'| gzip -c > ${outdir}/${pop}_novel_chr${CHR}.merged_frq.tab.gz 
+          zcat ${in_file} | awk '$10 !="NA" && ($5 == "NA" && $4 == "NA")'| gzip -c > ${outdir}/${pop}_novel_chr${CHR}.merged_frq.tab.gz 
           ;;
         Resia )
           #Private calculation without fixed sites
           #Private calculation without fixed sites
-          zcat ${in_file} |cut -f 1,3- | awk '$11 !="NA" && $11 > 0 && $11 < 1 && $5 == 0 && $4 == 0'| gzip -c > ${outdir}/${pop}_private_chr${CHR}.merged_frq.tab.gz
+          zcat ${in_file} | awk '$11 !="NA" && $11 > 0 && $11 < 1 && $5 == 0 && $4 == 0'| gzip -c > ${outdir}/${pop}_private_chr${CHR}.merged_frq.tab.gz
           # Fixed in Isolate and private
-          zcat ${in_file} |cut -f 1,3- | awk '$11 !="NA" && $11 == 1 && $5 == 0 && $4 == 0'| gzip -c > ${outdir}/${pop}_private_chr${CHR}.merged_frq.fixed.tab.gz
+          zcat ${in_file} | awk '$11 !="NA" && $11 == 1 && $5 == 0 && $4 == 0'| gzip -c > ${outdir}/${pop}_private_chr${CHR}.merged_frq.fixed.tab.gz
           # Shared calculation without fixed sites
-          zcat ${in_file} |cut -f 1,3- | awk '$11 !="NA" && $11 > 0 && $11 < 1 && ($5 > 0 || $4 > 0)'| gzip -c > ${outdir}/${pop}_shared_chr${CHR}.merged_frq.tab.gz
+          zcat ${in_file} | awk '$11 !="NA" && $11 > 0 && $11 < 1 && ($5 > 0 || $4 > 0)'| gzip -c > ${outdir}/${pop}_shared_chr${CHR}.merged_frq.tab.gz
           # Fixed in Isolate and shared
-          zcat ${in_file} |cut -f 1,3- | awk '$11 !="NA" && $11 == 1 && ($5 > 0 || $4 > 0)'| gzip -c > ${outdir}/${pop}_shared_chr${CHR}.merged_frq.fixed.tab.gz
+          zcat ${in_file} | awk '$11 !="NA" && $11 == 1 && ($5 > 0 || $4 > 0)'| gzip -c > ${outdir}/${pop}_shared_chr${CHR}.merged_frq.fixed.tab.gz
           # NOVEL in Isolate
-          zcat ${in_file} |cut -f 1,3- | awk '$11 !="NA" && ($5 == "NA" && $4 == "NA")'| gzip -c > ${outdir}/${pop}_novel_chr${CHR}.merged_frq.tab.gz
+          zcat ${in_file} | awk '$11 !="NA" && ($5 == "NA" && $4 == "NA")'| gzip -c > ${outdir}/${pop}_novel_chr${CHR}.merged_frq.tab.gz
           ;;
         Sauris )
          #Private calculation without fixed sites
-          zcat ${in_file} |cut -f 1,3- | awk '$12 !="NA" && $12 > 0 && $12 < 1 && $5 == 0 && $4 == 0'| gzip -c > ${outdir}/${pop}_private_chr${CHR}.merged_frq.tab.gz
+          zcat ${in_file} | awk '$12 !="NA" && $12 > 0 && $12 < 1 && $5 == 0 && $4 == 0'| gzip -c > ${outdir}/${pop}_private_chr${CHR}.merged_frq.tab.gz
           # Fixed in Isolate and private
-          zcat ${in_file} |cut -f 1,3- | awk '$12 !="NA" && $12 == 1 && $5 == 0 && $4 == 0'| gzip -c > ${outdir}/${pop}_private_chr${CHR}.merged_frq.fixed.tab.gz
+          zcat ${in_file} | awk '$12 !="NA" && $12 == 1 && $5 == 0 && $4 == 0'| gzip -c > ${outdir}/${pop}_private_chr${CHR}.merged_frq.fixed.tab.gz
           # Shared calculation without fixed sites
-          zcat ${in_file} |cut -f 1,3- | awk '$12 !="NA" && $12 > 0 && $12 < 1 && ($5 > 0 || $4 > 0)'| gzip -c > ${outdir}/${pop}_shared_chr${CHR}.merged_frq.tab.gz
+          zcat ${in_file} | awk '$12 !="NA" && $12 > 0 && $12 < 1 && ($5 > 0 || $4 > 0)'| gzip -c > ${outdir}/${pop}_shared_chr${CHR}.merged_frq.tab.gz
           # Fixed in Isolate and shared
-          zcat ${in_file} |cut -f 1,3- | awk '$12 !="NA" && $12 == 1 && ($5 > 0 || $4 > 0)'| gzip -c > ${outdir}/${pop}_shared_chr${CHR}.merged_frq.fixed.tab.gz
+          zcat ${in_file} | awk '$12 !="NA" && $12 == 1 && ($5 > 0 || $4 > 0)'| gzip -c > ${outdir}/${pop}_shared_chr${CHR}.merged_frq.fixed.tab.gz
           # NOVEL in Isolate
-          zcat ${in_file} |cut -f 1,3- | awk '$12 !="NA" && ($5 == "NA" && $4 == "NA")'| gzip -c > ${outdir}/${pop}_novel_chr${CHR}.merged_frq.tab.gz 
+          zcat ${in_file} | awk '$12 !="NA" && ($5 == "NA" && $4 == "NA")'| gzip -c > ${outdir}/${pop}_novel_chr${CHR}.merged_frq.tab.gz 
           ;;
         
       esac
