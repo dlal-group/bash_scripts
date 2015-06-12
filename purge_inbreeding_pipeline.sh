@@ -690,6 +690,7 @@ all_hom=`bcftools query -s ${sample} -R ${shared_cat} -f '%CHROM\t%POS\t%REF\t%A
         TSI )
           #Private calculation without fixed sites
           # zcat ${in_file} | awk '$6 !="NA" && $6 > 0 && $6 < 1 && $5 == 0 && $4 == 0'| gzip -c > ${outdir}/${pop}_private_chr${CHR}.merged_frq.tab.gz
+          zcat ${in_file} |cut -f 1,3-| awk '$5 !="NA" && $5 > 0 && ($6 == 0 || $7 == 0 || $8 == 0 || $9 == 0 || $10 == 0 || $11 == 0 || $12 == 0)'| gzip -c > ${outdir}/${pop}_private_chr${CHR}.merged_frq.tab.gz
           # # Fixed in Isolate and private
           # zcat ${in_file} | awk '$6 !="NA" && $6 == 1 && $5 == 0 && $4 == 0'| gzip -c > ${outdir}/${pop}_private_chr${CHR}.merged_frq.fixed.tab.gz
           # # Shared calculation without fixed sites
@@ -703,6 +704,7 @@ all_hom=`bcftools query -s ${sample} -R ${shared_cat} -f '%CHROM\t%POS\t%REF\t%A
         CEU )
           #Private calculation without fixed sites
           # zcat ${in_file} | awk '$4 !="NA" && $4 > 0 && $6 < 1 && $5 == 0 && $4 == 0'| gzip -c > ${outdir}/${pop}_private_chr${CHR}.merged_frq.tab.gz
+          zcat ${in_file} |cut -f 1,3-| awk '$4 !="NA" && $4 > 0 && ($6 == 0 || $7 == 0 || $8 == 0 || $9 == 0 || $10 == 0 || $11 == 0 || $12 == 0)'| gzip -c > ${outdir}/${pop}_private_chr${CHR}.merged_frq.tab.gz
           # # Fixed in Isolate and private
           # zcat ${in_file} | awk '$4 !="NA" && $4 == 1 && $5 == 0 && $4 == 0'| gzip -c > ${outdir}/${pop}_private_chr${CHR}.merged_frq.fixed.tab.gz
           # # Shared calculation without fixed sites
