@@ -39,4 +39,4 @@ echo "Processing $out_name"
 #WE NEED TO USE THE NEW ALIGNEMNT REFERENCE
 echo "Plotting $out_dir/BAMCHECK_STATS/$out_name.bamchek.stats"
 # plot-bamcheck -r /lustre/scratch111/resources/ref/Homo_sapiens/1000Genomes_hs37d5/hs37d5.fa.gc_stats -p $out_dir/BAMCHECK_STATS/PLOTS/QC_GRIND/${out_name%%.*}/ $out_dir/BAMCHECK_STATS/$out_name.bamchek.stats
-plot-bamcheck -p $out_dir/BAMCHECK_STATS/PLOTS/QC_GRIND/${out_name%%.*} $out_dir/BAMCHECK_STATS/$out_name.bamchek.stats
+/software/hgi/pkglocal/samtools-0.1.19/bin/plot-bamcheck -p $out_dir/BAMCHECK_STATS/PLOTS/QC_GRIND/${out_name%%.*} $out_dir/BAMCHECK_STATS/$out_name.bamchek.stats

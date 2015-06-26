@@ -213,7 +213,7 @@ case $MODE in
 	#WE NEED TO USE THE NEW ALIGNEMNT REFERENCE
 	echo "Plotting $out_dir/BAMCHECK_STATS/$out_name.bamchek.stats"
 	# plot-bamcheck -r /lustre/scratch111/resources/ref/Homo_sapiens/1000Genomes_hs37d5/hs37d5.fa.gc_stats -p $out_dir/BAMCHECK_STATS/PLOTS/QC_GRIND/${out_name%%.*}/ $out_dir/BAMCHECK_STATS/$out_name.bamchek.stats
-	plot-bamcheck -p $out_dir/BAMCHECK_STATS/PLOTS/QC_GRIND/${out_name%%.*}/${out_name%%.*} $out_dir/BAMCHECK_STATS/${out_name}.bamchek.stats
+	/software/hgi/pkglocal/samtools-0.1.19/bin/plot-bamcheck -p $out_dir/BAMCHECK_STATS/PLOTS/QC_GRIND/${out_name%%.*}/${out_name%%.*} $out_dir/BAMCHECK_STATS/${out_name}.bamchek.stats
 
 	# generate a html report with images
 	/nfs/users/nfs_m/mc14/Work/bash_scripts/bam_check_html_report.sh ${out_name%%.*} ../${out_name%%.*}/${out_name%%.*}-acgt-cycles.png ../${out_name%%.*}/${out_name%%.*}-coverage.png ../${out_name%%.*}/${out_name%%.*}-gc-content.png ../${out_name%%.*}/${out_name%%.*}-gc-depth.png ../${out_name%%.*}/${out_name%%.*}-indel-cycles.png ../${out_name%%.*}/${out_name%%.*}-indel-dist.png ../${out_name%%.*}/${out_name%%.*}-insert-size.png ../${out_name%%.*}/${out_name%%.*}-quals.png ../${out_name%%.*}/${out_name%%.*}-quals2.png ../${out_name%%.*}/${out_name%%.*}-quals3.png ../${out_name%%.*}/${out_name%%.*}-quals-hm.png > $out_dir/BAMCHECK_STATS/PLOTS/QC_GRIND/HTML/${out_name%%.*}_summary.html
