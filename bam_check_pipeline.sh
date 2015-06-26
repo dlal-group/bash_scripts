@@ -190,7 +190,10 @@ case $MODE in
 	echo "Processing $out_name"
 	#create bam stats if they're not present already
 	# /software/vertres/codebase/scripts/bamcheck -c 1,50,1 -d $1 > $out_dir/BAMCHECK_STATS/$out_name.bamchek.stats
-	/software/vertres/codebase/scripts/bamcheck -d $1 > $out_dir/BAMCHECK_STATS/$out_name.bamchek.stats
+	if [[ ! -s $out_dir/BAMCHECK_STATS/$out_name.bamchek.stats ]]
+	then
+		/software/vertres/codebase/scripts/bamcheck -d $1 > $out_dir/BAMCHECK_STATS/$out_name.bamchek.stats
+	fi
 
 	#grep ^SN ${files[$index]} | cut -f 2- > $1/$out_name.summary
 
