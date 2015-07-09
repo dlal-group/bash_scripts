@@ -280,4 +280,8 @@ case $MODE in
 	# 	- Use samtools calmd to recarculate BAM's MD tag
 
 	;;
+	BRIDGEDCHECK)
+	#check numer of reads before and after bridging
+
+	;;
 esac
