@@ -282,6 +282,11 @@ case $MODE in
 	;;
 	BRIDGEDCHECK)
 	#check numer of reads before and after bridging
-
+	# file=$1
+	out_name=`basename ${file}`
+	# out_dir=$2
+	# MODE=$3
+	reads=`samtools view ${file}`
+	echo ${file} ${reads} > ${out_dir}/${out_name}.rdc
 	;;
 esac
