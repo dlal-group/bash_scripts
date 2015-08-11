@@ -532,11 +532,16 @@ file=`sed -n "${LSB_JOBINDEX}p" $1`
 # done
 #31/05/2015 created sorted bed files
 # sort -n -k2,2 $file > $file.sorted.bed
-CHR=$file
-snplist=/lustre/scratch113/projects/esgi-vbseq/20140430_purging/enza/listsites/neutral/neut.${CHR}.list
-vcf=/lustre/scratch113/projects/esgi-vbseq/20140430_purging/UNRELATED/POP_MERGED_FILES/FIVE_POPS/20140711_ANNOTATED/${CHR}.vcf.gz
+# CHR=$file
+# snplist=/lustre/scratch113/projects/esgi-vbseq/20140430_purging/enza/listsites/neutral/neut.${CHR}.list
+# vcf=/lustre/scratch113/projects/esgi-vbseq/20140430_purging/UNRELATED/POP_MERGED_FILES/FIVE_POPS/20140711_ANNOTATED/${CHR}.vcf.gz
 
-bcftools query -R ${snplist} -f '%CHROM\t%POS\t%REF\t%ALT\t%INFO/AA\n' ${vcf} > /lustre/scratch113/projects/esgi-vbseq/20140430_purging/46_SAMPLES/RESULTS/HOMCOUNT/listsites/neut/neut.${CHR}.all_list
-#we need to check if the ANCESTRAL ALLELE IS EQUAL TO THE REFERENCE, so that the DERIVED is the ALTERNATIVE!!
-awk '{if($3==$5) print $1,$2-1,$2}' /lustre/scratch113/projects/esgi-vbseq/20140430_purging/46_SAMPLES/RESULTS/HOMCOUNT/listsites/neut/neut.${CHR}.all_list | tr " " "\t" > /lustre/scratch113/projects/esgi-vbseq/20140430_purging/46_SAMPLES/RESULTS/HOMCOUNT/listsites/neut/neut.${CHR}.bed
-rm /lustre/scratch113/projects/esgi-vbseq/20140430_purging/46_SAMPLES/RESULTS/HOMCOUNT/listsites/neut/neut.${CHR}.all_list
+# bcftools query -R ${snplist} -f '%CHROM\t%POS\t%REF\t%ALT\t%INFO/AA\n' ${vcf} > /lustre/scratch113/projects/esgi-vbseq/20140430_purging/46_SAMPLES/RESULTS/HOMCOUNT/listsites/neut/neut.${CHR}.all_list
+# #we need to check if the ANCESTRAL ALLELE IS EQUAL TO THE REFERENCE, so that the DERIVED is the ALTERNATIVE!!
+# awk '{if($3==$5) print $1,$2-1,$2}' /lustre/scratch113/projects/esgi-vbseq/20140430_purging/46_SAMPLES/RESULTS/HOMCOUNT/listsites/neut/neut.${CHR}.all_list | tr " " "\t" > /lustre/scratch113/projects/esgi-vbseq/20140430_purging/46_SAMPLES/RESULTS/HOMCOUNT/listsites/neut/neut.${CHR}.bed
+# rm /lustre/scratch113/projects/esgi-vbseq/20140430_purging/46_SAMPLES/RESULTS/HOMCOUNT/listsites/neut/neut.${CHR}.all_list
+
+# 23/07/2015
+# run qctools on imputed data
+# mkdir -p LOGS;size=`wc -l chr.list|cut -f 1 -d " "`;bsub -J "stats[1-${size}]" -o "LOGS/%J_stats.%I.o" -M 2000 -R"select[mem>2000] rusage[mem=2000]" -q normal -- ~/Work/bash_scripts/ja_runner.sh chr.list
+/nfs/team151/software/qctool_v1.4-linux-x86_64/qctool -g chr${file}.gen.gz -assume-chromosome ${file} -snp-stats final_stats/chr${file}.stats

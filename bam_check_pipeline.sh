@@ -46,7 +46,7 @@ case $MODE in
 	# mkdir -p LOGS;size=`wc -l new_batch_files.list|cut -f 1 -d " "`;bsub -J "IMPROVEDCHECK[1-${size}]" -o "LOGS/%J_IMPROVEDCHECK.%I.o" -M 2000 -R"select[mem>2000] rusage[mem=2000]" -q normal -- ~/Work/bash_scripts/ja_runner_par.sh -s ~/Work/bash_scripts/bam_check_pipeline.sh new_batch_files.list /lustre/scratch113/projects/carl_seq/05012015/improve_check IMPROVEDCHECK
 	# mkdir -p LOGS;size=`wc -l new_batch_files.list|cut -f 1 -d " "`;bsub -J "IMPROVEDCHECK[1-${size}]" -o "LOGS/%J_IMPROVEDCHECK.%I.o" -M 2000 -R"select[mem>2000] rusage[mem=2000]" -q normal -- ~/Work/bash_scripts/ja_runner_par.sh -s ~/Work/bash_scripts/bam_check_pipeline.sh new_batch_files.list /lustre/scratch113/projects/fvg_seq/05012015/improve_check IMPROVEDCHECK
 	# mkdir -p LOGS;size=`wc -l new_batch_files.list|cut -f 1 -d " "`;bsub -J "IMPROVEDCHECK[1-${size}]" -o "LOGS/%J_IMPROVEDCHECK.%I.o" -M 2000 -R"select[mem>2000] rusage[mem=2000]" -q normal -- ~/Work/bash_scripts/ja_runner_par.sh -s ~/Work/bash_scripts/bam_check_pipeline.sh new_batch_files.list /lustre/scratch113/projects/esgi-vbseq/05012015/improve_check IMPROVEDCHECK
-	#extract PG tag from each file to check if they already underwent any improvement already
+	#extract PG tag from each file to check if they already underwent any improvement
 	mkdir -p ${out_dir}
 	samtools view -H ${file} | grep "^@PG" > ${out_dir}/${out_name}.pgtag
 	;;
@@ -221,6 +221,15 @@ case $MODE in
 	# generate a html report with images
 	/nfs/users/nfs_m/mc14/Work/bash_scripts/bam_check_html_report.sh ${out_name%%.*} ../${out_name%%.*}/${out_name%%.*}-acgt-cycles.png ../${out_name%%.*}/${out_name%%.*}-coverage.png ../${out_name%%.*}/${out_name%%.*}-gc-content.png ../${out_name%%.*}/${out_name%%.*}-gc-depth.png ../${out_name%%.*}/${out_name%%.*}-indel-cycles.png ../${out_name%%.*}/${out_name%%.*}-indel-dist.png ../${out_name%%.*}/${out_name%%.*}-insert-size.png ../${out_name%%.*}/${out_name%%.*}-quals.png ../${out_name%%.*}/${out_name%%.*}-quals2.png ../${out_name%%.*}/${out_name%%.*}-quals3.png ../${out_name%%.*}/${out_name%%.*}-quals-hm.png > $out_dir/BAMCHECK_STATS/PLOTS/QC_GRIND/HTML/${out_name%%.*}_summary.html
 
+	#bit to generate a report....
+	PID=$!
+	wait $!
+	status=$?
+	wdir=`pwd -P`
+	cmd=`history | tail -n2| head -1| cut -f 2- -d " "`
+	email=mc14@sanger.ac.uk
+	/nfs/users/nfs_m/mc14/Work/bash_scripts/send_report.sh ${status} ${email} ${wdir} ${cmd}
+
   	;;
   	SEXCHECK)
 	#Check sex in ba files
@@ -281,12 +290,15 @@ case $MODE in
 
 	;;
 	BRIDGEDCHECK)
-	#check numer of reads before and after bridging
+	#check bam files before or after bridging
+	# mkdir -p LOGS;size=`wc -l before_bridge_new_batch_files.list|cut -f 1 -d " "`;bsub -J "BRIDGEDCHECK[1-${size}]" -o "LOGS/%J_BRIDGEDCHECK.%I.o" -M 2000 -R"select[mem>2000] rusage[mem=2000]" -q normal -- ~/Work/bash_scripts/ja_runner_par.sh -s ~/Work/bash_scripts/bam_check_pipeline.sh before_bridge_new_batch_files.list /lustre/scratch113/projects/fvg_seq/NEWBATCH/BAMSTATS BRIDGEDCHECK
 	# file=$1
 	out_name=`basename ${file}`
 	# out_dir=$2
 	# MODE=$3
-	reads=`samtools view ${file}`
-	echo ${file} ${reads} > ${out_dir}/${out_name}.rdc
+	# reads=`samtools view ${file}`
+	# echo ${file} ${reads} > ${out_dir}/${out_name}.rdc
+	/software/hgi/pkglocal/samtools-1.2/bin/samtools flagstat $file > ${out_dir}/${out_name}.rdc
+
 	;;
 esac
