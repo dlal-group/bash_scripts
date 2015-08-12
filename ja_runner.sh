@@ -544,4 +544,11 @@ file=`sed -n "${LSB_JOBINDEX}p" $1`
 # 23/07/2015
 # run qctools on imputed data
 # mkdir -p LOGS;size=`wc -l chr.list|cut -f 1 -d " "`;bsub -J "stats[1-${size}]" -o "LOGS/%J_stats.%I.o" -M 2000 -R"select[mem>2000] rusage[mem=2000]" -q normal -- ~/Work/bash_scripts/ja_runner.sh chr.list
-/nfs/team151/software/qctool_v1.4-linux-x86_64/qctool -g chr${file}.gen.gz -assume-chromosome ${file} -snp-stats final_stats/chr${file}.stats
+# /nfs/team151/software/qctool_v1.4-linux-x86_64/qctool -g chr${file}.gen.gz -assume-chromosome ${file} -snp-stats final_stats/chr${file}.stats
+
+#12/08/2015
+#create impute format files for UK10K+1000G PIII reference panel
+filename=`basename $file`
+chr=${filename%.bcf}
+
+bcftools convert -h ${chr} ${file}
