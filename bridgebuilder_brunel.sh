@@ -34,9 +34,9 @@ if [ -f $remap\_remapsorted.bam ]; then
         
         #3.3 Merge three sorted bams
         /software/hgi/pkglocal/samtools-1.2/bin/samtools merge -h $2/$bam_name\_header.txt -cp $2/$bam_name\_new.bam $unchanged $remap\_remapsorted.bam $bridged\_sorted.bam 
-        rm $unchanged
-        rm $bridged\_sorted.bam
-        rm $remap\_remapsorted.bam
+        # rm $unchanged
+        # rm $bridged\_sorted.bam
+        # rm $remap\_remapsorted.bam
 
         #Add in RG info in the header
         /software/hgi/pkglocal/samtools-1.2/bin/samtools reheader $2/$bam_name\_header.txt  $2/$bam_name\_new.bam |samtools view -h -|samtools view -Sb - > $2/$bam_name\_reheader.bam
