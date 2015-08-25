@@ -43,8 +43,13 @@ if [ -f ${remap} ]; then
         bwa aln -q 15 -b1 $REF $remap > $remap.1.sai;
         # /lustre/scratch113/projects/crohns/software/bwa.0.5.10_fixes/bwa aln -q 15 -b2 /lustre/scratch109/srpipe/references/Homo_sapiens/1000Genomes_hs37d5/all/bwa/hs37d5.fa $remap > $remap.2.sai;
         bwa aln -q 15 -b2 $REF $remap > $remap.2.sai;
+        #get single end reads
+        # bwa aln -q 15 -b0 $REF $remap > $remap.0.sai;
+        # bwa aln -q 15 -b0 /lustre/scratch114/resources/ref/Homo_sapiens/1000Genomes_hs37d5/hs37d5.fa 582286.dedup.realn.recal.bam_remap.bam > 582286.dedup.realn.recal.bam_remap.bam.0.sai;
         # /lustre/scratch113/projects/crohns/software/bwa.0.5.10_fixes/bwa sampe /lustre/scratch109/srpipe/references/Homo_sapiens/1000Genomes_hs37d5/all/bwa/hs37d5.fa $remap.1.sai $remap.2.sai $remap $remap | samtools view -h -Sb - > $remap\_hs37d5.bam
-        bwa sampe $REF $remap.1.sai $remap.2.sai $remap $remap | samtools view -h -Sb - > $remap\_hs37d5.bam
+        bwa sampe $REF $remap.1.sai $remap.2.sai $remap $remap | /software/hgi/pkglocal/samtools-1.2/bin/samtools view -h -Sb - > $remap\_hs37d5.bam
+        #map single end reads
+        # bwa samse $REF $remap.1.sai $remap.2.sai $remap $remap | /software/hgi/pkglocal/samtools-1.2/bin/samtools view -h -Sb - > $remap\_hs37d5.bam
         echo "remapping finished"
         # rm $remap.[12].sai
         # rm $remap

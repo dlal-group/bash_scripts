@@ -18,7 +18,7 @@ if [ ! -f ${2}/${bam_name}\_bridge.bam ]; then
 		# bwa aln -q 15 -b /lustre/scratch113/projects/fvg_seq/F12HPCEUHK0358_HUMpngR/BRIDGED/makebridge_bridge.fa /nfs/users/nfs_m/mc14/fvg_seq/NEWBATCH/582055/Alignment_result/582055.dedup.realn.recal.bam
 		bwa aln -q 15 -b /lustre/scratch113/projects/fvg_seq/F12HPCEUHK0358_HUMpngR/BRIDGED/makebridge_bridge.fa ${1} > ${2}/${bam_name}_bridge.sai
 		# /software/solexa/bin/aligners/bwa/bwa-0.5.9/bwa samse /lustre/scratch113/projects/fvg_seq/F12HPCEUHK0358_HUMpngR/BRIDGED/makebridge_bridge.fa ${1}_bridge.sai ${1} |samtools view -h -F 4 -Sb - > ${1}_bridge.bam
-		bwa samse /lustre/scratch113/projects/fvg_seq/F12HPCEUHK0358_HUMpngR/BRIDGED/makebridge_bridge.fa ${2}/${bam_name}_bridge.sai ${1} |samtools view -h -F 4 -Sb - > ${2}/${bam_name}_bridge.bam
+		bwa samse /lustre/scratch113/projects/fvg_seq/F12HPCEUHK0358_HUMpngR/BRIDGED/makebridge_bridge.fa ${2}/${bam_name}_bridge.sai ${1} | /software/hgi/pkglocal/samtools-1.2/bin/samtools view -h -F 4 -Sb - > ${2}/${bam_name}_bridge.bam
         rm ${2}/${bam_name}\_bridge.sai
 fi
 

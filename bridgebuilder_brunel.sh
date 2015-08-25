@@ -29,7 +29,7 @@ if [ -f $remap\_remapsorted.bam ]; then
 
         output=$(basename $bam)
         #3.2 Correct header for bridged file
-        /software/hgi/pkglocal/samtools-1.2/bin/samtools reheader $2/$bam_name\_header.txt ${bridged}\_sorted.bam |samtools view  -h - |samtools view -Sb - > ${bridged}\_reheader.bam
+        /software/hgi/pkglocal/samtools-1.2/bin/samtools reheader $2/$bam_name\_header.txt ${bridged}\_sorted.bam |/software/hgi/pkglocal/samtools-1.2/bin/samtools view  -h - |/software/hgi/pkglocal/samtools-1.2/bin/samtools view -Sb - > ${bridged}\_reheader.bam
         mv ${bridged}\_reheader.bam ${bridged}\_sorted.bam
         
         #3.3 Merge three sorted bams
@@ -39,7 +39,7 @@ if [ -f $remap\_remapsorted.bam ]; then
         # rm $remap\_remapsorted.bam
 
         #Add in RG info in the header
-        /software/hgi/pkglocal/samtools-1.2/bin/samtools reheader $2/$bam_name\_header.txt  $2/$bam_name\_new.bam |samtools view -h -|samtools view -Sb - > $2/$bam_name\_reheader.bam
+        /software/hgi/pkglocal/samtools-1.2/bin/samtools reheader $2/$bam_name\_header.txt  $2/$bam_name\_new.bam |/software/hgi/pkglocal/samtools-1.2/bin/samtools view -h -|/software/hgi/pkglocal/samtools-1.2/bin/samtools view -Sb - > $2/$bam_name\_reheader.bam
         mv $2/$bam_name\_reheader.bam $2/$bam_name\_new.bam
         /software/hgi/pkglocal/samtools-1.2/bin/samtools index $2/$bam_name\_new.bam
 
