@@ -38,12 +38,12 @@ infile_name=`basename ${infile}`
 -R ${ref} \
 --resource:1kg ${TGP} \
 -E 1kg.AA \
--E 1kg.AF \
 -E 1kg.EAS_AF \
 -E 1kg.AMR_AF \
 -E 1kg.AFR_AF \
 -E 1kg.SAS_AF \
 -E 1kg.EUR_AF
+# -E 1kg.AF \
 
 #index with tabix
 tabix -p vcf ${outfolder}/${infile_name}.ann.vcf.gz
