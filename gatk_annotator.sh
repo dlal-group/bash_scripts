@@ -15,7 +15,8 @@ outfolder=$2
 #set those to the last available
 dbsnp=/lustre/scratch114/resources/variation/Homo_sapiens/grch37/dbsnp_142_gatk.vcf
 ref=/lustre/scratch114/resources/ref/Homo_sapiens/1000Genomes_hs37d5/hs37d5.fa
-TGP=/lustre/scratch114/resources/1000g/release/20130502/ALL.autosomes.phase3_shapeit2_mvncall_integrated_v5.20130502.sites.vcf.gz
+# TGP=/lustre/scratch114/resources/1000g/release/20130502/ALL.autosomes.phase3_shapeit2_mvncall_integrated_v5.20130502.sites.vcf.gz
+TGP=/lustre/scratch114/resources/1000g/release/20110521-v3/ALL.wgs.phase1_release_v3.20101123.snps_indels_sv.sites.vcf.gz
 infile_name=`basename ${infile}`
 
 #first fix the header AND filter out all sites with a deletion AT THE BEGINNIG of the ALT allele field
@@ -56,3 +57,12 @@ tabix -p vcf ${outfolder}/${infile_name}.clean_ann.vcf.gz
 # rm ${infolder}/${chr}.fixed.vcf.gz.tbi
 # rm ${infolder}/${chr}.fixed.cleaned.vcf.gz.tbi
 
+#bit to generate a report....
+PID=$!
+wait $!
+status=$?
+wdir=`pwd -P`
+cmd=`history | tail -n2| head -1| cut -f 2- -d " "`
+info=`echo "anotated file ${infile}"`
+email=mc14@sanger.ac.uk
+/nfs/users/nfs_m/mc14/Work/bash_scripts/send_report.sh ${status} ${email} ${wdir} ${cmd} ${info}

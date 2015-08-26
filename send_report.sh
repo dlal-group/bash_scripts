@@ -15,6 +15,6 @@ status=$1
 email=$2
 wdir=$3
 cmd=$4
+info=$5
 
-
-echo -e "The runner has finished, all done!\nWorking directory: ${wdir}\nCommand line: ${cmd}" | mutt -s "Script report: ${status}" ${email}
+echo -e "The runner has finished, all done!\nWorking directory: ${wdir}\nCommand line: ${cmd}\nAdditional info:\n ${info}" | mutt -s "Script report: ${status}" ${email}
