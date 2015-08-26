@@ -12,6 +12,7 @@
 infile=$1
 # infolder=$2
 outfolder=$2
+mkdir -p ${outfolder}
 #set those to the last available
 dbsnp=/lustre/scratch114/resources/variation/Homo_sapiens/grch37/dbsnp_142_gatk.vcf
 ref=/lustre/scratch114/resources/ref/Homo_sapiens/1000Genomes_hs37d5/hs37d5.fa
@@ -63,6 +64,6 @@ wait $!
 status=$?
 wdir=`pwd -P`
 cmd=`history | tail -n2| head -1| cut -f 2- -d " "`
-info=`echo "anotated file ${infile}"`
+info=${infile}
 email=mc14@sanger.ac.uk
 /nfs/users/nfs_m/mc14/Work/bash_scripts/send_report.sh ${status} ${email} ${wdir} ${cmd} ${info}
