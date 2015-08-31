@@ -548,7 +548,26 @@ file=`sed -n "${LSB_JOBINDEX}p" $1`
 
 #12/08/2015
 #create impute format files for UK10K+1000G PIII reference panel
-filename=`basename $file`
-chr=${filename%.bcf}
+# filename=`basename $file`
+# chr=${filename%.bcf}
 
-bcftools convert -h ${chr} ${file}
+# bcftools convert -h ${chr} ${file}
+
+#31/08/2015
+#Extract lists of shared sites using enza's conseq lists
+# while read list_name
+  # do
+    #for chr in 12
+    list_name=${file}
+    for chr in {1..22}
+    do
+      #for pop in CEU
+      for pop in CEU TSI Erto Illegio Resia Sauris VBI CARL
+      do
+      sort -k1,1 -k2,2 -g /lustre/scratch113/projects/esgi-vbseq/20140430_purging/enza/REVISION_201508/conseqlists/${list_name}.sites.list | grep "^${chr}"|awk '{print $1,$2-1,$2}'| tr " " "\t" > /lustre/scratch113/projects/esgi-vbseq/20140430_purging/max/REVISION_201508/conseqlists/${list_name}.${chr}.sites.bed
+      # sed -i 's/ /	/g' /lustre/scratch113/projects/esgi-vbseq/20140430_purging/46_SAMPLES/INPUT_FILES/FIVE_POPS/WG/sharedsites/${pop}_shared_chr${chr}.bed.sorted.bed
+      bedtools intersect -a /lustre/scratch113/projects/esgi-vbseq/20140430_purging/max/REVISION_201508/conseqlists/${list_name}.${chr}.sites.bed -b /lustre/scratch113/projects/esgi-vbseq/20140430_purging/46_SAMPLES/INPUT_FILES/FIVE_POPS/WG/sharedsites/${pop}_shared_chr${chr}.bed.sorted.bed > /lustre/scratch113/projects/esgi-vbseq/20140430_purging/max/REVISION_201508/conseqlists/sharedsites/${pop}.${list_name}.${chr}.shared_sites.bed
+      done
+    done
+  # done < <(cat /lustre/scratch113/projects/esgi-vbseq/20140430_purging/enza/REVISION_201508/conseqlists/types.lists)
+
