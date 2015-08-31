@@ -683,7 +683,8 @@ all_hom=`bcftools query -s ${sample} -R ${shared_cat} -f '%CHROM\t%POS\t%REF\t%A
     # $11 Resia
     # $12 Sauris
 
-    pops_updated="FVG VBI CARL TSI CEU Erto Resia Illegio Sauris"
+    # pops_updated="FVG VBI CARL TSI CEU Erto Resia Illegio Sauris"
+    pops_updated="TSI CEU"
     for pop in $pops_updated
     do
       case $pop in
