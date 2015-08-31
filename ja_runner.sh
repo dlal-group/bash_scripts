@@ -5,6 +5,7 @@
 # Environment variables: LSB_JOBINDEX
 # mkdir -p LOGS;size=`wc -l result.list|cut -f 1 -d " "`;bsub -J "p_check[1-${size}]" -o "LOGS/%J_p_check.%I.o" -M 5000 -R"select[mem>5000] rusage[mem=5000]" -q normal -- ~/Work/bash_scripts/ja_runner.sh result.list
 # mkdir -p LOGS;size=`wc -l file_list|cut -f 1 -d " "`;bsub -J "sort[1-${size}]" -o "LOGS/%J_sort.%I.o" -M 100 -R"select[mem>100] rusage[mem=100]" -q yesterday -- ~/Work/bash_scripts/ja_runner.sh file_list
+# mkdir -p LOGS;size=`wc -l /lustre/scratch113/projects/esgi-vbseq/20140430_purging/enza/REVISION_201508/conseqlists/types.lists|cut -f 1 -d " "`;bsub -J "extract[1-${size}]" -o "LOGS/%J_extract.%I.o" -M 100 -R"select[mem>100] rusage[mem=100]" -q normal -- ~/Work/bash_scripts/ja_runner.sh /lustre/scratch113/projects/esgi-vbseq/20140430_purging/enza/REVISION_201508/conseqlists/types.lists
 file=`sed -n "${LSB_JOBINDEX}p" $1`
 # file2=`sed -n "${LSB_JOBINDEX}p" $2`
 #added for population control
@@ -564,7 +565,7 @@ file=`sed -n "${LSB_JOBINDEX}p" $1`
       #for pop in CEU
       for pop in CEU TSI Erto Illegio Resia Sauris VBI CARL
       do
-      sort -k1,1 -k2,2 -g /lustre/scratch113/projects/esgi-vbseq/20140430_purging/enza/REVISION_201508/conseqlists/${list_name}.sites.list | grep "^${chr}"|awk '{print $1,$2-1,$2}'| tr " " "\t" > /lustre/scratch113/projects/esgi-vbseq/20140430_purging/max/REVISION_201508/conseqlists/${list_name}.${chr}.${pop}.sites.bed
+      sort -k1,1 -k2,2 -g /lustre/scratch113/projects/esgi-vbseq/20140430_purging/enza/REVISION_201508/conseqlists/${list_name}.sites.list | grep "^${chr} "|awk '{print $1,$2-1,$2}'| tr " " "\t" > /lustre/scratch113/projects/esgi-vbseq/20140430_purging/max/REVISION_201508/conseqlists/${list_name}.${chr}.${pop}.sites.bed
       # sed -i 's/ /	/g' /lustre/scratch113/projects/esgi-vbseq/20140430_purging/46_SAMPLES/INPUT_FILES/FIVE_POPS/WG/sharedsites/${pop}_shared_chr${chr}.bed.sorted.bed
       bedtools intersect -a /lustre/scratch113/projects/esgi-vbseq/20140430_purging/max/REVISION_201508/conseqlists/${list_name}.${chr}.${pop}.sites.bed -b /lustre/scratch113/projects/esgi-vbseq/20140430_purging/46_SAMPLES/INPUT_FILES/FIVE_POPS/WG/sharedsites/${pop}_shared_chr${chr}.bed.sorted.bed > /lustre/scratch113/projects/esgi-vbseq/20140430_purging/max/REVISION_201508/conseqlists/sharedsites/${pop}.${list_name}.${chr}.shared_sites.bed
       done
