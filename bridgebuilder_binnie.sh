@@ -17,9 +17,10 @@ module unload hgi/bwa/0.5.9
 module load hgi/bwa/latest
 # module add hgi/bwa/0.5.10
 
+##############################################################################################################################
 echo "Run Binnie-ing"
 ~jr17/local/bin/binnie -i -s 50000 -m 10000 -v -a -u ${unchanged} -b ${bridged} -r ${remap} ${1} ${2}/${bam_name}_bridge.bam
-
+##############################################################################################################################
 #Run reheader
 
 echo $bam
@@ -33,11 +34,11 @@ if [ -f ${remap} ]; then
         echo "Binnie-ing finished"
         REF=/lustre/scratch114/resources/ref/Homo_sapiens/1000Genomes_hs37d5/hs37d5.fa
         #we need to sort remap.bam according to read name before realignment
-        # /software/hgi/pkglocal/samtools-1.2/bin/samtools sort -n $remap $remap\_readname\_sorted
+        /software/hgi/pkglocal/samtools-1.2/bin/samtools sort -n $remap $remap\_readname\_sorted
         # # /lustre/scratch113/projects/crohns/software/samtools-fixmate/samtools fixmate $remap\_readname\_sorted.bam $remap\_fixmate.bam
         # #582096.dedup.realn.recal.bam_new.bam_remap.bam_fixmate.bam
-        # /software/hgi/pkglocal/samtools-1.2/bin/samtools fixmate $remap\_readname\_sorted.bam $remap\_fixmate.bam 
-        # mv $remap\_fixmate.bam $remap
+        /software/hgi/pkglocal/samtools-1.2/bin/samtools fixmate $remap\_readname\_sorted.bam $remap\_fixmate.bam 
+        mv $remap\_fixmate.bam $remap
         # #2.2 remap reads in the *_remap.bam to target reference (hs37d5) pair-end
         # # /lustre/scratch113/projects/crohns/software/bwa.0.5.10_fixes/bwa aln -q 15 -b1 /lustre/scratch109/srpipe/references/Homo_sapiens/1000Genomes_hs37d5/all/bwa/hs37d5.fa $remap > $remap.1.sai;
         
@@ -82,9 +83,9 @@ fi
 if [[ -f ${bridged} && -f ${remap}\_hs37d5.bam ]];then
         #2.3 sort the bridged.bam and remaped remap.bam
         #uncomment the following three lines, to have the complete procedure!
-        # /software/hgi/pkglocal/samtools-1.2/bin/samtools sort -n $bridged $bridged\_readname
-        # /software/hgi/pkglocal/samtools-1.2/bin/samtools fixmate $bridged\_readname.bam $bridged\_fixmate.bam
-        # /software/hgi/pkglocal/samtools-1.2/bin/samtools sort $bridged\_fixmate.bam $bridged\_sorted
+        /software/hgi/pkglocal/samtools-1.2/bin/samtools sort -n $bridged $bridged\_readname
+        /software/hgi/pkglocal/samtools-1.2/bin/samtools fixmate $bridged\_readname.bam $bridged\_fixmate.bam
+        /software/hgi/pkglocal/samtools-1.2/bin/samtools sort $bridged\_fixmate.bam $bridged\_sorted
         /software/hgi/pkglocal/samtools-1.2/bin/samtools fixmate $remap\_hs37d5.bam $remap\_hs37d5.bam\_fixmate.bam
         #now sort by position
         /software/hgi/pkglocal/samtools-1.2/bin/samtools sort $remap\_hs37d5.bam\_fixmate.bam $remap\_remapsorted
