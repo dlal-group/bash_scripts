@@ -57,7 +57,8 @@ case $MODE in
 	echo "#Binnie STAGE #"
 	echo "###############"
 	#2.1 Run binnie
-	bsub -J "binnie_bridge_builder_s$(basename ${file})" -o "${out_dir}/%J_bridge_builder_binnie_s$(basename ${file}).log" -e "${out_dir}/%J_bridge_builder_binnie_s$(basename ${file}).err" -M8000 -R"select[mem>8000] rusage[mem=8000]" -q basement -- ~/Work/bash_scripts/bridgebuilder_binnie.sh ${file} ${out_dir}
+	bsub -J "binnie_bridge_builder_s$(basename ${file})" -o "${out_dir}/%J_bridge_builder_binnie_s$(basename ${file}).log" -e "${out_dir}/%J_bridge_builder_binnie_s$(basename ${file}).err" -M8000 -R"select[mem>8000] rusage[mem=8000]" -q normal -- ~/Work/bash_scripts/bridgebuilder_binnie.sh ${file} ${out_dir}
+	# bsub -J "binnie_bridge_builder_s$(basename ${file})" -o "${out_dir}/%J_bridge_builder_binnie_s$(basename ${file}).log" -e "${out_dir}/%J_bridge_builder_binnie_s$(basename ${file}).err" -M8000 -R"select[mem>8000] rusage[mem=8000]" -q basement -- ~/Work/bash_scripts/bridgebuilder_binnie.sh ${file} ${out_dir}
 	# bsub -J "binnie_bridge_builder_s$(basename ${file})" -o "${out_dir}/%J_bridge_builder_binnie_s$(basename ${file}).log" -e "${out_dir}/%J_bridge_builder_binnie_s$(basename ${file}).err" -M9000 -R"select[mem>9000] rusage[mem=9000]" -q basement -- ~/Work/bash_scripts/bridgebuilder_binnie.sh ${file} ${out_dir}
 
 	echo "###############"
