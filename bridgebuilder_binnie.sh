@@ -58,6 +58,13 @@ if [ -f ${remap} ]; then
 
         #merge them back
         /software/hgi/pkglocal/samtools-1.2/bin/samtools merge -f -cp $remap\_hs37d5.bam $remap\_hs37d5.1.bam_remapsorted.bam $remap\_hs37d5.2.bam_remapsorted.bam
+
+        #fix header
+        /software/hgi/pkglocal/samtools-1.2/bin/samtools view -H $remap\_hs37d5.bam |grep -v "^@PG\|^@HD" > $remap\_hs37d5.bam_header.txt
+
+        #rehead file
+        /software/hgi/pkglocal/samtools-1.2/bin/samtools reheader $remap\_hs37d5.bam_header.txt $remap\_hs37d5.bam |/software/hgi/pkglocal/samtools-1.2/bin/samtools view  -h - |/software/hgi/pkglocal/samtools-1.2/bin/samtools view -Sb - > $remap\_hs37d5.bam_reheader.bam
+        mv $remap\_hs37d5.bam_reheader.bam $remap\_hs37d5.bam
         echo "remapping finished"
 
         rm $remap\_hs37d5.[12].bam_remapsorted
@@ -66,26 +73,10 @@ if [ -f ${remap} ]; then
 fi
 
 
-# if [ -f ${remap} ]; then
-#         echo "Binnie-ing finished"
-#         #we need to sort remap.bam according to read name before realignment
-#         samtools sort -n $remap $remap\_readname\_sorted
-#         mv $remap\_readname\_sorted.bam $remap
-#         #2.2 remap reads in the *_remap.bam to target reference (hs37d5) pair-end
-#         # /software/solexa/bin/aligners/bwa/bwa-0.5.9/bwa aln -q 15 -b1 /lustre/scratch109/srpipe/references/Homo_sapiens/1000Genomes_hs37d5/all/bwa/hs37d5.fa $remap > $remap.1.sai;
-#         /software/solexa/bin/aligners/bwa/bwa-0.5.9/bwa aln -q 15 -b1 /lustre/scratch113/projects/crohns/2013jan04/bridge_builder_testing/bundle/hs37d5/hs37d5.fa $remap > $remap.1.sai;
-#         /software/solexa/bin/aligners/bwa/bwa-0.5.9/bwa aln -q 15 -b2 /lustre/scratch113/projects/crohns/2013jan04/bridge_builder_testing/bundle/hs37d5/hs37d5.fa $remap > $remap.2.sai;
-#         # /software/solexa/bin/aligners/bwa/bwa-0.5.9/bwa aln -q 15 -b2 /lustre/scratch109/srpipe/references/Homo_sapiens/1000Genomes_hs37d5/all/bwa/hs37d5.fa $remap > $remap.2.sai;
-#         /software/solexa/bin/aligners/bwa/bwa-0.5.9/bwa sampe /lustre/scratch113/projects/crohns/2013jan04/bridge_builder_testing/bundle/hs37d5/hs37d5.fa $remap.1.sai $remap.2.sai $remap $remap | samtools view -h -Sb - > $remap\_hs37d5.bam
-#         # /software/solexa/bin/aligners/bwa/bwa-0.5.9/bwa sampe /lustre/scratch109/srpipe/references/Homo_sapiens/1000Genomes_hs37d5/all/bwa/hs37d5.fa $remap.1.sai $remap.2.sai $remap $remap | samtools view -h -Sb - > $remap\_hs37d5.bam
-#         echo "remapping finished"
-#         rm $remap.[12].sai
-#         rm $remap
-# fi
-
 
 if [[ -f ${bridged} && -f ${remap}\_hs37d5.bam ]];then
         #2.3 sort the bridged.bam and remaped remap.bam
+        #uncomment the following three lines, to have the complete procedure!
         # /software/hgi/pkglocal/samtools-1.2/bin/samtools sort -n $bridged $bridged\_readname
         # /software/hgi/pkglocal/samtools-1.2/bin/samtools fixmate $bridged\_readname.bam $bridged\_fixmate.bam
         # /software/hgi/pkglocal/samtools-1.2/bin/samtools sort $bridged\_fixmate.bam $bridged\_sorted
