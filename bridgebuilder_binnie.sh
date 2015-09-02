@@ -40,9 +40,14 @@ if [ -f ${remap} ]; then
         # mv $remap\_fixmate.bam $remap
         # #2.2 remap reads in the *_remap.bam to target reference (hs37d5) pair-end
         # # /lustre/scratch113/projects/crohns/software/bwa.0.5.10_fixes/bwa aln -q 15 -b1 /lustre/scratch109/srpipe/references/Homo_sapiens/1000Genomes_hs37d5/all/bwa/hs37d5.fa $remap > $remap.1.sai;
-        # bwa aln -q 15 -b1 $REF $remap > $remap.1.sai;
+        
+        if [ ! -e $remap.1.sai ]; then
+                bwa aln -q 15 -b1 $REF $remap > $remap.1.sai;
+        fi
         # # /lustre/scratch113/projects/crohns/software/bwa.0.5.10_fixes/bwa aln -q 15 -b2 /lustre/scratch109/srpipe/references/Homo_sapiens/1000Genomes_hs37d5/all/bwa/hs37d5.fa $remap > $remap.2.sai;
-        # bwa aln -q 15 -b2 $REF $remap > $remap.2.sai;
+        if [ ! -e $remap.2.sai ]; then
+                bwa aln -q 15 -b2 $REF $remap > $remap.2.sai;
+        fi
         # /lustre/scratch113/projects/crohns/software/bwa.0.5.10_fixes/bwa sampe /lustre/scratch109/srpipe/references/Homo_sapiens/1000Genomes_hs37d5/all/bwa/hs37d5.fa $remap.1.sai $remap.2.sai $remap $remap | samtools view -h -Sb - > $remap\_hs37d5.bam
         #####################################################################################################
         #2/09/2015 -> finally sort out the problem with duplicate removal! so this is a temporary fix!
