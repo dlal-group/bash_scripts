@@ -33,7 +33,7 @@ if [ -f $remap\_remapsorted.bam ]; then
         mv ${bridged}\_reheader.bam ${bridged}\_sorted.bam
         
         #3.3 Merge three sorted bams
-        /software/hgi/pkglocal/samtools-1.2/bin/samtools merge -h $2/$bam_name\_header.txt -cp $2/$bam_name\_new.bam $unchanged $remap\_remapsorted.bam $bridged\_sorted.bam 
+        /software/hgi/pkglocal/samtools-1.2/bin/samtools merge -f -h $2/$bam_name\_header.txt -cp $2/$bam_name\_new.bam $unchanged $remap\_remapsorted.bam $bridged\_sorted.bam 
         # rm $unchanged
         # rm $bridged\_sorted.bam
         # rm $remap\_remapsorted.bam
