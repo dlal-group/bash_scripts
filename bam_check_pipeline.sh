@@ -221,15 +221,6 @@ case $MODE in
 	# generate a html report with images
 	/nfs/users/nfs_m/mc14/Work/bash_scripts/bam_check_html_report.sh ${out_name%%.*} ../${out_name%%.*}/${out_name%%.*}-acgt-cycles.png ../${out_name%%.*}/${out_name%%.*}-coverage.png ../${out_name%%.*}/${out_name%%.*}-gc-content.png ../${out_name%%.*}/${out_name%%.*}-gc-depth.png ../${out_name%%.*}/${out_name%%.*}-indel-cycles.png ../${out_name%%.*}/${out_name%%.*}-indel-dist.png ../${out_name%%.*}/${out_name%%.*}-insert-size.png ../${out_name%%.*}/${out_name%%.*}-quals.png ../${out_name%%.*}/${out_name%%.*}-quals2.png ../${out_name%%.*}/${out_name%%.*}-quals3.png ../${out_name%%.*}/${out_name%%.*}-quals-hm.png > $out_dir/BAMCHECK_STATS/PLOTS/QC_GRIND/HTML/${out_name%%.*}_summary.html
 
-	#bit to generate a report....
-	PID=$!
-	wait $!
-	status=$?
-	wdir=`pwd -P`
-	cmd=`history | tail -n2| head -1| cut -f 2- -d " "`
-	email=mc14@sanger.ac.uk
-	/nfs/users/nfs_m/mc14/Work/bash_scripts/send_report.sh ${status} ${email} ${wdir} ${cmd}
-
   	;;
   	SEXCHECK)
 	#Check sex in ba files
