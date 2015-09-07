@@ -559,19 +559,27 @@ file=`sed -n "${LSB_JOBINDEX}p" $1`
 # while read list_name
   # do
     #for chr in 12
-    list_name=${file}
-    for chr in {1..22}
-    do
-      #for pop in CEU
-      for pop in CEU TSI Erto Illegio Resia Sauris VBI CARL
-      do
-      sort -k1,1 -k2,2 -g /lustre/scratch113/projects/esgi-vbseq/20140430_purging/enza/REVISION_201508/conseqlists/${list_name}.sites.list| tr "\t" " " | grep "^${chr} "|awk '{print $1,$2-1,$2}'| tr " " "\t" > /lustre/scratch113/projects/esgi-vbseq/20140430_purging/max/REVISION_201508/conseqlists/${list_name}.${chr}.${pop}.sites.bed
-      # sed -i 's/ /	/g' /lustre/scratch113/projects/esgi-vbseq/20140430_purging/46_SAMPLES/INPUT_FILES/FIVE_POPS/WG/sharedsites/${pop}_shared_chr${chr}.bed.sorted.bed
-      bedtools intersect -a /lustre/scratch113/projects/esgi-vbseq/20140430_purging/max/REVISION_201508/conseqlists/${list_name}.${chr}.${pop}.sites.bed -b /lustre/scratch113/projects/esgi-vbseq/20140430_purging/46_SAMPLES/INPUT_FILES/FIVE_POPS/WG/sharedsites/${pop}_shared_chr${chr}.bed.sorted.bed > /lustre/scratch113/projects/esgi-vbseq/20140430_purging/max/REVISION_201508/conseqlists/sharedsites/${pop}.${list_name}.${chr}.shared_sites.bed
-      done
-    done
+    # list_name=${file}
+    # for chr in {1..22}
+    # do
+    #   #for pop in CEU
+    #   for pop in CEU TSI Erto Illegio Resia Sauris VBI CARL
+    #   do
+    #   sort -k1,1 -k2,2 -g /lustre/scratch113/projects/esgi-vbseq/20140430_purging/enza/REVISION_201508/conseqlists/${list_name}.sites.list| tr "\t" " " | grep "^${chr} "|awk '{print $1,$2-1,$2}'| tr " " "\t" > /lustre/scratch113/projects/esgi-vbseq/20140430_purging/max/REVISION_201508/conseqlists/${list_name}.${chr}.${pop}.sites.bed
+    #   # sed -i 's/ /	/g' /lustre/scratch113/projects/esgi-vbseq/20140430_purging/46_SAMPLES/INPUT_FILES/FIVE_POPS/WG/sharedsites/${pop}_shared_chr${chr}.bed.sorted.bed
+    #   bedtools intersect -a /lustre/scratch113/projects/esgi-vbseq/20140430_purging/max/REVISION_201508/conseqlists/${list_name}.${chr}.${pop}.sites.bed -b /lustre/scratch113/projects/esgi-vbseq/20140430_purging/46_SAMPLES/INPUT_FILES/FIVE_POPS/WG/sharedsites/${pop}_shared_chr${chr}.bed.sorted.bed > /lustre/scratch113/projects/esgi-vbseq/20140430_purging/max/REVISION_201508/conseqlists/sharedsites/${pop}.${list_name}.${chr}.shared_sites.bed
+    #   done
+    # done
   # done < <(cat /lustre/scratch113/projects/esgi-vbseq/20140430_purging/enza/REVISION_201508/conseqlists/types.lists)
 
 #extract stats from new dataset HRC perhaps
 # filename=`basename ${file}`
 # bcftools stats -s - ${file} > /lustre/scratch113/projects/esgi-vbseq/20140430_purging/max/${filename}.jointcall.stats
+
+#08/09/2015
+
+i=`echo ${file} | cut -f 1 -d " "`
+c=`echo ${file} | cut -f 2 -d " "`
+t=`echo ${file} | cut -f 3 -d " "`
+# bsub -o ooo.$t.$i.$c.out -e ooo.$t.$i.$c.err -q normal -- /software/varinf/pkg/vcftools/current/bin/vcftools --gzvcf /lustre/scratch113/projects/esgi-vbseq/25082015_purging/26082015_ANNOTATED/1000G_FVG_VBSEQ.chr$c.vcf.gz.clean_ann.vcf.gz --counts2 --out c_$t/$t.$i.$c --positions conseqlists/$t/$c.$t --indv $i 
+/software/varinf/pkg/vcftools/current/bin/vcftools --gzvcf /lustre/scratch113/projects/esgi-vbseq/25082015_purging/26082015_ANNOTATED/1000G_FVG_VBSEQ.chr$c.vcf.gz.clean_ann.vcf.gz --counts2 --out c_$t/$t.$i.$c --positions conseqlists/$t/$c.$t --indv $i 
