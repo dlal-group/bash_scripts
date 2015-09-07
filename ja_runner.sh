@@ -565,7 +565,7 @@ file=`sed -n "${LSB_JOBINDEX}p" $1`
       #for pop in CEU
       for pop in CEU TSI Erto Illegio Resia Sauris VBI CARL
       do
-      sort -k1,1 -k2,2 -g /lustre/scratch113/projects/esgi-vbseq/20140430_purging/enza/REVISION_201508/conseqlists/${list_name}.sites.list | grep "^${chr} "|awk '{print $1,$2-1,$2}'| tr " " "\t" > /lustre/scratch113/projects/esgi-vbseq/20140430_purging/max/REVISION_201508/conseqlists/${list_name}.${chr}.${pop}.sites.bed
+      sort -k1,1 -k2,2 -g /lustre/scratch113/projects/esgi-vbseq/20140430_purging/enza/REVISION_201508/conseqlists/${list_name}.sites.list| tr "\t" " " | grep "^${chr} "|awk '{print $1,$2-1,$2}'| tr " " "\t" > /lustre/scratch113/projects/esgi-vbseq/20140430_purging/max/REVISION_201508/conseqlists/${list_name}.${chr}.${pop}.sites.bed
       # sed -i 's/ /	/g' /lustre/scratch113/projects/esgi-vbseq/20140430_purging/46_SAMPLES/INPUT_FILES/FIVE_POPS/WG/sharedsites/${pop}_shared_chr${chr}.bed.sorted.bed
       bedtools intersect -a /lustre/scratch113/projects/esgi-vbseq/20140430_purging/max/REVISION_201508/conseqlists/${list_name}.${chr}.${pop}.sites.bed -b /lustre/scratch113/projects/esgi-vbseq/20140430_purging/46_SAMPLES/INPUT_FILES/FIVE_POPS/WG/sharedsites/${pop}_shared_chr${chr}.bed.sorted.bed > /lustre/scratch113/projects/esgi-vbseq/20140430_purging/max/REVISION_201508/conseqlists/sharedsites/${pop}.${list_name}.${chr}.shared_sites.bed
       done
