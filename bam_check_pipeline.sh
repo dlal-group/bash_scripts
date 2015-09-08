@@ -173,11 +173,18 @@ case $MODE in
 	echo -e "comparing file headers through diff\nfile1:${file}\nfile2:${file2}"
 	samtools view -H ${file}| grep "^@SQ"| cut -f 1-3 | diff - <(samtools view -H ${file2}| grep "^@SQ"| cut -f 1-3) > ${out_dir}/${out_name}.diff
 	# samtools view -H /lustre/scratch113/projects/carl_seq/release/20140325/sample_improved_bams_hgi_2/SC_CARLSEQ5554942.bam| grep "^@SQ"| cut -f 1-3 | diff - <(samtools view -H /lustre/scratch113/projects/carl_seq/NEWBATCH/603/result_alignment/603.rmdup.bam| grep "^@SQ"| cut -f 1-3)
+	;;
+	FIXHEADER)
 
-
+	mkdir -p ${out_dir}
+	#fix header for chr in contig
+	echo -e "reheading file ${file}"
+	filename=`basename ${file}`
+	samtools view -H ${file}| sed 's/SN:chr/SN:/g' >  ${out_dir}/${filename}.header
+	samtools reheader ${out_dir}/${filename}.header ${file} > ${out_dir}/${filename}.reheaded.bam
+	samtools index ${out_dir}/${filename}.reheaded.bam
 
 	;;
-
 	BAMSTATS )
 	# Summary Numbers. Use `grep ^SN | cut -f 2-` to extract this part.
 	out_name=`basename $1`
