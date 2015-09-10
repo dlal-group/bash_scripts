@@ -581,5 +581,6 @@ file=`sed -n "${LSB_JOBINDEX}p" $1`
 i=`echo ${file} | cut -f 1 -d " "`
 c=`echo ${file} | cut -f 2 -d " "`
 t=`echo ${file} | cut -f 3 -d " "`
+
 # bsub -o ooo.$t.$i.$c.out -e ooo.$t.$i.$c.err -q normal -- /software/varinf/pkg/vcftools/current/bin/vcftools --gzvcf /lustre/scratch113/projects/esgi-vbseq/25082015_purging/26082015_ANNOTATED/1000G_FVG_VBSEQ.chr$c.vcf.gz.clean_ann.vcf.gz --counts2 --out c_$t/$t.$i.$c --positions conseqlists/$t/$c.$t --indv $i 
-/software/varinf/pkg/vcftools/current/bin/vcftools --gzvcf /lustre/scratch113/projects/esgi-vbseq/25082015_purging/26082015_ANNOTATED/1000G_FVG_VBSEQ.chr$c.vcf.gz.clean_ann.vcf.gz --counts2 --derived --out /lustre/scratch113/projects/esgi-vbseq/20140430_purging/max/20150809_REVISION/c_$t/$t.$i.$c --positions /lustre/scratch113/projects/esgi-vbseq/20140430_purging/max/20150809_REVISION/conseqlists/$t/$c.$t --chr ${c} --indv $i
+/software/varinf/pkg/vcftools/current/bin/vcftools --gzvcf /lustre/scratch113/projects/esgi-vbseq/25082015_purging/26082015_ANNOTATED/1000G_FVG_VBSEQ.chr$c.vcf.gz.clean_ann.vcf.gz --counts2 --derived --out /lustre/scratch113/projects/esgi-vbseq/20140430_purging/max/20150809_REVISION/c2_$t/$t.$i.$c --positions /lustre/scratch113/projects/esgi-vbseq/20140430_purging/max/20150809_REVISION/conseqlists/$t/$c.$t --chr ${c} --indv $i
