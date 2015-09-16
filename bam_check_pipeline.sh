@@ -185,6 +185,21 @@ case $MODE in
 	samtools index ${out_dir}/${filename}.reheaded.bam
 
 	;;
+	FIXSAMPLE)
+
+	mkdir -p ${out_dir}
+	#fix header for chr in contig
+	file1=`echo $file | cut -f 1 -d ":"`
+	echo -e "reheading file ${file1}"
+	filename=`basename ${file1}`
+	n_sname=`echo $file | cut -f 2 -d ":"`
+	sname=`echo $file | cut -f 3 -d ":"`
+	
+	samtools view -H ${file}| sed 's/SM:${sname}/SM:${n_sname}/g' >  ${out_dir}/${filename}.header
+	samtools reheader ${out_dir}/${filename}.header ${file} > ${out_dir}/${filename}.reheaded.bam
+	samtools index ${out_dir}/${filename}.reheaded.bam
+
+	;;
 	BAMSTATS )
 	# Summary Numbers. Use `grep ^SN | cut -f 2-` to extract this part.
 	out_name=`basename $1`

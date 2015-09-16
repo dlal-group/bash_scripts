@@ -19,6 +19,19 @@ while getopts ":ds" opt; do
       script=$2
       $script ${file} ${file2} "${@:4}"
       ;;
+    t)
+      echo $opt
+      echo "Triple column list mode triggered!" >&2
+      file1=`sed -n "${LSB_JOBINDEX}p" $3 | awk '{print $1}'`
+      file2=`sed -n "${LSB_JOBINDEX}p" $3 | awk '{print $2}'`
+      file3=`sed -n "${LSB_JOBINDEX}p" $3 | awk '{print $3}'`
+      echo ${file1}
+      echo ${file2}
+      echo ${file3}
+      file=${file1}\:${file2}\:${file3}
+      script=$2
+      $script ${file} "${@:4}"
+      ;;
     s)
       echo $opt
       echo "Single list mode triggered!!" >&2
