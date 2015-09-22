@@ -590,6 +590,10 @@ file=`sed -n "${LSB_JOBINDEX}p" $1`
 # bcftools stats -s - ${file} > ${file}.stats
 
 #clean Fst files removing nan
-filename=`basename ${file}`
-awk '$3!="-nan"' ${file} | gzip -c > ${file}.clean.gz
+# filename=`basename ${file}`
+# awk '$3!="-nan"' ${file} | gzip -c > ${file}.clean.gz
+# gzip ${file}
+
+#clean HWE files removing useless columns
+awk '{print $1,$2,$9}' ${file} | gzip -c > ${file}.clean.gz
 gzip ${file}
