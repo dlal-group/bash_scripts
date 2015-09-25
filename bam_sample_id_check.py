@@ -23,6 +23,6 @@ for line in open('%s' %(in_path) , 'r'):
 				if re.match('SM:', bam_h):
 					clinic=bam_h.split(":")
 					sample=clinic[1]
-					print bam_file + sample
+					print bam_file + " " + sample
 			break
 			
