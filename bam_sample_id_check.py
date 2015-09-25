@@ -11,7 +11,6 @@ in_path=sys.argv[1]
 
 for line in open('%s' %(in_path) , 'r'):
 	bam_file=line.rstrip()
-	print bam_file
 	# cmd=['/software/hgi/pkglocal/samtools-1.2/bin/samtools','view','-H',bam_file,'|','grep','^@RG','|','head','-1']
 	cmd=['/software/hgi/pkglocal/samtools-1.2/bin/samtools','view','-H',bam_file]
 	p = sub.Popen(cmd,stdout=sub.PIPE,stderr=sub.PIPE)
@@ -24,11 +23,6 @@ for line in open('%s' %(in_path) , 'r'):
 				if re.match('SM:', bam_h):
 					clinic=bam_h.split(":")
 					sample=clinic[1]
-					print sample
+					print bam_file + sample
 			break
 			
-# out=open('%s/%s_consequences.list' %(out_path,chr), 'w')
-# sys.stdout=out
-# for csq in listaconseq: print csq
-						 
-				
