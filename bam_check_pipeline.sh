@@ -196,8 +196,8 @@ case $MODE in
 	n_sname=`echo $file | cut -f 3 -d ":"`
 
 	samtools view -H ${file1} | sed "s/SM:${sname}/SM:${n_sname}/g" >  ${out_dir}/${filename}.header
-	# samtools reheader ${out_dir}/${filename}.header ${file1} > ${out_dir}/${filename}.reheaded.bam
-	# samtools index ${out_dir}/${filename}.reheaded.bam
+	samtools reheader ${out_dir}/${filename}.header ${file1} > ${out_dir}/${filename}.reheaded.bam
+	samtools index ${out_dir}/${filename}.reheaded.bam
 
 	;;
 	BAMSTATS )
