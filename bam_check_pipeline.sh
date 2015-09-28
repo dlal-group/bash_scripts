@@ -188,12 +188,12 @@ case $MODE in
 	FIXSAMPLE)
 
 	mkdir -p ${out_dir}
-	#fix header for chr in contig
-	file1=`echo $file | cut -f 1 -d ":"`
+	#fix header for sample name
+	file1=`echo $file | cut -f 1 -d " "`
 	echo -e "reheading file ${file1}"
 	filename=`basename ${file1}`
-	n_sname=`echo $file | cut -f 2 -d ":"`
-	sname=`echo $file | cut -f 3 -d ":"`
+	sname=`echo $file | cut -f 2 -d " "`
+	n_sname=`echo $file | cut -f 3 -d " "`
 
 	samtools view -H ${file1}| sed 's/SM:${sname}/SM:${n_sname}/g' >  ${out_dir}/${filename}.header
 	samtools reheader ${out_dir}/${filename}.header ${file1} > ${out_dir}/${filename}.reheaded.bam
