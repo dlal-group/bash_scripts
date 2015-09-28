@@ -7,7 +7,15 @@ import subprocess as sub
 
 #this version works on a single chromosome, so we can submit a job array
 in_path=sys.argv[1]
+samples=sys.argv[2]
 # in_path="/lustre/scratch113/projects/esgi-vbseq/08092015/variant_calling/lists/chr20-pooled.list"
+# samples="/lustre/scratch113/projects/esgi-vbseq/08092015/vbi_complete_callset_NO_LEAK.samples"
+#create a dictionary of samples id + sex to match with samples ids in the bam file
+id_sex={}
+for row in open('%s' %(samples) , 'r'):
+	sample_sex=row.rstrip().split("\t")
+	id_sex[sample_sex[0]]=sample_sex[1]
+					
 
 for line in open('%s' %(in_path) , 'r'):
 	bam_file=line.rstrip()
@@ -23,6 +31,7 @@ for line in open('%s' %(in_path) , 'r'):
 				if re.match('SM:', bam_h):
 					clinic=bam_h.split(":")
 					sample=clinic[1]
-					print bam_file + " " + sample
+					for key in id_sex:
+						if key in sample:
+							print bam_file,sample,key, id_sex[key]
 			break
-			
