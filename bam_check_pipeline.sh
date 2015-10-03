@@ -200,6 +200,21 @@ case $MODE in
 	samtools index ${out_dir}/${filename}.reheaded.bam
 
 	;;
+
+	FIXRG)
+	#mkdir -p LOGS;size=`wc -l /lustre/scratch113/projects/fvg_seq/16092015/rg_to_fix.list|cut -f 1 -d " "`;bsub -J "bam_rg_fix[1-${size}]" -o "LOGS/%J_bam_rg_fix.%I.o" -M 2000 -R"select[mem>2000] rusage[mem=2000]" -q normal -- ~/Work/bash_scripts/ja_runner_par.sh -s ~/Work/bash_scripts/bam_check_pipeline.sh /lustre/scratch113/projects/fvg_seq/16092015/rg_to_fix.list /lustre/scratch113/projects/fvg_seq/16092015/rg_fixed_bams FIXRG
+	module add hgi/picard-tools/1.127
+	mkdir -p ${out_dir}
+	#fix header for sample name
+	$file
+	echo -e "fixing RG for file ${file}"
+	filename=`basename ${file}`
+
+	read_g=`samtools view -H ${file}| grep ^@RG | head -1| cut -f 2- | sed 's/:/=/g'`
+
+	picard-tools AddOrReplaceReadGroups I=${file} O=${out_dir}/${filename} VALIDATION_STRINGENCY=LENIENT $read_g
+
+	;;
 	BAMSTATS )
 	# Summary Numbers. Use `grep ^SN | cut -f 2-` to extract this part.
 	out_name=`basename $1`

@@ -594,6 +594,6 @@ file=`sed -n "${LSB_JOBINDEX}p" $1`
 # awk '$3!="-nan"' ${file} | gzip -c > ${file}.clean.gz
 # gzip ${file}
 
-#clean HWE files removing useless columns
-awk '{print $1,$2,$9}' ${file} | gzip -c > ${file}.clean.gz
-gzip ${file}
+# #clean HWE files removing useless columns
+# awk '{print $1,$2,$9}' ${file} | gzip -c > ${file}.clean.gz
+# gzip ${file}
