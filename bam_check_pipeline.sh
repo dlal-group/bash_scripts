@@ -213,7 +213,8 @@ case $MODE in
 	read_g=`samtools view -H ${file}| grep ^@RG | head -1| cut -f 2- | sed 's/:/=/g'`
 
 	picard-tools AddOrReplaceReadGroups I=${file} O=${out_dir}/${filename} VALIDATION_STRINGENCY=LENIENT $read_g
-
+	samtools index ${out_dir}/${filename}
+	
 	;;
 	BAMSTATS )
 	# Summary Numbers. Use `grep ^SN | cut -f 2-` to extract this part.
