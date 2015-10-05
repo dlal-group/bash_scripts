@@ -8,7 +8,7 @@ if [[ $# -lt 3 ]]; then
 	echo "Attention!!! Not enough arguments provided!!!"
 	echo "##############################################"
 	echo "Usage:"
-	echo "vqsr_gatk_recalibrate_indels.sh <input_file_path> <output_path> <mode>."
+	echo "vqsr_gatk_calibrate_indels.sh <input_file_path> <output_path> <mode>."
 	echo -e "The 'mode' option is used to select the GATK version to use:\n1 - GATK v.2.5\n2 - GATK v.2.7\n3 - GATK v.2.8\n4 - Latest GATK v.3.3"
 	exit 1
 fi
@@ -79,11 +79,11 @@ case $MODE in
 	-recalFile $OUTF/vqsr.sites.indels.vcf \
 	-tranchesFile $OUTF/vqsr.sites.indels.tranches \
 	--rscript_file $OUTF/indels_VQSR.r \
-	-resource:mills,VCF,known=true,training=true,truth=true,prior=12.0 /lustre/scratch114/resources/variation/Homo_sapiens/grch37/gatk-bundle/2.5/Mills_and_1000G_gold_standard.indels.b37.vcf
-	-resource:dbsnp,known=true,training=false,truth=false,prior=2.0 /lustre/scratch114/resources/variation/Homo_sapiens/grch37/gatk-bundle/2.8/b37/dbsnp_138.b37.vcf
-	--target_titv 2.3
-	--maxGaussians 4
-	-an QD -an DP -an FS -an SOR -an ReadPosRankSum -an MQRankSum -an InbreedingCoeff
+	-resource:mills,VCF,known=true,training=true,truth=true,prior=12.0 /lustre/scratch114/resources/variation/Homo_sapiens/grch37/gatk-bundle/2.5/Mills_and_1000G_gold_standard.indels.b37.vcf \
+	-resource:dbsnp,known=true,training=false,truth=false,prior=2.0 /lustre/scratch114/resources/variation/Homo_sapiens/grch37/gatk-bundle/2.8/b37/dbsnp_138.b37.vcf \
+	--target_titv 2.3 \
+	--maxGaussians 4 \
+	-an QD -an DP -an FS -an SOR -an ReadPosRankSum -an MQRankSum -an InbreedingCoeff \
 	-tranche 10 -tranche 15 -tranche 20 -tranche 25 -tranche 30 -tranche 35 -tranche 40 -tranche 45 -tranche 50 -tranche 55 -tranche 60 -tranche 65 -tranche 70 -tranche 75 -tranche 80 -tranche 85 -tranche 90 -tranche 95 -tranche 98 -tranche 100
 	
 	;;
