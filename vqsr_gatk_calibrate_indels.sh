@@ -76,6 +76,7 @@ case $MODE in
 	echo "Latest GATK"
 	java -Xmx4800m -Xms4800m -Xss280m -server -XX:+UseSerialGC -jar /software/hgi/pkglocal/gatk-protected-3.3/GenomeAnalysisTK.jar \
 	-T VariantRecalibrator --mode INDEL -l INFO -U LENIENT_VCF_PROCESSING -R $REF -input $input \
+	--ignore_filter LowQual \
 	-recalFile $OUTF/vqsr.sites.indels.vcf \
 	-tranchesFile $OUTF/vqsr.sites.indels.tranches \
 	--rscript_file $OUTF/indels_VQSR.r \
