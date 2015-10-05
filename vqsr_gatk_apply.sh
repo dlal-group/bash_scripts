@@ -11,7 +11,7 @@ OUTF=$2
 thr=$3
 recal_trance_path=$4
 
-REF=/lustre/scratch113/teams/hgi/users/mercury/references/Homo_sapiens/1000Genomes_hs37d5/hs37d5.fa
+REF=/lustre/scratch114/resources/ref/Homo_sapiens/1000Genomes_hs37d5/hs37d5.fa
 echo "Applying recalibration filter with parameters:"
 echo -e "Reference file:$REF\nInput file: ${input}\nOutput folder: $OUTF\nTreshold for SNPs call: ${thr}\nTreshold for INDELs call: 90.00 (fixed)\nRecall and tranches path:${recal_trance_path}"
 
