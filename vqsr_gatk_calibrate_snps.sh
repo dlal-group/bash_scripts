@@ -9,14 +9,14 @@ if [[ $# -lt 3 ]]; then
 	echo "##############################################"
 	echo "Usage:"
 	echo "vqsr_gatk_recalibrate.sh <input_file_path> <output_path> <mode>."
-	echo -e "The 'mode' option is used to select the GATK version to use:\n1 - GATK v.2.5\n2 - GATK v.2.7\n3 - GATK v.2.8"
+	echo -e "The 'mode' option is used to select the GATK version to use:\n1 - GATK v.2.5\n2 - GATK v.2.7\n3 - GATK v.2.8\n5 - Latest GATK v.3.3"
 	exit 1
 fi
 
 input=$1
 OUTF=$2
 MODE=$3
-REF=/lustre/scratch111/resources/ref/Homo_sapiens/1000Genomes_hs37d5/hs37d5.fa
+REF=/lustre/scratch114/resources/ref/Homo_sapiens/1000Genomes_hs37d5/hs37d5.fa
 
 mkdir -p $OUTF/LOGS
 
