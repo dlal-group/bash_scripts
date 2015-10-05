@@ -72,6 +72,21 @@ case $MODE in
 	-tranche 10 -tranche 15 -tranche 20 -tranche 25 -tranche 30 -tranche 35 -tranche 40 -tranche 45 -tranche 50 -tranche 55 -tranche 60 -tranche 65 -tranche 70 -tranche 75 -tranche 80 -tranche 85 -tranche 90 -tranche 95
 	
 	;;
+	4)
+	echo "Latest GATK"
+	java -Xmx4800m -Xms4800m -Xss280m -server -XX:+UseSerialGC -jar /software/hgi/pkglocal/gatk-protected-3.3/GenomeAnalysisTK.jar \
+	-T VariantRecalibrator --mode INDEL -l INFO -U LENIENT_VCF_PROCESSING -R $REF -input $input \
+	-recalFile $OUTF/vqsr.sites.indels.vcf \
+	-tranchesFile $OUTF/vqsr.sites.indels.tranches \
+	--rscript_file $OUTF/indels_VQSR.r \
+	-resource:mills,VCF,known=true,training=true,truth=true,prior=12.0 /lustre/scratch114/resources/variation/Homo_sapiens/grch37/gatk-bundle/2.5/Mills_and_1000G_gold_standard.indels.b37.vcf
+	-resource:dbsnp,known=true,training=false,truth=false,prior=2.0 /lustre/scratch114/resources/variation/Homo_sapiens/grch37/gatk-bundle/2.8/b37/dbsnp_138.b37.vcf
+	--target_titv 2.3
+	--maxGaussians 4
+	-an QD -an DP -an FS -an SOR -an ReadPosRankSum -an MQRankSum -an InbreedingCoeff
+	-tranche 10 -tranche 15 -tranche 20 -tranche 25 -tranche 30 -tranche 35 -tranche 40 -tranche 45 -tranche 50 -tranche 55 -tranche 60 -tranche 65 -tranche 70 -tranche 75 -tranche 80 -tranche 85 -tranche 90 -tranche 95 -tranche 98 -tranche 100
+	
+	;;
 
 	*)
 	echo "Invalid mode selected"
