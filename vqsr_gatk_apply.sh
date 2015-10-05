@@ -48,3 +48,4 @@ tabix -p vcf -f $OUTF/${input_name}.vqsr_indel.vcf.gz
 bcftools concat -a $OUTF/${input_name}.vqsr_snp.vcf.gz $OUTF/${input_name}.vqsr_indel.vcf.gz | vcf-sort | bgzip -c > $OUTF/${input_name}.vqsr_appl.vcf.gz
 
 tabix -p vcf -f $OUTF/${input_name}.vqsr_appl.vcf.gz
+bcftools stats -d 0,5000,1 -s - $OUTF/${input_name}.vqsr_appl.vcf.gz > $OUTF/${input_name}.vqsr_appl.vcf.gz.vchk
