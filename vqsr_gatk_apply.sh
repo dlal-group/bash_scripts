@@ -18,7 +18,7 @@ echo -e "Reference file:$REF\nInput file: ${input}\nOutput folder: $OUTF\nTresho
 #apply the recalibration for SNPS
 echo "SNP mode ..."
 
-java -Xmx4000m -Xms4000m -Xss280m -server -XX:+UseSerialGC -jar /nfs/users/nfs_m/mercury/src/GenomeAnalysisTK-2.5/GenomeAnalysisTK.jar \
+java -Xmx4800m -Xms4800m -Xss280m -server -XX:+UseSerialGC -jar /software/hgi/pkglocal/gatk-protected-3.3/GenomeAnalysisTK.jar \
 -T ApplyRecalibration -U LENIENT_VCF_PROCESSING \
 --ts_filter_level ${thr} \
 --mode SNP  \
@@ -33,9 +33,9 @@ tabix -p vcf -f $OUTF/${input_name}.vqsr_snp.vcf.gz
 
 echo "INDELs mode ..."
 #apply the recalibration for INDELs
-java -Xmx4000m -Xms4000m -Xss280m -server -XX:+UseSerialGC -jar /nfs/users/nfs_m/mercury/src/GenomeAnalysisTK-2.5/GenomeAnalysisTK.jar \
+java -Xmx4800m -Xms4800m -Xss280m -server -XX:+UseSerialGC -jar /software/hgi/pkglocal/gatk-protected-3.3/GenomeAnalysisTK.jar \
 -T ApplyRecalibration -U LENIENT_VCF_PROCESSING \
---ts_filter_level 90.00 \
+--ts_filter_level 95.00 \
 --mode INDEL \
 -R $REF \
 --input $OUTF/${input_name}.vqsr_snp.vcf.gz \
@@ -43,6 +43,8 @@ java -Xmx4000m -Xms4000m -Xss280m -server -XX:+UseSerialGC -jar /nfs/users/nfs_m
 -tranchesFile ${recal_trance_path}/vqsr.sites.indels.tranches \
 -o $OUTF/${input_name}.vqsr.vcf.gz
 
-tabix -p vcf -f $OUTF/${input_name}.vqsr.vcf.gz
+tabix -p vcf -f $OUTF/${input_name}.vqsr_indel.vcf.gz
 
+bcftools concat -a $OUTF/${input_name}.vqsr_snp.vcf.gz $OUTF/${input_name}.vqsr_indel.vcf.gz | vcf-sort | bgzip -c > $OUTF/${input_name}.vqsr_appl.vcf.gz
 
+tabix -p vcf -f $OUTF/${input_name}.vqsr_appl.vcf.gz
