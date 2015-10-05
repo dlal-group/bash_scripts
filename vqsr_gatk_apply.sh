@@ -21,7 +21,7 @@ echo "SNP mode ..."
 java -Xmx4800m -Xms4800m -Xss280m -server -XX:+UseSerialGC -jar /software/hgi/pkglocal/gatk-protected-3.3/GenomeAnalysisTK.jar \
 -T ApplyRecalibration -U LENIENT_VCF_PROCESSING \
 --ts_filter_level ${thr} \
---mode SNP  \
+--mode SNP \
 -R $REF \
 --input ${input} \
 -recalFile ${recal_trance_path}/vqsr.sites.snps.vcf.gz \
