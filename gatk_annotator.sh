@@ -31,11 +31,11 @@ infile_name=`basename ${infile}`
 
 
 # /software/jre1.7.0_25/bin/java -Xmx1000m -Xms1000m -server -XX:+UseSerialGC -jar /nfs/users/nfs_m/mercury/src/GenomeAnalysisTK-3.1-1/GenomeAnalysisTK.jar -T VariantAnnotator \
+# --dbsnp ${dbsnp} \
 java -Xmx2500m -Xms2500m -server -XX:+UseSerialGC -jar /software/hgi/pkglocal/gatk-protected-3.3/GenomeAnalysisTK.jar -T VariantAnnotator \
 --variant ${infile} \
 --out ${outfolder}/${infile_name}.ann.vcf.gz \
 -R ${ref} \
---dbsnp ${dbsnp} \
 --resource:1kg ${TGP} \
 -E 1kg.AA \
 -E 1kg.EAS_AF \
