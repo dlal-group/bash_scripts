@@ -17,7 +17,7 @@ mkdir -p ${outfolder}
 dbsnp=/lustre/scratch114/resources/variation/Homo_sapiens/grch37/dbsnp_142_gatk.vcf
 ref=/lustre/scratch114/resources/ref/Homo_sapiens/1000Genomes_hs37d5/hs37d5.fa
 # TGP=/lustre/scratch114/resources/1000g/release/20130502/ALL.autosomes.phase3_shapeit2_mvncall_integrated_v5.20130502.sites.vcf.gz
-TGP=/lustre/scratch114/resources/1000g/release/20110521-v3/ALL.wgs.phase1_release_v3.20101123.snps_indels_sv.sites.vcf.gz
+TGP=/lustre/scratch114/resources/1000g/release/20130502/ALL.autosomes.phase3_shapeit2_mvncall_integrated_v5.20130502.sites.vcf.gz
 infile_name=`basename ${infile}`
 
 #first fix the header AND filter out all sites with a deletion AT THE BEGINNIG of the ALT allele field
@@ -32,7 +32,7 @@ infile_name=`basename ${infile}`
 
 # /software/jre1.7.0_25/bin/java -Xmx1000m -Xms1000m -server -XX:+UseSerialGC -jar /nfs/users/nfs_m/mercury/src/GenomeAnalysisTK-3.1-1/GenomeAnalysisTK.jar -T VariantAnnotator \
 # --dbsnp ${dbsnp} \
-/software/jre1.7.0_25/bin/java -Xmx1000m -Xms1000m -server -XX:+UseSerialGC -jar /software/hgi/pkglocal/gatk-protected-3.3/GenomeAnalysisTK.jar -T VariantAnnotator \
+java -Xmx2500m -Xms2500m -server -XX:+UseSerialGC -jar /software/hgi/pkglocal/gatk-protected-3.3/GenomeAnalysisTK.jar -T VariantAnnotator \
 --variant ${infile} \
 --out ${outfolder}/${infile_name}.ann.vcf.gz \
 -R ${ref} \
@@ -59,11 +59,11 @@ tabix -p vcf ${outfolder}/${infile_name}.clean_ann.vcf.gz
 # rm ${infolder}/${chr}.fixed.cleaned.vcf.gz.tbi
 
 #bit to generate a report....
-PID=$!
-wait $!
-status=$?
-wdir=`pwd -P`
-cmd=`history | tail -n2| head -1| cut -f 2- -d " "`
-info=${infile}
-email=mc14@sanger.ac.uk
-/nfs/users/nfs_m/mc14/Work/bash_scripts/send_report.sh ${status} ${email} ${wdir} ${cmd} ${info}
+# PID=$!
+# wait $!
+# status=$?
+# wdir=`pwd -P`
+# cmd=`history | tail -n2| head -1| cut -f 2- -d " "`
+# info=${infile}
+# email=mc14@sanger.ac.uk
+# /nfs/users/nfs_m/mc14/Work/bash_scripts/send_report.sh ${status} ${email} ${wdir} ${cmd} ${info}
