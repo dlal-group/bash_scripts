@@ -43,9 +43,9 @@ java -Xmx4800m -Xms4800m -Xss280m -server -XX:+UseSerialGC -jar /software/hgi/pk
 -tranchesFile ${recal_trance_path}/vqsr.sites.indels.tranches \
 -o $OUTF/${input_name}.vqsr.vcf.gz
 
-tabix -p vcf -f $OUTF/${input_name}.vqsr_indel.vcf.gz
+tabix -p vcf -f $OUTF/${input_name}.vqsr.vcf.gz
 
-bcftools concat -a $OUTF/${input_name}.vqsr_snp.vcf.gz $OUTF/${input_name}.vqsr_indel.vcf.gz | vcf-sort | bgzip -c > $OUTF/${input_name}.vqsr_appl.vcf.gz
+# bcftools concat -a $OUTF/${input_name}.vqsr_snp.vcf.gz $OUTF/${input_name}.vqsr_indel.vcf.gz | vcf-sort | bgzip -c > $OUTF/${input_name}.vqsr_appl.vcf.gz
 
-tabix -p vcf -f $OUTF/${input_name}.vqsr_appl.vcf.gz
-bcftools stats -d 0,5000,1 -s - $OUTF/${input_name}.vqsr_appl.vcf.gz > $OUTF/${input_name}.vqsr_appl.vcf.gz.vchk
+# tabix -p vcf -f $OUTF/${input_name}.vqsr_appl.vcf.gz
+bcftools stats -d 0,5000,1 -s - $OUTF/$OUTF/${input_name}.vqsr.vcf.gz > $OUTF/${input_name}.vqsr.vcf.gz.vchk
