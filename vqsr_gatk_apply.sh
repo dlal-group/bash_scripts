@@ -46,8 +46,8 @@ echo "SNP mode ..."
 # tabix -p vcf -f $OUTF/${input_name}.vqsr.vcf.gz
 
 # bcftools concat -a $OUTF/${input_name}.vqsr_snp.vcf.gz $OUTF/${input_name}.vqsr_indel.vcf.gz | vcf-sort | bgzip -c > $OUTF/${input_name}.vqsr_appl.vcf.gz
-bcftools filter -i'FILTER=PASS' -O z -o $OUTF/${input_name}.vqsr.filt.vcf.gz $OUTF/${input_name}.vqsr.vcf.gz
+bcftools view -f'PASS' -O z -o $OUTF/${input_name}.vqsr.filt.vcf.gz $OUTF/${input_name}.vqsr.vcf.gz
 
-tabix -p vcf -f $OUTF/${input_name}.vqsr.filt.vcf.gz
+tabix -f -p vcf -f $OUTF/${input_name}.vqsr.filt.vcf.gz
 bcftools stats -d 0,5000,1 -s - $OUTF/${input_name}.vqsr.vcf.gz > $OUTF/${input_name}.vqsr.vcf.gz.vchk
 bcftools stats -d 0,5000,1 -s - $OUTF/${input_name}.vqsr.filt.vcf.gz > $OUTF/${input_name}.vqsr.filt.vcf.gz.vchk
