@@ -586,8 +586,8 @@ file=`sed -n "${LSB_JOBINDEX}p" $1`
 # /software/varinf/pkg/vcftools/current/bin/vcftools --gzvcf /lustre/scratch113/projects/esgi-vbseq/25082015_purging/26082015_ANNOTATED/1000G_FVG_VBSEQ.chr$c.vcf.gz.clean_ann.vcf.gz --counts2 --derived --out /lustre/scratch113/projects/esgi-vbseq/20140430_purging/max/20150809_REVISION/c_$t/$t.$i.$c --positions /lustre/scratch113/projects/esgi-vbseq/20140430_purging/max/20150809_REVISION/conseqlists/$t/$c.$t --chr ${c} --indv $i
 
 #extract stats from file
-# filename=`basename ${file}`
-# bcftools stats -s - ${file} > ${file}.stats
+filename=`basename ${file}`
+bcftools stats -s - ${file} > ${file}.stats
 
 #clean Fst files removing nan
 # filename=`basename ${file}`
