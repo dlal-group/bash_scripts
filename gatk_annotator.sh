@@ -32,25 +32,26 @@ infile_name=`basename ${infile}`
 
 # /software/jre1.7.0_25/bin/java -Xmx1000m -Xms1000m -server -XX:+UseSerialGC -jar /nfs/users/nfs_m/mercury/src/GenomeAnalysisTK-3.1-1/GenomeAnalysisTK.jar -T VariantAnnotator \
 # --dbsnp ${dbsnp} \
-java -Xmx2500m -Xms2500m -server -XX:+UseSerialGC -jar /software/hgi/pkglocal/gatk-protected-3.3/GenomeAnalysisTK.jar -T VariantAnnotator \
---variant ${infile} \
---out ${outfolder}/${infile_name}.ann.vcf.gz \
--R ${ref} \
---resource:1kg ${TGP} \
--E 1kg.AA \
--E 1kg.EAS_AF \
--E 1kg.AMR_AF \
--E 1kg.AFR_AF \
--E 1kg.SAS_AF \
--E 1kg.EUR_AF
+# java -Xmx2500m -Xms2500m -server -XX:+UseSerialGC -jar /software/hgi/pkglocal/gatk-protected-3.3/GenomeAnalysisTK.jar -T VariantAnnotator \
+# --variant ${infile} \
+# --out ${outfolder}/${infile_name}.ann.vcf.gz \
+# -R ${ref} \
+# --resource:1kg ${TGP} \
+# -E 1kg.AA \
+# -E 1kg.EAS_AF \
+# -E 1kg.AMR_AF \
+# -E 1kg.AFR_AF \
+# -E 1kg.SAS_AF \
+# -E 1kg.EUR_AF
 # -E 1kg.AF \
 
 #index with tabix
+bcftools annotate -a ${TGP} -c CHROM,POS,ID,-,-,-,-,INFO/AA,INFO/EAS_AF,INFO/AMR_AF,INFO/AFR_AF,INFO/SAS_AF,INFO/EUR_AF -O z -o ${outfolder}/${infile_name}.ann.vcf.gz ${infile}
 tabix -p vcf ${outfolder}/${infile_name}.ann.vcf.gz
 
-zcat ${outfolder}/${infile_name}.ann.vcf.gz | sed "s/1kg\.//g" | bgzip -c > ${outfolder}/${infile_name}.clean_ann.vcf.gz
+# zcat ${outfolder}/${infile_name}.ann.vcf.gz | sed "s/1kg\.//g" | bgzip -c > ${outfolder}/${infile_name}.clean_ann.vcf.gz
 
-tabix -p vcf ${outfolder}/${infile_name}.clean_ann.vcf.gz
+# tabix -p vcf ${outfolder}/${infile_name}.clean_ann.vcf.gz
 
 #clean stuff
 # rm ${infolder}/${chr}.fixed.vcf.gz

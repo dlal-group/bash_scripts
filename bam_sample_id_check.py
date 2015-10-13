@@ -23,6 +23,7 @@ for line in open('%s' %(in_path) , 'r'):
 	cmd=['/software/hgi/pkglocal/samtools-1.2/bin/samtools','view','-H',bam_file]
 	p = sub.Popen(cmd,stdout=sub.PIPE,stderr=sub.PIPE)
 	output, errors = p.communicate()
+	
 	for tag in output.rstrip().split("\n"):
 		c_tag=tag.rstrip()
 		if re.match('@RG', c_tag):
