@@ -164,7 +164,7 @@ for chunk in `seq 1 $chunk_num`; do
 		reflegend=$refdir/$refname/chr$chr.${chunkStr}$postfix.legend.gz
 	fi
 	echo -e "#!/usr/local/bin/bash
-	\n$impute2 -allow_large_regions -m /lustre/scratch113/projects/carl_seq/MERGED_REF_PANEL_Feb2015/GENETIC_MAP/genetic_map_chr${chr}_combined_b37.txt -h $refhap -l $reflegend -known_haps_g $phasedir/chr$chr.hap.gz -sample_g $phasedir/chr$chr.sample $extra_str -use_prephased_g -k_hap $k_hap -int $chunk_begin $chunk_end -Ne 20000 -buffer $buffer_size -o chr$chr.$chunkStr.gen $chrX_impute_str
+	\n$impute2 -allow_large_regions -m /lustre/scratch114/teams/soranzo/users/mc14/fromscratch113/INGI/MERGED_REF_PANEL_Feb2015/GENETIC_MAP/genetic_map_chr${chr}_combined_b37.txt -h $refhap -l $reflegend -known_haps_g $phasedir/chr$chr.hap.gz -sample_g $phasedir/chr$chr.sample $extra_str -use_prephased_g -k_hap $k_hap -int $chunk_begin $chunk_end -Ne 20000 -buffer $buffer_size -o chr$chr.$chunkStr.gen $chrX_impute_str
 	\ngzip -f chr$chr.$chunkStr.gen
 	\nif [[ -e chr$chr.$chunkStr.gen_allele_probs ]]; then
 	\ngzip chr$chr.$chunkStr.gen_allele_probs chr$chr.$chunkStr.gen_haps
