@@ -1,7 +1,8 @@
 #Script to prepare data for plotting after imputation
-for pop in FVG
     for pan in uk10k1kg.ref
     for pan in INGI.shapeit CARL.shapeit FVG.shapeit VBI.shapeit 1000Gph1.shapeit 1000GP_Phase3.shapeit INGI_1000GPh3.shapeit uk10k1kg.ref
+for pop in INCIPE2
+    for pan in 1000GP_Phase3.shapeit
 
 for pop in CARL FVG INCIPE2 VBI
 # pop=CARL

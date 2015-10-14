@@ -28,53 +28,54 @@ PANEL=$2
 chr=$3
 MODE=$4 #set this to PHASE, if you want to phase and impute; set this to IMPUTE, if you're providing already phased genotypes
 
-imputedir=/lustre/scratch113/projects/carl_seq/05272015_MERGED_REF_PANEL/IMPUTED/${pop}/${PANEL}$postfix
+# imputedir=/lustre/scratch113/projects/carl_seq/05272015_MERGED_REF_PANEL/IMPUTED/${pop}/${PANEL}$postfix
+imputedir=/lustre/scratch114/teams/soranzo/users/mc14/fromscratch113/INGI/14102015_MERGED_REF_PANEL/IMPUTED/${pop}/${PANEL}$postfix
 # mkdir -p ${phasedir}
 mkdir -p ${imputedir}
 
 case $pop in
 	VBI)
-	extra_str_excl_samples="-exclude_samples_g /lustre/scratch113/projects/carl_seq/05272015_MERGED_REF_PANEL/listpop/VBI_seq_samples.exclusion"
-	extra_str_excl_snps="-exclude_snps_g /lustre/scratch113/projects/carl_seq/05272015_MERGED_REF_PANEL/snplist/${pop}_chr${chr}.exclude -impute_excluded"
-	genodir=/lustre/scratch113/projects/carl_seq/MERGED_REF_PANEL_Feb2015/VBI_geno
-	phasedir=/lustre/scratch113/projects/carl_seq/MERGED_REF_PANEL_Feb2015/VBI_geno
+	extra_str_excl_samples="-exclude_samples_g /lustre/scratch114/teams/soranzo/users/mc14/fromscratch113/INGI/05272015_MERGED_REF_PANEL/listpop/VBI_seq_samples.exclusion"
+	extra_str_excl_snps="-exclude_snps_g /lustre/scratch114/teams/soranzo/users/mc14/fromscratch113/INGI/05272015_MERGED_REF_PANEL/snplist/${pop}_chr${chr}.exclude -impute_excluded"
+	genodir=/lustre/scratch114/teams/soranzo/users/mc14/fromscratch113/INGI/MERGED_REF_PANEL_Feb2015/VBI_geno
+	phasedir=/lustre/scratch114/teams/soranzo/users/mc14/fromscratch113/INGI/MERGED_REF_PANEL_Feb2015/VBI_geno
 	;;
 	FVG)
-	extra_str_excl_samples="-exclude_samples_g /lustre/scratch113/projects/carl_seq/05272015_MERGED_REF_PANEL/listpop/FVG_seq_samples.exclusion"
-	extra_str_excl_snps="-exclude_snps_g /lustre/scratch113/projects/carl_seq/05272015_MERGED_REF_PANEL/snplist/${pop}_chr${chr}.exclude -impute_excluded"
-	genodir=/lustre/scratch113/projects/carl_seq/05272015_MERGED_REF_PANEL/GWAS/FVG/shapeit
-	phasedir=/lustre/scratch113/projects/carl_seq/05272015_MERGED_REF_PANEL/GWAS/FVG/shapeit
+	extra_str_excl_samples="-exclude_samples_g /lustre/scratch114/teams/soranzo/users/mc14/fromscratch113/INGI/05272015_MERGED_REF_PANEL/listpop/FVG_seq_samples.exclusion"
+	extra_str_excl_snps="-exclude_snps_g /lustre/scratch114/teams/soranzo/users/mc14/fromscratch113/INGI/05272015_MERGED_REF_PANEL/snplist/${pop}_chr${chr}.exclude -impute_excluded"
+	genodir=/lustre/scratch114/teams/soranzo/users/mc14/fromscratch113/INGI/05272015_MERGED_REF_PANEL/GWAS/FVG/shapeit
+	phasedir=/lustre/scratch114/teams/soranzo/users/mc14/fromscratch113/INGI/05272015_MERGED_REF_PANEL/GWAS/FVG/shapeit
 	;;
 	CARL)
-	extra_str_excl_samples="-exclude_samples_g /lustre/scratch113/projects/carl_seq/05272015_MERGED_REF_PANEL/listpop/CARL_seq_samples.exclusion"
-	extra_str_excl_snps="-exclude_snps_g /lustre/scratch113/projects/carl_seq/05272015_MERGED_REF_PANEL/snplist/${pop}_chr${chr}.exclude -impute_excluded"
+	extra_str_excl_samples="-exclude_samples_g /lustre/scratch114/teams/soranzo/users/mc14/fromscratch113/INGI/05272015_MERGED_REF_PANEL/listpop/CARL_seq_samples.exclusion"
+	extra_str_excl_snps="-exclude_snps_g /lustre/scratch114/teams/soranzo/users/mc14/fromscratch113/INGI/05272015_MERGED_REF_PANEL/snplist/${pop}_chr${chr}.exclude -impute_excluded"
 	genodir=/lustre/scratch113/teams/soranzo/users/jh21/imputed/carl/shapeit
 	phasedir=/lustre/scratch113/teams/soranzo/users/jh21/imputed/carl/shapeit
 	;;
 	INCIPE2 )
-	extra_str_excl_snps="-exclude_snps_g /lustre/scratch113/projects/carl_seq/05272015_MERGED_REF_PANEL/snplist/${pop}_chr${chr}.exclude -impute_excluded"
+	extra_str_excl_snps="-exclude_snps_g /lustre/scratch114/teams/soranzo/users/mc14/fromscratch113/INGI/05272015_MERGED_REF_PANEL/snplist/${pop}_chr${chr}.exclude -impute_excluded"
 	genodir=/lustre/scratch113/teams/soranzo/users/jh21/imputed/incipe2/shapeit
 	phasedir=/lustre/scratch113/teams/soranzo/users/jh21/imputed/incipe2/shapeit
 	;;
 esac
 case $PANEL in
 	FVG )
-	refdir=/lustre/scratch113/projects/carl_seq/MERGED_REF_PANEL_Feb2015/SHAPEIT/FVG_HAP_LEGEND
+	refdir=/lustre/scratch114/teams/soranzo/users/mc14/fromscratch113/INGI/MERGED_REF_PANEL_Feb2015/SHAPEIT/FVG_HAP_LEGEND
 	refhap=$refdir/${PANEL}.chr$chr.hap.gz
 	reflegend=$refdir/${PANEL}.chr$chr.legend.gz
 	;;
 	CARL )
-	refdir=/lustre/scratch113/projects/carl_seq/MERGED_REF_PANEL_Feb2015/SHAPEIT/CARL_HAP_LEGEND
+	refdir=/lustre/scratch114/teams/soranzo/users/mc14/fromscratch113/INGI/MERGED_REF_PANEL_Feb2015/SHAPEIT/CARL_HAP_LEGEND
 	refhap=$refdir/${PANEL}.chr$chr.hap.gz
 	reflegend=$refdir/${PANEL}.chr$chr.legend.gz
 	;;
 	VBI )
-	refdir=/lustre/scratch113/projects/carl_seq/MERGED_REF_PANEL_Feb2015/SHAPEIT/VBI_HAP_LEGEND
+	refdir=/lustre/scratch114/teams/soranzo/users/mc14/fromscratch113/INGI/MERGED_REF_PANEL_Feb2015/SHAPEIT/VBI_HAP_LEGEND
 	refhap=$refdir/${PANEL}.chr$chr.hap.gz
 	reflegend=$refdir/${PANEL}.chr$chr.legend.gz
 	;;
 	INGI )
-	refdir=/lustre/scratch113/projects/carl_seq/MERGED_REF_PANEL_Feb2015/MERGER_CARL_VBI_FVG
+	refdir=/lustre/scratch114/teams/soranzo/users/mc14/fromscratch113/INGI/MERGED_REF_PANEL_Feb2015/MERGER_CARL_VBI_FVG
 	refhap=$refdir/${PANEL}.chr$chr.hap.gz
 	reflegend=$refdir/${PANEL}.chr$chr.legend.gz
 	;;
@@ -84,7 +85,7 @@ case $PANEL in
 	reflegend=$refdir/ALL_1000G_phase1interim_jun2011_chr${chr}_impute.legend.gz
 	;;
 	INGI_1000GPh3 )
-	refdir=/lustre/scratch113/projects/carl_seq/MERGED_REF_PANEL_Feb2015/MERGER_INGI_1000GPh3
+	refdir=/lustre/scratch114/teams/soranzo/users/mc14/fromscratch113/INGI/MERGED_REF_PANEL_Feb2015/MERGER_INGI_1000GPh3
 	refhap=$refdir/${PANEL}.chr$chr.hap.gz
 	reflegend=$refdir/${PANEL}.chr$chr.legend.gz
 	;;
