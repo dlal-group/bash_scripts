@@ -608,4 +608,5 @@ CARL_path=/lustre/scratch113/projects/carl_seq/variant_refinement/13102015_RELEA
 FVG_path=/lustre/scratch113/projects/fvg_seq/16092015/13102015_RELEASE/${chr}.vcf.gz
 VBI_path=/lustre/scratch113/projects/esgi-vbseq/08092015/13102015_RELEASE/${chr}.vcf.gz
 
-bcftools merge -m both ${EUR_path} ${TSI_path} ${CARL_path} ${FVG_path} ${VBI_path} -O z -o /lustre/scratch113/projects/esgi-vbseq/13102015_SIGU/EUR_INGI_MERGE/${chr}.vcf.gz
+bcftools merge -m both ${TSI_path} ${CARL_path} ${FVG_path} ${VBI_path} -O z -o /lustre/scratch113/projects/esgi-vbseq/13102015_SIGU/EUR_INGI_MERGE/${chr}.TSI.vcf.gz
+bcftools merge -m both ${EUR_path} ${CARL_path} ${FVG_path} ${VBI_path} -O z -o /lustre/scratch113/projects/esgi-vbseq/13102015_SIGU/EUR_INGI_MERGE/${chr}.EUR.vcf.gz
