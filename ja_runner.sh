@@ -586,8 +586,8 @@ file=`sed -n "${LSB_JOBINDEX}p" $1`
 # /software/varinf/pkg/vcftools/current/bin/vcftools --gzvcf /lustre/scratch113/projects/esgi-vbseq/25082015_purging/26082015_ANNOTATED/1000G_FVG_VBSEQ.chr$c.vcf.gz.clean_ann.vcf.gz --counts2 --derived --out /lustre/scratch113/projects/esgi-vbseq/20140430_purging/max/20150809_REVISION/c_$t/$t.$i.$c --positions /lustre/scratch113/projects/esgi-vbseq/20140430_purging/max/20150809_REVISION/conseqlists/$t/$c.$t --chr ${c} --indv $i
 
 #extract stats from file
-filename=`basename ${file}`
-bcftools stats -s - ${file} > ${file}.stats
+# filename=`basename ${file}`
+# bcftools stats -s - ${file} > ${file}.stats
 
 #clean Fst files removing nan
 # filename=`basename ${file}`
@@ -597,3 +597,15 @@ bcftools stats -s - ${file} > ${file}.stats
 # #clean HWE files removing useless columns
 # awk '{print $1,$2,$9}' ${file} | gzip -c > ${file}.clean.gz
 # gzip ${file}
+
+#16/10/2015
+#merge files for IBD/ROH calc for SIGU slides
+chr=${file}
+
+EUR_path=/lustre/scratch113/projects/esgi-vbseq/13102015_SIGU/TGP3/EUR/ALL.chr${chr}.phase3_shapeit2_mvncall_integrated_v5.20130502.genotypes.vcf.gz
+TSI_path=/lustre/scratch113/projects/esgi-vbseq/13102015_SIGU/TGP3/TSI/ALL.chr${chr}.phase3_shapeit2_mvncall_integrated_v5.20130502.genotypes.vcf.gz
+CARL_path=/lustre/scratch113/projects/carl_seq/variant_refinement/13102015_RELEASE/${chr}.vcf.gz
+FVG_path=/lustre/scratch113/projects/fvg_seq/16092015/13102015_RELEASE/${chr}.vcf.gz
+VBI_path=/lustre/scratch113/projects/esgi-vbseq/08092015/13102015_RELEASE/${chr}.vcf.gz
+
+bcftools merge -m both ${EUR_path} ${TSI_path} ${CARL_path} ${FVG_path} ${VBI_path} -O z -o /lustre/scratch113/projects/esgi-vbseq/13102015_SIGU/EUR_INGI_MERGE/${chr}.vcf.gz
