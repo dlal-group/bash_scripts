@@ -613,7 +613,10 @@ file=`sed -n "${LSB_JOBINDEX}p" $1`
 
 #19/10/2015
 #
-pop="UK10K"
+# pop="UK10K"
+pop="EUR"
+# pop="TSI"
+# pop="TGPph3"
 chr=${file}
 pop_path="/lustre/scratch113/projects/esgi-vbseq/13102015_SIGU/${pop}/UNION/${chr}"
 awk '{if(length($3)==length($4)) print $0}' ${pop_path}/sites.txt > ${pop_path}/sites_snp.txt
