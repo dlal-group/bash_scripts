@@ -600,13 +600,24 @@ file=`sed -n "${LSB_JOBINDEX}p" $1`
 
 #16/10/2015
 #merge files for IBD/ROH calc for SIGU slides
+# chr=${file}
+
+# EUR_path=/lustre/scratch113/projects/esgi-vbseq/13102015_SIGU/TGP3/EUR/ALL.chr${chr}.phase3_shapeit2_mvncall_integrated_v5.20130502.genotypes.vcf.gz
+# TSI_path=/lustre/scratch113/projects/esgi-vbseq/13102015_SIGU/TGP3/TSI/ALL.chr${chr}.phase3_shapeit2_mvncall_integrated_v5.20130502.genotypes.vcf.gz
+# CARL_path=/lustre/scratch113/projects/carl_seq/variant_refinement/13102015_RELEASE/${chr}.vcf.gz
+# FVG_path=/lustre/scratch113/projects/fvg_seq/16092015/13102015_RELEASE/${chr}.vcf.gz
+# VBI_path=/lustre/scratch113/projects/esgi-vbseq/08092015/13102015_RELEASE/${chr}.vcf.gz
+
+# bcftools merge -m both ${TSI_path} ${CARL_path} ${FVG_path} ${VBI_path} -O z -o /lustre/scratch113/projects/esgi-vbseq/13102015_SIGU/EUR_INGI_MERGE/${chr}.TSI.vcf.gz
+# bcftools merge -m both ${EUR_path} ${CARL_path} ${FVG_path} ${VBI_path} -O z -o /lustre/scratch113/projects/esgi-vbseq/13102015_SIGU/EUR_INGI_MERGE/${chr}.EUR.vcf.gz
+
+#19/10/2015
+#
+pop="UK10K"
 chr=${file}
-
-EUR_path=/lustre/scratch113/projects/esgi-vbseq/13102015_SIGU/TGP3/EUR/ALL.chr${chr}.phase3_shapeit2_mvncall_integrated_v5.20130502.genotypes.vcf.gz
-TSI_path=/lustre/scratch113/projects/esgi-vbseq/13102015_SIGU/TGP3/TSI/ALL.chr${chr}.phase3_shapeit2_mvncall_integrated_v5.20130502.genotypes.vcf.gz
-CARL_path=/lustre/scratch113/projects/carl_seq/variant_refinement/13102015_RELEASE/${chr}.vcf.gz
-FVG_path=/lustre/scratch113/projects/fvg_seq/16092015/13102015_RELEASE/${chr}.vcf.gz
-VBI_path=/lustre/scratch113/projects/esgi-vbseq/08092015/13102015_RELEASE/${chr}.vcf.gz
-
-bcftools merge -m both ${TSI_path} ${CARL_path} ${FVG_path} ${VBI_path} -O z -o /lustre/scratch113/projects/esgi-vbseq/13102015_SIGU/EUR_INGI_MERGE/${chr}.TSI.vcf.gz
-bcftools merge -m both ${EUR_path} ${CARL_path} ${FVG_path} ${VBI_path} -O z -o /lustre/scratch113/projects/esgi-vbseq/13102015_SIGU/EUR_INGI_MERGE/${chr}.EUR.vcf.gz
+pop_path="/lustre/scratch113/projects/esgi-vbseq/13102015_SIGU/${pop}/UNION/${chr}"
+awk '{if(length($3)==length($4)) print $0}' ${pop_path}/sites.txt > ${pop_path}/sites_snp.txt
+awk 'FNR==NR{a[$2]=$6;next}{if(a[$2]) print $0,a[$2];else print $0,"NA"}' ${pop_path}/${pop}_freq.txt ${pop_path}/sites_snp.txt > ${pop_path}/sites_${pop}.txt
+awk 'FNR==NR{a[$2]=$6;next}{if(a[$2]) print $0,a[$2];else print $0,"NA"}' ${pop_path}/carl_freq.txt ${pop_path}/sites_${pop}.txt > ${pop_path}/sites_${pop}_carl.txt
+awk 'FNR==NR{a[$2]=$6;next}{if(a[$2]) print $0,a[$2];else print $0,"NA"}' ${pop_path}/vbi_freq.txt ${pop_path}/sites_${pop}_carl.txt > ${pop_path}/sites_${pop}_carl_vbi.txt
+awk 'FNR==NR{a[$2]=$6;next}{if(a[$2]) print $0,a[$2];else print $0,"NA"}' ${pop_path}/fvg_freq.txt ${pop_path}/sites_${pop}_carl_vbi.txt > ${pop_path}/sites_${pop}_carl_vbi_fvg.txt
