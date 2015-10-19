@@ -618,7 +618,7 @@ do
 # pop="TGPph3"
 chr=${file}
 pop_path="/lustre/scratch113/projects/esgi-vbseq/13102015_SIGU/${pop}/UNION/${chr}"
-awk '{if(length($3)==length($4)) print $0}' ${pop_path}/sites.txt > ${pop_path}/sites_snp.txt
+awk '{if(length($3)==length($4) && $4!~",") print $0}' ${pop_path}/sites.txt > ${pop_path}/sites_snp.txt
 awk 'FNR==NR{a[$2]=$6;next}{if($2 in a) print $0,a[$2];else print $0,"NA"}' ${pop_path}/${pop}_freq.txt ${pop_path}/sites_snp.txt > ${pop_path}/sites_${pop}.txt
 awk 'FNR==NR{a[$2]=$6;next}{if($2 in a) print $0,a[$2];else print $0,"NA"}' ${pop_path}/carl_freq.txt ${pop_path}/sites_${pop}.txt > ${pop_path}/sites_${pop}_carl.txt
 awk 'FNR==NR{a[$2]=$6;next}{if($2 in a) print $0,a[$2];else print $0,"NA"}' ${pop_path}/vbi_freq.txt ${pop_path}/sites_${pop}_carl.txt > ${pop_path}/sites_${pop}_carl_vbi.txt
