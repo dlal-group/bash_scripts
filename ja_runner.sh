@@ -632,3 +632,4 @@ filename=`basename ${file}`
 
 mkdir -p ${outpath}/NORMALIZED
 bcftools norm -f /lustre/scratch114/resources/ref/Homo_sapiens/1000Genomes_hs37d5/hs37d5.fa -O z -o ${outpath}/NORMALIZED/${filename} ${file}
+tabix -p vcf ${outpath}/NORMALIZED/${filename}
