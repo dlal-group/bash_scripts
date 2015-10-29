@@ -627,9 +627,20 @@ file=`sed -n "${LSB_JOBINDEX}p" $1`
 
 # 21/10/2015
 # run bcftools norm
-outpath=`dirname ${file}`
-filename=`basename ${file}`
+# outpath=`dirname ${file}`
+# filename=`basename ${file}`
 
-mkdir -p ${outpath}/NORMALIZED
-bcftools norm -f /lustre/scratch114/resources/ref/Homo_sapiens/1000Genomes_hs37d5/hs37d5.fa -O z -o ${outpath}/NORMALIZED/${filename} ${file}
-tabix -p vcf ${outpath}/NORMALIZED/${filename}
+# mkdir -p ${outpath}/NORMALIZED
+# bcftools norm -f /lustre/scratch114/resources/ref/Homo_sapiens/1000Genomes_hs37d5/hs37d5.fa -O z -o ${outpath}/NORMALIZED/${filename} ${file}
+# tabix -p vcf ${outpath}/NORMALIZED/${filename}
+
+# 29/10/2015
+# run bcftools stats and plink to extract heterozigosity values
+module add hgi/plink/1.90b3w
+filename=`basename ${file}`
+#extract stats on snps only bcftools
+bcftools view -v snps ${file}|bcftools stats -s - > ${filename}.snps.stats
+
+#extract stats on snps only plink2
+plink --vcf ${file} --biallelic-only --double-id --keep-allele-order --snps-only --het --out ${filename}.snps.het
+plink --vcf ${file} --biallelic-only --double-id --keep-allele-order --snps-only --hardy --out ${filename}.snps.hardy
