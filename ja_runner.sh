@@ -636,19 +636,25 @@ file=`sed -n "${LSB_JOBINDEX}p" $1`
 
 # 29/10/2015
 # run bcftools stats and plink to extract heterozigosity values
-module add hgi/plink/1.90b3w
-filename=`basename ${file}`
+# module add hgi/plink/1.90b3w
+# filename=`basename ${file}`
 
 #extract stats on snps only bcftools
 # bcftools view -v snps ${file}|bcftools stats -s - > ${filename}.snps.stats
 
 #extract stats on snps only plink2
-plink --vcf ${file} --biallelic-only --double-id --keep-allele-order --snps-only --recode --out ${filename}.snps
+# plink --vcf ${file} --biallelic-only --double-id --keep-allele-order --snps-only --recode --out ${filename}.snps
 
-#fix rsID if missing
-awk '{OFS="\t"}{if($2 ==".") print $1,"chr"$1":"$4,$3,$4;else print $0}' ${filename}.snps.map > ${filename}.snps.map.new
-mv ${filename}.snps.map ${filename}.snps.map.old 
-mv ${filename}.snps.map.new ${filename}.snps.map 
+# #fix rsID if missing
+# awk '{OFS="\t"}{if($2 ==".") print $1,"chr"$1":"$4,$3,$4;else print $0}' ${filename}.snps.map > ${filename}.snps.map.new
+# mv ${filename}.snps.map ${filename}.snps.map.old 
+# mv ${filename}.snps.map.new ${filename}.snps.map 
 
-plink --file ${filename}.snps --het --out ${filename}.snps.het
-plink --file ${filename}.snps --hardy --out ${filename}.snps.hardy
+# plink --file ${filename}.snps --het --out ${filename}.snps.het
+# plink --file ${filename}.snps --hardy --out ${filename}.snps.hardy
+
+#####################
+#2/11/2015
+#extract info from vcf files
+filename=`basename ${file}`
+(echo -e "CHROM\tPOS\tQUAL\tVQSLOD\tHWE";bcftools query -f '%CHROM\t%POS\t%QUAL\t%INFO/VQSLOD\t%INFO/HWE\n' ${file}) > ${filename}_qvh.tab
