@@ -636,7 +636,7 @@ file=`sed -n "${LSB_JOBINDEX}p" $1`
 
 # 29/10/2015
 # run bcftools stats and plink to extract heterozigosity values
-# module add hgi/plink/1.90b3w
+module add hgi/plink/1.90b3w
 # filename=`basename ${file}`
 
 #extract stats on snps only bcftools
