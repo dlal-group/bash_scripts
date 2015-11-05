@@ -636,7 +636,7 @@ file=`sed -n "${LSB_JOBINDEX}p" $1`
 
 # 29/10/2015
 # run bcftools stats and plink to extract heterozigosity values
-module add hgi/plink/1.90b3w
+# module add hgi/plink/1.90b3w
 # filename=`basename ${file}`
 
 #extract stats on snps only bcftools
@@ -660,8 +660,14 @@ module add hgi/plink/1.90b3w
 # (echo -e "CHROM\tPOS\tQUAL\tVQSLOD\tHWE";bcftools query -f '%CHROM\t%POS\t%QUAL\t%INFO/VQSLOD\t%INFO/HWE\n' ${file}) > ${filename}_qvh.tab
 
 #calculate frequencies
+# filename=`basename ${file}`
+# outpath=`dirname ${file}`
+
+# plink --file ${file} --freq --out ${outpath}/${filename}.freq
+
+#5/11/2015
+#format NRD data by chromosome
+
 filename=`basename ${file}`
-outpath=`dirname ${file}`
 
-plink --file ${file} --freq --out ${outpath}/${filename}.freq
-
+(echo -e "SNP\tCHR\tPOS\tOGC\tNRD";fgrep -v POS ${file}| sort -g -k2,2| awk '{OFS="\t"}{print $1":"$2,$0}') > ${filename}
