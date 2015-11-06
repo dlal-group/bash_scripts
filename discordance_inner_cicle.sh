@@ -1,9 +1,9 @@
 #!/bin/bash
 
 #conversion for seq files
-plink --noweb --file $1 --chr $3 --recode --transpose --tab --allow-no-sex --out ${1}_chr$3
+plink --file $1 --chr $3 --recode --transpose --tab --allow-no-sex --out ${1}_chr$3
 #conversion for other files
-plink --noweb --file $2 --chr $3 --recode --transpose --tab --allow-no-sex --out ${2}_chr$3
+plink --file $2 --chr $3 --recode --transpose --tab --allow-no-sex --out ${2}_chr$3
 #now launch the python script on any chr
 #python2.7 ~/Work/bash_scripts/non_ref_discordance.py 
 #370K/TEST_AD/biallelic_overl.SNP.unfilt.geno.seq.VB.chr20.tped

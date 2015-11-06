@@ -17,20 +17,21 @@ fi
 #26/11/2013
 #input file preparation step
 # bsub -J "input_prep_$1" -o "%J_input_prep_$1.o" -M2000 -R"select[mem>2000] rusage[mem=2000]" -q yesterday -- genotype_concordance_input_prep.sh 
+module add hgi/plink/1.90b3w
 
 outname_f1=`basename $1`.s1_gwas
 outname_f2=`basename $2`.s2_seq
 
 #recode files in ped format and standardized names
 bsub -J "recode_f1" -o "%J_recode_f1.log" -M1000 -R"select[mem>1000] rusage[mem=1000]" \
--q normal "plink --noweb --bfile $1 --keep $3 --recode --allow-no-sex --out ${outname_f1}"
+-q normal "plink --bfile $1 --keep $3 --recode --allow-no-sex --out ${outname_f1}"
 
 bsub -J "recode_f2" -o "%J_recode_f2.log" -M1000 -R"select[mem>1000] rusage[mem=1000]" \
--q normal "plink --noweb --bfile $2 --keep $3 --recode --allow-no-sex --out ${outname_f2}"
+-q normal "plink --bfile $2 --keep $3 --recode --allow-no-sex --out ${outname_f2}"
 
 #create the freq file for first dataset:this is useful to set the reference only if the first dataset came from gwas data
 bsub -J "create_freq_table_d1" -o "%J_create_freq_table_d1.log" -w "ended(recode_f1)" -M1000 -R"select[mem>1000] rusage[mem=1000]" \
--q normal "plink2 --file ${outname_f1} --freq --allow-no-sex --out ${outname_f1}"
+-q normal "plink --file ${outname_f1} --freq --allow-no-sex --out ${outname_f1}"
 
 #correctly format the frq file
 bsub -J "format_freq_table_f1" -o "%J_format_freq_table_f1.log" -w "ended(create_freq_table_d1)" -M4000 -R"select[mem>4000] rusage[mem=4000]" \
@@ -38,7 +39,7 @@ bsub -J "format_freq_table_f1" -o "%J_format_freq_table_f1.log" -w "ended(create
 
 #create the freq file for second dataset
 bsub -J "create_freq_table_d2" -o "%J_create_freq_table_d2.log" -w "ended(recode_f2)" -M1000 -R"select[mem>1000] rusage[mem=1000]" \
--q normal "plink2 --file ${outname_f2} --freq --allow-no-sex --out ${outname_f2}"
+-q normal "plink --file ${outname_f2} --freq --allow-no-sex --out ${outname_f2}"
 
 #correctly format the frq file
 bsub -J "format_freq_table_f2" -o "%J_format_freq_table_f2.log" -w "ended(create_freq_table_d2)" -M4000 -R"select[mem>4000] rusage[mem=4000]" \
