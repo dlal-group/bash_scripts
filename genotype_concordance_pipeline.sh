@@ -52,7 +52,7 @@ bsub -J "sort_genotype_table" -o "%J_sort_genotype_table.log" -w "ended(format_f
 
 #we need to flip data after check on freq tables
 bsub -J "gt_flipping" -w "ended(sort_genotype_table)" -o "%J_gt_flipping.log" -M4000 -R"select[mem>4000] rusage[mem=4000]" \
--q normal genotype_concordance_variant_flipping.sh ${outname_f1}.frq ${outname_f2}.frq ${outname_f2}
+-q normal -- ./genotype_concordance_variant_flipping.sh ${outname_f1}.frq ${outname_f2}.frq ${outname_f2}
 
 #create the ref table for  REF/ALT allele:basically this contains the frequencies and the major allele because usually this is the REF allele in GWAS data
 if [ $# -lt 4 ]
@@ -71,13 +71,13 @@ do
 		#if we provide the 4th argument we are going to use our own REF table:this apply for data as WES or WGS
 	then
 		bsub -J "gt_calculator_chr${chr}" -o "%J_gt_calculator_chr${chr}.log" -M8000 -R"select[mem>8000] rusage[mem=8000]" \
-		-q normal discordance_inner_cicle.sh ${outname_f1} ${outname_f2}.flipped ${chr} $3 $4
+		-q normal -- ./discordance_inner_cicle.sh ${outname_f1} ${outname_f2}.flipped ${chr} $3 $4
 	else
 		#use the automatically created ref discordance table
 		bsub -J "gt_calculator_chr${chr}" -w "ended(ref_discordance_table_creator)" -o "%J_gt_calculator_chr${chr}.log" -M8000 -R"select[mem>8000] rusage[mem=8000]" \
-		-q normal discordance_inner_cicle.sh ${outname_f1} ${outname_f2}.flipped ${chr} $3 ref_discordance_table.txt
+		-q normal -- ./discordance_inner_cicle.sh ${outname_f1} ${outname_f2}.flipped ${chr} $3 ref_discordance_table.txt
 	fi
 done
 
 bsub -J "last_step" -w "ended(gt_calculator_chr*)" -o "%J_last_step.log" -M8000 -R"select[mem>8000] rusage[mem=8000]" \
--q normal last_discordance_pipeline_step.sh $3
+-q normal -- ./last_discordance_pipeline_step.sh $3
