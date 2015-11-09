@@ -670,4 +670,7 @@ file=`sed -n "${LSB_JOBINDEX}p" $1`
 
 filename=`basename ${file}`
 
-(echo -e "SNP\tCHR\tPOS\tOGC\tNRD";fgrep -v POS ${file}| sort -g -k2,2| awk '{OFS="\t"}{print $1":"$2,$0}') > ${filename}
+#(echo -e "SNP\tCHR\tPOS\tOGC\tNRD";fgrep -v POS ${file}| sort -g -k2,2| awk '{OFS="\t"}{print $1":"$2,$0}') > ${filename}
+
+#modify to use the new file formatted by caterina
+(echo -e "SNP\tCHR\tPOS\tOGC\tNRD";fgrep -v POS ${file}| sort -g -k2,2| awk '{OFS="\t"}{print $2,$0}') > ${filename}
