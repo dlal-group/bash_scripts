@@ -15,6 +15,30 @@ def g_concordance(table):
 		
 	return overall_concordance
 
+#define a function to calculate the complementary allele
+def comp_ref(allele):
+	if allele == 'A':
+		complementary='T'
+	elif allele == 'T':
+		complementary='A'
+	elif allele == 'C':
+		complementary='G'
+	elif allele == 'G':
+		complementary='C'
+	elif allele == '0':
+		complementary='.'
+		
+	return complementary
+
+#define a function to calculate the complementary genotype
+def comp_geno(genotype):
+	a1=genotype.strip().split(' ')[0]
+	a2=genotype.strip().split(' ')[1]
+	c_a1=comp_ref(a1)
+	c_a2=comp_ref(a2)
+	g_complementary=(' ').join([c_a1,c_a2])
+	return g_complementary
+
 def nr_discordance(table):
 	non_ref_den=sum([table['SRR_ORA'],table['SRR_OAA'],table['SRA_ORR'],table['SRA_ORA'],table['SRA_OAA'],table['SAA_ORR'],table['SAA_ORA'],table['SAA_OAA']])
 	non_ref_num=sum([table['SRA_ORR'],table['SRA_OAA'],table['SAA_ORR'],table['SAA_ORA'],table['SRR_ORA'],table['SRR_OAA']])
@@ -79,10 +103,11 @@ def table_counter(first_table_el,second_table_el):
 	return el_cohord
 
 #TODO:write down all command used to format all files involved in the script!
-#OTHER_inputfile_name='/lustre/scratch113/projects/fvg_seq/20140319/20140401_VQSR2.5_reapply_v138_excl/20140503_COMPARISON/HMG/DISCORDANCE/rs681524.hm22.set.only.seq.s2_seq_chr11.tped'
-#SEQ_inputfile_name='/lustre/scratch113/projects/fvg_seq/20140319/20140401_VQSR2.5_reapply_v138_excl/20140503_COMPARISON/HMG/DISCORDANCE/rs681524.seq.set.only.hm22.s1_gwas_chr11.tped'
-#ref_inputfile_name='/lustre/scratch113/projects/fvg_seq/20140319/20140401_VQSR2.5_reapply_v138_excl/20140503_COMPARISON/HMG/DISCORDANCE/ref_discordance_table.txt'
-# indiv_inputfile_name='/lustre/scratch113/projects/fvg_seq/20140319/20140401_VQSR2.5_reapply_v138_excl/20140503_COMPARISON/HMG/DISCORDANCE/rs681524.seq.set.only.hm22.s1_gwas_chr11.tfam'
+#OTHER_inputfile_name='ALL_VB_20151013_gwas_definitivo.new.s1_gwas_chr1.tped'
+#SEQ_inputfile_name='ALL_VB_20151013_seq_definitivo.new.s2_seq.flipped_chr1.tped'
+#ref_inputfile_name='ref_discordance_table.txt.single'
+#indiv_inputfile_name='ALL_VB_20151013_seq_definitivo.new.s2_seq.flipped_chr1.tfam'
+#chr=1
 OTHER_inputfile_name=sys.argv[1]
 SEQ_inputfile_name=sys.argv[2]
 ref_inputfile_name=sys.argv[3]
@@ -128,6 +153,7 @@ for snp_line in ref_inputfile:
 	if x[0]==str(chr):
 		# ref_all[x[1]]=x[3] , use the rs id instead of the position
 		ref_all[x[2]]=x[3]
+
 print len(ref_all)
 
 ###WORK BY SITE!!!######
@@ -150,6 +176,7 @@ print >> seq_NA_out, "POS ALL1 ALL2 REF CONV"
 
 #for rs_line in SEQ_inputfile:
 for rs_line in rs_lines:
+	#rs_line=rs_lines[0]
 	#print (seq_conversion)
 	snp=rs_line.strip().split('\t')
 	# current_ref=ref_all[snp[3]] , switch to rsID instead of position checking 
@@ -158,8 +185,8 @@ for rs_line in rs_lines:
 	global conversion_seq
 	conversion=[]
 	for i in xrange (4,len(snp)):
-		if current_ref in snp[i]:
-			if snp[i]==" ".join([current_ref,current_ref]):
+		if current_ref in snp[i] or current_ref in comp_geno(snp[i]):
+			if snp[i]==" ".join([current_ref,current_ref]) or snp[i]==" ".join([comp_ref(current_ref),comp_ref(current_ref)]):
 				#major allele monomorphic
 				conv_value=0
 				print >> seq_RR_out, "%s %s %s %s" %(ref_snp,snp[i],current_ref,conv_value)
@@ -171,7 +198,7 @@ for rs_line in rs_lines:
 			#missing genotype
 			conv_value='NA'
 			print >> seq_NA_out, "%s %s %s %s" %(ref_snp,snp[i],current_ref,conv_value)
-		elif current_ref not in snp[i]:
+		elif current_ref not in snp[i] and current_ref not in comp_geno(snp[i]):
 			#minor allele monomorphic
 			conv_value=2
 			print >> seq_AA_out, "%s %s %s %s" %(ref_snp,snp[i],current_ref,conv_value)
@@ -208,8 +235,8 @@ for gwas_line in gwas_lines:
 	global conversion_gwas
 	conversion_gwas=[]
 	for i in xrange (4,len(snp)):
-		if current_ref in snp[i]:
-			if snp[i]==" ".join([current_ref,current_ref]):
+		if current_ref in snp[i] or current_ref in comp_geno(snp[i]):
+			if snp[i]==" ".join([current_ref,current_ref]) or snp[i]==" ".join([comp_ref(current_ref),comp_ref(current_ref)]):
 				#major allele monomorphic
 				g_conv_value=0
 				print >> gwas_RR_out, "%s %s %s %s" %(ref_snp,snp[i],current_ref,g_conv_value)
@@ -221,7 +248,7 @@ for gwas_line in gwas_lines:
 			#missing genotype
 			g_conv_value='NA'
 			print >> gwas_NA_out, "%s %s %s %s" %(ref_snp,snp[i],current_ref,g_conv_value)
-		elif current_ref not in snp[i]:
+		elif current_ref not in snp[i] and current_ref not in comp_geno(snp[i]):
 			#minor allele monomorphic
 			g_conv_value=2
 			print >> gwas_AA_out, "%s %s %s %s" %(ref_snp,snp[i],current_ref,g_conv_value)
@@ -345,6 +372,7 @@ for current_sample in sorted(indiv_list.keys()):
 #		pdb.set_trace()
 		sample_gwas=gwas_conversion[current_pos][indiv_list[current_sample]]
 		current_sample_gwas.append(sample_gwas)
+
 	actual_sample_gwas[current_sample]=current_sample_gwas
 #	print 'sample GWAS'
 #	print actual_sample_gwas[current_sample]
@@ -353,6 +381,7 @@ for current_sample in sorted(indiv_list.keys()):
 #		pdb.set_trace()
 		sample_seq=seq_conversion[current_pos][indiv_list[current_sample]]
 		current_sample_seq.append(sample_seq)
+		
 	actual_sample_seq[current_sample]=current_sample_seq
 #	print 'sample SEQ'
 #	print actual_sample_seq[current_sample]
