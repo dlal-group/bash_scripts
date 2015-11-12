@@ -548,7 +548,7 @@ file=`sed -n "${LSB_JOBINDEX}p" $1`
 # /nfs/team151/software/qctool_v1.4-linux-x86_64/qctool -g chr${file}.gen.gz -assume-chromosome ${file} -snp-stats final_stats/chr${file}.stats
 
 #12/08/2015
-#create impute format files for UK10K+1000G PIII reference panel
+# create impute format files for UK10K+1000G PIII reference panel
 # filename=`basename $file`
 # chr=${filename%.bcf}
 
