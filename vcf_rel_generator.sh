@@ -19,7 +19,7 @@ filename=`basename ${vcf}`
 bcftools query -f "%CHROM:%POS-%POS\n" ${vcf} -o ${outpath}/${filename}.all_sites.list
 
 #use the exlusion list formatted as CHR:POS-POS to remove sites from the complete file list
-fgrep -v -w -f ${sites} ${outpath}/${filename}.all_sites.list | cut -f 1 -d "-" | tr ":" "\t" | awk '{OFS="\t"}{print $1,$2,$2}' > ${outpath}/${filename}.included_sites.list
+fgrep -v -w -f ${sites} ${outpath}/${filename}.all_sites.list | cut -f 1 -d "-" | tr ":" "\t" | awk '{OFS="\t"}{print $1,$2}' > ${outpath}/${filename}.included_sites.list
 
 #now use the sample exclusion list to exclude samples
 
