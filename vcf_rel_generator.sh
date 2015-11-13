@@ -23,6 +23,6 @@ fgrep -v -w -f ${sites} ${outpath}/${filename}.all_sites.list | cut -f 1 -d "-" 
 
 #now use the sample exclusion list to exclude samples
 
-bcftools view -S ^${samples} ${vcf} -R ${outpath}/${filename}.included_sites.list -O z -o ${outpath}/${filename}
+bcftools view -S ^${samples} -R ${outpath}/${filename}.included_sites.list ${vcf} -O z -o ${outpath}/${filename}
 
 tabix -p vcf ${outpath}/${filename}
