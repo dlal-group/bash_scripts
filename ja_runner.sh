@@ -613,7 +613,8 @@ file=`sed -n "${LSB_JOBINDEX}p" $1`
 
 #19/10/2015
 #
-for pop in UK10K EUR TSI
+# for pop in UK10K EUR TSI
+for pop in TGPph3
 do
 # pop="TGPph3"
 chr=${file}
