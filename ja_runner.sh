@@ -614,17 +614,17 @@ file=`sed -n "${LSB_JOBINDEX}p" $1`
 #19/10/2015
 #
 # for pop in UK10K EUR TSI
-for pop in TGPph3
-do
-# pop="TGPph3"
-chr=${file}
-pop_path="/lustre/scratch113/projects/esgi-vbseq/16112015_TRIESTE/${pop}/UNION/${chr}"
-awk '{if(length($3)==length($4) && $4!~",") print $0}' ${pop_path}/sites.txt > ${pop_path}/sites_snp.txt
-awk 'FNR==NR{a[$2]=$6;next}{if($2 in a) print $0,a[$2];else print $0,"NA"}' ${pop_path}/${pop}_freq.txt ${pop_path}/sites_snp.txt > ${pop_path}/sites_${pop}.txt
-awk 'FNR==NR{a[$2]=$6;next}{if($2 in a) print $0,a[$2];else print $0,"NA"}' ${pop_path}/carl_freq.txt ${pop_path}/sites_${pop}.txt > ${pop_path}/sites_${pop}_carl.txt
-awk 'FNR==NR{a[$2]=$6;next}{if($2 in a) print $0,a[$2];else print $0,"NA"}' ${pop_path}/vbi_freq.txt ${pop_path}/sites_${pop}_carl.txt > ${pop_path}/sites_${pop}_carl_vbi.txt
-awk 'FNR==NR{a[$2]=$6;next}{if($2 in a) print $0,a[$2];else print $0,"NA"}' ${pop_path}/fvg_freq.txt ${pop_path}/sites_${pop}_carl_vbi.txt > ${pop_path}/sites_${pop}_carl_vbi_fvg.txt
-done
+# for pop in TGPph3
+# do
+# # pop="TGPph3"
+# chr=${file}
+# pop_path="/lustre/scratch113/projects/esgi-vbseq/16112015_TRIESTE/${pop}/UNION/${chr}"
+# awk '{if(length($3)==length($4) && $4!~",") print $0}' ${pop_path}/sites.txt > ${pop_path}/sites_snp.txt
+# awk 'FNR==NR{a[$2]=$6;next}{if($2 in a) print $0,a[$2];else print $0,"NA"}' ${pop_path}/${pop}_freq.txt ${pop_path}/sites_snp.txt > ${pop_path}/sites_${pop}.txt
+# awk 'FNR==NR{a[$2]=$6;next}{if($2 in a) print $0,a[$2];else print $0,"NA"}' ${pop_path}/carl_freq.txt ${pop_path}/sites_${pop}.txt > ${pop_path}/sites_${pop}_carl.txt
+# awk 'FNR==NR{a[$2]=$6;next}{if($2 in a) print $0,a[$2];else print $0,"NA"}' ${pop_path}/vbi_freq.txt ${pop_path}/sites_${pop}_carl.txt > ${pop_path}/sites_${pop}_carl_vbi.txt
+# awk 'FNR==NR{a[$2]=$6;next}{if($2 in a) print $0,a[$2];else print $0,"NA"}' ${pop_path}/fvg_freq.txt ${pop_path}/sites_${pop}_carl_vbi.txt > ${pop_path}/sites_${pop}_carl_vbi_fvg.txt
+# done
 
 # 21/10/2015
 # run bcftools norm
@@ -675,3 +675,6 @@ done
 
 #modify to use the new file formatted by caterina
 # echo -e "SNP\tCHR\tPOS\tOGC\tNRD";fgrep -v POS ${file}| sort -g -k2,2| awk '{OFS="\t"}{print $2,$0}') > ${filename}
+
+#zipping stuff..
+gzip ${file}
