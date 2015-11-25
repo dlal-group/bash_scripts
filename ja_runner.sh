@@ -677,4 +677,9 @@ file=`sed -n "${LSB_JOBINDEX}p" $1`
 # echo -e "SNP\tCHR\tPOS\tOGC\tNRD";fgrep -v POS ${file}| sort -g -k2,2| awk '{OFS="\t"}{print $2,$0}') > ${filename}
 
 #zipping stuff..
-gzip ${file}
+# gzip ${file}
+
+#25/11/2015
+# extract table info and write table in current folder
+filename=`basename ${file}`
+(echo "CHROM POS ID REF ALT AN AC AF MAF MINOR";bcftools query ${file} -f "%CHROM\t%POS\t%ID\t%REF\t%ALT\t%INFO/AN\t%INFO/AC\n" | awk '{if($5 !~ ",") print $0}' | awk '{if($6 != 0)print $0,$7/$6;else print $0,"NA"}' | awk '{if($NF != "NA") {if($NF > 0.5) print $0,1-$NF,$4;else print $0,$NF,$5}else{print $0,"NA","NA"}}') | tr "\t" " " > ${file}.csv
