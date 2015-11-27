@@ -681,12 +681,6 @@ file=`sed -n "${LSB_JOBINDEX}p" $1`
 
 #25/11/2015
 # extract table info and write table in current folder
-chr=${file}
-tgp3_file=/lustre/scratch114/resources/1000g/release/20130502/ALL.chr${chr}.phase3_shapeit2_mvncall_integrated_v5.20130502.genotypes.vcf.gz
-uk10k_file=/lustre/scratch113/projects/uk10k/cohorts/REL-2012-06-02/v2/vcf_sites_filtered/chr${chr}.sites.vcf.gz
-tgp3_file_name=`basename ${tgp3_file}`
-uk10k_file_name=`basename ${uk10k_file}`
+file_name=`basename ${file}`
 
-(echo "CHROM POS ID REF ALT AN AC AF MAF MINOR";bcftools query ${tgp3_file} -f "%CHROM\t%POS\t%ID\t%REF\t%ALT\t%INFO/AN\t%INFO/AC\n" -i"AF=1" | awk '{if($5 !~ ",") print $0}' | awk '{if($6 != 0)print $0,$7/$6;else print $0,"NA"}' | awk '{if($NF != "NA") {if($NF > 0.5) print $0,1-$NF,$4;else print $0,$NF,$5}else{print $0,"NA","NA"}}') | tr "\t" " " > /lustre/scratch113/projects/carl_seq/OUTBRED/TGP/${tgp3_file_name}.csv
-(echo "CHROM POS ID REF ALT AN AC AF MAF MINOR";bcftools query ${uk10k_file} -f "%CHROM\t%POS\t%ID\t%REF\t%ALT\t%INFO/AN\t%INFO/AC\n" -i"AF=1" | awk '{if($5 !~ ",") print $0}' | awk '{if($6 != 0)print $0,$7/$6;else print $0,"NA"}' | awk '{if($NF != "NA") {if($NF > 0.5) print $0,1-$NF,$4;else print $0,$NF,$5}else{print $0,"NA","NA"}}') | tr "\t" " " > /lustre/scratch113/projects/carl_seq/OUTBRED/UK10K/${uk10k_file_name}.csv
-
+(echo "CHROM POS ID REF ALT AN AC AF MAF MINOR";bcftools query ${file} -f "%CHROM\t%POS\t%ID\t%REF\t%ALT\t%INFO/AN\t%INFO/AC\n" -i"AF=1" | awk '{if($5 !~ ",") print $0}' | awk '{if($6 != 0)print $0,$7/$6;else print $0,"NA"}' | awk '{if($NF != "NA") {if($NF > 0.5) print $0,1-$NF,$4;else print $0,$NF,$5}else{print $0,"NA","NA"}}') | tr "\t" " " > ${file_name}.csv
