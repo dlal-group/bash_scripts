@@ -42,7 +42,6 @@ for row in open('%s' %(overlap_list) , 'r'):
 			multi_alt=over_line[3].split(",")
 			if (len(multi_alt[0])==len(over_line[2])):
 				over_dict[(over_line[0],over_line[1],"Multiallelic")] = sum(int(x) for x in over_line[4] if x.isdigit())
-				print "Multiallelic"
 		elif (len(over_line[2])==len(over_line[3])):
 			over_dict[(over_line[0],over_line[1],"Biallelic")] = sum(int(x) for x in over_line[4] if x.isdigit())
 
@@ -51,7 +50,6 @@ for row in open('%s' %(overlap_list) , 'r'):
 			multi_alt=over_line[3].split(",")
 			if (len(multi_alt[0])!=len(over_line[2])):
 				over_dict[(over_line[0],over_line[1],"Multiallelic")] = sum(int(x) for x in over_line[4] if x.isdigit())
-				print "Multiallelic"
 		elif (len(over_line[2])!=len(over_line[3])):
 			over_dict[(over_line[0],over_line[1],"Biallelic")] = sum(int(x) for x in over_line[4] if x.isdigit())
 
