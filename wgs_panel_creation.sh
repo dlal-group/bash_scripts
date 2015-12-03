@@ -56,22 +56,3 @@ bsub -J"extract_common_ingi_${mode}_aceq1dpgt5_${first_suffix}_UK10K" -o"%J_extr
 
 #extract sites to retain
 
-
-
-########## INDELS 
-#select sites with AC >=2 and DP>=5
-bsub -J"extract_indels" -o"%J_extract_indels_acgt2dpgt5.o" -M 3000 -R "select[mem>=3000] rusage[mem=3000]" -q normal -- bcftools query -i'TYPE="indels" && AC>=2 && DP>=5' -f "%CHROM\t%POS\n" ${vcf} -o ${outdir}/${filename}.indels_ac2dp5.tab
-bsub -J"extract_indels" -o"%J_extract_indels_aceq0dpgt5.o" -M 3000 -R "select[mem>=3000] rusage[mem=3000]" -q normal -- bcftools query -i'TYPE="indels" && AC==0 && DP>=5' -f "%CHROM\t%POS\n" ${vcf} -o ${outdir}/${filename}.indels_ac0dp5.tab
-
-#select sites with AC=1 and DP>5
-bsub -J"extract_indels" -o"%J_extract_indels_aceq1dpgt5.o" -M 3000 -R "select[mem>=3000] rusage[mem=3000]" -q normal -- bcftools query -i"TYPE='indels' && AC==1 && DP>=5" -f "%CHROM\t%POS\n" ${vcf} -o ${outdir}/${filename}.indels_ac1dp5.tab
-
-#extract a list of sites with AC1 in common between at least two isolates
-
-#extract a list of sites in common with 1000G or/and UK10K
-
-#merge those lists in a list of uniqe sites
-
-#extract sites to retain
-
-
