@@ -6,7 +6,7 @@
 
 # vcf=/lustre/scratch113/projects/esgi-vbseq/08092015/12112015_FILTERED_REL/22.vcf.gz
 # cohort="VBI"
-# outdir=/lustre/scratch113/projects/esgi-vbseq/27112015_INGI_REF_PANEL/
+# outdir=/lustre/scratch113/projects/esgi-vbseq/27112015_INGI_REF_PANEL/VBI
 #ARGS:
 # $1= vcf file for a single chromosome, better if named as "[chr].vcf.gz"
 # $2=cohort
@@ -23,11 +23,11 @@ first_suffix="${filename%%.*}"
 
 ########## SNPS
 #select sites with AC >=2 and DP>=5
-bsub -J"extract_snps_acgt2dpgt5_${first_suffix}" -o"%J_extract_snps_acgt2dpgt5_${first_suffix}.o" -M 3000 -R "select[mem>=3000] rusage[mem=3000]" -q normal -- bcftools query -i'TYPE="snp" && AC>=2 && DP>=5' -f "%CHROM\t%POS\n" ${vcf} -o ${outdir}/${filename}.snps_ac2dp5.tab
-bsub -J"extract_snps_aceq0dpgt5_${first_suffix}" -o"%J_extract_snps_aceq0dpgt5_${first_suffix}.o" -M 3000 -R "select[mem>=3000] rusage[mem=3000]" -q normal -- bcftools query -i'TYPE="snp" && AC==0 && DP>=5' -f "%CHROM\t%POS\n" ${vcf} -o ${outdir}/${filename}.snps_ac0dp5.tab
+bsub -J"extract_snps_acgt2dpgt5_${first_suffix}" -o"%J_extract_snps_acgt2dpgt5_${first_suffix}.o" -M 3000 -R "select[mem>=3000] rusage[mem=3000]" -q normal -- bcftools query -i'TYPE="snp" && AC>=2 && DP>=5' -f "%CHROM\t%POS\t%REF\t%ALT\n" ${vcf} -o ${outdir}/${filename}.snps_ac2dp5.tab
+bsub -J"extract_snps_aceq0dpgt5_${first_suffix}" -o"%J_extract_snps_aceq0dpgt5_${first_suffix}.o" -M 3000 -R "select[mem>=3000] rusage[mem=3000]" -q normal -- bcftools query -i'TYPE="snp" && AC==0 && DP>=5' -f "%CHROM\t%POS\t%REF\t%ALT\n" ${vcf} -o ${outdir}/${filename}.snps_ac0dp5.tab
 
 #select sites with AC=1 and DP>5
-bsub -J"extract_snps_aceq1dpgt5_${first_suffix}" -o"%J_extract_snps_aceq1dpgt5_${first_suffix}.o" -M 3000 -R "select[mem>=3000] rusage[mem=3000]" -q normal -- bcftools query -i"TYPE='snp' && AC==1 && DP>=5" -f "%CHROM\t%POS\n" ${vcf} -o ${outdir}/${filename}.snps_ac1dp5.tab
+bsub -J"extract_snps_aceq1dpgt5_${first_suffix}" -o"%J_extract_snps_aceq1dpgt5_${first_suffix}.o" -M 3000 -R "select[mem>=3000] rusage[mem=3000]" -q normal -- bcftools query -i"TYPE='snp' && AC==1 && DP>=5" -f "%CHROM\t%POS\t%REF\t%ALT\n" ${vcf} -o ${outdir}/${filename}.snps_ac1dp5.tab
 
 #test:
 #VBI on chr 22 : removed 2 snps for DP<5
