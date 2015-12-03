@@ -11,8 +11,8 @@ import subprocess as sub
 # var_list="/lustre/scratch113/projects/esgi-vbseq/27112015_INGI_REF_PANEL/VBI/22.vcf.gz.snps_ac1dp5.tab"
 # overlap_list="/lustre/scratch113/projects/esgi-vbseq/16112015_TRIESTE/INGI/UNION/22/sites.txt"
 # outdir="/lustre/scratch113/projects/esgi-vbseq/27112015_INGI_REF_PANEL/VBI"
-# mode="snps"
-# mode="indels"
+# mode="snp"
+# mode="indel"
 
 cohort=sys.argv[1]
 var_list=sys.argv[2]
@@ -37,7 +37,7 @@ over_dict={}
 
 for row in open('%s' %(overlap_list) , 'r'):
 	over_line=row.rstrip().split("\t")
-	if (mode == "snps"):
+	if (mode == "snp"):
 		if re.search(',', over_line[3]):
 			multi_alt=over_line[3].split(",")
 			if (len(multi_alt[0])==len(over_line[2])):
@@ -46,7 +46,7 @@ for row in open('%s' %(overlap_list) , 'r'):
 		elif (len(over_line[2])==len(over_line[3])):
 			over_dict[(over_line[0],over_line[1],"Biallelic")] = sum(int(x) for x in over_line[4] if x.isdigit())
 
-	elif (mode =="indels"):
+	elif (mode =="indel"):
 		if re.search( ',',over_line[3]):
 			multi_alt=over_line[3].split(",")
 			if (len(multi_alt[0])!=len(over_line[2])):
@@ -70,7 +70,7 @@ for row in open('%s' %(var_list) , 'r'):
 		vartype="Multiallelic"
 	else :
 		vartype="Biallelic"
-		
+
 	if (over_dict[(var_line[0],var_line[1],vartype)] > 1):
 		over_var[(var_line[0],var_line[1],vartype)]=over_dict[(var_line[0],var_line[1],vartype)]
 		print >> over_out,'%s\t%s\t%s' %(var_line[0],var_line[1],vartype)
