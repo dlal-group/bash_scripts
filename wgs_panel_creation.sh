@@ -25,11 +25,11 @@ first_suffix="${filename%%.*}"
 
 ########## SNPS
 #select sites with AC >=2 and DP>=5
-bsub -J"extract_${mode}_acgt2dpgt5_${first_suffix}" -o"%J_extract_${mode}_acgt2dpgt5_${first_suffix}.o" -M 3000 -R "select[mem>=3000] rusage[mem=3000]" -q normal -- bcftools query -i'TYPE="${mode}" && AC>=2 && DP>=5' -f "%CHROM\t%POS\t%REF\t%ALT\n" ${vcf} -o ${outdir}/${filename}.${mode}_ac2dp5.tab
-bsub -J"extract_${mode}_aceq0dpgt5_${first_suffix}" -o"%J_extract_${mode}_aceq0dpgt5_${first_suffix}.o" -M 3000 -R "select[mem>=3000] rusage[mem=3000]" -q normal -- bcftools query -i'TYPE="${mode}" && AC==0 && DP>=5' -f "%CHROM\t%POS\t%REF\t%ALT\n" ${vcf} -o ${outdir}/${filename}.${mode}_ac0dp5.tab
+bsub -J"extract_${mode}_acgt2dpgt5_${first_suffix}" -o"%J_extract_${mode}_acgt2dpgt5_${first_suffix}.o" -M 3000 -R "select[mem>=3000] rusage[mem=3000]" -q normal -- bcftools query -i'TYPE=${mode} && AC>=2 && DP>=5' -f "%CHROM\t%POS\t%REF\t%ALT\n" ${vcf} -o ${outdir}/${filename}.${mode}_ac2dp5.tab
+bsub -J"extract_${mode}_aceq0dpgt5_${first_suffix}" -o"%J_extract_${mode}_aceq0dpgt5_${first_suffix}.o" -M 3000 -R "select[mem>=3000] rusage[mem=3000]" -q normal -- bcftools query -i'TYPE=${mode} && AC==0 && DP>=5' -f "%CHROM\t%POS\t%REF\t%ALT\n" ${vcf} -o ${outdir}/${filename}.${mode}_ac0dp5.tab
 
 #select sites with AC=1 and DP>5
-bsub -J"extract_${mode}_aceq1dpgt5_${first_suffix}" -o"%J_extract_${mode}_aceq1dpgt5_${first_suffix}.o" -M 3000 -R "select[mem>=3000] rusage[mem=3000]" -q normal -- bcftools query -i'TYPE="${mode}" && AC==1 && DP>=5' -f "%CHROM\t%POS\t%REF\t%ALT\n" ${vcf} -o ${outdir}/${filename}.${mode}_ac1dp5.tab
+bsub -J"extract_${mode}_aceq1dpgt5_${first_suffix}" -o"%J_extract_${mode}_aceq1dpgt5_${first_suffix}.o" -M 3000 -R "select[mem>=3000] rusage[mem=3000]" -q normal -- bcftools query -i'TYPE=${mode} && AC==1 && DP>=5' -f "%CHROM\t%POS\t%REF\t%ALT\n" ${vcf} -o ${outdir}/${filename}.${mode}_ac1dp5.tab
 
 #test:
 #VBI on chr 22 : removed 2 snps for DP<5
