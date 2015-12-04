@@ -8,7 +8,7 @@ import subprocess as sub
 
 #this version works on a single chromosome, so we can submit a job array
 # cohort="VBI"
-# var_list="/lustre/scratch113/projects/esgi-vbseq/27112015_INGI_REF_PANEL/VBI/22.vcf.gz.snps_ac1dp5.tab"
+# var_list="/lustre/scratch113/projects/esgi-vbseq/27112015_INGI_REF_PANEL/VBI/22.vcf.gz.snp_ac1dp5.tab"
 # overlap_list="/lustre/scratch113/projects/esgi-vbseq/16112015_TRIESTE/INGI/UNION/22/sites.txt"
 # outdir="/lustre/scratch113/projects/esgi-vbseq/27112015_INGI_REF_PANEL/VBI"
 # mode="snp"
@@ -64,14 +64,14 @@ over_var={}
 not_over_var=[]
 for row in open('%s' %(var_list) , 'r'):
 	var_line=row.rstrip().split("\t")
-	if re.search(',', var_line[3]):
+	if re.search(',',var_line[3]):
 		vartype="Multiallelic"
 	else :
 		vartype="Biallelic"
 
 	if (over_dict[(var_line[0],var_line[1],vartype)] > 1):
 		over_var[(var_line[0],var_line[1],vartype)]=over_dict[(var_line[0],var_line[1],vartype)]
-		print >> over_out,'%s\t%s\t%s' %(var_line[0],var_line[1],vartype)
+		print >> over_out,'%s\t%s\t%s' %(var_line[0],var_line[1],var_line[2],var_line[3],vartype)
 	else :
 		not_over_var.append((var_line[0],var_line[1],vartype))
-		print >> not_over_out,'%s\t%s\t%s' %(var_line[0],var_line[1],vartype)
+		print >> not_over_out,'%s\t%s\t%s' %(var_line[0],var_line[1],var_line[2],var_line[3],vartype)
