@@ -71,7 +71,7 @@ for row in open('%s' %(var_list) , 'r'):
 
 	if (over_dict[(var_line[0],var_line[1],vartype)] > 1):
 		over_var[(var_line[0],var_line[1],vartype)]=over_dict[(var_line[0],var_line[1],vartype)]
-		print >> over_out,'%s\t%s\t%s' %(var_line[0],var_line[1],var_line[2],var_line[3],vartype)
+		print >> over_out,'%s\t%s\t%s\t%s\t%s' %(var_line[0],var_line[1],var_line[2],var_line[3],vartype)
 	else :
 		not_over_var.append((var_line[0],var_line[1],vartype))
-		print >> not_over_out,'%s\t%s\t%s' %(var_line[0],var_line[1],var_line[2],var_line[3],vartype)
+		print >> not_over_out,'%s\t%s\t%s\t%s\t%s' %(var_line[0],var_line[1],var_line[2],var_line[3],vartype)
