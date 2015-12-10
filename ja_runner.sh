@@ -689,4 +689,5 @@ file=`sed -n "${LSB_JOBINDEX}p" $1`
 # extract table info and write table in current folder
 file_name=`basename ${file}`
 bcftools view --min-alleles 3 ${file} -O z -o ${file_name}
+tabix -p vcf ${file_name}
 bcftools stats -s - -i ${file_name} > ${file_name}.stats
