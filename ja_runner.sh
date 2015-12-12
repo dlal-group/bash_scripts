@@ -687,7 +687,14 @@ file=`sed -n "${LSB_JOBINDEX}p" $1`
 
 #25/11/2015
 # extract table info and write table in current folder
-file_name=`basename ${file}`
-bcftools view --min-alleles 3 ${file} -O z -o ${file_name}
-tabix -p vcf ${file_name}
-bcftools stats -s - -i ${file_name} > ${file_name}.stats
+# file_name=`basename ${file}`
+# bcftools view --min-alleles 3 ${file} -O z -o ${file_name}
+# tabix -p vcf ${file_name}
+# bcftools stats -s - -i ${file_name} > ${file_name}.stats
+
+#12/12/2015
+# extract info from vcf files AN AC AF and TGP FReq to check increment
+filename=`basename ${file}`
+(echo -e "CHROM\tPOS\tAN\tAC\tAF\tEAS_AF\tAMR_AF\tAFR_AF\tSAS_AF\tEUR_AF";bcftools query -f '%CHROM\t%POS\t%AN\t%AC\t%AF\t%EAS_AF\t%AMR_AF\t%AFR_AF\t%SAS_AF\t%EUR_AF\n' ${file}) > ${filename}_qvh.tab
+
+
