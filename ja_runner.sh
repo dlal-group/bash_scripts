@@ -695,6 +695,6 @@ file=`sed -n "${LSB_JOBINDEX}p" $1`
 #12/12/2015
 # extract info from vcf files AN AC AF and TGP FReq to check increment
 filename=`basename ${file}`
-(echo -e "CHROM\tPOS\tAN\tAC\tAF\tEAS_AF\tAMR_AF\tAFR_AF\tSAS_AF\tEUR_AF";bcftools query -f '%CHROM\t%POS\t%AN\t%AC\t%AF\t%EAS_AF\t%AMR_AF\t%AFR_AF\t%SAS_AF\t%EUR_AF\n' ${file}) > ${filename}_qvh.tab
+(echo -e "CHROM\tPOS\tAN\tAC\tEAS_AF\tAMR_AF\tAFR_AF\tSAS_AF\tEUR_AF\tAF";bcftools query -f '%CHROM\t%POS\t%AN\t%AC\t%EAS_AF\t%AMR_AF\t%AFR_AF\t%SAS_AF\t%EUR_AF\n' ${file} | awk 'BEGIN{OFS="\t"}{print $0,$4/$3}') > ${filename}_qvh.tab
 
 
