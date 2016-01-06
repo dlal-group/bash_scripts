@@ -11,7 +11,7 @@ except ImportError:
 
 def worker(queue):
 	for cmd in iter(queue.get, None):
-		# print cmd
+		print cmd
 		subprocess.check_call(cmd)
 
 file_list=sys.argv[1]
