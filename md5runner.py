@@ -12,7 +12,7 @@ except ImportError:
 def worker(queue):
 	for cmd in iter(queue.get, None):
 		# print cmd
-		subprocess.check_call(cmd, stdout=None, stderr=subprocess.STDOUT)
+		subprocess.check_call(cmd, stderr=subprocess.STDOUT)
 
 file_list=sys.argv[1]
 # file_list="/lacie/01/ftp/files/WES_FVG/presbyacusis_fastqfiles/file_list.txt"
