@@ -23,7 +23,7 @@ files_to_md=open(file_list,'r')
 fastqs=files_to_md.read().split()
 
 q = Queue()
-threads = [Thread(target=worker, args=(q,)) for _ in range(40)]
+threads = [Thread(target=worker, args=(q,)) for _ in range(2)]
 for t in threads: # start workers
 	t.daemon = True
 	t.start()
