@@ -701,6 +701,6 @@ file=`sed -n "${LSB_JOBINDEX}p" $1`
 #merge data to create a uniq INGI vcf file
 filename=`basename ${file}`
 
-bftools merge /lustre/scratch113/projects/fvg_seq/16092015/12112015_FILTERED_REL/${file} /lustre/scratch113/projects/carl_seq/variant_refinement/12112015_FILTERED_REL/${file} /lustre/scratch113/projects/esgi-vbseq/08092015/12112015_FILTERED_REL/${file} -O z -o /lustre/scratch113/projects/esgi-vbseq/16112015_TRIESTE/MERGED_INGI/${file}
+bcftools merge /lustre/scratch113/projects/fvg_seq/16092015/12112015_FILTERED_REL/${file} /lustre/scratch113/projects/carl_seq/variant_refinement/12112015_FILTERED_REL/${file} /lustre/scratch113/projects/esgi-vbseq/08092015/12112015_FILTERED_REL/${file} -O z -o /lustre/scratch113/projects/esgi-vbseq/16112015_TRIESTE/MERGED_INGI/${file}
 
 tabix -p vcf /lustre/scratch113/projects/esgi-vbseq/16112015_TRIESTE/MERGED_INGI/${file}
