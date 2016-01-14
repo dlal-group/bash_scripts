@@ -1,4 +1,4 @@
-#!/usr/local/bin/bash
+#!/usr/bin/env bash
 
 IFS=$'\n'
 set $(cat metabolic_FVG_parameter_file.txt)
