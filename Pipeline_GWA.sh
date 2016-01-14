@@ -30,12 +30,7 @@ do
 # RUN GWAS analyses using the GWA function
 qsub -N "${cohort}_chr${chr}_${trait}" -o "${out_path}/${cohort}_chr${chr}_${trait}.o" \
 -e "${out_path}/${cohort}_chr${chr}_${trait}.e" \
--l h_rt=200:00:00 -l vf=10G -wd ${out_path} -q all.q R CMD BATCH '--args '${pheno}' '${trait}' '${covariates}' '${kinship}' '${geno}' '${cohort}' '${imp_path}' '${out_path}'' GWAS_1KG_imputed.R
+-l h_rt=200:00:00 -l vf=10G -wd ${out_path} -q all.q R CMD BATCH '--args '${pheno}' '${trait}' '${covariates}' '${kinship}' '${geno}' '${cohort}' '${imp_path}' '${out_path}'' ~/scripts/r_scripts/GWAS_1KG_imputed.R
 
 done
-
-# RUN FORMATTING AND PLOTTING STEPS
-bsub -o formatting.log -J "formatting" -w "ended(P_$2_$4*)" \
--M6000000 -R"select[mem>6000] rusage[mem=6000]" -q long \
-R CMD BATCH '--args '$2' '$4'' formatting.R
 
