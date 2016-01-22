@@ -3,8 +3,6 @@
 # Author: petr.danecek@sanger
 # Edited for proper chrX phasing: mc14@sanger.ac.uk
 
-import sys;
-sys.path.append("/software/hgi/pkglocal/vr-codebase-git-20141121-9cdcbbc/lib/perl5/lib/perl5/");
 use strict;
 use warnings;
 use Carp;
