@@ -30,7 +30,7 @@ do
 # RUN GWAS analyses using the GWA function
 qsub -N "${cohort}_chr${chr}_${trait}" -o "${out_path}/${cohort}_chr${chr}_${trait}.o" \
 -e "${out_path}/${cohort}_chr${chr}_${trait}.e" \
--l h_rt=200:00:00 -l vf=10G -wd ${out_path} -q all.q R CMD BATCH '--args '${pheno}' '${trait}' '${covariates}' '${kinship}' '${geno}' '${cohort}' '${imp_path}' '${out_path}'' ~/scripts/r_scripts/GWAS_1KG_imputed.R
+-l h_rt=200:00:00 -l vf=10G -wd ${out_path} -q all.q -- R CMD BATCH '--args '${pheno}' '${trait}' '${covariates}' '${kinship}' '${geno}' '${cohort}' '${imp_path}' '${out_path}'' ~/scripts/r_scripts/GWAS_1KG_imputed.R
 
 done
 
