@@ -7,6 +7,7 @@ use strict;
 use warnings;
 use Carp;
 use Utils;
+use lib .;
 
 my $runner = myRunner->new();
 $runner->run();
