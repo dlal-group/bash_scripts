@@ -24,6 +24,15 @@ cohort=${2} # <- args[[6]]
 imp_path=${16} # <- args[[7]]
 out_path=${18} # <- args[[8]]
 
+echo -e "pheno = ${pheno}\n
+trait = ${trait}\n
+covariates = ${covariates}\n
+kinship = ${kinship}\n
+geno = ${geno}\n
+cohort = ${cohort}\n
+imp_path = ${imp_path}\n
+out_path = ${out_path}\n
+"
 
 for chr in $(seq 20 22)
 do
@@ -33,4 +42,3 @@ qsub -N "${cohort}_chr${chr}_${trait}" -o "${out_path}/${cohort}_chr${chr}_${tra
 -l h_rt=200:00:00 -l vf=10G -wd ${out_path} -q all.q -- R CMD BATCH '--args '${pheno}' '${trait}' '${covariates}' '${kinship}' '${geno}' '${cohort}' '${imp_path}' '${out_path}'' ~/scripts/r_scripts/GWAS_1KG_imputed.R
 
 done
-

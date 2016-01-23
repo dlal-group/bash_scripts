@@ -27,9 +27,9 @@ sub new
     $$self{verbose}       = 1;
     $$self{do_clean}      = 1;
     $$self{limits}        = { memory=>5_500, runtime=>3*24*60 };
-    $$self{impute2_bin}   = 'impute2';
-    $$self{bcftools}      = '/software/vertres/bin-external/bcftools-exp-rc';
-    $$self{tabix}         = '/software/vertres/bin-external/tabix-exp-rc';
+    $$self{impute2_bin}   = '/nfs/team151/software/impute_v2.3.1_x86_64_static/impute2';
+    $$self{bcftools}      = 'bcftools';
+    $$self{tabix}         = 'tabix';
     $$self{max_chr_len}   = 249250621;
     $$self{concat_args}   = '-ad both';
     $$self{in_GL_tag}     = 'PL';
@@ -45,7 +45,7 @@ sub new
         #
         version  => '] .$$self{config_version}. q[',
 
-        impute2_bin => '/nfs/users/nfs_p/pd3/sandbox/svn/impute2/impute2.3.1',
+        impute2_bin => '/nfs/team151/software/impute_v2.3.1_x86_64_static/impute2',
         gen_map     => '/nfs/users/nfs_p/pd3/sandbox/svn/impute2/ALL_1000G_phase1interim_jun2011_impute/genetic_map_chr{CHROM}_combined_b37.txt',
         bcftools    => '] .$$self{bcftools}. q[',
         tabix       => '] .$$self{tabix}. q[',
