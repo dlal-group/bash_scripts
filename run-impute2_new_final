@@ -630,7 +630,18 @@ sub impute2
     }
 
     # study genotypes
-    $files = qq[-g $outdir/01.vcf_to_impute2.$from-$to.impute.gen.gz -sample_g $outdir/01.vcf_to_impute2.$from-$to.impute.samples]; 
+    #24/01/2016 added to retrieve sample file provided for chr X non par region imputation
+    if ( $$self{impute2_args} =~ "-sample_g" )
+    { 
+        my %options;
+        %options = map{split / /,$_}(split /-/, $$self{impute2_args});
+        print $options{sample_g};
+        $files = qq[-g $outdir/01.vcf_to_impute2.$from-$to.impute_gts.gz -sample_g $options{sample_g}]; 
+     }
+     else
+     {
+        $files = qq[-g $outdir/01.vcf_to_impute2.$from-$to.impute.gen.gz -sample_g $outdir/01.vcf_to_impute2.$from-$to.impute.samples]; 
+     }
 
     $self->cmd(qq[$CMD $files -o $out >>$out.o 2>>$out.e]);
 
@@ -690,7 +701,7 @@ sub impute2_to_vcf
     #24/01/2016 -> added check to trim useless alternative alleles
     $self->cmd(qq[$$self{bcftools} view -a $outfile.merged.bcf -Ob -o $outfile.merged.trimmed.bcf]);
     rename("$outfile.merged.trimmed.bcf","$outfile.merged.bcf");
-    
+
     $self->cmd(qq[$$self{bcftools} index $outfile.merged.bcf]);
     unlink("$outfile.imputed.bcf");
     unlink("$outfile.imputed.bcf.csi");
