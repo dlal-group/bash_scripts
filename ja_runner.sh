@@ -710,5 +710,7 @@ file=`sed -n "${LSB_JOBINDEX}p" $1`
 filename=`basename ${file}`
 basedir=`dirname ${file}`
 
+mkdir -p ${basedir}/TRIMMED/
+
 bcftools view -a ${file} -O z -o ${basedir}/TRIMMED/${filename}
 tabix -p vcf ${basedir}/TRIMMED/${filename}
