@@ -687,6 +687,10 @@ sub impute2_to_vcf
     $self->cmd(qq[$$self{bcftools} convert --gensample2vcf $outdir/02.impute2.$from-$to.gz,$outdir/02.impute2.$from-${to}_samples -Ob -o $outfile.imputed.bcf]);
     $self->cmd(qq[$$self{bcftools} index $outfile.imputed.bcf]);
     $self->cmd(qq[$$self{bcftools} concat -r $chr:$from-$to $$self{concat_args} $outfile.imputed.bcf $in_vcf -Ob -o $outfile.merged.bcf]);
+    #24/01/2016 -> added check to trim useless alternative alleles
+    $self->cmd(qq[$$self{bcftools} view -a $outfile.merged.bcf -Ob -o $outfile.merged.trimmed.bcf]);
+    rename("$outfile.merged.trimmed.bcf","$outfile.merged.bcf");
+    
     $self->cmd(qq[$$self{bcftools} index $outfile.merged.bcf]);
     unlink("$outfile.imputed.bcf");
     unlink("$outfile.imputed.bcf.csi");
