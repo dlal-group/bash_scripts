@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
 IFS=$'\n'
-set $(cat metabolic_FVG_parameter_file.txt)
+set $(cat /home/cocca/analyses/MetabolicSyndrome/FVG/metabolic_FVG_parameter_file.txt)
 # set $(cat parameter_file.txt)
 
 # Cohort's name $2 = FVG
@@ -41,8 +41,12 @@ do
 echo -e "#!/bin/bash\n#$ -S /bin/bash\n#$ -cwd\n\n\nR CMD BATCH '--args '${pheno}' '${trait}' '${covariates}' '${kinship}' '${geno}' '${cohort}' '${imp_path}' '${out_path}'' ~/scripts/r_scripts/GWAS_1KG_imputed.R" > ${out_path}/MetS_score_analysis_chr${chr}.sh
 chmod ug+x ${out_path}/MetS_score_analysis_chr${chr}.sh
 
+# qsub -N "${cohort}_chr${chr}_${trait}" -o "${out_path}/${cohort}_chr${chr}_${trait}.o" \
+# -e "${out_path}/${cohort}_chr${chr}_${trait}.e" \
+# -l h_rt=200:00:00 -l vf=10G -wd ${out_path} -- ${out_path}/MetS_score_analysis_chr${chr}.sh
+
 qsub -N "${cohort}_chr${chr}_${trait}" -o "${out_path}/${cohort}_chr${chr}_${trait}.o" \
 -e "${out_path}/${cohort}_chr${chr}_${trait}.e" \
--l h_rt=200:00:00 -l vf=10G -wd ${out_path} -- ${out_path}/MetS_score_analysis_chr${chr}.sh
+-l vf=10G -wd ${out_path} -q all.q -- ${out_path}/MetS_score_analysis_chr${chr}.sh
 
 done
