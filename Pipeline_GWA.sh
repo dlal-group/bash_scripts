@@ -22,7 +22,7 @@ kinship=${10} # <- args[[4]]
 geno=${12} # <- args[[5]]
 cohort=${2} # <- args[[6]]
 imp_path=${16} # <- args[[7]]
-out_path=${18} # <- args[[8]]
+out_path=${20} # <- args[[8]]
 
 echo -e "pheno = ${pheno}\n
 trait = ${trait}\n
