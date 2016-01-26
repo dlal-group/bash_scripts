@@ -13,12 +13,18 @@
 # mkdir -p LOGS;size=`wc -l /lustre/scratch113/projects/carl_seq/variant_refinement/18092015_SHAPEIT/vcfstats.list |cut -f 1 -d " "`; bsub -J "call_check[1-${size}]" -o "LOGS/%J_call_check.%I.o" -M2000 -R"select[mem>2000] rusage[mem=2000]" -q normal -- ~/Work/bash_scripts/ja_runner_par.sh -s ~/Work/bash_scripts/vcfchk_fast_count.sh /lustre/scratch113/projects/carl_seq/variant_refinement/18092015_SHAPEIT/vcfstats.list
 # mkdir -p LOGS;size=`wc -l /lustre/scratch113/projects/esgi-vbseq/08092015/variant_calling/pooled/vcfstats.list |cut -f 1 -d " "`; bsub -J "call_check[1-${size}]" -o "LOGS/%J_call_check.%I.o" -M2000 -R"select[mem>2000] rusage[mem=2000]" -q normal -- ~/Work/bash_scripts/ja_runner_par.sh -s ~/Work/bash_scripts/vcfchk_fast_count.sh /lustre/scratch113/projects/esgi-vbseq/08092015/variant_calling/pooled/vcfstats.list
 
-vcfchk_path=$1
-outname=`basename ${vcfchk_path}`
+vcf_path=$1
+outname=`basename ${vcf_path}`
+out_path=`dirname ${vcf_path}`
+vcfchk_path=${out_path}/${outname}.vcfchk
+
 i=`echo ${outname%.*}`
 echo ${vcfchk_path}
 echo ${outname}
 echo ${i}
+
+#lets calculate the stats here!!
+bcftools stats -F /lustre/scratch114/resources/ref/Homo_sapiens/1000Genomes_hs37d5/hs37d5.fa -s - -v ${vcf_path} > ${vcfchk_path}
 
 (echo -e "CHR\tVARIANTS\tSNPS\tSingleton_SNPS\tMONO_SNPS\tINDELS\tSingleton_INDELS\tMONO_INDELS\tMULTI_SITES\tMULTI_SNPS\tMULTI_INDELS";
 # for i in {1..22} X
