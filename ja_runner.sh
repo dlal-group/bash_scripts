@@ -712,5 +712,18 @@ basedir=`dirname ${file}`
 
 mkdir -p ${basedir}/TRIMMED/
 
-bcftools view -a ${file} -O z -o ${basedir}/TRIMMED/${filename}
+bcftools view -m1 -a ${file} -O z -o ${basedir}/TRIMMED/M1.${filename}
+bcftools view -m0 -M0 ${file} -O z -o ${basedir}/TRIMMED/M0.${filename}
+tabix -p vcf ${basedir}/TRIMMED/M1.${filename}
+tabix -p vcf ${basedir}/TRIMMED/M0.${filename}
+
+bcftools concat -a ${basedir}/TRIMMED/M1.${filename} ${basedir}/TRIMMED/M0.${filename} -O z -o ${basedir}/TRIMMED/UNSORTED.${filename}
+(bcftools view -h ${basedir}/TRIMMED/UNSORTED.${filename};bcftools view -H ${basedir}/TRIMMED/UNSORTED.${filename} | sort -g -k2,2 )| bgzip -c > ${basedir}/TRIMMED/${filename}
 tabix -p vcf ${basedir}/TRIMMED/${filename}
+
+rm ${basedir}/TRIMMED/M1.${filename}
+rm ${basedir}/TRIMMED/M0.${filename}
+rm ${basedir}/TRIMMED/M1.${filename}.tbi
+rm ${basedir}/TRIMMED/M0.${filename}.tbi
+rm ${basedir}/TRIMMED/UNSORTED.${filename}
+ 
