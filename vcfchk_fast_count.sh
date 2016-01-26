@@ -13,6 +13,12 @@
 # mkdir -p LOGS;size=`wc -l /lustre/scratch113/projects/carl_seq/variant_refinement/18092015_SHAPEIT/vcfstats.list |cut -f 1 -d " "`; bsub -J "call_check[1-${size}]" -o "LOGS/%J_call_check.%I.o" -M2000 -R"select[mem>2000] rusage[mem=2000]" -q normal -- ~/Work/bash_scripts/ja_runner_par.sh -s ~/Work/bash_scripts/vcfchk_fast_count.sh /lustre/scratch113/projects/carl_seq/variant_refinement/18092015_SHAPEIT/vcfstats.list
 # mkdir -p LOGS;size=`wc -l /lustre/scratch113/projects/esgi-vbseq/08092015/variant_calling/pooled/vcfstats.list |cut -f 1 -d " "`; bsub -J "call_check[1-${size}]" -o "LOGS/%J_call_check.%I.o" -M2000 -R"select[mem>2000] rusage[mem=2000]" -q normal -- ~/Work/bash_scripts/ja_runner_par.sh -s ~/Work/bash_scripts/vcfchk_fast_count.sh /lustre/scratch113/projects/esgi-vbseq/08092015/variant_calling/pooled/vcfstats.list
 
+# mkdir -p LOGS;size=`wc -l /lustre/scratch113/projects/esgi-vbseq/08092015/12112015_FILTERED_REL/TRIMMED/files.list |cut -f 1 -d " "`; bsub -J "call_check[1-${size}]" -o "LOGS/%J_call_check.%I.o" -M2000 -R"select[mem>2000] rusage[mem=2000]" -q normal -- ~/Work/bash_scripts/ja_runner_par.sh -s ~/Work/bash_scripts/vcfchk_fast_count.sh /lustre/scratch113/projects/esgi-vbseq/08092015/12112015_FILTERED_REL/TRIMMED/files.list
+
+# mkdir -p LOGS;size=`wc -l /lustre/scratch113/projects/fvg_seq/16092015/12112015_FILTERED_REL/TRIMMED/files.list |cut -f 1 -d " "`; bsub -J "call_check[1-${size}]" -o "LOGS/%J_call_check.%I.o" -M2000 -R"select[mem>2000] rusage[mem=2000]" -q normal -- ~/Work/bash_scripts/ja_runner_par.sh -s ~/Work/bash_scripts/vcfchk_fast_count.sh /lustre/scratch113/projects/fvg_seq/16092015/12112015_FILTERED_REL/TRIMMED/files.list
+
+# mkdir -p LOGS;size=`wc -l /lustre/scratch113/projects/carl_seq/variant_refinement/12112015_FILTERED_REL/TRIMMED/files.list |cut -f 1 -d " "`; bsub -J "call_check[1-${size}]" -o "LOGS/%J_call_check.%I.o" -M2000 -R"select[mem>2000] rusage[mem=2000]" -q normal -- ~/Work/bash_scripts/ja_runner_par.sh -s ~/Work/bash_scripts/vcfchk_fast_count.sh /lustre/scratch113/projects/carl_seq/variant_refinement/12112015_FILTERED_REL/TRIMMED/files.list
+
 vcf_path=$1
 outname=`basename ${vcf_path}`
 out_path=`dirname ${vcf_path}`
