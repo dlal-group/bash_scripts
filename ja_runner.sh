@@ -712,8 +712,8 @@ basedir=`dirname ${file}`
 
 mkdir -p ${basedir}/TRIMMED/
 
-bcftools view -c1 -a ${file} -O z -o ${basedir}/TRIMMED/M1.${filename}
-bcftools view -c0 -C0 ${file} -O z -o ${basedir}/TRIMMED/M0.${filename}
+bcftools view -c1 ${file} | bcftools view -a -O z -o ${basedir}/TRIMMED/M1.${filename}
+bcftools view -i"AC==0" ${file} -O z -o ${basedir}/TRIMMED/M0.${filename}
 tabix -p vcf ${basedir}/TRIMMED/M1.${filename}
 tabix -p vcf ${basedir}/TRIMMED/M0.${filename}
 
