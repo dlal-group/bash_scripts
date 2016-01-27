@@ -48,15 +48,15 @@ for chr in $(seq 20 22)
 do
 # RUN GWAS analyses using the GWA function
 # we need to create the script, than we'll submit it
-echo -e "#!/bin/bash\n#$ -S /bin/bash\n#$ -l vf=10G \n#$ -cwd\n\n\nR CMD BATCH '--args '${pheno}' '${trait}' '${covariates}' '${kinship}' '${geno}' '${cohort}' '${imp_path}' '${out_path}'' ~/scripts/r_scripts/GWAS_1KG_imputed.R" > ${out_path}/MetS_score_analysis_chr${chr}.sh
-chmod ug+x ${out_path}/MetS_score_analysis_chr${chr}.sh
+# echo -e "#!/bin/bash\n#$ -S /bin/bash\n#$ -l vf=10G \n#$ -cwd\n\n\nR CMD BATCH '--args '${pheno}' '${trait}' '${covariates}' '${kinship}' '${geno}' '${cohort}' '${imp_path}' '${out_path}'' ~/scripts/r_scripts/GWAS_1KG_imputed.R" > ${out_path}/MetS_score_analysis_chr${chr}.sh
+# chmod ug+x ${out_path}/MetS_score_analysis_chr${chr}.sh
 
 # qsub -N "${cohort}_chr${chr}_${trait}" -o "${out_path}/${cohort}_chr${chr}_${trait}.o" \
 # -e "${out_path}/${cohort}_chr${chr}_${trait}.e" \
 # -l h_rt=200:00:00 -l vf=10G -wd ${out_path} -- ${out_path}/MetS_score_analysis_chr${chr}.sh
 
 qsub -N "${cohort}_chr${chr}_${trait}" -o "${out_path}/${cohort}_chr${chr}_${trait}.o" \
--e "${out_path}/${cohort}_chr${chr}_${trait}.e" \
+-e "${out_path}/${cohort}_chr${chr}_${trait}.e" -wd ${out_path} -cwd \
 -q all.q -- R CMD BATCH '--args '${pheno}' '${trait}' '${covariates}' '${kinship}' '${geno}' '${cohort}' '${imp_path}' '${out_path}'' ~/scripts/r_scripts/GWAS_1KG_imputed.R
 
 done
