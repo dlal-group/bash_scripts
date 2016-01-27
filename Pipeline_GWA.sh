@@ -45,7 +45,7 @@ out_path = ${out_path}\n
 "
 source ~/scripts/bash_scripts/SGE_script_create_function
 
-for chr in $(seq 20 22)
+for chr in $(seq 1 22)
 do
 # RUN GWAS analyses using the GWA function
 # we need to create the script, than we'll submit it
