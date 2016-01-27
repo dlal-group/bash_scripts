@@ -43,7 +43,7 @@ cohort = ${cohort}\n
 imp_path = ${imp_path}\n
 out_path = ${out_path}\n
 "
-source ~/scripts/bash_script/SGE_script_create_function
+source ~/scripts/bash_scripts/SGE_script_create_function
 
 for chr in $(seq 20 22)
 do
