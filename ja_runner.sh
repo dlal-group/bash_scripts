@@ -707,6 +707,7 @@ file=`sed -n "${LSB_JOBINDEX}p" $1`
 
 #24/01/2016
 # Fix multiallelic issue, trimming all sites with alternative allele uncounted
+set -e
 filename=`basename ${file}`
 basedir=`dirname ${file}`
 
