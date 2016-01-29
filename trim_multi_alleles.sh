@@ -3,6 +3,7 @@
 
 # Fix multiallelic issue, trimming all sites with alternative allele uncounted
 set -e
+file=$1
 filename=`basename ${file}`
 basedir=`dirname ${file}`
 
