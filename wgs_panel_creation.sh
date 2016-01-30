@@ -14,6 +14,8 @@
 # $4=mode (snps/indels)
 
 # /nfs/users/nfs_m/mc14/Work/bash_scripts/wgs_panel_creation.sh /lustre/scratch113/projects/esgi-vbseq/08092015/12112015_FILTERED_REL/22.vcf.gz VBI /lustre/scratch113/projects/esgi-vbseq/27112015_INGI_REF_PANEL
+set -e
+
 vcf=$1
 cohort=$2
 outdir=$3/$2
