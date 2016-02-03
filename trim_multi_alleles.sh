@@ -13,7 +13,18 @@ mkdir -p ${basedir}/TRIMMED/
 bcftools view -m 3 ${file} -O z -o ${basedir}/TRIMMED/M3.tt.${filename}
 tabix -p vcf ${basedir}/TRIMMED/M3.tt.${filename}
 
-bcftools view -a -O z -o ${basedir}/TRIMMED/M3.${filename} ${basedir}/TRIMMED/M3.tt.${filename}
+#split in chunks and submit all jobs splitted
+bcftools query -f "%CHROM\t%POS\n" > ${basedir}/TRIMMED/M3.tt.${filename}.pos_list
+split -a 3 -d -l 1000 ${basedir}/TRIMMED/M3.tt.${filename}.pos_list ${basedir}/TRIMMED/M3.tt.${filename}.pos_list.
+
+for region in ls `${basedir}/TRIMMED/M3.tt.${filename}.pos_list.*`
+do
+	basename_region=`basename ${region}`
+	bcftools view -a -r ${region} -O z -o ${basedir}/TRIMMED/${basename_region}.vcf.gz
+	#we need a list of those splitted files to concat back together
+	
+done
+
 tabix -p vcf ${basedir}/TRIMMED/M3.${filename}
 
 #then we create a file for all the remaining sites: we're not goin to work on them!
@@ -30,3 +41,8 @@ rm ${basedir}/TRIMMED/M2.${filename}
 rm ${basedir}/TRIMMED/M3.${filename}
 rm ${basedir}/TRIMMED/M2.${filename}.tbi
 rm ${basedir}/TRIMMED/M3.${filename}.tbi
+
+#split multiallelic sites
+# bcftools norm -f /lustre/scratch114/resources/ref/Homo_sapiens/1000Genomes_hs37d5/hs37d5.fa -m - -r 
+
+#than intersect with other cohorts
