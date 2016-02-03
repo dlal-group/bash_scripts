@@ -22,14 +22,14 @@ mkdir -p ${basedir}/TRIMMED/LOGS;size=`wc -l ${basedir}/TRIMMED/M3.tt.${filename
 
 #in the meanwhile we create a file for all the remaining sites: we're not goin to work on them!
 bsub -J "extract_M2_${filename}" -o "${basedir}/TRIMMED/LOGS/%J_extract_M2_${filename}.o" -M2000 -R"select[mem>2000] rusage[mem=2000]" -q normal -- bcftools view -M 2 -O z -o ${basedir}/TRIMMED/M2.${filename} ${file}
-bsub -J "index_M2_${filename}" -o "${basedir}/TRIMMED/LOGS/%J_index_M2_${filename}.o" -w "ended(extract_M2_${filename})" -M2000 -R"select[mem>2000] rusage[mem=2000]" -q normal -- tabix -p vcf -f ${basedir}/TRIMMED/M2.${filename}
+bsub -J "index_M2_${filename}" -o "${basedir}/TRIMMED/LOGS/%J_index_M2_${filename}.o" -w "done(extract_M2_${filename})" -M2000 -R"select[mem>2000] rusage[mem=2000]" -q normal -- tabix -p vcf -f ${basedir}/TRIMMED/M2.${filename}
 
 #concat with the -a options, sort stuff out by itself!!
 #We need to wait for all the jobs to end, than we concat M3 chunks back together
-bsub -J "concat_M3_${filename}" -o "${basedir}/TRIMMED/LOGS/%J_concat_M3_${filename}.o" -w "ended(trim_${filename}*)" -M2000 -R"select[mem>2000] rusage[mem=2000]" -q normal -- ~/Work/bash_scripts/concat_chunked_vcf.sh ${file}
+bsub -J "concat_M3_${filename}" -o "${basedir}/TRIMMED/LOGS/%J_concat_M3_${filename}.o" -w "done(trim_${filename}*)" -M2000 -R"select[mem>2000] rusage[mem=2000]" -q normal -- ~/Work/bash_scripts/concat_chunked_vcf.sh ${file}
 
 #We need to wait for all the jobs to end, than we concat M2 and M3 stuff back together
-bsub -J "concat_M2M3_${filename}" -o "${basedir}/TRIMMED/LOGS/%J_concat_M2M3_${filename}.o" -w "ended(concat_M3_${filename})" -M2000 -R"select[mem>2000] rusage[mem=2000]" -q normal -- bcftools concat -a ${basedir}/TRIMMED/M2.${filename} ${basedir}/TRIMMED/M3.${filename} -O z -o ${basedir}/TRIMMED/${filename}
-bsub -J "index_M2M3_${filename}" -o "${basedir}/TRIMMED/LOGS/%J_index_M2M3_${filename}.o" -w "ended(concat_M2M3_${filename})" -M2000 -R"select[mem>2000] rusage[mem=2000]" -q normal -- tabix -p vcf -f ${basedir}/TRIMMED/${filename}
+bsub -J "concat_M2M3_${filename}" -o "${basedir}/TRIMMED/LOGS/%J_concat_M2M3_${filename}.o" -w "done(concat_M3_${filename} && index_M2_${filename})" -M2000 -R"select[mem>2000] rusage[mem=2000]" -q normal -- bcftools concat -a ${basedir}/TRIMMED/M2.${filename} ${basedir}/TRIMMED/M3.${filename} -O z -o ${basedir}/TRIMMED/${filename}
+bsub -J "index_M2M3_${filename}" -o "${basedir}/TRIMMED/LOGS/%J_index_M2M3_${filename}.o" -w "done(concat_M2M3_${filename})" -M2000 -R"select[mem>2000] rusage[mem=2000]" -q normal -- tabix -p vcf -f ${basedir}/TRIMMED/${filename}
 
-echo "rm ${basedir}/TRIMMED/M3.tt.${filename};rm ${basedir}/TRIMMED/M3.tt.${filename}.tbi;rm ${basedir}/TRIMMED/M2.${filename};rm ${basedir}/TRIMMED/M3.${filename};rm ${basedir}/TRIMMED/M2.${filename}.tbi;rm ${basedir}/TRIMMED/M3.${filename}.tbi" | bsub -J "clean_${filename}" -o "${basedir}/TRIMMED/LOGS/%J_clean_${filename}.o" -w "ended(index_M2M3_${filename})" -M1000 -R"select[mem>1000] rusage[mem=1000]" -q normal
+echo "rm ${basedir}/TRIMMED/M3.tt.${filename};rm ${basedir}/TRIMMED/M3.tt.${filename}.tbi;rm ${basedir}/TRIMMED/M2.${filename};rm ${basedir}/TRIMMED/M3.${filename};rm ${basedir}/TRIMMED/M2.${filename}.tbi;rm ${basedir}/TRIMMED/M3.${filename}.tbi" | bsub -J "clean_${filename}" -o "${basedir}/TRIMMED/LOGS/%J_clean_${filename}.o" -w "done(index_M2M3_${filename})" -M1000 -R"select[mem>1000] rusage[mem=1000]" -q normal
