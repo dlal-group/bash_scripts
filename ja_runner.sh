@@ -705,26 +705,12 @@ file=`sed -n "${LSB_JOBINDEX}p" $1`
 
 # tabix -p vcf /lustre/scratch113/projects/esgi-vbseq/16112015_TRIESTE/MERGED_INGI/${file}
 
-#24/01/2016
-# Fix multiallelic issue, trimming all sites with alternative allele uncounted
+# 03/02/2016
+# run bcftools norm
 set -e
+outpath=`dirname ${file}`
 filename=`basename ${file}`
-basedir=`dirname ${file}`
 
-mkdir -p ${basedir}/TRIMMED/
-
-bcftools view -c1 ${file} | bcftools view -a -O z -o ${basedir}/TRIMMED/M1.${filename}
-bcftools view -m 2 -M 2 -i"AC==0" ${file} -O z -o ${basedir}/TRIMMED/M0.${filename}
-tabix -p vcf ${basedir}/TRIMMED/M1.${filename}
-tabix -p vcf ${basedir}/TRIMMED/M0.${filename}
-
-bcftools concat -a ${basedir}/TRIMMED/M1.${filename} ${basedir}/TRIMMED/M0.${filename} -O z -o ${basedir}/TRIMMED/UNSORTED.${filename}
-(bcftools view -h ${basedir}/TRIMMED/UNSORTED.${filename};bcftools view -H ${basedir}/TRIMMED/UNSORTED.${filename} | sort -g -k2,2 )| bgzip -c > ${basedir}/TRIMMED/${filename}
-tabix -p vcf ${basedir}/TRIMMED/${filename}
-
-rm ${basedir}/TRIMMED/M1.${filename}
-rm ${basedir}/TRIMMED/M0.${filename}
-rm ${basedir}/TRIMMED/M1.${filename}.tbi
-rm ${basedir}/TRIMMED/M0.${filename}.tbi
-rm ${basedir}/TRIMMED/UNSORTED.${filename}
- 
+mkdir -p ${outpath}/NORMALIZED
+bcftools norm -m - both -f /lustre/scratch114/resources/ref/Homo_sapiens/1000Genomes_hs37d5/hs37d5.fa -O z -o ${outpath}/NORMALIZED/${filename} ${file}
+tabix -p vcf ${outpath}/NORMALIZED/${filename}
