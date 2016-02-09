@@ -9,6 +9,7 @@
 # mkdir -p LOGS;size=`wc -l <vcf file list> |cut -f 1 -d " "`; bsub -J "annotate_gatk[1-${size}]" -o "LOGS/%J_annotate_gatk.%I.o" -M5000 -R"select[mem>5000] rusage[mem=5000]" -q normal -- ja_runner_par.sh -s gatk_annotator.sh <vcf file list> <output folder>
 
 
+
 infile=$1
 # infolder=$2
 outfolder=$2
