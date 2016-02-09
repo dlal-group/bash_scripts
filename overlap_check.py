@@ -41,16 +41,16 @@ for row in open('%s' %(overlap_list) , 'r'):
 		if re.search(',', over_line[3]):
 			multi_alt=over_line[3].split(",")
 			if (len(multi_alt[0])==len(over_line[2])):
-				over_dict[(over_line[0],over_line[1],"Multiallelic")] = sum(int(x) for x in over_line[4] if x.isdigit())
+				over_dict[(over_line[0],over_line[1],over_line[2],over_line[3],"Multiallelic")] = sum(int(x) for x in over_line[4] if x.isdigit())
 		elif (len(over_line[2])==len(over_line[3])):
-			over_dict[(over_line[0],over_line[1],"Biallelic")] = sum(int(x) for x in over_line[4] if x.isdigit())
+			over_dict[(over_line[0],over_line[1],over_line[2],over_line[3],"Biallelic")] = sum(int(x) for x in over_line[4] if x.isdigit())
 	elif (mode =="indel"):
 		if re.search( ',',over_line[3]):
 			multi_alt=over_line[3].split(",")
 			if (len(multi_alt[0])!=len(over_line[2])):
-				over_dict[(over_line[0],over_line[1],"Multiallelic")] = sum(int(x) for x in over_line[4] if x.isdigit())
+				over_dict[(over_line[0],over_line[1],over_line[2],over_line[3],"Multiallelic")] = sum(int(x) for x in over_line[4] if x.isdigit())
 		elif (len(over_line[2])!=len(over_line[3])):
-			over_dict[(over_line[0],over_line[1],"Biallelic")] = sum(int(x) for x in over_line[4] if x.isdigit())
+			over_dict[(over_line[0],over_line[1],over_line[2],over_line[3],"Biallelic")] = sum(int(x) for x in over_line[4] if x.isdigit())
 
 #now we need to write 2 files:
 #1) a tabbed file with overlapping variants
@@ -67,9 +67,9 @@ for row in open('%s' %(var_list) , 'r'):
 		vartype="Multiallelic"
 	else :
 		vartype="Biallelic"
-	if (over_dict[(var_line[0],var_line[1],vartype)] > 1):
-		over_var[(var_line[0],var_line[1],vartype)]=over_dict[(var_line[0],var_line[1],vartype)]
+	if (over_dict[(var_line[0],var_line[1],var_line[2],var_line[3],vartype)] > 1):
+		over_var[(var_line[0],var_line[1],var_line[2],var_line[3],vartype)]=over_dict[(var_line[0],var_line[1],var_line[2],var_line[3],vartype)]
 		print >> over_out,'%s\t%s\t%s\t%s\t%s' %(var_line[0],var_line[1],var_line[2],var_line[3],vartype)
 	else :
-		not_over_var.append((var_line[0],var_line[1],vartype))
+		not_over_var.append((var_line[0],var_line[1],var_line[2],var_line[3],vartype))
 		print >> not_over_out,'%s\t%s\t%s\t%s\t%s' %(var_line[0],var_line[1],var_line[2],var_line[3],vartype)
