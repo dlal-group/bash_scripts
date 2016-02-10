@@ -1,15 +1,8 @@
-#this function needs some arguments:
-# $1=Job name
-# $2=out_file
-# $3=error_file
-# $4=working directory
-# $5=command to execute
-
 #!/bin/bash
 #$ -S /bin/bash
 #$ -N "extract_chr${chr}"
-#$ -o "extract_chr${chr}.o"
-#$ -e "extract_chr${chr}.e"
+#$ -o "$JOB_ID_extract_chr${chr}.o"
+#$ -e "$JOB_ID_extract_chr${chr}.e"
 #$ -cwd
 #$ -q all.q
 
@@ -19,8 +12,8 @@ chr=$1
 # tar -xzvf MERGER.tgz MERGER/ALL/CHR${chr}/chr${chr}.geno.gz
 
 #generate map file
-cut -f 2,3,5 -d " " chr${chr}.geno_info > chr${chr}.part1_map
+cut -f 2,3,5 -d " " /netapp/dati/daCinzia/Genotipi/VB_IMP_1KG/MERGER/ALL/CHR${chr}/chr${chr}.geno_info > /netapp/dati/daCinzia/Genotipi/VB_IMP_1KG/MERGER/ALL/CHR${chr}/chr${chr}.part1_map
 
-zcat chr${chr}.geno.gz | cut -f 2-5 -d " " > chr${chr}.part2_map
+zcat /netapp/dati/daCinzia/Genotipi/VB_IMP_1KG/MERGER/ALL/CHR${chr}/chr${chr}.geno.gz | cut -f 2-5 -d " " > /netapp/dati/daCinzia/Genotipi/VB_IMP_1KG/MERGER/ALL/CHR${chr}/chr${chr}.part2_map
 
-awk 'FNR==NR{a[$1,$2]=$3;next}{if(a[$1,$2]) print $0,a[$1,$2];else print $0,"NA"}' chr${chr}.part1_map chr${chr}.part2_map > chr${chr}.map
+(echo "SNP Position A0 A1 Rsq";awk 'FNR==NR{a[$1,$2]=$3;next}{if(a[$1,$2]) print $0,a[$1,$2]}' /netapp/dati/daCinzia/Genotipi/VB_IMP_1KG/MERGER/ALL/CHR${chr}/chr${chr}.part1_map /netapp/dati/daCinzia/Genotipi/VB_IMP_1KG/MERGER/ALL/CHR${chr}/chr${chr}.part2_map) | tr " " "\t"> /netapp/dati/daCinzia/Genotipi/VB_IMP_1KG/MERGER/ALL/CHR${chr}/chr${chr}.map
