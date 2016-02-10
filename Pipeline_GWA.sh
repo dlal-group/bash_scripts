@@ -67,3 +67,9 @@ source ~/scripts/bash_scripts/SGE_script_create_function
 # # -q all.q -- R CMD BATCH '--args '${pheno}' '${trait}' '${covariates}' '${kinship}' '${geno}' '${cohort}' '${imp_path}' '${out_path}'' ~/scripts/r_scripts/GWAS_1KG_imputed.R
 # qsub ${out_path}/MetS_score_analysis_chr${chr}.sh
 # done
+
+
+for i in {1..22}
+do
+qsub -N "extract_chr${chr}" -o "extract_chr${chr}.o" -e "extract_chr${chr}.e" -cwd -q all.q -- tar -xzvf MERGER.tgz MERGER/ALL/CHR${i}/chr${i}.geno.gz
+done
