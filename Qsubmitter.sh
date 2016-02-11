@@ -6,6 +6,7 @@
 #$ -cwd
 #$ -q all.q
 
+set -e
 chr=$1
 #10/02/2016
 #extract file from a tar archive
