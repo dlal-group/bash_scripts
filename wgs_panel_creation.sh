@@ -99,6 +99,7 @@ bsub -J"generate_ingi_${mode}_${first_suffix}_${cohort}_vcf_tbi" -o"${outdir}/LO
 ;;
 EXTRACT)
 #solution 2) annotate sites to retain on orifinal VCF thank extract those sites only
+echo "Sites extraction step!"
 echo "cat ${outdir}/${chr}/${filename}.${mode}_ac0dp5.tab ${outdir}/${chr}/${filename}.${mode}_ac2dp5.tab ${outdir}/${chr}/${filename}.${mode}_ac1dp5.tab.INGI.${mode}.over.tab ${outdir}/${chr}/${filename}.${mode}_ac1dp5.tab.INGI.${mode}.not_over.tab.TGP3.${mode}.over.tab ${outdir}/${chr}/${filename}.${mode}_ac1dp5.tab.INGI.${mode}.not_over.tab.UK10K.${mode}.over.tab | cut -f -4 | sort -g -k1,1 -k2,2 | uniq| awk 'BEGIN{OFS=\"\t\"}{print \$0,\"REF_PANEL\"}' | bgzip -c > ${outdir}/${chr}/${filename}.${mode}_extract_annotation.list.gz" | bsub -J"merge_common_ingi_${mode}_aceq0eq1gt2dpgt5_${first_suffix}_${cohort}" -o"${outdir}/LOG_OVERLAPS/9.%J_merge_common_ingi_${mode}_aceq0eq1gt2dpgt5_${first_suffix}_${cohort}.o" -M 1000 -R "select[mem>=1000] rusage[mem=1000]" -q normal
 bsub -J"merge_common_ingi_${mode}_aceq0eq1gt2dpgt5_${first_suffix}_${cohort}_tbi" -o"${outdir}/LOG_OVERLAPS/9.%J_merge_common_ingi_${mode}_aceq0eq1gt2dpgt5_${first_suffix}_${cohort}_tbi.o" -w "ended(merge_common_ingi_${mode}_aceq0eq1gt2dpgt5_${first_suffix}_${cohort})" -M 1000 -R "select[mem>=1000] rusage[mem=1000]" -q normal -- tabix -b 2 -e 2 -s 1 -f ${outdir}/${chr}/${filename}.${mode}_extract_annotation.list.gz
 
@@ -110,6 +111,7 @@ bsub -J"extract_ingi_${mode}_${first_suffix}_${cohort}_vcf_tbi" -o"${outdir}/LOG
 ;;
 MERGE )
 # add a bit for merg back SNP and INDEls
+echo "Merge step!"
 bsub -J"merge_${first_suffix}_${cohort}_vcf" -o"${outdir}/LOG_PANEL/12.%J_merge_${first_suffix}_${cohort}_vcf.o" -M 1000 -R "select[mem>=1000] rusage[mem=1000]" -q normal -- bcftools concat -a  ${outdir}/PANEL/${filename}.snp_REF.vcf.gz ${outdir}/PANEL/${filename}.indel_REF.vcf.gz -O z -o ${outdir}/PANEL/${filename}.ALL_REF.vcf.gz
 bsub -J"merge_${first_suffix}_${cohort}_vcf_tbi" -o"${outdir}/LOG_PANEL/12.%J_merge_${first_suffix}_${cohort}_vcf_tbi.o" -w"ended(merge_${first_suffix}_${cohort}_vcf)" -M 1000 -R "select[mem>=1000] rusage[mem=1000]" -q normal -- tabix -p vcf ${outdir}/PANEL/${filename}.ALL_REF.vcf.gz
 echo "bcftools stats -v -F /lustre/scratch114/resources/ref/Homo_sapiens/1000Genomes_hs37d5/hs37d5.fa ${outdir}/PANEL/${filename}.ALL_REF.vcf.gz > ${outdir}/PANEL/${filename}.ALL_REF.vcf.gz.vcfchk" | bsub -J"stats_merged_${first_suffix}_${cohort}_vcf" -o"${outdir}/LOG_PANEL/13.%J_stats_merged_${first_suffix}_${cohort}.o" -w"ended(merge_${first_suffix}_${cohort}_vcf_tbi)" -M 1000 -R "select[mem>=1000] rusage[mem=1000]" -q normal
