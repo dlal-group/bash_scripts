@@ -1,8 +1,8 @@
 #!/bin/bash
 #$ -S /bin/bash
-#$ -N "extract_chr\${1}"
-#$ -o "$JOB_ID_extract_chr\${1}.o"
-#$ -e "$JOB_ID_extract_chr\${1}.e"
+#$ -N "extract_chr"
+#$ -o "$JOB_ID_extract_chr.o"
+#$ -e "$JOB_ID_extract_chr.e"
 #$ -cwd
 #$ -q all.q
 
