@@ -22,8 +22,8 @@ chr=$1
 out_path=$2
 cohort=$3
 out_suffix=$4
-mkdir -p ${out_path}/${chr}/
-tar -xzvf ${cohort}_MetS_score_${chr}_*.tar.gz -C ${out_path}/${chr}/
+# mkdir -p ${out_path}/${chr}/
+# tar -xzvf ${cohort}_MetS_score_${chr}_*.tar.gz -C ${out_path}/${chr}/
 
 
 R CMD BATCH '--args '${cohort}' '${chr}' '${out_path}' '${out_path}/${chr}/${cohort}_MetS_score_${chr}_${out_suffix}.csv'' ~/scripts/r_scripts/GWA_qc.r ${out_path}/${chr}/${cohort}_MetS_score_analysis_chr${chr}.Rout
