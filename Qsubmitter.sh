@@ -1,8 +1,8 @@
 #!/bin/bash
 #$ -S /bin/bash
-#$ -N "extract_chr${1}"
-#$ -o "$JOB_ID_extract_chr${1}.o"
-#$ -e "$JOB_ID_extract_chr${1}.e"
+#$ -N "extract_chr\${1}"
+#$ -o "$JOB_ID_extract_chr\${1}.o"
+#$ -e "$JOB_ID_extract_chr\${1}.e"
 #$ -cwd
 #$ -q all.q
 
@@ -22,7 +22,7 @@ chr=$1
 out_path=$2
 cohort=$3
 out_suffix=$4
-mkdir -p ${chr}
+mkdir -p ${out_path}/${chr}/
 tar -xzvf ${cohort}_MetS_score_${chr}_*.tar.gz -C ${out_path}/${chr}/
 
 
