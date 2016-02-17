@@ -1,8 +1,8 @@
 #!/bin/bash
 #$ -S /bin/bash
-#$ -N "extract_chr${chr}"
-#$ -o "$JOB_ID_extract_chr${chr}.o"
-#$ -e "$JOB_ID_extract_chr${chr}.e"
+#$ -N "extract_chr${$1}"
+#$ -o "$JOB_ID_extract_chr${$1}.o"
+#$ -e "$JOB_ID_extract_chr${$1}.e"
 #$ -cwd
 #$ -q all.q
 
@@ -13,8 +13,21 @@ chr=$1
 # tar -xzvf MERGER.tgz MERGER/ALL/CHR${chr}/chr${chr}.geno.gz
 
 #generate map file
-cut -f 2,3,5 -d " " /netapp/dati/daCinzia/Genotipi/VB_IMP_1KG/MERGER/ALL/CHR${chr}/chr${chr}.geno_info > /netapp/dati/daCinzia/Genotipi/VB_IMP_1KG/MERGER/ALL/CHR${chr}/chr${chr}.part1_map
+# cut -f 2,3,5 -d " " /netapp/dati/daCinzia/Genotipi/VB_IMP_1KG/MERGER/ALL/CHR${chr}/chr${chr}.geno_info > /netapp/dati/daCinzia/Genotipi/VB_IMP_1KG/MERGER/ALL/CHR${chr}/chr${chr}.part1_map
+# zcat /netapp/dati/daCinzia/Genotipi/VB_IMP_1KG/MERGER/ALL/CHR${chr}/chr${chr}.geno.gz | cut -f 2-5 -d " " > /netapp/dati/daCinzia/Genotipi/VB_IMP_1KG/MERGER/ALL/CHR${chr}/chr${chr}.part2_map
+# (echo "SNP Position A0 A1 Rsq";awk 'FNR==NR{a[$1,$2]=$3;next}{if(a[$1,$2]) print $0,a[$1,$2]}' /netapp/dati/daCinzia/Genotipi/VB_IMP_1KG/MERGER/ALL/CHR${chr}/chr${chr}.part1_map /netapp/dati/daCinzia/Genotipi/VB_IMP_1KG/MERGER/ALL/CHR${chr}/chr${chr}.part2_map) | tr " " "\t"> /netapp/dati/daCinzia/Genotipi/VB_IMP_1KG/MERGER/ALL/CHR${chr}/chr${chr}.map
 
-zcat /netapp/dati/daCinzia/Genotipi/VB_IMP_1KG/MERGER/ALL/CHR${chr}/chr${chr}.geno.gz | cut -f 2-5 -d " " > /netapp/dati/daCinzia/Genotipi/VB_IMP_1KG/MERGER/ALL/CHR${chr}/chr${chr}.part2_map
+#17/02/2016
+#extract info for results qc after GWA
+out_path=$2
+cohort=$3
+out_suffix=$4
+mkdir ${chr}
+mv ${out_path}/${cohort}_MetS_score_${chr}_*.tar.gz ${out_path}/${chr}
+# cd ${out_path}/${chr}
+tar -xzvf ${out_path}/${chr}/${cohort}_MetS_score_${chr}_*.tar.gz
+# cd ..
 
-(echo "SNP Position A0 A1 Rsq";awk 'FNR==NR{a[$1,$2]=$3;next}{if(a[$1,$2]) print $0,a[$1,$2]}' /netapp/dati/daCinzia/Genotipi/VB_IMP_1KG/MERGER/ALL/CHR${chr}/chr${chr}.part1_map /netapp/dati/daCinzia/Genotipi/VB_IMP_1KG/MERGER/ALL/CHR${chr}/chr${chr}.part2_map) | tr " " "\t"> /netapp/dati/daCinzia/Genotipi/VB_IMP_1KG/MERGER/ALL/CHR${chr}/chr${chr}.map
+
+R CMD BATCH '--args ${cohort} ${chr} ${out_path} ${out_path}/${chr}/${cohort}_MetS_score_${chr}_${out_suffix}.csv' ~/scripts/r_scripts/GWA_qc.r ${out_path}/${chr}/${cohort}_MetS_score_analysis_chr${chr}.Rout
+
