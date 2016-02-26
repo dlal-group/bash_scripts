@@ -712,5 +712,5 @@ outpath=`dirname ${file}`
 filename=`basename ${file}`
 
 mkdir -p ${outpath}/NORMALIZED
-bcftools norm -m +both -f /lustre/scratch114/resources/ref/Homo_sapiens/1000Genomes_hs37d5/hs37d5.fa -O z -o ${outpath}/NORMALIZED/${filename} ${file}
+bcftools norm -m +both -f /lustre/scratch114/resources/ref/Homo_sapiens/1000Genomes_hs37d5/hs37d5.fa ${file}| bcftools view -S /lustre/scratch113/projects/carl_seq/variant_refinement/12112015_FILTERED_REL/03022016_TRIMMED_REL/ANNOTATED/NORMALIZED/25022016_BEAUTIFY/ALL_CARL_samples.list -O z -o ${outpath}/NORMALIZED/${filename}
 tabix -p vcf ${outpath}/NORMALIZED/${filename}
