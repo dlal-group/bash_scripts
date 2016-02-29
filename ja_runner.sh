@@ -707,10 +707,25 @@ file=`sed -n "${LSB_JOBINDEX}p" $1`
 
 # 03/02/2016
 # run bcftools norm
+# set -e
+# outpath=`dirname ${file}`
+# filename=`basename ${file}`
+
+# mkdir -p ${outpath}/NORMALIZED
+# bcftools norm -m +both -f /lustre/scratch114/resources/ref/Homo_sapiens/1000Genomes_hs37d5/hs37d5.fa ${file}| bcftools view -S /lustre/scratch113/projects/carl_seq/variant_refinement/12112015_FILTERED_REL/03022016_TRIMMED_REL/ANNOTATED/NORMALIZED/25022016_BEAUTIFY/ALL_CARL_samples.list -O z -o ${outpath}/NORMALIZED/${filename}
+# tabix -p vcf ${outpath}/NORMALIZED/${filename}
+
+#26/02/2016
+#count mismatches between panels and extraction lists
+#do it for snps and indels separately so we can pinpoint out all the problems
+
+#29/02/2016
 set -e
 outpath=`dirname ${file}`
 filename=`basename ${file}`
 
-mkdir -p ${outpath}/NORMALIZED
-bcftools norm -m +both -f /lustre/scratch114/resources/ref/Homo_sapiens/1000Genomes_hs37d5/hs37d5.fa ${file}| bcftools view -S /lustre/scratch113/projects/carl_seq/variant_refinement/12112015_FILTERED_REL/03022016_TRIMMED_REL/ANNOTATED/NORMALIZED/25022016_BEAUTIFY/ALL_CARL_samples.list -O z -o ${outpath}/NORMALIZED/${filename}
-tabix -p vcf ${outpath}/NORMALIZED/${filename}
+mkdir -p ${outpath}/29022016_NORMALIZED
+bcftools norm -f /lustre/scratch114/resources/ref/Homo_sapiens/1000Genomes_hs37d5/hs37d5.fa ${file} |bcftools norm -m -both -O z -o ${outpath}/29022016_NORMALIZED/${filename}
+tabix -p vcf ${outpath}/29022016_NORMALIZED/${filename}
+
+
