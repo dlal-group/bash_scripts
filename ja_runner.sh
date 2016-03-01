@@ -727,5 +727,3 @@ filename=`basename ${file}`
 mkdir -p ${outpath}/29022016_NORMALIZED
 bcftools norm -f /lustre/scratch114/resources/ref/Homo_sapiens/1000Genomes_hs37d5/hs37d5.fa ${file} |bcftools norm -m -both -O z -o ${outpath}/29022016_NORMALIZED/${filename}
 tabix -p vcf ${outpath}/29022016_NORMALIZED/${filename}
-
-
