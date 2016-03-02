@@ -115,7 +115,7 @@ bsub -J"extract_ingi_${mode}_${first_suffix}_${cohort}_vcf_tbi" -o"${outdir}/LOG
 MERGE )
 # add a bit for merg back SNP and INDEls
 echo "Merge step!"
-bsub -J"merge_${first_suffix}_${cohort}_vcf" -o"${outdir}/LOG_PANEL/12.%J_merge_${first_suffix}_${cohort}_vcf.o" -w"ended(extract_ingi_${mode}_${first_suffix}_${cohort}_vcf_tbi)" -M 1000 -R "select[mem>=1000] rusage[mem=1000]" -q normal -- bcftools concat -a  ${outdir}/PANEL/${filename}.snp_REF.vcf.gz ${outdir}/PANEL/${filename}.indel_REF.vcf.gz -O z -o ${outdir}/PANEL/${filename}.ALL_REF.vcf.gz
+bsub -J"merge_${first_suffix}_${cohort}_vcf" -o"${outdir}/LOG_PANEL/12.%J_merge_${first_suffix}_${cohort}_vcf.o" -w"ended(extract_ingi_snp_${first_suffix}_${cohort}_vcf_tbi) && ended(extract_ingi_indel_${first_suffix}_${cohort}_vcf_tbi)" -M 1000 -R "select[mem>=1000] rusage[mem=1000]" -q normal -- bcftools concat -a  ${outdir}/PANEL/${filename}.snp_REF.vcf.gz ${outdir}/PANEL/${filename}.indel_REF.vcf.gz -O z -o ${outdir}/PANEL/${filename}.ALL_REF.vcf.gz
 bsub -J"merge_${first_suffix}_${cohort}_vcf_tbi" -o"${outdir}/LOG_PANEL/12.%J_merge_${first_suffix}_${cohort}_vcf_tbi.o" -w"ended(merge_${first_suffix}_${cohort}_vcf)" -M 1000 -R "select[mem>=1000] rusage[mem=1000]" -q normal -- tabix -p vcf ${outdir}/PANEL/${filename}.ALL_REF.vcf.gz
 echo "bcftools stats -v -F /lustre/scratch114/resources/ref/Homo_sapiens/1000Genomes_hs37d5/hs37d5.fa ${outdir}/PANEL/${filename}.ALL_REF.vcf.gz > ${outdir}/PANEL/${filename}.ALL_REF.vcf.gz.vcfchk" | bsub -J"stats_merged_${first_suffix}_${cohort}_vcf" -o"${outdir}/LOG_PANEL/13.%J_stats_merged_${first_suffix}_${cohort}.o" -w"ended(merge_${first_suffix}_${cohort}_vcf_tbi)" -M 1000 -R "select[mem>=1000] rusage[mem=1000]" -q normal
 
