@@ -36,7 +36,10 @@ mkdir -p ${outdir}/${chr}
 
 case ${stage} in
 ALL )
-
+# define path
+ingi_union=/lustre/scratch113/projects/esgi-vbseq/01032016_PANEL_SESOURCES/INGI/UNION
+tgp_ingi=/lustre/scratch113/projects/esgi-vbseq/01032016_PANEL_SESOURCES/TGPph3/UNION
+uk10k_ingi=/lustre/scratch113/projects/esgi-vbseq/01032016_PANEL_SESOURCES/UK10K/UNION
 #select sites with AC >=2 and DP>=5
 bsub -J"extract_${mode}_${cohort}_acgt2dpgt5_${first_suffix}" -o"${outdir}/LOG_LISTS/1.%J_extract_${mode}_${cohort}_acgt2dpgt5_${first_suffix}.o" -M 1000 -R "select[mem>=1000] rusage[mem=1000]" -q normal -- bcftools query -i"TYPE='${mode}' && AC>=2 && DP>=5" -f "%CHROM\t%POS\t%REF\t%ALT\n" ${vcf} -o ${outdir}/${chr}/${filename}.${mode}_ac2dp5.tab
 bsub -J"extract_${mode}_${cohort}_aceq0dpgt5_${first_suffix}" -o"${outdir}/LOG_LISTS/2.%J_extract_${mode}_${cohort}_aceq0dpgt5_${first_suffix}.o" -M 1000 -R "select[mem>=1000] rusage[mem=1000]" -q normal -- bcftools query -i"TYPE='${mode}' && AC==0 && DP>=5" -f "%CHROM\t%POS\t%REF\t%ALT\n" ${vcf} -o ${outdir}/${chr}/${filename}.${mode}_ac0dp5.tab
@@ -55,11 +58,11 @@ bsub -J"extract_${mode}_${cohort}_aceq1dpgt5_${first_suffix}" -o"${outdir}/LOG_L
 # overlap_list=sys.argv[3]
 # outdir=sys.argv[4]
 
-bsub -J"extract_common_ingi_${mode}_${cohort}_aceq1dpgt5_${first_suffix}_INGI" -o"${outdir}/LOG_OVERLAPS/4.%J_extract_common_ingi_${mode}_${cohort}_aceq1dpgt5_${first_suffix}_INGI.o" -w "ended(extract_${mode}_${cohort}_aceq1dpgt5_${first_suffix})" -M 1000 -R "select[mem>=1000] rusage[mem=1000]" -q normal -- python /nfs/users/nfs_m/mc14/Work/bash_scripts/overlap_check.py INGI ${outdir}/${chr}/${filename}.${mode}_ac1dp5.tab /lustre/scratch113/projects/esgi-vbseq/09022016_PANEL_SESOURCES/INGI/UNION/${chr}/sites.txt ${outdir}/${chr} ${mode}
+bsub -J"extract_common_ingi_${mode}_${cohort}_aceq1dpgt5_${first_suffix}_INGI" -o"${outdir}/LOG_OVERLAPS/4.%J_extract_common_ingi_${mode}_${cohort}_aceq1dpgt5_${first_suffix}_INGI.o" -w "ended(extract_${mode}_${cohort}_aceq1dpgt5_${first_suffix})" -M 1000 -R "select[mem>=1000] rusage[mem=1000]" -q normal -- python /nfs/users/nfs_m/mc14/Work/bash_scripts/overlap_check.py INGI ${outdir}/${chr}/${filename}.${mode}_ac1dp5.tab ${ingi_union}/${chr}/sites.txt ${outdir}/${chr} ${mode}
 
 #extract a list of sites in common with 1000G or/and UK10K
-bsub -J"extract_common_ingi_${mode}_${cohort}_aceq1dpgt5_${first_suffix}_TGP3" -o"${outdir}/LOG_OVERLAPS/5.%J_extract_common_ingi_${mode}_${cohort}_aceq1dpgt5_${first_suffix}_TGP3.o" -w "ended(extract_common_ingi_${mode}_${cohort}_aceq1dpgt5_${first_suffix}_INGI)" -M 2000 -R "select[mem>=2000] rusage[mem=2000]" -q normal -- python /nfs/users/nfs_m/mc14/Work/bash_scripts/overlap_check.py TGP3 ${outdir}/${chr}/${filename}.${mode}_ac1dp5.tab.INGI.${mode}.not_over.tab /lustre/scratch113/projects/esgi-vbseq/09022016_PANEL_SESOURCES/TGPph3/UNION/${chr}/sites.txt ${outdir}/${chr} ${mode}
-bsub -J"extract_common_ingi_${mode}_${cohort}_aceq1dpgt5_${first_suffix}_UK10K" -o"${outdir}/LOG_OVERLAPS/6.%J_extract_common_ingi_${mode}_${cohort}_aceq1dpgt5_${first_suffix}_UK10K.o" -w "ended(extract_common_ingi_${mode}_${cohort}_aceq1dpgt5_${first_suffix}_INGI)" -M 2000 -R "select[mem>=2000] rusage[mem=2000]" -q normal -- python /nfs/users/nfs_m/mc14/Work/bash_scripts/overlap_check.py UK10K ${outdir}/${chr}/${filename}.${mode}_ac1dp5.tab.INGI.${mode}.not_over.tab /lustre/scratch113/projects/esgi-vbseq/09022016_PANEL_SESOURCES/UK10K/UNION/${chr}/sites.txt ${outdir}/${chr} ${mode}
+bsub -J"extract_common_ingi_${mode}_${cohort}_aceq1dpgt5_${first_suffix}_TGP3" -o"${outdir}/LOG_OVERLAPS/5.%J_extract_common_ingi_${mode}_${cohort}_aceq1dpgt5_${first_suffix}_TGP3.o" -w "ended(extract_common_ingi_${mode}_${cohort}_aceq1dpgt5_${first_suffix}_INGI)" -M 2000 -R "select[mem>=2000] rusage[mem=2000]" -q normal -- python /nfs/users/nfs_m/mc14/Work/bash_scripts/overlap_check.py TGP3 ${outdir}/${chr}/${filename}.${mode}_ac1dp5.tab.INGI.${mode}.not_over.tab ${tgp_ingi}/${chr}/sites.txt ${outdir}/${chr} ${mode}
+bsub -J"extract_common_ingi_${mode}_${cohort}_aceq1dpgt5_${first_suffix}_UK10K" -o"${outdir}/LOG_OVERLAPS/6.%J_extract_common_ingi_${mode}_${cohort}_aceq1dpgt5_${first_suffix}_UK10K.o" -w "ended(extract_common_ingi_${mode}_${cohort}_aceq1dpgt5_${first_suffix}_INGI)" -M 2000 -R "select[mem>=2000] rusage[mem=2000]" -q normal -- python /nfs/users/nfs_m/mc14/Work/bash_scripts/overlap_check.py UK10K ${outdir}/${chr}/${filename}.${mode}_ac1dp5.tab.INGI.${mode}.not_over.tab ${uk10k_ingi}/${chr}/sites.txt ${outdir}/${chr} ${mode}
 
 #after all the pipeline run, we end up with the following files for each chr:
 # 2864 9.vcf.gz.snp_ac0dp5.tab
