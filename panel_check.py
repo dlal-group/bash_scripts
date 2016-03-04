@@ -10,7 +10,7 @@ import subprocess as sub
 # alleles mismatches or other stuff
 
 data = sys.stdin.read()
-print 'Data from stdin -', dat
+print 'Data from stdin -', data
 # cohort="VBI"
 # var_list="/lustre/scratch113/projects/esgi-vbseq/27112015_INGI_REF_PANEL/VBI/22.vcf.gz.snp_ac1dp5.tab"
 # overlap_list="/lustre/scratch113/projects/esgi-vbseq/16112015_TRIESTE/INGI/UNION/22/sites.txt"
