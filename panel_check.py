@@ -9,8 +9,13 @@ import subprocess as sub
 #this script is meant to be usede to check stuff on the reference panel input files, like duplicates or triplicates row
 # alleles mismatches or other stuff
 
+cohort=sys.argv[1]
 data = sys.stdin.read()
-print 'Data from stdin -', data
+
+
+print 'Cohort - ', cohort
+print 'Data from stdin -'
+print data
 # cohort="VBI"
 # var_list="/lustre/scratch113/projects/esgi-vbseq/27112015_INGI_REF_PANEL/VBI/22.vcf.gz.snp_ac1dp5.tab"
 # overlap_list="/lustre/scratch113/projects/esgi-vbseq/16112015_TRIESTE/INGI/UNION/22/sites.txt"
@@ -18,7 +23,6 @@ print 'Data from stdin -', data
 # mode="snp"
 # mode="indel"
 
-# cohort=sys.argv[1]
 # var_list=sys.argv[2]
 # overlap_list=sys.argv[3]
 # outdir=sys.argv[4]
