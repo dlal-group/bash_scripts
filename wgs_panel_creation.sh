@@ -122,6 +122,13 @@ bsub -J"merge_${first_suffix}_${cohort}_vcf_tbi" -o"${outdir}/LOG_PANEL/12.%J_me
 echo "bcftools stats -v -F /lustre/scratch114/resources/ref/Homo_sapiens/1000Genomes_hs37d5/hs37d5.fa ${outdir}/PANEL/${filename}.ALL_REF.vcf.gz > ${outdir}/PANEL/${filename}.ALL_REF.vcf.gz.vcfchk" | bsub -J"stats_merged_${first_suffix}_${cohort}_vcf" -o"${outdir}/LOG_PANEL/13.%J_stats_merged_${first_suffix}_${cohort}.o" -w"ended(merge_${first_suffix}_${cohort}_vcf_tbi)" -M 1000 -R "select[mem>=1000] rusage[mem=1000]" -q normal
 
 ;;
+
+CHECK )
+# Retrieve duplicates line from extraction lists
+
+awk 'BEGIN{x_count[$1,$2]=1}{if (x[$1,$2]) {  x_count[$1,$2]++; print $0; if (x_count[$1,$2] == 2) { print x[$1,$2];print x_count[$1,$2]}  } x[$1,$2] = $0}'
+
+;;
 esac
 
 #need to put back together SNP and INDELs for each chromosome after everything is done
