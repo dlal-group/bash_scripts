@@ -16,6 +16,10 @@ data = sys.stdin.read()
 print 'Cohort - ', cohort
 print 'Data from stdin -'
 print data
+
+#first thing we want to check for duplicates/triplicates rows
+
+
 # cohort="VBI"
 # var_list="/lustre/scratch113/projects/esgi-vbseq/27112015_INGI_REF_PANEL/VBI/22.vcf.gz.snp_ac1dp5.tab"
 # overlap_list="/lustre/scratch113/projects/esgi-vbseq/16112015_TRIESTE/INGI/UNION/22/sites.txt"
