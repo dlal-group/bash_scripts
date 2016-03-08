@@ -720,10 +720,19 @@ file=`sed -n "${LSB_JOBINDEX}p" $1`
 #do it for snps and indels separately so we can pinpoint out all the problems
 
 #29/02/2016
+# set -e
+# outpath=`dirname ${file}`
+# filename=`basename ${file}`
+
+# mkdir -p ${outpath}/29022016_NORMALIZED
+# bcftools norm -f /lustre/scratch114/resources/ref/Homo_sapiens/1000Genomes_hs37d5/hs37d5.fa ${file} |bcftools norm -m -both -O z -o ${outpath}/29022016_NORMALIZED/${filename}
+# tabix -p vcf ${outpath}/29022016_NORMALIZED/${filename}
+
+#08/03/2016
+#GERP annotation for PURGING check
 set -e
-outpath=`dirname ${file}`
 filename=`basename ${file}`
 
-mkdir -p ${outpath}/29022016_NORMALIZED
-bcftools norm -f /lustre/scratch114/resources/ref/Homo_sapiens/1000Genomes_hs37d5/hs37d5.fa ${file} |bcftools norm -m -both -O z -o ${outpath}/29022016_NORMALIZED/${filename}
-tabix -p vcf ${outpath}/29022016_NORMALIZED/${filename}
+bcftools annotate -a /lustre/scratch113/projects/esgi-vbseq/25082015_purging/26082015_ANNOTATED/GERP/annotations/${file}.GERP.bed.gz -f CHROM,FROM,TO,GERP -h /lustre/scratch113/projects/esgi-vbseq/25082015_purging/26082015_ANNOTATED/GERP/annotations/header_gerp.txt -O z -o /lustre/scratch113/projects/esgi-vbseq/25082015_purging/26082015_ANNOTATED/GERP/${file}.GERP.vcf.gz /lustre/scratch113/projects/esgi-vbseq/25082015_purging/26082015_ANNOTATED/1000G_FVG_VBSEQ.chr${file}.vcf.gz.clean_ann.vcf.gz
+tabix -f -p vcf /lustre/scratch113/projects/esgi-vbseq/25082015_purging/26082015_ANNOTATED/GERP/${file}.GERP.vcf.gz
+
