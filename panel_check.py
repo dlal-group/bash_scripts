@@ -9,79 +9,58 @@ import subprocess as sub
 #this script is meant to be usede to check stuff on the reference panel input files, like duplicates or triplicates row
 # alleles mismatches or other stuff
 
+# data = sys.stdin.read()
 cohort=sys.argv[1]
-data = sys.stdin.read()
-
-
-print 'Cohort - ', cohort
-print 'Data from stdin -'
-print data
+all_list=sys.argv[2]
+# all_list="test.tab"
+outdir=sys.argv[3]
+mode=sys.argv[4]
 
 #first thing we want to check for duplicates/triplicates rows
+# the input data has to be in the form of a table with:
+# CHROM POS REF ALT INFO/DP4 INFO/DP4 INFO/DP INFO/HOB INFO/ICB INFO/IDV
+all_list_name=all_list.split("/")[-1]
+sites_dict={}
+pos_dict={}
 
+for row in open('%s' %(all_list) , 'r'):
+	single_line=row.rstrip().split("\t")
+	# check_string=single_line[0]+single_line[1]+single_line[4]+single_line[5]+single_line[6]+single_line[7]+single_line[8]+single_line[9]
+	# first mark all duplicates by position
+	pos_dict[single_line[1]] = pos_dict.setdefault(single_line[1],-1) + 1
+	site_key=(single_line[0],single_line[1],single_line[4],single_line[5],single_line[6],single_line[7],single_line[8])
+	sites_dict[site_key] = sites_dict.setdefault(site_key,-1) + 1
 
-# cohort="VBI"
-# var_list="/lustre/scratch113/projects/esgi-vbseq/27112015_INGI_REF_PANEL/VBI/22.vcf.gz.snp_ac1dp5.tab"
-# overlap_list="/lustre/scratch113/projects/esgi-vbseq/16112015_TRIESTE/INGI/UNION/22/sites.txt"
-# outdir="/lustre/scratch113/projects/esgi-vbseq/27112015_INGI_REF_PANEL/VBI"
-# mode="snp"
-# mode="indel"
+#we need to write 2 files:
+#1) a tabbed file with keep variants
+#2) a tabbed file with excluded variants
+keep_out=open('%s/%s.%s.%s.to_keep.tab' %(outdir, all_list_name, cohort, mode), 'w')
+# keep_out=open('/lustre/scratch113/projects/esgi-vbseq/02032016_INGI_REF_PANEL/VBI/PANEL/%s.keep.tab' %(all_list_name), 'w')
+#all those with 0 positions duplicates, we want to keep them
+#plus, we want to keep all those duplicates by positions which also have a duplicate by row
+for row in open('%s' %(all_list) , 'r'):
+	# infile = open('%s' %(all_list) , 'r')
+	# row = infile.readline()
+	var_line=row.rstrip().split("\t")
+	for pos_key in pos_dict.keys():
+		# pos_key=pos_dict.keys()[0]
+		for sites_key in sites_dict.keys():
+			# sites_key=sites_dict.keys()[0]
+			if pos_key in sites_key:
+				# we need to create 2 sets for the intersection
+				s1=set(sites_key)
+				s2=set(var_line)
+				# if this intersection is equal to the line I'm reading and to the site key, than go on
+				if s1.intersection(s2) == s1:
+				# if sites_key in var_line:
+					if pos_dict[pos_key] == 0:
+					#need to keep the site since there are not position duplicates
+					# ['1', '231955500', 'A', 'AT', '1162,1312,57,90', '2839', '0.00578704', '0.906249', '9']
+						print >> keep_out,'%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s' %(var_line[0],var_line[1],var_line[2],var_line[3],var_line[4],var_line[5],var_line[6],var_line[7],var_line[8],"KEEP")
+					else :
+						#if we have dupolicates by position , we need to check them
+						if sites_dict[sites_key] != 0:
+							# we'll keep the duplicates only if they're from the same site (splitted multiallelic site)
+							print >> keep_out,'%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s' %(var_line[0],var_line[1],var_line[2],var_line[3],var_line[4],var_line[5],var_line[6],var_line[7],var_line[8],"KEEP")
 
-# var_list=sys.argv[2]
-# overlap_list=sys.argv[3]
-# outdir=sys.argv[4]
-# mode=sys.argv[5]
-
-# var_list_name=var_list.split("/")[-1]
-
-# #read overlap list and create a dictionary with chr, pos and score, where score is the sum of the elements in the
-# # last column
-# over_dict={}
-# # infile = open('%s' %(overlap_list) , 'r')
-# # firstLine = infile.readline()
-# # N=30
-# # with open('%s' %(overlap_list) , 'r') as myfile:
-# # 	head = [next(myfile) for x in xrange(N)]
-
-# # print head
-
-# # row=head[23]
-
-# for row in open('%s' %(overlap_list) , 'r'):
-# 	over_line=row.rstrip().split("\t")
-# 	if (mode == "snp"):
-# 		if re.search(',', over_line[3]):
-# 			multi_alt=over_line[3].split(",")
-# 			if (len(multi_alt[0])==len(over_line[2])):
-# 				over_dict[(over_line[0],over_line[1],over_line[2],over_line[3],"Multiallelic")] = sum(int(x) for x in over_line[4] if x.isdigit())
-# 		elif (len(over_line[2])==len(over_line[3])):
-# 			over_dict[(over_line[0],over_line[1],over_line[2],over_line[3],"Biallelic")] = sum(int(x) for x in over_line[4] if x.isdigit())
-# 	elif (mode =="indel"):
-# 		if re.search( ',',over_line[3]):
-# 			multi_alt=over_line[3].split(",")
-# 			if (len(multi_alt[0])!=len(over_line[2])):
-# 				over_dict[(over_line[0],over_line[1],over_line[2],over_line[3],"Multiallelic")] = sum(int(x) for x in over_line[4] if x.isdigit())
-# 		elif (len(over_line[2])!=len(over_line[3])):
-# 			over_dict[(over_line[0],over_line[1],over_line[2],over_line[3],"Biallelic")] = sum(int(x) for x in over_line[4] if x.isdigit())
-
-# #now we need to write 2 files:
-# #1) a tabbed file with overlapping variants
-# #2) a tabbed file with non overlapping variants wich we will check against other stuff
-# over_out=open('%s/%s.%s.%s.over.tab' %(outdir, var_list_name, cohort, mode), 'w')
-# not_over_out=open('%s/%s.%s.%s.not_over.tab' %(outdir, var_list_name, cohort, mode), 'w')
-
-
-# over_var={}
-# not_over_var=[]
-# for row in open('%s' %(var_list) , 'r'):
-# 	var_line=row.rstrip().split("\t")
-# 	if re.search(',',var_line[3]):
-# 		vartype="Multiallelic"
-# 	else :
-# 		vartype="Biallelic"
-# 	if (over_dict[(var_line[0],var_line[1],var_line[2],var_line[3],vartype)] > 1):
-# 		over_var[(var_line[0],var_line[1],var_line[2],var_line[3],vartype)]=over_dict[(var_line[0],var_line[1],var_line[2],var_line[3],vartype)]
-# 		print >> over_out,'%s\t%s\t%s\t%s\t%s' %(var_line[0],var_line[1],var_line[2],var_line[3],vartype)
-# 	else :
-# 		not_over_var.append((var_line[0],var_line[1],var_line[2],var_line[3],vartype))
-# 		print >> not_over_out,'%s\t%s\t%s\t%s\t%s' %(var_line[0],var_line[1],var_line[2],var_line[3],vartype)
+keep_out.close()

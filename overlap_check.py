@@ -25,15 +25,8 @@ var_list_name=var_list.split("/")[-1]
 #read overlap list and create a dictionary with chr, pos and score, where score is the sum of the elements in the
 # last column
 over_dict={}
-# infile = open('%s' %(overlap_list) , 'r')
-# firstLine = infile.readline()
-# N=30
-# with open('%s' %(overlap_list) , 'r') as myfile:
-# 	head = [next(myfile) for x in xrange(N)]
 
-# print head
-
-# row=head[23]
+#assign a overlap score to each row
 
 for row in open('%s' %(overlap_list) , 'r'):
 	over_line=row.rstrip().split("\t")

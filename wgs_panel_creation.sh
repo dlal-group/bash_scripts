@@ -180,12 +180,62 @@ bsub -J"annotate_ingi_${mode}_${first_suffix}_${cohort}_vcf_tbi" -o"${outdir}/LO
 bsub -J"extract_ingi_${mode}_${first_suffix}_${cohort}_vcf" -o"${outdir}/LOG_PANEL/11.%J_extract_ingi_${mode}_${first_suffix}_${cohort}_vcf.o" -w"ended(annotate_ingi_${mode}_${first_suffix}_${cohort}_vcf_tbi)" -M 2000 -R "select[mem>=2000] rusage[mem=2000]" -q normal -- bcftools view -i"TYPE='${mode}' && INFO/REF_PANEL=1" -O z -o ${outdir}/PANEL/${filename}.${mode}_REF.vcf.gz ${outdir}/PANEL/${filename}.${mode}_annREF.vcf.gz 
 bsub -J"extract_ingi_${mode}_${first_suffix}_${cohort}_vcf_tbi" -o"${outdir}/LOG_PANEL/11.%J_extract_ingi_${mode}_${first_suffix}_${cohort}_vcf_tbi.o" -w"ended(extract_ingi_${mode}_${first_suffix}_${cohort}_vcf)" -M 2000 -R "select[mem>=2000] rusage[mem=2000]" -q normal -- tabix -f -p vcf ${outdir}/PANEL/${filename}.${mode}_REF.vcf.gz
 
+###########
+echo "Cleaning step!!!"
+#we need to remove all those normalized stuff that is confounding (that should result in removal of SOME indels sites, not snps)
+
+#first create a keeping table in the form of
+# CHROM POS REF ALT INFO/DP4 INFO/DP4 INFO/DP INFO/HOB INFO/ICB INFO/IDV 
+bsub -J"clean_ingi_${mode}_${first_suffix}_${cohort}_keeplist" -o"${outdir}/LOG_PANEL/13.%J_clean_ingi_${mode}_${first_suffix}_${cohort}_keeplist.o" -w"ended(extract_ingi_${mode}_${first_suffix}_${cohort}_vcf_tbi)" -M 2000 -R "select[mem>=2000] rusage[mem=2000]" -q normal -- bcftools query -f"%CHROM\t%POS\t%REF\t%ALT\t%INFO/DP4\t%INFO/DP\t%INFO/HOB\t%INFO/ICB\t%INFO/IDV\n" ${outdir}/PANEL/${filename}.${mode}_REF.vcf.gz -o ${outdir}/PANEL/${filename}.${mode}_REF_keep.tab
+#now use the python script to mark sites to keep
+bsub -J"clean_ingi_${mode}_${first_suffix}_${cohort}_keeplist_annotate" -o"${outdir}/LOG_PANEL/13.%J_clean_ingi_${mode}_${first_suffix}_${cohort}_keeplist_annotate.o" -w"ended(clean_ingi_${mode}_${first_suffix}_${cohort}_keeplist)" -M 2000 -R "select[mem>=2000] rusage[mem=2000]" -q normal -- python /nfs/users/nfs_m/mc14/Work/bash_scripts/panel_check.py ${cohort} ${outdir}/PANEL/${filename}.${mode}_REF_keep.tab ${outdir}/PANEL/ ${mode}
+
+#bgzip and index the thing
+echo "bgzip ${outdir}/PANEL/${filename}.${mode}_REF_keep.tab.to_keep.tab" | bsub -J"clean_ingi_${mode}_${first_suffix}_${cohort}_keeplist_gzip" -o"${outdir}/LOG_PANEL/13.%J_clean_ingi_${mode}_${first_suffix}_${cohort}_keeplist_gzip.o" -w"ended(clean_ingi_${mode}_${first_suffix}_${cohort}_keeplist_annotate)" -M 2000 -R "select[mem>=2000] rusage[mem=2000]" -q normal
+
+bsub -J"clean_ingi_${mode}_${first_suffix}_${cohort}_keeplist_gzip_index" -o"${outdir}/LOG_PANEL/13.%J_clean_ingi_${mode}_${first_suffix}_${cohort}_keeplist_gzip_index.o" -w"ended(clean_ingi_${mode}_${first_suffix}_${cohort}_keeplist_gzip)" -M 2000 -R "select[mem>=2000] rusage[mem=2000]" -q normal -- tabix -s 1 -b 2 -e 2 ${outdir}/PANEL/${filename}.${mode}_REF_keep.tab.to_keep.tab
+
+#now use the indexed file to annotate the vcf and than extract the final variant set
+bsub -J"clean_annotate_ingi_${mode}_${first_suffix}_${cohort}_vcf" -o"${outdir}/LOG_PANEL/14.%J_clean_annotate_ingi_${mode}_${first_suffix}_${cohort}_vcf.o" -w"ended(merge_common_ingi_${mode}_aceq0eq1gt2dpgt5_${first_suffix}_${cohort}_tbi)" -M 2000 -R "select[mem>=2000] rusage[mem=2000]" -q normal -- bcftools annotate -a ${outdir}/PANEL/${filename}.${mode}_REF_keep.tab.to_keep.tab.gz -m KEEP -c CHROM,POS,REF,ALT,INFO/DP4,INFO/DP,INFO/HOB,INFO/ICB,INFO/IDV -O z -o ${outdir}/PANEL/${filename}.${mode}_KEEP_REF.vcf.gz ${outdir}/PANEL/${filename}.${mode}_REF.vcf.gz
+bsub -J"clean_annotate_ingi_${mode}_${first_suffix}_${cohort}_vcf_tbi" -o"${outdir}/LOG_PANEL/14.%J_clean_annotate_ingi_${mode}_${first_suffix}_${cohort}_vcf_tbi.o" -w"ended(clean_annotate_ingi_${mode}_${first_suffix}_${cohort}_vcf)" -M 2000 -R "select[mem>=2000] rusage[mem=2000]" -q normal -- tabix -f -p vcf ${outdir}/PANEL/${filename}.${mode}_KEEP_REF.vcf.gz
+
+bsub -J"extract_clean_ingi_${mode}_${first_suffix}_${cohort}_vcf" -o"${outdir}/LOG_PANEL/15.%J_extract_clean_ingi_${mode}_${first_suffix}_${cohort}_vcf.o" -w"ended(clean_annotate_ingi_${mode}_${first_suffix}_${cohort}_vcf_tbi)" -M 2000 -R "select[mem>=2000] rusage[mem=2000]" -q normal -- bcftools view -i"TYPE='${mode}' && INFO/KEEP=1" -O z -o ${outdir}/PANEL/${filename}.${mode}_clean_REF.vcf.gz ${outdir}/PANEL/${filename}.${mode}_KEEP_REF.vcf.gz
+bsub -J"extract_clean_ingi_${mode}_${first_suffix}_${cohort}_vcf_tbi" -o"${outdir}/LOG_PANEL/15.%J_extract_clean_ingi_${mode}_${first_suffix}_${cohort}_vcf_tbi.o" -w"ended(extract_clean_ingi_${mode}_${first_suffix}_${cohort}_vcf)" -M 2000 -R "select[mem>=2000] rusage[mem=2000]" -q normal -- tabix -f -p vcf ${outdir}/PANEL/${filename}.${mode}_clean_REF.vcf.gz
+
+
+################################################
 # add a bit for merg back SNP and INDEls
 echo "Merge step!"
 bsub -J"merge_${first_suffix}_${cohort}_vcf" -o"${outdir}/LOG_PANEL/12.%J_merge_${first_suffix}_${cohort}_vcf.o" -w"ended(extract_ingi_snp_${first_suffix}_${cohort}_vcf_tbi) && ended(extract_ingi_indel_${first_suffix}_${cohort}_vcf_tbi)" -M 1000 -R "select[mem>=1000] rusage[mem=1000]" -q normal -- bcftools concat -a  ${outdir}/PANEL/${filename}.snp_REF.vcf.gz ${outdir}/PANEL/${filename}.indel_REF.vcf.gz -O z -o ${outdir}/PANEL/${filename}.ALL_REF.vcf.gz
 # bsub -J"merge_${first_suffix}_${cohort}_vcf" -o"${outdir}/LOG_PANEL/12.%J_merge_${first_suffix}_${cohort}_vcf.o" -M 1000 -R "select[mem>=1000] rusage[mem=1000]" -q normal -- bcftools concat -a  ${outdir}/PANEL/${filename}.snp_REF.vcf.gz ${outdir}/PANEL/${filename}.indel_REF.vcf.gz -O z -o ${outdir}/PANEL/${filename}.ALL_REF.vcf.gz
 bsub -J"merge_${first_suffix}_${cohort}_vcf_tbi" -o"${outdir}/LOG_PANEL/12.%J_merge_${first_suffix}_${cohort}_vcf_tbi.o" -w"ended(merge_${first_suffix}_${cohort}_vcf)" -M 1000 -R "select[mem>=1000] rusage[mem=1000]" -q normal -- tabix -p vcf ${outdir}/PANEL/${filename}.ALL_REF.vcf.gz
 echo "bcftools stats -v -F /lustre/scratch114/resources/ref/Homo_sapiens/1000Genomes_hs37d5/hs37d5.fa ${outdir}/PANEL/${filename}.ALL_REF.vcf.gz > ${outdir}/PANEL/${filename}.ALL_REF.vcf.gz.vcfchk" | bsub -J"stats_merged_${first_suffix}_${cohort}_vcf" -o"${outdir}/LOG_PANEL/13.%J_stats_merged_${first_suffix}_${cohort}.o" -w"ended(merge_${first_suffix}_${cohort}_vcf_tbi)" -M 1000 -R "select[mem>=1000] rusage[mem=1000]" -q normal
+
+;;
+
+CLEAN)
+echo "Cleaning step!!!"
+#we need to remove all those normalized stuff that is confounding (that should result in removal of SOME indels sites, not snps)
+
+#first create a keeping table in the form of
+# CHROM POS REF ALT INFO/DP4 INFO/DP4 INFO/DP INFO/HOB INFO/ICB INFO/IDV 
+bsub -J"clean_ingi_${mode}_${first_suffix}_${cohort}_keeplist" -o"${outdir}/LOG_PANEL/13.%J_clean_ingi_${mode}_${first_suffix}_${cohort}_keeplist.o" -M 2000 -R "select[mem>=2000] rusage[mem=2000]" -q normal -- bcftools query -f"%CHROM\t%POS\t%REF\t%ALT\t%INFO/DP4\t%INFO/DP\t%INFO/HOB\t%INFO/ICB\t%INFO/IDV\n" ${outdir}/PANEL/${filename}.${mode}_REF.vcf.gz -o ${outdir}/PANEL/${filename}.${mode}_REF_keep.tab
+#now use the python script to mark sites to keep
+bsub -J"clean_ingi_${mode}_${first_suffix}_${cohort}_keeplist_annotate" -o"${outdir}/LOG_PANEL/13.%J_clean_ingi_${mode}_${first_suffix}_${cohort}_keeplist_annotate.o" -w"ended(clean_ingi_${mode}_${first_suffix}_${cohort}_keeplist)" -M 2000 -R "select[mem>=2000] rusage[mem=2000]" -q normal -- python /nfs/users/nfs_m/mc14/Work/bash_scripts/panel_check.py ${cohort} ${outdir}/PANEL/${filename}.${mode}_REF_keep.tab ${outdir}/PANEL/ ${mode}
+
+#bgzip and index the thing
+echo "bgzip ${outdir}/PANEL/${filename}.${mode}_REF_keep.tab.to_keep.tab" | bsub -J"clean_ingi_${mode}_${first_suffix}_${cohort}_keeplist_gzip" -o"${outdir}/LOG_PANEL/13.%J_clean_ingi_${mode}_${first_suffix}_${cohort}_keeplist_gzip.o" -w"ended(clean_ingi_${mode}_${first_suffix}_${cohort}_keeplist_annotate)" -M 2000 -R "select[mem>=2000] rusage[mem=2000]" -q normal
+
+bsub -J"clean_ingi_${mode}_${first_suffix}_${cohort}_keeplist_gzip_index" -o"${outdir}/LOG_PANEL/13.%J_clean_ingi_${mode}_${first_suffix}_${cohort}_keeplist_gzip_index.o" -w"ended(clean_ingi_${mode}_${first_suffix}_${cohort}_keeplist_gzip)" -M 2000 -R "select[mem>=2000] rusage[mem=2000]" -q normal -- tabix -s 1 -b 2 -e 2 ${outdir}/PANEL/${filename}.${mode}_REF_keep.tab.to_keep.tab
+
+#now use the indexed file to annotate the vcf and than extract the final variant set
+bsub -J"clean_annotate_ingi_${mode}_${first_suffix}_${cohort}_vcf" -o"${outdir}/LOG_PANEL/14.%J_clean_annotate_ingi_${mode}_${first_suffix}_${cohort}_vcf.o" -w"ended(merge_common_ingi_${mode}_aceq0eq1gt2dpgt5_${first_suffix}_${cohort}_tbi)" -M 2000 -R "select[mem>=2000] rusage[mem=2000]" -q normal -- bcftools annotate -a ${outdir}/PANEL/${filename}.${mode}_REF_keep.tab.to_keep.tab.gz -m KEEP -c CHROM,POS,REF,ALT,INFO/DP4,INFO/DP,INFO/HOB,INFO/ICB,INFO/IDV -O z -o ${outdir}/PANEL/${filename}.${mode}_KEEP_REF.vcf.gz ${outdir}/PANEL/${filename}.${mode}_REF.vcf.gz
+bsub -J"clean_annotate_ingi_${mode}_${first_suffix}_${cohort}_vcf_tbi" -o"${outdir}/LOG_PANEL/14.%J_clean_annotate_ingi_${mode}_${first_suffix}_${cohort}_vcf_tbi.o" -w"ended(clean_annotate_ingi_${mode}_${first_suffix}_${cohort}_vcf)" -M 2000 -R "select[mem>=2000] rusage[mem=2000]" -q normal -- tabix -f -p vcf ${outdir}/PANEL/${filename}.${mode}_KEEP_REF.vcf.gz
+
+bsub -J"extract_clean_ingi_${mode}_${first_suffix}_${cohort}_vcf" -o"${outdir}/LOG_PANEL/15.%J_extract_clean_ingi_${mode}_${first_suffix}_${cohort}_vcf.o" -w"ended(clean_annotate_ingi_${mode}_${first_suffix}_${cohort}_vcf_tbi)" -M 2000 -R "select[mem>=2000] rusage[mem=2000]" -q normal -- bcftools view -i"TYPE='${mode}' && INFO/KEEP=1" -O z -o ${outdir}/PANEL/${filename}.${mode}_clean_REF.vcf.gz ${outdir}/PANEL/${filename}.${mode}_KEEP_REF.vcf.gz
+bsub -J"extract_clean_ingi_${mode}_${first_suffix}_${cohort}_vcf_tbi" -o"${outdir}/LOG_PANEL/15.%J_extract_clean_ingi_${mode}_${first_suffix}_${cohort}_vcf_tbi.o" -w"ended(extract_clean_ingi_${mode}_${first_suffix}_${cohort}_vcf)" -M 2000 -R "select[mem>=2000] rusage[mem=2000]" -q normal -- tabix -f -p vcf ${outdir}/PANEL/${filename}.${mode}_clean_REF.vcf.gz
+
+
 
 ;;
 esac
