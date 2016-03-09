@@ -12,9 +12,11 @@ import subprocess as sub
 # data = sys.stdin.read()
 cohort=sys.argv[1]
 all_list=sys.argv[2]
+dupe_pos_list=sys.argv[3]
+dupe_sites_list=sys.argv[4]
 # all_list="test.tab"
-outdir=sys.argv[3]
-mode=sys.argv[4]
+outdir=sys.argv[5]
+mode=sys.argv[6]
 
 #first thing we want to check for duplicates/triplicates rows
 # the input data has to be in the form of a table with:
@@ -23,13 +25,18 @@ all_list_name=all_list.split("/")[-1]
 sites_dict={}
 pos_dict={}
 
-for row in open('%s' %(all_list) , 'r'):
-	single_line=row.rstrip().split("\t")
+for pos_row in open('%s' %(dupe_pos_list) , 'r'):
+	pos_line=pos_row.rstrip().split("\t")
 	# check_string=single_line[0]+single_line[1]+single_line[4]+single_line[5]+single_line[6]+single_line[7]+single_line[8]+single_line[9]
 	# first mark all duplicates by position
-	pos_dict[single_line[1]] = pos_dict.setdefault(single_line[1],-1) + 1
-	site_key=(single_line[0],single_line[1],single_line[4],single_line[5],single_line[6],single_line[7],single_line[8])
-	sites_dict[site_key] = sites_dict.setdefault(site_key,-1) + 1
+	pos_dict[pos_line[0]] = pos_line[1]
+
+for dupe_row in open('%s' %(dupe_sites_list) , 'r'):
+	dupe_line=dupe_row.rstrip().split("\t")
+	# check_string=single_line[0]+single_line[1]+single_line[4]+single_line[5]+single_line[6]+single_line[7]+single_line[8]+single_line[9]
+	# first mark all duplicates by position
+	site_key=(dupe_line[0],dupe_line[1],dupe_line[4],dupe_line[5],dupe_line[6],dupe_line[7],dupe_line[8])
+	sites_dict[site_key] = dupe_line[9]
 
 print "Dictionaries created!"
 #we need to write 2 files:

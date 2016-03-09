@@ -220,8 +220,12 @@ echo "Cleaning step!!!"
 #first create a keeping table in the form of
 # CHROM POS REF ALT INFO/DP4 INFO/DP4 INFO/DP INFO/HOB INFO/ICB INFO/IDV 
 bsub -J"clean_ingi_${mode}_${first_suffix}_${cohort}_keeplist" -o"${outdir}/LOG_PANEL/13.%J_clean_ingi_${mode}_${first_suffix}_${cohort}_keeplist.o" -M 2000 -R "select[mem>=2000] rusage[mem=2000]" -q normal -- bcftools query -f"%CHROM\t%POS\t%REF\t%ALT\t%INFO/DP4\t%INFO/DP\t%INFO/HOB\t%INFO/ICB\t%INFO/IDV\n" ${outdir}/PANEL/${filename}.${mode}_REF.vcf.gz -o ${outdir}/PANEL/${filename}.${mode}_REF_keep.tab
+
+#extract positions duplicates from files with awk (and fuck off python!)
+bsub -J"clean_ingi_${mode}_${first_suffix}_${cohort}_keeplist_extract" -o"${outdir}/LOG_PANEL/13.%J_clean_ingi_${mode}_${first_suffix}_${cohort}_keeplist_extract.o" -w"ended(clean_ingi_${mode}_${first_suffix}_${cohort}_keeplist)" -M 1000 -R "select[mem>=1000] rusage[mem=1000]" -q normal -- /nfs/users/nfs_m/mc14/Work/bash_scripts/dupe_extract.sh ${outdir}/PANEL/${filename}.${mode}_REF_keep.tab ${outdir}/PANEL/${filename}.${mode}_REF_keep_dupe_pos.tab ${outdir}/PANEL/${filename}.${mode}_REF_keep_dupe_sites.tab
+
 #now use the python script to mark sites to keep
-bsub -J"clean_ingi_${mode}_${first_suffix}_${cohort}_keeplist_annotate" -o"${outdir}/LOG_PANEL/13.%J_clean_ingi_${mode}_${first_suffix}_${cohort}_keeplist_annotate.o" -w"ended(clean_ingi_${mode}_${first_suffix}_${cohort}_keeplist)" -M 2000 -R "select[mem>=2000] rusage[mem=2000]" -q normal -- python /nfs/users/nfs_m/mc14/Work/bash_scripts/panel_check.py ${cohort} ${outdir}/PANEL/${filename}.${mode}_REF_keep.tab ${outdir}/PANEL/ ${mode}
+bsub -J"clean_ingi_${mode}_${first_suffix}_${cohort}_keeplist_annotate" -o"${outdir}/LOG_PANEL/13.%J_clean_ingi_${mode}_${first_suffix}_${cohort}_keeplist_annotate.o" -w"ended(clean_ingi_${mode}_${first_suffix}_${cohort}_keeplist)" -M 2000 -R "select[mem>=2000] rusage[mem=2000]" -q normal -- python /nfs/users/nfs_m/mc14/Work/bash_scripts/panel_check.py ${cohort} ${outdir}/PANEL/${filename}.${mode}_REF_keep.tab ${outdir}/PANEL/${filename}.${mode}_REF_keep_dupe_pos.tab ${outdir}/PANEL/${filename}.${mode}_REF_keep_dupe_sites.tab ${outdir}/PANEL/ ${mode}
 
 #bgzip and index the thing
 echo "sort -g -k2,2 ${outdir}/PANEL/${filename}.${mode}_REF_keep.tab.${cohort}.${mode}.to_keep.tab| bgzip -c > ${outdir}/PANEL/${filename}.${mode}_REF_keep.tab.${cohort}.${mode}.to_keep.tab.gz" | bsub -J"clean_ingi_${mode}_${first_suffix}_${cohort}_keeplist_gzip" -o"${outdir}/LOG_PANEL/13.%J_clean_ingi_${mode}_${first_suffix}_${cohort}_keeplist_gzip.o" -w"ended(clean_ingi_${mode}_${first_suffix}_${cohort}_keeplist_annotate)" -M 2000 -R "select[mem>=2000] rusage[mem=2000]" -q normal
