@@ -237,11 +237,3 @@ bsub -J"extract_clean_ingi_${mode}_${first_suffix}_${cohort}_vcf_tbi" -o"${outdi
 
 ;;
 esac
-
-#need to put back together SNP and INDELs for each chromosome after everything is done
-mode="indel"
-cohort="VBI"
-first_suffix="22"
-# filename=`basename ${vcf}`
-
-clean_annotate_ingi_indel_22_VBI_vcf
