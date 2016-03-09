@@ -196,7 +196,7 @@ echo "sort -g -k2,2 ${outdir}/PANEL/${filename}.${mode}_REF_keep.tab.${cohort}.$
 bsub -J"clean_ingi_${mode}_${first_suffix}_${cohort}_keeplist_gzip_index" -o"${outdir}/LOG_PANEL/13.%J_clean_ingi_${mode}_${first_suffix}_${cohort}_keeplist_gzip_index.o" -w"ended(clean_ingi_${mode}_${first_suffix}_${cohort}_keeplist_gzip)" -M 2000 -R "select[mem>=2000] rusage[mem=2000]" -q normal -- tabix -f -s 1 -b 2 -e 2 ${outdir}/PANEL/${filename}.${mode}_REF_keep.tab.${cohort}.${mode}.to_keep.tab.gz
 
 #now use the indexed file to annotate the vcf and than extract the final variant set
-bsub -J"clean_annotate_ingi_${mode}_${first_suffix}_${cohort}_vcf" -o"${outdir}/LOG_PANEL/14.%J_clean_annotate_ingi_${mode}_${first_suffix}_${cohort}_vcf.o" -w"ended(merge_common_ingi_${mode}_aceq0eq1gt2dpgt5_${first_suffix}_${cohort}_tbi)" -M 2000 -R "select[mem>=2000] rusage[mem=2000]" -q normal -- bcftools annotate -a ${outdir}/PANEL/${filename}.${mode}_REF_keep.tab.${cohort}.${mode}.to_keep.tab.gz -m KEEP -c CHROM,POS,REF,ALT,INFO/DP4,INFO/DP,INFO/HOB,INFO/ICB,INFO/IDV -O z -o ${outdir}/PANEL/${filename}.${mode}_KEEP_REF.vcf.gz ${outdir}/PANEL/${filename}.${mode}_REF.vcf.gz
+bsub -J"clean_annotate_ingi_${mode}_${first_suffix}_${cohort}_vcf" -o"${outdir}/LOG_PANEL/14.%J_clean_annotate_ingi_${mode}_${first_suffix}_${cohort}_vcf.o" -w"ended(clean_ingi_${mode}_${first_suffix}_${cohort}_keeplist_gzip_index)" -M 2000 -R "select[mem>=2000] rusage[mem=2000]" -q normal -- bcftools annotate -a ${outdir}/PANEL/${filename}.${mode}_REF_keep.tab.${cohort}.${mode}.to_keep.tab.gz -m KEEP -c CHROM,POS,REF,ALT,INFO/DP4,INFO/DP,INFO/HOB,INFO/ICB,INFO/IDV -O z -o ${outdir}/PANEL/${filename}.${mode}_KEEP_REF.vcf.gz ${outdir}/PANEL/${filename}.${mode}_REF.vcf.gz
 bsub -J"clean_annotate_ingi_${mode}_${first_suffix}_${cohort}_vcf_tbi" -o"${outdir}/LOG_PANEL/14.%J_clean_annotate_ingi_${mode}_${first_suffix}_${cohort}_vcf_tbi.o" -w"ended(clean_annotate_ingi_${mode}_${first_suffix}_${cohort}_vcf)" -M 2000 -R "select[mem>=2000] rusage[mem=2000]" -q normal -- tabix -f -p vcf ${outdir}/PANEL/${filename}.${mode}_KEEP_REF.vcf.gz
 
 bsub -J"extract_clean_ingi_${mode}_${first_suffix}_${cohort}_vcf" -o"${outdir}/LOG_PANEL/15.%J_extract_clean_ingi_${mode}_${first_suffix}_${cohort}_vcf.o" -w"ended(clean_annotate_ingi_${mode}_${first_suffix}_${cohort}_vcf_tbi)" -M 2000 -R "select[mem>=2000] rusage[mem=2000]" -q normal -- bcftools view -i"TYPE='${mode}' && INFO/KEEP=1" -O z -o ${outdir}/PANEL/${filename}.${mode}_clean_REF.vcf.gz ${outdir}/PANEL/${filename}.${mode}_KEEP_REF.vcf.gz
@@ -229,7 +229,7 @@ echo "sort -g -k2,2 ${outdir}/PANEL/${filename}.${mode}_REF_keep.tab.${cohort}.$
 bsub -J"clean_ingi_${mode}_${first_suffix}_${cohort}_keeplist_gzip_index" -o"${outdir}/LOG_PANEL/13.%J_clean_ingi_${mode}_${first_suffix}_${cohort}_keeplist_gzip_index.o" -w"ended(clean_ingi_${mode}_${first_suffix}_${cohort}_keeplist_gzip)" -M 2000 -R "select[mem>=2000] rusage[mem=2000]" -q normal -- tabix -f -s 1 -b 2 -e 2 ${outdir}/PANEL/${filename}.${mode}_REF_keep.tab.${cohort}.${mode}.to_keep.tab.gz
 
 #now use the indexed file to annotate the vcf and than extract the final variant set
-bsub -J"clean_annotate_ingi_${mode}_${first_suffix}_${cohort}_vcf" -o"${outdir}/LOG_PANEL/14.%J_clean_annotate_ingi_${mode}_${first_suffix}_${cohort}_vcf.o" -w"ended(merge_common_ingi_${mode}_aceq0eq1gt2dpgt5_${first_suffix}_${cohort}_tbi)" -M 2000 -R "select[mem>=2000] rusage[mem=2000]" -q normal -- bcftools annotate -a ${outdir}/PANEL/${filename}.${mode}_REF_keep.tab.${cohort}.${mode}.to_keep.tab.gz -m KEEP -c CHROM,POS,REF,ALT,INFO/DP4,INFO/DP,INFO/HOB,INFO/ICB,INFO/IDV -O z -o ${outdir}/PANEL/${filename}.${mode}_KEEP_REF.vcf.gz ${outdir}/PANEL/${filename}.${mode}_REF.vcf.gz
+bsub -J"clean_annotate_ingi_${mode}_${first_suffix}_${cohort}_vcf" -o"${outdir}/LOG_PANEL/14.%J_clean_annotate_ingi_${mode}_${first_suffix}_${cohort}_vcf.o" -w"ended(clean_ingi_${mode}_${first_suffix}_${cohort}_keeplist_gzip_index)" -M 2000 -R "select[mem>=2000] rusage[mem=2000]" -q normal -- bcftools annotate -a ${outdir}/PANEL/${filename}.${mode}_REF_keep.tab.${cohort}.${mode}.to_keep.tab.gz -m KEEP -c CHROM,POS,REF,ALT,INFO/DP4,INFO/DP,INFO/HOB,INFO/ICB,INFO/IDV -O z -o ${outdir}/PANEL/${filename}.${mode}_KEEP_REF.vcf.gz ${outdir}/PANEL/${filename}.${mode}_REF.vcf.gz
 bsub -J"clean_annotate_ingi_${mode}_${first_suffix}_${cohort}_vcf_tbi" -o"${outdir}/LOG_PANEL/14.%J_clean_annotate_ingi_${mode}_${first_suffix}_${cohort}_vcf_tbi.o" -w"ended(clean_annotate_ingi_${mode}_${first_suffix}_${cohort}_vcf)" -M 2000 -R "select[mem>=2000] rusage[mem=2000]" -q normal -- tabix -f -p vcf ${outdir}/PANEL/${filename}.${mode}_KEEP_REF.vcf.gz
 
 bsub -J"extract_clean_ingi_${mode}_${first_suffix}_${cohort}_vcf" -o"${outdir}/LOG_PANEL/15.%J_extract_clean_ingi_${mode}_${first_suffix}_${cohort}_vcf.o" -w"ended(clean_annotate_ingi_${mode}_${first_suffix}_${cohort}_vcf_tbi)" -M 2000 -R "select[mem>=2000] rusage[mem=2000]" -q normal -- bcftools view -i"TYPE='${mode}' && INFO/KEEP=1" -O z -o ${outdir}/PANEL/${filename}.${mode}_clean_REF.vcf.gz ${outdir}/PANEL/${filename}.${mode}_KEEP_REF.vcf.gz
@@ -239,3 +239,9 @@ bsub -J"extract_clean_ingi_${mode}_${first_suffix}_${cohort}_vcf_tbi" -o"${outdi
 esac
 
 #need to put back together SNP and INDELs for each chromosome after everything is done
+mode="indel"
+cohort="VBI"
+first_suffix="22"
+# filename=`basename ${vcf}`
+
+clean_annotate_ingi_indel_22_VBI_vcf
