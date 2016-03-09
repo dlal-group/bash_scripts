@@ -31,6 +31,7 @@ for row in open('%s' %(all_list) , 'r'):
 	site_key=(single_line[0],single_line[1],single_line[4],single_line[5],single_line[6],single_line[7],single_line[8])
 	sites_dict[site_key] = sites_dict.setdefault(site_key,-1) + 1
 
+print "Dictionaries created!"
 #we need to write 2 files:
 #1) a tabbed file with keep variants
 #2) a tabbed file with excluded variants
@@ -42,25 +43,28 @@ for row in open('%s' %(all_list) , 'r'):
 	# infile = open('%s' %(all_list) , 'r')
 	# row = infile.readline()
 	var_line=row.rstrip().split("\t")
-	for pos_key in pos_dict.keys():
+	pos_key=var_line[1]
+	# for pos_key in pos_dict.keys():
 		# pos_key=pos_dict.keys()[0]
-		for sites_key in sites_dict.keys():
-			# sites_key=sites_dict.keys()[0]
-			if pos_key in sites_key:
-				# we need to create 2 sets for the intersection
-				s1=set(sites_key)
-				s2=set(var_line)
-				# if this intersection is equal to the line I'm reading and to the site key, than go on
-				if s1.intersection(s2) == s1:
-				# if sites_key in var_line:
-					if pos_dict[pos_key] == 0:
-					#need to keep the site since there are not position duplicates
-					# ['1', '231955500', 'A', 'AT', '1162,1312,57,90', '2839', '0.00578704', '0.906249', '9']
+	contained = [key for key in sites_dict.keys() if pos_key in key]
+	# for sites_key in sites_dict.keys():
+	for sites_key in contained:
+		# sites_key=contained[0]
+		if pos_key in sites_key:
+			# we need to create 2 sets for the intersection
+			s1=set(sites_key)
+			s2=set(var_line)
+			# if this intersection is equal to the line I'm reading and to the site key, than go on
+			if s1.intersection(s2) == s1:
+			# if sites_key in var_line:
+				if pos_dict[pos_key] == 0:
+				#need to keep the site since there are not position duplicates
+				# ['1', '231955500', 'A', 'AT', '1162,1312,57,90', '2839', '0.00578704', '0.906249', '9']
+					print >> keep_out,'%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s' %(var_line[0],var_line[1],var_line[2],var_line[3],var_line[4],var_line[5],var_line[6],var_line[7],var_line[8],"KEEP")
+				else :
+					#if we have dupolicates by position , we need to check them
+					if sites_dict[sites_key] != 0:
+						# we'll keep the duplicates only if they're from the same site (splitted multiallelic site)
 						print >> keep_out,'%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s' %(var_line[0],var_line[1],var_line[2],var_line[3],var_line[4],var_line[5],var_line[6],var_line[7],var_line[8],"KEEP")
-					else :
-						#if we have dupolicates by position , we need to check them
-						if sites_dict[sites_key] != 0:
-							# we'll keep the duplicates only if they're from the same site (splitted multiallelic site)
-							print >> keep_out,'%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s' %(var_line[0],var_line[1],var_line[2],var_line[3],var_line[4],var_line[5],var_line[6],var_line[7],var_line[8],"KEEP")
 
 keep_out.close()

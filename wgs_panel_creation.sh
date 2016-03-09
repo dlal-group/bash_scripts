@@ -191,9 +191,9 @@ bsub -J"clean_ingi_${mode}_${first_suffix}_${cohort}_keeplist" -o"${outdir}/LOG_
 bsub -J"clean_ingi_${mode}_${first_suffix}_${cohort}_keeplist_annotate" -o"${outdir}/LOG_PANEL/13.%J_clean_ingi_${mode}_${first_suffix}_${cohort}_keeplist_annotate.o" -w"ended(clean_ingi_${mode}_${first_suffix}_${cohort}_keeplist)" -M 2000 -R "select[mem>=2000] rusage[mem=2000]" -q normal -- python /nfs/users/nfs_m/mc14/Work/bash_scripts/panel_check.py ${cohort} ${outdir}/PANEL/${filename}.${mode}_REF_keep.tab ${outdir}/PANEL/ ${mode}
 
 #bgzip and index the thing
-echo "bgzip ${outdir}/PANEL/${filename}.${mode}_REF_keep.tab.to_keep.tab" | bsub -J"clean_ingi_${mode}_${first_suffix}_${cohort}_keeplist_gzip" -o"${outdir}/LOG_PANEL/13.%J_clean_ingi_${mode}_${first_suffix}_${cohort}_keeplist_gzip.o" -w"ended(clean_ingi_${mode}_${first_suffix}_${cohort}_keeplist_annotate)" -M 2000 -R "select[mem>=2000] rusage[mem=2000]" -q normal
+echo "sort -g -k2,2 ${outdir}/PANEL/${filename}.${mode}_REF_keep.tab.to_keep.tab| bgzip -c > ${outdir}/PANEL/${filename}.${mode}_REF_keep.tab.to_keep.tab.gz" | bsub -J"clean_ingi_${mode}_${first_suffix}_${cohort}_keeplist_gzip" -o"${outdir}/LOG_PANEL/13.%J_clean_ingi_${mode}_${first_suffix}_${cohort}_keeplist_gzip.o" -w"ended(clean_ingi_${mode}_${first_suffix}_${cohort}_keeplist_annotate)" -M 2000 -R "select[mem>=2000] rusage[mem=2000]" -q normal
 
-bsub -J"clean_ingi_${mode}_${first_suffix}_${cohort}_keeplist_gzip_index" -o"${outdir}/LOG_PANEL/13.%J_clean_ingi_${mode}_${first_suffix}_${cohort}_keeplist_gzip_index.o" -w"ended(clean_ingi_${mode}_${first_suffix}_${cohort}_keeplist_gzip)" -M 2000 -R "select[mem>=2000] rusage[mem=2000]" -q normal -- tabix -s 1 -b 2 -e 2 ${outdir}/PANEL/${filename}.${mode}_REF_keep.tab.to_keep.tab
+bsub -J"clean_ingi_${mode}_${first_suffix}_${cohort}_keeplist_gzip_index" -o"${outdir}/LOG_PANEL/13.%J_clean_ingi_${mode}_${first_suffix}_${cohort}_keeplist_gzip_index.o" -w"ended(clean_ingi_${mode}_${first_suffix}_${cohort}_keeplist_gzip)" -M 2000 -R "select[mem>=2000] rusage[mem=2000]" -q normal -- tabix -f -s 1 -b 2 -e 2 ${outdir}/PANEL/${filename}.${mode}_REF_keep.tab.to_keep.tab
 
 #now use the indexed file to annotate the vcf and than extract the final variant set
 bsub -J"clean_annotate_ingi_${mode}_${first_suffix}_${cohort}_vcf" -o"${outdir}/LOG_PANEL/14.%J_clean_annotate_ingi_${mode}_${first_suffix}_${cohort}_vcf.o" -w"ended(merge_common_ingi_${mode}_aceq0eq1gt2dpgt5_${first_suffix}_${cohort}_tbi)" -M 2000 -R "select[mem>=2000] rusage[mem=2000]" -q normal -- bcftools annotate -a ${outdir}/PANEL/${filename}.${mode}_REF_keep.tab.to_keep.tab.gz -m KEEP -c CHROM,POS,REF,ALT,INFO/DP4,INFO/DP,INFO/HOB,INFO/ICB,INFO/IDV -O z -o ${outdir}/PANEL/${filename}.${mode}_KEEP_REF.vcf.gz ${outdir}/PANEL/${filename}.${mode}_REF.vcf.gz
@@ -224,9 +224,9 @@ bsub -J"clean_ingi_${mode}_${first_suffix}_${cohort}_keeplist" -o"${outdir}/LOG_
 bsub -J"clean_ingi_${mode}_${first_suffix}_${cohort}_keeplist_annotate" -o"${outdir}/LOG_PANEL/13.%J_clean_ingi_${mode}_${first_suffix}_${cohort}_keeplist_annotate.o" -w"ended(clean_ingi_${mode}_${first_suffix}_${cohort}_keeplist)" -M 2000 -R "select[mem>=2000] rusage[mem=2000]" -q normal -- python /nfs/users/nfs_m/mc14/Work/bash_scripts/panel_check.py ${cohort} ${outdir}/PANEL/${filename}.${mode}_REF_keep.tab ${outdir}/PANEL/ ${mode}
 
 #bgzip and index the thing
-echo "bgzip ${outdir}/PANEL/${filename}.${mode}_REF_keep.tab.to_keep.tab" | bsub -J"clean_ingi_${mode}_${first_suffix}_${cohort}_keeplist_gzip" -o"${outdir}/LOG_PANEL/13.%J_clean_ingi_${mode}_${first_suffix}_${cohort}_keeplist_gzip.o" -w"ended(clean_ingi_${mode}_${first_suffix}_${cohort}_keeplist_annotate)" -M 2000 -R "select[mem>=2000] rusage[mem=2000]" -q normal
+echo "sort -g -k2,2 ${outdir}/PANEL/${filename}.${mode}_REF_keep.tab.to_keep.tab| bgzip -c > ${outdir}/PANEL/${filename}.${mode}_REF_keep.tab.to_keep.tab.gz" | bsub -J"clean_ingi_${mode}_${first_suffix}_${cohort}_keeplist_gzip" -o"${outdir}/LOG_PANEL/13.%J_clean_ingi_${mode}_${first_suffix}_${cohort}_keeplist_gzip.o" -w"ended(clean_ingi_${mode}_${first_suffix}_${cohort}_keeplist_annotate)" -M 2000 -R "select[mem>=2000] rusage[mem=2000]" -q normal
 
-bsub -J"clean_ingi_${mode}_${first_suffix}_${cohort}_keeplist_gzip_index" -o"${outdir}/LOG_PANEL/13.%J_clean_ingi_${mode}_${first_suffix}_${cohort}_keeplist_gzip_index.o" -w"ended(clean_ingi_${mode}_${first_suffix}_${cohort}_keeplist_gzip)" -M 2000 -R "select[mem>=2000] rusage[mem=2000]" -q normal -- tabix -s 1 -b 2 -e 2 ${outdir}/PANEL/${filename}.${mode}_REF_keep.tab.to_keep.tab
+bsub -J"clean_ingi_${mode}_${first_suffix}_${cohort}_keeplist_gzip_index" -o"${outdir}/LOG_PANEL/13.%J_clean_ingi_${mode}_${first_suffix}_${cohort}_keeplist_gzip_index.o" -w"ended(clean_ingi_${mode}_${first_suffix}_${cohort}_keeplist_gzip)" -M 2000 -R "select[mem>=2000] rusage[mem=2000]" -q normal -- tabix -f -s 1 -b 2 -e 2 ${outdir}/PANEL/${filename}.${mode}_REF_keep.tab.to_keep.tab
 
 #now use the indexed file to annotate the vcf and than extract the final variant set
 bsub -J"clean_annotate_ingi_${mode}_${first_suffix}_${cohort}_vcf" -o"${outdir}/LOG_PANEL/14.%J_clean_annotate_ingi_${mode}_${first_suffix}_${cohort}_vcf.o" -w"ended(merge_common_ingi_${mode}_aceq0eq1gt2dpgt5_${first_suffix}_${cohort}_tbi)" -M 2000 -R "select[mem>=2000] rusage[mem=2000]" -q normal -- bcftools annotate -a ${outdir}/PANEL/${filename}.${mode}_REF_keep.tab.to_keep.tab.gz -m KEEP -c CHROM,POS,REF,ALT,INFO/DP4,INFO/DP,INFO/HOB,INFO/ICB,INFO/IDV -O z -o ${outdir}/PANEL/${filename}.${mode}_KEEP_REF.vcf.gz ${outdir}/PANEL/${filename}.${mode}_REF.vcf.gz
@@ -234,8 +234,6 @@ bsub -J"clean_annotate_ingi_${mode}_${first_suffix}_${cohort}_vcf_tbi" -o"${outd
 
 bsub -J"extract_clean_ingi_${mode}_${first_suffix}_${cohort}_vcf" -o"${outdir}/LOG_PANEL/15.%J_extract_clean_ingi_${mode}_${first_suffix}_${cohort}_vcf.o" -w"ended(clean_annotate_ingi_${mode}_${first_suffix}_${cohort}_vcf_tbi)" -M 2000 -R "select[mem>=2000] rusage[mem=2000]" -q normal -- bcftools view -i"TYPE='${mode}' && INFO/KEEP=1" -O z -o ${outdir}/PANEL/${filename}.${mode}_clean_REF.vcf.gz ${outdir}/PANEL/${filename}.${mode}_KEEP_REF.vcf.gz
 bsub -J"extract_clean_ingi_${mode}_${first_suffix}_${cohort}_vcf_tbi" -o"${outdir}/LOG_PANEL/15.%J_extract_clean_ingi_${mode}_${first_suffix}_${cohort}_vcf_tbi.o" -w"ended(extract_clean_ingi_${mode}_${first_suffix}_${cohort}_vcf)" -M 2000 -R "select[mem>=2000] rusage[mem=2000]" -q normal -- tabix -f -p vcf ${outdir}/PANEL/${filename}.${mode}_clean_REF.vcf.gz
-
-
 
 ;;
 esac
