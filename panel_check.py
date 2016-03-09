@@ -35,8 +35,8 @@ for dupe_row in open('%s' %(dupe_sites_list) , 'r'):
 	dupe_line=dupe_row.rstrip().split("\t")
 	# check_string=single_line[0]+single_line[1]+single_line[4]+single_line[5]+single_line[6]+single_line[7]+single_line[8]+single_line[9]
 	# first mark all duplicates by position
-	site_key=(dupe_line[0],dupe_line[1],dupe_line[4],dupe_line[5],dupe_line[6],dupe_line[7],dupe_line[8])
-	sites_dict[site_key] = dupe_line[9]
+	site_key=(dupe_line[0],dupe_line[1],dupe_line[4],dupe_line[5],dupe_line[6],dupe_line[7])
+	sites_dict[site_key] = dupe_line[8]
 
 print "Dictionaries created!"
 #we need to write 2 files:
