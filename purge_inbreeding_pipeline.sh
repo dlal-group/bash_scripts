@@ -1417,6 +1417,51 @@ all_hom=`bcftools query -s ${sample} -R ${shared_cat} -f '%CHROM\t%POS\t%REF\t%A
         bsub -J"roh_${pop}_${CHR}" -o"%J_roh_${pop}_${CHR}.o" -q normal -M8000 -n4 -R"span[hosts=1] select[mem>=8000] rusage[mem=8000]" -- java -Xms5000m -Xmx5000m -jar /nfs/team151/software/IBDseq/ibdseq.r1206.jar gt=${pop_path}/${CHR}.non_missing.vcf.gz nthreads=4 excludesamples=${pop_list} out=${outdir}/${pop}.roh
     done
 
+  ;;
+  NEWROHVILLAGE )
+    echo "Calculate ROH from a unified vcf file....with IBDseq...we need a file without missing genotypes(NO MAF filter)!!"
+    echo "We'll have also data separate for villages in FVG"
+    echo -e "Parameters: \nwindow=${window}\noverlap=${overlap}"
+    #use he same vcf file for all the samples but change the sample list of individuals toi exclude from the analysis
+    pops_updated="FVG VBI TSI CEU CARL Erto Resia Illegio Sauris"
+    for pop in $pops_updated
+    do
+
+      case $pop in
+        FVG )
+          pop_path=/lustre/scratch113/projects/esgi-vbseq/25082015_purging/26082015_ANNOTATED/GERP
+          ;;
+        VBI )
+          pop_path=/lustre/scratch113/projects/esgi-vbseq/25082015_purging/26082015_ANNOTATED/GERP
+            ;;
+        TSI )
+          pop_path=/lustre/scratch113/projects/esgi-vbseq/25082015_purging/26082015_ANNOTATED/GERP
+            ;;
+        CEU )
+          pop_path=/lustre/scratch113/projects/esgi-vbseq/25082015_purging/26082015_ANNOTATED/GERP
+            ;;
+        CARL )
+          pop_path=/lustre/scratch113/projects/esgi-vbseq/25082015_purging/26082015_ANNOTATED/GERP
+            ;;
+        Erto )
+          pop_path=/lustre/scratch113/projects/esgi-vbseq/25082015_purging/26082015_ANNOTATED/GERP
+            ;;
+        Sauris )
+          pop_path=/lustre/scratch113/projects/esgi-vbseq/25082015_purging/26082015_ANNOTATED/GERP
+            ;;
+        Illegio )
+          pop_path=/lustre/scratch113/projects/esgi-vbseq/25082015_purging/26082015_ANNOTATED/GERP
+            ;;
+        Resia )
+          pop_path=/lustre/scratch113/projects/esgi-vbseq/25082015_purging/26082015_ANNOTATED/GERP
+            ;;
+      esac
+
+        pop_list=/lustre/scratch113/projects/esgi-vbseq/25082015_purging/26082015_ANNOTATED/listpop/HRC_all_samples_but_${pop}.list
+        #use freq data
+        bsub -J"roh_${pop}_${CHR}" -o"%J_roh_${pop}_${CHR}.o" -q normal -M8000 -n4 -R"span[hosts=1] select[mem>=8000] rusage[mem=8000]" -- java -Xms5000m -Xmx5000m -jar /nfs/team151/software/beagle_4/beagle.22Feb16.8ef.jar gt=${pop_path}/${chr}.GERP.vcf.gz nthreads=4 excludesamples=${pop_list} out=${outdir}/${pop}.roh
+    done
+
   ;;  
   SPLITCSQ )
     echo "Split a chromosome file using a list of consequences"
