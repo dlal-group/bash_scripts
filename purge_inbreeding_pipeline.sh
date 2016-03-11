@@ -1423,7 +1423,7 @@ all_hom=`bcftools query -s ${sample} -R ${shared_cat} -f '%CHROM\t%POS\t%REF\t%A
     echo "We'll have also data separate for villages in FVG"
     echo -e "Parameters: \nwindow=${window}\noverlap=${overlap}"
     #use he same vcf file for all the samples but change the sample list of individuals toi exclude from the analysis
-    pops_updated="FVG VBI TSI CEU CARL Erto Resia Illegio Sauris"
+    pops_updated="FVG VBI TSI CEU Erto Resia Illegio Sauris"
     for pop in $pops_updated
     do
 
