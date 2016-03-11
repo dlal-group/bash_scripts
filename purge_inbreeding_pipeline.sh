@@ -1460,7 +1460,7 @@ all_hom=`bcftools query -s ${sample} -R ${shared_cat} -f '%CHROM\t%POS\t%REF\t%A
         pop_list=/lustre/scratch113/projects/esgi-vbseq/25082015_purging/26082015_ANNOTATED/listpop/HRC_all_samples_but_${pop}.list
         #use freq data
         # bsub -J"roh_${pop}_${CHR}" -o"%J_roh_${pop}_${CHR}.o" -q normal -M8000 -n4 -R"span[hosts=1] select[mem>=8000] rusage[mem=8000]" -- java -Xms5000m -Xmx5000m -jar /nfs/team151/software/beagle_4/beagle.22Feb16.8ef.jar gt=${pop_path}/${chr}.GERP.vcf.gz nthreads=4 excludesamples=${pop_list} out=${outdir}/${pop}.roh
-        bsub -J"roh_${pop}_${CHR}" -o"%J_roh_${pop}_${CHR}.o" -q normal -M8000 -n4 -R"span[hosts=1] select[mem>=8000] rusage[mem=8000]" -- beagle 5000 gt=${pop_path}/${chr}.GERP.vcf.gz nthreads=4 excludesamples=${pop_list} out=${outdir}/${pop}.roh
+        bsub -J"roh_${pop}_${CHR}" -o"%J_roh_${pop}_${CHR}.o" -q normal -M8000 -n4 -R"span[hosts=1] select[mem>=8000] rusage[mem=8000]" -- beagle 5000 gt=${pop_path}/${CHR}.GERP.vcf.gz nthreads=4 excludesamples=${pop_list} out=${outdir}/${pop}.roh
     done
 
   ;;  
