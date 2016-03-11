@@ -1418,7 +1418,7 @@ all_hom=`bcftools query -s ${sample} -R ${shared_cat} -f '%CHROM\t%POS\t%REF\t%A
     done
 
   ;;
-  NEWROHVILLAGE )
+  ROHVILLAGENEW )
     echo "Calculate ROH from a unified vcf file....with IBDseq...we need a file without missing genotypes(NO MAF filter)!!"
     echo "We'll have also data separate for villages in FVG"
     echo -e "Parameters: \nwindow=${window}\noverlap=${overlap}"
