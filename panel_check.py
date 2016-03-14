@@ -15,9 +15,9 @@ cohort=sys.argv[1]
 all_list=sys.argv[2]
 dupe_pos_list=sys.argv[3]
 dupe_sites_list=sys.argv[4]
-# all_list="13.vcf.gz.indel_REF_keep.tab"
-# dupe_pos_list="13.vcf.gz.indel_REF_keep_dupe_pos.tab"
-# dupe_sites_list="13.vcf.gz.indel_REF_keep_dupe_sites.tab"
+# all_list="test_chr4_REF_keep.tab"
+# dupe_pos_list="4.vcf.gz.indel_REF_keep_dupe_pos.tab"
+# dupe_sites_list="4.vcf.gz.indel_REF_keep_dupe_sites.tab"
 
 # all_list="test.tab"
 outdir=sys.argv[5]
@@ -96,7 +96,7 @@ with open('%s' %(all_list) , 'r') as all_file:
 						# print >> keep_out,'%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s' %(var_line[0],var_line[1],var_line[2],var_line[3],var_line[4],var_line[5],var_line[6],var_line[7],var_line[8],"KEEP")
 					# else :
 						#if we have dupolicates by position , we need to check them
-						if sites_dict[sites_key] != 0:
+						if sites_dict[sites_key] != str(0):
 							# we'll keep the duplicates only if they're from the same site (splitted multiallelic site)
 							print >> keep_out,'%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s' %(var_line[0],var_line[1],var_line[2],var_line[3],var_line[4],var_line[5],var_line[6],var_line[7],var_line[8],"KEEP")
 
