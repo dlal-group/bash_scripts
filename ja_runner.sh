@@ -730,10 +730,17 @@ file=`sed -n "${LSB_JOBINDEX}p" $1`
 
 #08/03/2016
 #GERP annotation for PURGING check
-set -e
-filename=`basename ${file}`
+# set -e
+# filename=`basename ${file}`
 
-bcftools annotate -a /lustre/scratch113/projects/esgi-vbseq/25082015_purging/26082015_ANNOTATED/GERP/annotations/${file}.GERP.bed.gz -c CHROM,FROM,TO,GERP -h /lustre/scratch113/projects/esgi-vbseq/25082015_purging/26082015_ANNOTATED/GERP/annotations/header_gerp.txt -O z -o /lustre/scratch113/projects/esgi-vbseq/25082015_purging/26082015_ANNOTATED/GERP/${file}.GERP.vcf.gz /lustre/scratch113/projects/esgi-vbseq/25082015_purging/26082015_ANNOTATED/1000G_FVG_VBSEQ.chr${file}.vcf.gz.clean_ann.vcf.gz
-tabix -f -p vcf /lustre/scratch113/projects/esgi-vbseq/25082015_purging/26082015_ANNOTATED/GERP/${file}.GERP.vcf.gz
+# bcftools annotate -a /lustre/scratch113/projects/esgi-vbseq/25082015_purging/26082015_ANNOTATED/GERP/annotations/${file}.GERP.bed.gz -c CHROM,FROM,TO,GERP -h /lustre/scratch113/projects/esgi-vbseq/25082015_purging/26082015_ANNOTATED/GERP/annotations/header_gerp.txt -O z -o /lustre/scratch113/projects/esgi-vbseq/25082015_purging/26082015_ANNOTATED/GERP/${file}.GERP.vcf.gz /lustre/scratch113/projects/esgi-vbseq/25082015_purging/26082015_ANNOTATED/1000G_FVG_VBSEQ.chr${file}.vcf.gz.clean_ann.vcf.gz
+# tabix -f -p vcf /lustre/scratch113/projects/esgi-vbseq/25082015_purging/26082015_ANNOTATED/GERP/${file}.GERP.vcf.gz
 
 # tabix -s 1 -b 2 -e 3 ${file}
+#15/03/2016
+#extract stats
+filename=`basename ${file}`
+samples=$2
+pop=$3
+
+bcftools stats -S ${samples} ${file} > ${pop}/${filename}.vchk
