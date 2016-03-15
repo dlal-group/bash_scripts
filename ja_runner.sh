@@ -743,4 +743,6 @@ filename=`basename ${file}`
 samples=$2
 pop=$3
 
-bcftools stats -S ${samples} ${file} > ${pop}/${filename}.vchk
+bcftools view -S ${samples} ${file}| bcftools stats > ${pop}/${filename}.vchk
+
+
