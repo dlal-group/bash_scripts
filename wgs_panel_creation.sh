@@ -140,6 +140,10 @@ bsub -J"clean_annotate_ingi_${mode}_${first_suffix}_${cohort}_vcf_tbi" -o"${outd
 bsub -J"extract_clean_ingi_${mode}_${first_suffix}_${cohort}_vcf" -o"${outdir}/LOG_PANEL/20.%J_extract_clean_ingi_${mode}_${first_suffix}_${cohort}_vcf.o" -w"ended(clean_annotate_ingi_${mode}_${first_suffix}_${cohort}_vcf_tbi)" -M 2000 -R "select[mem>=2000] rusage[mem=2000]" -q normal -- bcftools view -i"TYPE='${mode}' && INFO/KEEP=1" -O z -o ${outdir}/PANEL/${filename}.${mode}_clean_REF.vcf.gz ${outdir}/PANEL/${filename}.${mode}_KEEP_REF.vcf.gz
 bsub -J"extract_clean_ingi_${mode}_${first_suffix}_${cohort}_vcf_tbi" -o"${outdir}/LOG_PANEL/21.%J_extract_clean_ingi_${mode}_${first_suffix}_${cohort}_vcf_tbi.o" -w"ended(extract_clean_ingi_${mode}_${first_suffix}_${cohort}_vcf)" -M 2000 -R "select[mem>=2000] rusage[mem=2000]" -q normal -- tabix -f -p vcf ${outdir}/PANEL/${filename}.${mode}_clean_REF.vcf.gz
 
+#now we do the last round of cleaning to generate the correct vcf file
+bsub -J"extract_final_clean_ingi_${mode}_${first_suffix}_${cohort}_vcf" -o"${outdir}/LOG_PANEL/22.%J_extract_final_clean_ingi_${mode}_${first_suffix}_${cohort}_vcf.o" -w"ended(extract_clean_ingi_${mode}_${first_suffix}_${cohort}_vcf_tbi)" -M 2000 -R "select[mem>=2000] rusage[mem=2000]" -q normal -- /nfs/users/nfs_m/mc14/Work/bash_scripts/last_vcf.sh ${outdir}/PANEL/${filename}.${mode}_clean_REF.vcf.gz ${cohort} ${outdir}/PANEL/${filename}.${mode}_REF_keep.tab.${cohort}.${mode}.to_keep.tab ${outdir}/PANEL ${mode}
+
+
 ;;
 
 MERGE )
