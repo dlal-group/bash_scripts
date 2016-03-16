@@ -49,7 +49,7 @@ print "Dictionaries created!"
 #now we need to read the stream from the vcf file and for each line
 # decide if we want to keep it or not, based on matching fields
 keep_in=open('%s/%s.%s.%s.to_keep.vcf' %(outdir, all_list_name, cohort, mode), 'w')
-keep_out=open('%s/%s.%s.%s.to_remove.vcf' %(outdir, all_list_name, cohort, mode), 'w')
+# keep_out=open('%s/%s.%s.%s.to_remove.vcf' %(outdir, all_list_name, cohort, mode), 'w')
 # keep_in=open('%s.keep_TEST.vcf' %(all_list_name), 'w')
 
 # with open('%s' %(vcfdata) , 'r') as vcfdata_file:
@@ -59,12 +59,13 @@ for vcf_row in vcfdata:
 		# vcf_row = infile.readline()
 	vcf_line=vcf_row.rstrip().split("\t")
 	info_field=vcf_line[7].rstrip().split(";")
-	info_key=";".join([info_field[0],info_field[1],info_field[2],info_field[3],info_field[4]])
+	# info_key=";".join([info_field[0],info_field[1],info_field[2],info_field[3],info_field[4]])
+	info_key=";".join([info_field[0],info_field[1]])
 	sites_key_vcf=(vcf_line[0],vcf_line[1],vcf_line[3],vcf_line[4],info_key)
 	if sites_key_vcf in all_sites_dict:
 		print >> keep_in,'%s' %(vcf_row.rstrip())
-	else :
-		print >> keep_out,'%s' %(vcf_row.rstrip())
+	# else :
+	# 	print >> keep_out,'%s' %(vcf_row.rstrip())
 
 
 keep_in.close()
