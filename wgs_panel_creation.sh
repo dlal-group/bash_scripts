@@ -121,6 +121,8 @@ echo "Cleaning step!!!"
 # CHROM POS REF ALT INFO/DP4 INFO/DP4 INFO/DP INFO/HOB INFO/ICB INFO/IDV 
 # bsub -J"clean_ingi_${mode}_${first_suffix}_${cohort}_keeplist" -o"${outdir}/LOG_PANEL/13.%J_clean_ingi_${mode}_${first_suffix}_${cohort}_keeplist.o" -M200 -R "select[mem>=200] rusage[mem=200]" -q normal -- bcftools query -f"%CHROM\t%POS\t%REF\t%ALT\t%INFO/DP4\t%INFO/DP\t%INFO/HOB\t%INFO/ICB\t%INFO/IDV\n" ${outdir}/PANEL/${filename}.${mode}_REF.vcf.gz -o ${outdir}/PANEL/${filename}.${mode}_REF_keep.tab
 # echo "bcftools annotate -x \"^INFO/DP4,INFO/DP,INFO/HOB,INFO/ICB,INFO/IDV\",FORMAT ${outdir}/PANEL/${filename}.${mode}_REF.vcf.gz| bcftools view -G -H| cut -f -2,4-5,8 > ${outdir}/PANEL/${filename}.${mode}_REF_keep.tab" | bsub -J"clean_ingi_${mode}_${first_suffix}_${cohort}_keeplist" -o"${outdir}/LOG_PANEL/13.%J_clean_ingi_${mode}_${first_suffix}_${cohort}_keeplist.o" -M200 -R "select[mem>=200] rusage[mem=200]" -q normal 
+#Since not all sites have all the INFO fields required (INFO/DP4,INFO/DP,INFO/HOB,INFO/ICB,INFO/IDV )
+#we need to use a smaller set of fields (INFO/DP4,INFO/DP) that still should do!
 echo "bcftools annotate -x \"^INFO/DP4,INFO/DP\",FORMAT ${outdir}/PANEL/${filename}.${mode}_REF.vcf.gz| bcftools view -G -H| cut -f -2,4-5,8 > ${outdir}/PANEL/${filename}.${mode}_REF_keep.tab" | bsub -J"clean_ingi_${mode}_${first_suffix}_${cohort}_keeplist" -o"${outdir}/LOG_PANEL/13.%J_clean_ingi_${mode}_${first_suffix}_${cohort}_keeplist.o" -M200 -R "select[mem>=200] rusage[mem=200]" -q normal 
 
 #extract positions duplicates from files with awk (and fuck off python!)
