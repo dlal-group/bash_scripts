@@ -10,7 +10,7 @@ import time
 #this script is meant to be usede to check stuff on the reference panel input files, like duplicates or triplicates row
 # alleles mismatches or other stuff
 
-vcfdata = sys.stdin.read()
+vcfdata = sys.stdin.readlines()
 # vcfdata ="test_last_chr4_REF_keep.vcf"
 cohort=sys.argv[1]
 all_list=sys.argv[2]
@@ -57,7 +57,6 @@ for vcf_row in vcfdata:
 		# infile = open('%s' %(vcfdata) , 'r')
 		# vcf_row = infile.readline()
 	vcf_line=vcf_row.rstrip().split("\t")
-	print len(vcf_line)
 	info_field=vcf_line[7].rstrip().split(";")
 	info_key=";".join([info_field[0],info_field[1],info_field[2],info_field[3],info_field[4]])
 	sites_key_vcf=(vcf_line[0],vcf_line[1],vcf_line[3],vcf_line[4],info_key)
