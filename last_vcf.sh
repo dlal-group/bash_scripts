@@ -12,4 +12,4 @@ bcftools view -h ${vcf} > ${vcf}.header
 bcftools view -H ${vcf} | python /nfs/users/nfs_m/mc14/Work/bash_scripts/last_filter.py ${cohort} ${all_list} ${outdir} ${mode}
 
 cat ${vcf}.header ${outdir}.${all_list}.${cohort}.${mode}.to_keep.vcf | bgzip -c > ${outdir}.${all_list}.${cohort}.${mode}.to_keep.vcf.gz
-tabix -p vcf ${outdir}.${all_list}.${cohort}.${mode}.to_keep.vcf.gz
+tabix -f -p vcf ${outdir}.${all_list}.${cohort}.${mode}.to_keep.vcf.gz
