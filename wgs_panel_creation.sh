@@ -151,6 +151,10 @@ LAST_FILTER )
 #now we do the last round of cleaning to generate the correct vcf file
 # bsub -J"extract_final_clean_ingi_${mode}_${first_suffix}_${cohort}_vcf" -o"${outdir}/LOG_PANEL/22.%J_extract_final_clean_ingi_${mode}_${first_suffix}_${cohort}_vcf.o" -w"ended(extract_clean_ingi_${mode}_${first_suffix}_${cohort}_vcf_tbi)" -M 2000 -R "select[mem>=2000] rusage[mem=2000]" -q normal -- /nfs/users/nfs_m/mc14/Work/bash_scripts/last_vcf.sh ${outdir}/PANEL/${filename}.${mode}_clean_REF.vcf.gz ${cohort} ${outdir}/PANEL/${filename}.${mode}_REF_keep.tab.${cohort}.${mode}.to_keep.tab ${outdir}/PANEL ${mode}
 bsub -J"extract_final_clean_ingi_${mode}_${first_suffix}_${cohort}_vcf" -o"${outdir}/LOG_PANEL/22.%J_extract_final_clean_ingi_${mode}_${first_suffix}_${cohort}_vcf.o" -M 2000 -R "select[mem>=2000] rusage[mem=2000]" -q normal -- /nfs/users/nfs_m/mc14/Work/bash_scripts/last_vcf.sh ${outdir}/PANEL/${filename}.${mode}_clean_REF.vcf.gz ${cohort} ${outdir}/PANEL/${filename}.${mode}_REF_keep.tab.${cohort}.${mode}.to_keep.tab ${outdir}/PANEL ${mode}
+
+# We need to clean also the snp vcf file since there are duplicates!
+# ${pop}/PANEL/${i}.vcf.gz.snp_REF.vcf.gz
+
 ;;
 
 MERGE )
