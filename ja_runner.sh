@@ -740,9 +740,18 @@ file=`sed -n "${LSB_JOBINDEX}p" $1`
 #15/03/2016
 #extract stats
 filename=`basename ${file}`
-samples=$2
-pop=$3
+# samples=$2
+# pop=$3
 
-bcftools view -S ${samples} --force-samples ${file}| bcftools stats -s - -v > ${pop}/${filename}.vchk
+# bcftools view -S ${samples} --force-samples ${file}| bcftools stats -s - -v > ${pop}/${filename}.vchk
 
 
+# -2 >= GERP <2 : GCLASS= "neutral";2 >= GERP <4 : GCLASS ="moderate";4>= GERP <6 : GCLASS="large";6> GERP : GCLASS="extreme"
+
+
+# for i in {1..22}
+# do
+echo ${file}
+zcat ${file}.GERP.bed.gz | awk '{if($4 < 2) print $1,$2,$3,$4,"neutral";else if($4 < 4 && $4 >= 2) print $1,$2,$3,$4,"moderate";else if($4 < 6 && $4 >= 4) print $1,$2,$3,$4,"large";else if($4 > 6 ) print $1,$2,$3,$4,"extreme"}'|bgzip -c > ${file}.GERP.CLASS.bed.gz
+tabix -s 1 -b 2 -e 3 ${file}.GERP.CLASS.bed.gz
+# done
