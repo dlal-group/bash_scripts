@@ -752,6 +752,9 @@ filename=`basename ${file}`
 # for i in {1..22}
 # do
 echo ${file}
-zcat ${file}.GERP.bed.gz | awk '{if($4 < 2) print $1,$2,$3,$4,"neutral";else if($4 < 4 && $4 >= 2) print $1,$2,$3,$4,"moderate";else if($4 < 6 && $4 >= 4) print $1,$2,$3,$4,"large";else if($4 > 6 ) print $1,$2,$3,$4,"extreme"}'|bgzip -c > ${file}.GERP.CLASS.bed.gz
-tabix -s 1 -b 2 -e 3 ${file}.GERP.CLASS.bed.gz
+tabix /lustre/scratch113/projects/esgi-vbseq/25082015_purging/26082015_ANNOTATED/GERP/annotations/${file}.GERP.bed.gz ${file}| awk '{if($4 < 2) print $1,$2,$3,$4,"neutral";else if($4 < 4 && $4 >= 2) print $1,$2,$3,$4,"moderate";else if($4 < 6 && $4 >= 4) print $1,$2,$3,$4,"large";else if($4 > 6 ) print $1,$2,$3,$4,"extreme"}'|bgzip -c > /lustre/scratch113/projects/esgi-vbseq/25082015_purging/26082015_ANNOTATED/GERP/annotations/${file}.GERP.CLASS.bed.gz
+tabix -s 1 -b 2 -e 3 /lustre/scratch113/projects/esgi-vbseq/25082015_purging/26082015_ANNOTATED/GERP/annotations/${file}.GERP.CLASS.bed.gz
 # done
+
+bcftools annotate -a /lustre/scratch113/projects/esgi-vbseq/25082015_purging/26082015_ANNOTATED/GERP/annotations/${file}.GERP.CLASS.bed.gz -c CHROM,FROM,TO,-,GCLASS -h /lustre/scratch113/projects/esgi-vbseq/25082015_purging/26082015_ANNOTATED/GERP/annotations/header_gerp_class.txt -O z -o /lustre/scratch113/projects/esgi-vbseq/25082015_purging/26082015_ANNOTATED/GERP/CLASS/${file}.GERP.CLASS.vcf.gz /lustre/scratch113/projects/esgi-vbseq/25082015_purging/26082015_ANNOTATED/GERP/${file}.GERP.vcf.gz
+tabix -f -p vcf /lustre/scratch113/projects/esgi-vbseq/25082015_purging/26082015_ANNOTATED/GERP/CLASS/${file}.GERP.CLASS.vcf.gz
