@@ -41,9 +41,9 @@ VCF_MERGE )
 IMPUTE_FORMAT )
 #first we need to create the legend file
 # we need rsID, position, REF,ALT: for consistency we'll assign rsID=chr:pos:ALT to all sites with unknown rsID
-echo "bcftools query -f\"%CHROM\\t%POS\\t%ID\\t%REF\\t%ALT\\n\" \${vcf} | awk '{if(\$3!=\".\") print \$3,\$2,\$4,\$5;else if (\$3==\".\") print \"chr\"\$1\":\"\$2\":\"\$5,\$2,\$4,\$5}'| gzip -c > \${outdir}/\${chr}.INGI_REF.\${cohort}.legend.gz" | bsub -J"extract_${mode}_${cohort}_legend_${first_suffix}" -o"${outdir}/LOG_${stage}/1.%J_extract_${mode}_${cohort}_legend_${first_suffix}.o" -M 1000 -R "select[mem>=1000] rusage[mem=1000]" -q normal
+echo "bcftools query -f\"%CHROM\\t%POS\\t%ID\\t%REF\\t%ALT\\n\" ${vcf} | awk '{if(\$3!=\".\") print \$3,\$2,\$4,\$5;else if (\$3==\".\") print \"chr\"\$1\":\"\$2\":\"\$5,\$2,\$4,\$5}'| gzip -c > ${outdir}/${chr}.INGI_REF.${cohort}.legend.gz" | bsub -J"extract_${mode}_${cohort}_legend_${first_suffix}" -o"${outdir}/LOG_${stage}/1.%J_extract_${mode}_${cohort}_legend_${first_suffix}.o" -M 1000 -R "select[mem>=1000] rusage[mem=1000]" -q normal
 #than we need to create the hap file we need to create the legend file
-echo "bcftools query -f\"[%GT ]\\n\" \${vcf} | tr \"|\" \" \" | gzip -c > \${outdir}/\${chr}.INGI_REF.\${cohort}.hap.gz" | bsub -J"extract_${mode}_${cohort}_hap_${first_suffix}" -o"${outdir}/LOG_${stage}/2.%J_extract_${mode}_${cohort}_hap_${first_suffix}.o" -M 1000 -R "select[mem>=1000] rusage[mem=1000]" -q normal
+echo "bcftools query -f\"[%GT ]\\n\" ${vcf} | tr \"|\" \" \" | gzip -c > ${outdir}/${chr}.INGI_REF.${cohort}.hap.gz" | bsub -J"extract_${mode}_${cohort}_hap_${first_suffix}" -o"${outdir}/LOG_${stage}/2.%J_extract_${mode}_${cohort}_hap_${first_suffix}.o" -M 1000 -R "select[mem>=1000] rusage[mem=1000]" -q normal
 
 
 ;;
