@@ -32,6 +32,21 @@ while getopts ":dst" opt; do
       script=$2
       $script ${file} "${@:4}"
       ;;
+    q)
+      echo $opt
+      echo "Quadruple column list mode triggered!" >&2
+      file1=`sed -n "${LSB_JOBINDEX}p" $3 | awk '{print $1}'`
+      file2=`sed -n "${LSB_JOBINDEX}p" $3 | awk '{print $2}'`
+      file3=`sed -n "${LSB_JOBINDEX}p" $3 | awk '{print $3}'`
+      file4=`sed -n "${LSB_JOBINDEX}p" $3 | awk '{print $4}'`
+      echo ${file1}
+      echo ${file2}
+      echo ${file3}
+      echo ${file4}
+      file=${file1}\:${file2}\:${file3}\:${file4}
+      script=$2
+      $script ${file} "${@:4}"
+      ;;
     s)
       echo $opt
       echo "Single list mode triggered!!" >&2
