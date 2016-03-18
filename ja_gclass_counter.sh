@@ -21,6 +21,6 @@ maxgerp="4"
 esac
 
 echo ${g_cat} ${r_cat} ${file} ${mingerp} ${maxgerp}
-
+mkdir -p /lustre/scratch113/projects/esgi-vbseq/25082015_purging/26082015_ANNOTATED/gerpinroh/new_counts/inds/${file}/
 # bsub -o /lustre/scratch113/projects/esgi-vbseq/20140430_purging/enza_2016/gerpinroh/new_counts/outerr/${g_cat}/ooo.${file}.${r_cat}.${g_cat}.out -e /lustre/scratch113/projects/esgi-vbseq/20140430_purging/enza_2016/gerpinroh/new_counts/outerr/${g_cat}/ooo.${file}.${r_cat}.${g_cat}.err -G team151
 python /lustre/scratch113/projects/esgi-vbseq/20140430_purging/enza_2016/gerp/GerpScr/GenotypeSummaryByRegionAndGerp_mergechr.py ${file} /lustre/scratch113/projects/esgi-vbseq/20140430_purging/enza_2016/gerp/BedIndBySize/${r_cat}/${file}.${r_cat}.bed ${mingerp} ${maxgerp} > /lustre/scratch113/projects/esgi-vbseq/25082015_purging/26082015_ANNOTATED/gerpinroh/new_counts/inds/${file}/${file}.${r_cat}.${g_cat}.count
