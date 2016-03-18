@@ -4,8 +4,8 @@
 # Arguments: runner.sh filelist
 # Environment variables: LSB_JOBINDEX
 # mkdir -p LOGS;size=`wc -l result.list|cut -f 1 -d " "`;bsub -J "p_check[1-${size}]" -o "LOGS/%J_p_check.%I.o" -M 5000 -R"select[mem>5000] rusage[mem=5000]" -q normal -- ~/Work/bash_scripts/ja_runner.sh result.list
-r_cat=`sed -n "${LSB_JOBINDEX}p" $1`
-file=`sed -n "${LSB_JOBINDEX}p" $2`
+r_cat=`sed -n "${LSB_JOBINDEX}p" $1 | awk '{print $1}'`
+file=`sed -n "${LSB_JOBINDEX}p" $1 | awk '{print $2}'`
 g_cat=$2
 
 echo ${g_cat} ${r_cat} ${file}
