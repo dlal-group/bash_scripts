@@ -8,7 +8,6 @@ r_cat=`sed -n "${LSB_JOBINDEX}p" $1 | awk '{print $1}'`
 file=`sed -n "${LSB_JOBINDEX}p" $1 | awk '{print $2}'`
 g_cat=$2
 
-echo ${g_cat} ${r_cat} ${file}
 
 case ${g_cat} in
 neutral )
@@ -20,6 +19,8 @@ mingerp="2"
 maxgerp="4"
 ;;
 esac
+
+echo ${g_cat} ${r_cat} ${file} ${mingerp} ${maxgerp}
 
 # bsub -o /lustre/scratch113/projects/esgi-vbseq/20140430_purging/enza_2016/gerpinroh/new_counts/outerr/${g_cat}/ooo.${file}.${r_cat}.${g_cat}.out -e /lustre/scratch113/projects/esgi-vbseq/20140430_purging/enza_2016/gerpinroh/new_counts/outerr/${g_cat}/ooo.${file}.${r_cat}.${g_cat}.err -G team151
 python /lustre/scratch113/projects/esgi-vbseq/20140430_purging/enza_2016/gerp/GerpScr/GenotypeSummaryByRegionAndGerp_mergechr.py ${file} /lustre/scratch113/projects/esgi-vbseq/20140430_purging/enza_2016/gerp/BedIndBySize/${r_cat}/${file}.${r_cat}.bed ${mingerp} ${maxgerp} > /lustre/scratch113/projects/esgi-vbseq/25082015_purging/26082015_ANNOTATED/gerpinroh/new_counts/inds/${file}/${file}.${r_cat}.${g_cat}.count
