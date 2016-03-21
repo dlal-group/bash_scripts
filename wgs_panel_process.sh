@@ -85,12 +85,14 @@ chunk_size=3000000
 pop1=${cohorts[0]}
 pop2=${cohorts[1]}
 # pop2="CARL"
+iter=0
 
 for p in ${cohorts[@]}
 do
 if [[ $p==${pop1} ]];then
 echo "First round"
 echo "${pop1},${pop2}"
+echo "${iter}"
 outdir=/lustre/scratch113/projects/esgi-vbseq/02032016_INGI_REF_PANEL/IMPUTE/${pop1}_${pop2}/${chr}
 mkdir -p ${outdir}
 mkdir -p ${outdir}/LOG_${stage}
@@ -106,10 +108,9 @@ leg_2=/lustre/scratch113/projects/esgi-vbseq/02032016_INGI_REF_PANEL/IMPUTE/${po
 echo -e "Populations: ${pop1} - ${pop2}\nChr: ${chr}\n 
 Impute parameters:\n Genetic map: ${gen_map}\n Hap files \n -${hap_1}\n -${hap_2}\n
 Legend files: \n -${leg_1}\n -${leg_2}\n
-Interval: ${start_pos} - ${end_pos}\n
 Chunk size: ${chunk_size}\n
 Buffer: ${buffer}\n
-Output: ${out_ref}"
+Output folder: ${outdir}"
 
 # run panel merging
 # size=`wc -l /lustre/scratch113/projects/esgi-vbseq/02032016_INGI_REF_PANEL/IMPUTE/${pop1}_${pop2}/${chr}/${chr}.chunks.txt|cut -f 1 -d " "`;bsub -J "merge_ref_${pop1}_${pop2}[1-${size}]" -o "${outdir}/LOG_${stage}/%J_merge_ref_${pop1}_${pop2}.%I.o" -M 5000 -R"select[mem>5000] rusage[mem=5000]" -q normal -- /nfs/users/nfs_m/mc14/Work/bash_scripts/ja_merge_panels.sh /lustre/scratch113/projects/esgi-vbseq/02032016_INGI_REF_PANEL/IMPUTE/${pop1}_${pop2}/${chr}/${chr}.chunks.txt ${pop1} ${pop2} ${chr} ${gen_map} ${hap_1} ${hap_2} ${leg_1} ${leg_2} ${buffer}
@@ -120,6 +121,8 @@ Output: ${out_ref}"
 
 elif [[$p == ${pop2}]]; then
 echo "${p}, second round"
+iter=$[iter +1]
+echo "${iter}"
 continue
 else
 echo ${p}
@@ -129,6 +132,8 @@ c_pop2=${pop2}
 pop1=`echo "${pop1}_${pop2}"`
 pop2=${p}
 echo "${pop1},${pop2}"
+iter=$[iter +1]
+echo "${iter}"
 outdir=/lustre/scratch113/projects/esgi-vbseq/02032016_INGI_REF_PANEL/IMPUTE/${pop1}_${pop2}/${chr}
 mkdir -p ${outdir}
 mkdir -p ${outdir}/LOG_${stage}
@@ -145,10 +150,10 @@ leg_2=/lustre/scratch113/projects/esgi-vbseq/02032016_INGI_REF_PANEL/IMPUTE/${po
 echo -e "Populations: ${pop1} - ${pop2}\nChr: ${chr}\n 
 Impute parameters:\n Genetic map: ${gen_map}\n Hap files \n -${hap_1}\n -${hap_2}\n
 Legend files: \n -${leg_1}\n -${leg_2}\n
-Interval: ${start_pos} - ${end_pos}\n
 Chunk size: ${chunk_size}\n
 Buffer: ${buffer}\n
-Output: ${out_ref}"
+Output folder: ${outdir}"
+
 outdir=/lustre/scratch113/projects/esgi-vbseq/02032016_INGI_REF_PANEL/IMPUTE/${pop1}_${pop2}/${chr}
 mkdir -p ${outdir}
 mkdir -p ${outdir}/LOG_${stage}
