@@ -89,7 +89,7 @@ iter=0
 
 for p in ${cohorts[@]}
 do
-if [ $p== "${pop1}" ];then
+if [ $p == "${pop1}" ];then
 echo "First round"
 echo "${pop1},${pop2}"
 echo "${iter}"
@@ -119,7 +119,7 @@ Output folder: ${outdir}"
 # bsub -J"merge_${chr}_${pop1}_${pop2}" -o"${outdir}/LOG_${stage}/%J_merge_${chr}_${pop1}_${pop2}.o" -w"ended(merge_ref_${pop1}_${pop2}*)" -M 2000 -R"select[mem>=2000] rusage[mem=2000]" -q normal -- /nfs/users/nfs_m/mc14/Work/bash_scripts/chunk_merger.sh ${pop1} ${pop2} ${chr}
 
 
-elif [ $p== "${pop2}"]; then
+elif [ $p == "${pop2}"]; then
 echo "${p}, second round"
 iter=$[iter +1]
 echo "${iter}"
