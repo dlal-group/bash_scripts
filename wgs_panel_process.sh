@@ -69,9 +69,6 @@ PANEL_MERGE )
 #first:write a chunk file
 chr=$2
 cohorts=(${@:3})
-outdir=/lustre/scratch113/projects/esgi-vbseq/02032016_INGI_REF_PANEL/IMPUTE/${pop1}_${pop2}/${chr}
-mkdir -p ${outdir}
-mkdir -p ${outdir}/LOG_${stage}
 
 # cohorts=(TSI CARL FVG VBI)
 
@@ -94,6 +91,9 @@ do
 if [[ $p==${pop1} ]];then
 echo "First round"
 echo "${pop1},${pop2}"
+outdir=/lustre/scratch113/projects/esgi-vbseq/02032016_INGI_REF_PANEL/IMPUTE/${pop1}_${pop2}/${chr}
+mkdir -p ${outdir}
+mkdir -p ${outdir}/LOG_${stage}
 
 hap_1=/lustre/scratch113/projects/esgi-vbseq/02032016_INGI_REF_PANEL/IMPUTE/${pop1}/${chr}/${chr}.INGI_REF.${pop1}.hap.gz
 hap_2=/lustre/scratch113/projects/esgi-vbseq/02032016_INGI_REF_PANEL/IMPUTE/${pop2}/${chr}/${chr}.INGI_REF.${pop2}.hap.gz
@@ -124,6 +124,10 @@ c_pop2=${pop2}
 pop1=`echo "${pop1}_${pop2}"`
 pop2=${p}
 echo "${pop1},${pop2}"
+outdir=/lustre/scratch113/projects/esgi-vbseq/02032016_INGI_REF_PANEL/IMPUTE/${pop1}_${pop2}/${chr}
+mkdir -p ${outdir}
+mkdir -p ${outdir}/LOG_${stage}
+
 
 hap_1=/lustre/scratch113/projects/esgi-vbseq/02032016_INGI_REF_PANEL/IMPUTE/${pop1}/${chr}/${chr}.INGI_REF.${pop1}.hap.gz
 hap_2=/lustre/scratch113/projects/esgi-vbseq/02032016_INGI_REF_PANEL/IMPUTE/${pop2}/${chr}/${chr}.INGI_REF.${pop2}.hap.gz
