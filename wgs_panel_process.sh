@@ -100,7 +100,8 @@ hap_2=/lustre/scratch113/projects/esgi-vbseq/02032016_INGI_REF_PANEL/IMPUTE/${po
 leg_1=/lustre/scratch113/projects/esgi-vbseq/02032016_INGI_REF_PANEL/IMPUTE/${pop1}/${chr}/${chr}.INGI_REF.${pop1}.legend.gz
 leg_2=/lustre/scratch113/projects/esgi-vbseq/02032016_INGI_REF_PANEL/IMPUTE/${pop2}/${chr}/${chr}.INGI_REF.${pop2}.legend.gz
 
-/nfs/users/nfs_m/mc14/Work/bash_scripts/chunk_generator.sh ${leg_1} ${leg_2} ${chunk_size} ${pop1} ${pop2} ${chr}
+#chunk generation step
+# /nfs/users/nfs_m/mc14/Work/bash_scripts/chunk_generator.sh ${leg_1} ${leg_2} ${chunk_size} ${pop1} ${pop2} ${chr}
 
 echo -e "Populations: ${pop1} - ${pop2}\nChr: ${chr}\n 
 Impute parameters:\n Genetic map: ${gen_map}\n Hap files \n -${hap_1}\n -${hap_2}\n
@@ -109,10 +110,12 @@ Interval: ${start_pos} - ${end_pos}\n
 Chunk size: ${chunk_size}\n
 Buffer: ${buffer}\n
 Output: ${out_ref}"
-size=`wc -l /lustre/scratch113/projects/esgi-vbseq/02032016_INGI_REF_PANEL/IMPUTE/${pop1}_${pop2}/${chr}/${chr}.chunks.txt|cut -f 1 -d " "`;bsub -J "merge_ref_${pop1}_${pop2}[1-${size}]" -o "${outdir}/LOG_${stage}/%J_merge_ref_${pop1}_${pop2}.%I.o" -M 5000 -R"select[mem>5000] rusage[mem=5000]" -q normal -- /nfs/users/nfs_m/mc14/Work/bash_scripts/ja_merge_panels.sh /lustre/scratch113/projects/esgi-vbseq/02032016_INGI_REF_PANEL/IMPUTE/${pop1}_${pop2}/${chr}/${chr}.chunks.txt ${pop1} ${pop2} ${chr} ${gen_map} ${hap_1} ${hap_2} ${leg_1} ${leg_2} ${buffer}
 
-#need to merge back stuff!!
-bsub -J"merge_${chr}_${pop1}_${pop2}" -o"${outdir}/LOG_${stage}/%J_merge_${chr}_${pop1}_${pop2}.o" -w"ended(merge_ref_${pop1}_${pop2}*)" -M 2000 -R"select[mem>=2000] rusage[mem=2000]" -q normal -- /nfs/users/nfs_m/mc14/Work/bash_scripts/chunk_merger.sh ${pop1} ${pop2} ${chr}
+# run panel merging
+# size=`wc -l /lustre/scratch113/projects/esgi-vbseq/02032016_INGI_REF_PANEL/IMPUTE/${pop1}_${pop2}/${chr}/${chr}.chunks.txt|cut -f 1 -d " "`;bsub -J "merge_ref_${pop1}_${pop2}[1-${size}]" -o "${outdir}/LOG_${stage}/%J_merge_ref_${pop1}_${pop2}.%I.o" -M 5000 -R"select[mem>5000] rusage[mem=5000]" -q normal -- /nfs/users/nfs_m/mc14/Work/bash_scripts/ja_merge_panels.sh /lustre/scratch113/projects/esgi-vbseq/02032016_INGI_REF_PANEL/IMPUTE/${pop1}_${pop2}/${chr}/${chr}.chunks.txt ${pop1} ${pop2} ${chr} ${gen_map} ${hap_1} ${hap_2} ${leg_1} ${leg_2} ${buffer}
+
+#merge back panel files
+# bsub -J"merge_${chr}_${pop1}_${pop2}" -o"${outdir}/LOG_${stage}/%J_merge_${chr}_${pop1}_${pop2}.o" -w"ended(merge_ref_${pop1}_${pop2}*)" -M 2000 -R"select[mem>=2000] rusage[mem=2000]" -q normal -- /nfs/users/nfs_m/mc14/Work/bash_scripts/chunk_merger.sh ${pop1} ${pop2} ${chr}
 
 
 elif [[$p == ${pop2}]]; then
@@ -136,7 +139,8 @@ hap_2=/lustre/scratch113/projects/esgi-vbseq/02032016_INGI_REF_PANEL/IMPUTE/${po
 leg_1=/lustre/scratch113/projects/esgi-vbseq/02032016_INGI_REF_PANEL/IMPUTE/${pop1}/${chr}/${chr}.INGI_REF.${pop1}.legend.gz
 leg_2=/lustre/scratch113/projects/esgi-vbseq/02032016_INGI_REF_PANEL/IMPUTE/${pop2}/${chr}/${chr}.INGI_REF.${pop2}.legend.gz
 
-bsub -J"chunks_${chr}_${pop1}_${pop2}" -o"${outdir}/LOG_${stage}/%J_chunks_${chr}_${pop1}_${pop2}.o" -w"ended(merge_${chr}_${c_pop1}_${c_pop2})" -M 2000 -R"select[mem>=2000] rusage[mem=2000]" -q normal -- /nfs/users/nfs_m/mc14/Work/bash_scripts/chunk_generator.sh ${leg_1} ${leg_2} ${chunk_size} ${pop1} ${pop2} ${chr}
+#chunk generation step
+# bsub -J"chunks_${chr}_${pop1}_${pop2}" -o"${outdir}/LOG_${stage}/%J_chunks_${chr}_${pop1}_${pop2}.o" -w"ended(merge_${chr}_${c_pop1}_${c_pop2})" -M 2000 -R"select[mem>=2000] rusage[mem=2000]" -q normal -- /nfs/users/nfs_m/mc14/Work/bash_scripts/chunk_generator.sh ${leg_1} ${leg_2} ${chunk_size} ${pop1} ${pop2} ${chr}
 
 echo -e "Populations: ${pop1} - ${pop2}\nChr: ${chr}\n 
 Impute parameters:\n Genetic map: ${gen_map}\n Hap files \n -${hap_1}\n -${hap_2}\n
@@ -148,10 +152,12 @@ Output: ${out_ref}"
 outdir=/lustre/scratch113/projects/esgi-vbseq/02032016_INGI_REF_PANEL/IMPUTE/${pop1}_${pop2}/${chr}
 mkdir -p ${outdir}
 mkdir -p ${outdir}/LOG_${stage}
-size=`wc -l /lustre/scratch113/projects/esgi-vbseq/02032016_INGI_REF_PANEL/IMPUTE/${pop1}_${pop2}/${chr}/${chr}.chunks.txt|cut -f 1 -d " "`;bsub -J "merge_ref_${pop1}_${pop2}[1-${size}]" -o "${outdir}/LOG_${stage}/%J_merge_ref_${pop1}_${pop2}.%I.o" -w"ended(chunks_${chr}_${pop1}_${pop2})" -M 5000 -R"select[mem>5000] rusage[mem=5000]" -q normal -- /nfs/users/nfs_m/mc14/Work/bash_scripts/ja_merge_panels.sh /lustre/scratch113/projects/esgi-vbseq/02032016_INGI_REF_PANEL/IMPUTE/${pop1}_${pop2}/${chr}/${chr}.chunks.txt ${pop1} ${pop2} ${chr} ${gen_map} ${hap_1} ${hap_2} ${leg_1} ${leg_2} ${buffer}
 
-#need to merge back stuff!!
-bsub -J"merge_${chr}_${pop1}_${pop2}" -o"${outdir}/LOG_${stage}/%J_merge_${chr}_${pop1}_${pop2}.o" -w"ended(merge_ref_${pop1}_${pop2}*)" -M 2000 -R"select[mem>=2000] rusage[mem=2000]" -q normal -- /nfs/users/nfs_m/mc14/Work/bash_scripts/chunk_merger.sh ${pop1} ${pop2} ${chr}
+# run panel merging
+# size=`wc -l /lustre/scratch113/projects/esgi-vbseq/02032016_INGI_REF_PANEL/IMPUTE/${pop1}_${pop2}/${chr}/${chr}.chunks.txt|cut -f 1 -d " "`;bsub -J "merge_ref_${pop1}_${pop2}[1-${size}]" -o "${outdir}/LOG_${stage}/%J_merge_ref_${pop1}_${pop2}.%I.o" -w"ended(chunks_${chr}_${pop1}_${pop2})" -M 5000 -R"select[mem>5000] rusage[mem=5000]" -q normal -- /nfs/users/nfs_m/mc14/Work/bash_scripts/ja_merge_panels.sh /lustre/scratch113/projects/esgi-vbseq/02032016_INGI_REF_PANEL/IMPUTE/${pop1}_${pop2}/${chr}/${chr}.chunks.txt ${pop1} ${pop2} ${chr} ${gen_map} ${hap_1} ${hap_2} ${leg_1} ${leg_2} ${buffer}
+
+#merge back panel files
+# bsub -J"merge_${chr}_${pop1}_${pop2}" -o"${outdir}/LOG_${stage}/%J_merge_${chr}_${pop1}_${pop2}.o" -w"ended(merge_ref_${pop1}_${pop2}*)" -M 2000 -R"select[mem>=2000] rusage[mem=2000]" -q normal -- /nfs/users/nfs_m/mc14/Work/bash_scripts/chunk_merger.sh ${pop1} ${pop2} ${chr}
 
 fi
 done
