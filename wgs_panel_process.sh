@@ -116,8 +116,10 @@ bsub -J"merge_${chr}_${pop1}_${pop2}" -o"${outdir}/LOG_${stage}/%J_merge_${chr}_
 
 
 elif [[$p == ${pop2}]]; then
+echo "${p}, second round"
 continue
 else
+echo ${p}
 
 c_pop1=${pop1}
 c_pop2=${pop2}
