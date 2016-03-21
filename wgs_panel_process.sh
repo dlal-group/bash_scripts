@@ -68,7 +68,7 @@ PANEL_MERGE )
 
 #first:write a chunk file
 chr=$2
-cohorts=${@:3}
+cohorts=(${@:3})
 # cohorts=(TSI CARL FVG VBI)
 
 #for the first round, pop1 is ${cohorts[0]}
