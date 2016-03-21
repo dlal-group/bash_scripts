@@ -69,6 +69,10 @@ PANEL_MERGE )
 #first:write a chunk file
 chr=$2
 cohorts=(${@:3})
+outdir=/lustre/scratch113/projects/esgi-vbseq/02032016_INGI_REF_PANEL/IMPUTE/${pop1}_${pop2}/${chr}
+mkdir -p ${outdir}
+mkdir -p ${outdir}/LOG_${stage}
+
 # cohorts=(TSI CARL FVG VBI)
 
 #for the first round, pop1 is ${cohorts[0]}
@@ -105,9 +109,6 @@ Interval: ${start_pos} - ${end_pos}\n
 Chunk size: ${chunk_size}\n
 Buffer: ${buffer}\n
 Output: ${out_ref}"
-outdir=/lustre/scratch113/projects/esgi-vbseq/02032016_INGI_REF_PANEL/IMPUTE/${pop1}_${pop2}/${chr}
-mkdir -p ${outdir}
-mkdir -p ${outdir}/LOG_${stage}
 size=`wc -l /lustre/scratch113/projects/esgi-vbseq/02032016_INGI_REF_PANEL/IMPUTE/${pop1}_${pop2}/${chr}/${chr}.chunks.txt|cut -f 1 -d " "`;bsub -J "merge_ref_${pop1}_${pop2}[1-${size}]" -o "${outdir}/LOG_${stage}/%J_merge_ref_${pop1}_${pop2}.%I.o" -M 5000 -R"select[mem>5000] rusage[mem=5000]" -q normal -- /nfs/users/nfs_m/mc14/Work/bash_scripts/ja_merge_panels.sh /lustre/scratch113/projects/esgi-vbseq/02032016_INGI_REF_PANEL/IMPUTE/${pop1}_${pop2}/${chr}/${chr}.chunks.txt ${pop1} ${pop2} ${chr} ${gen_map} ${hap_1} ${hap_2} ${leg_1} ${leg_2} ${buffer}
 
 #need to merge back stuff!!
