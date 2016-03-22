@@ -20,4 +20,4 @@ chunk_n=$(printf "%03d" ${LSB_JOBINDEX})
 # out_ref=/lustre/scratch113/projects/esgi-vbseq/02032016_INGI_REF_PANEL/IMPUTE/${pop1}_${pop2}/${chr}/${chr}.INGI_REF.${pop1}_${pop2}.${chunk_n}.${start_pos}-${end_pos}
 out_ref=/lustre/scratch113/projects/esgi-vbseq/02032016_INGI_REF_PANEL/IMPUTE/${pop1}_${pop2}/${chr}/${chr}.INGI_REF.${pop1}_${pop2}.${chunk_n}
 
-/nfs/team151/software/impute_v2.3.2_x86_64_static/impute2 -allow_large_regions -m ${gen_map} -h ${hap_1} ${hap_2} -l ${leg_1} ${leg_2} -merge_ref_panels -merge_ref_panels_output_ref ${out_ref} -int ${start_pos} ${end_pos} -Ne 20000 -buffer ${buffer}
+/nfs/team151/software/impute_v2.3.2_x86_64_static/impute2 -allow_large_regions -m ${gen_map} -h ${hap_1} ${hap_2} -l ${leg_1} ${leg_2} -k_hap 2000 2000 -merge_ref_panels -merge_ref_panels_output_ref ${out_ref} -int ${start_pos} ${end_pos} -Ne 20000 -buffer ${buffer} -i ${out_ref}.info
