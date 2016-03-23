@@ -168,25 +168,6 @@ echo "bcftools stats -v -F /lustre/scratch114/resources/ref/Homo_sapiens/1000Gen
 
 ;;
 
-CHECK )
-# Retrieve duplicates line from extraction lists
-
-# awk 'BEGIN{x_count[$1,$2]=1}
-# {if (x[$1,$2]) {
-#   x_count[$1,$2]++;
-#    print $0;
-#     if (x_count[$1,$2] == 2) {
-#      print x[$1,$2];
-#      print x_count[$1,$2]
-#  }
-#    }
-#     x[$1,$2] = $0}'
-
-# awk 'BEGIN{x_count[$1,$2]=0} {if (x[$1,$2]) {x_count[$1,$2]++; print x_count[$1,$2];if (x_count[$1,$2] == 2) { print x[$1,$2]; } } x[$1,$2] = $0}'
-
-
-;;
-
 ALL )
 
 # define path
