@@ -56,8 +56,7 @@ mkdir -p ${outdir}/${chr}
 # echo "bcftools query -f\"%CHROM\\t%POS\\t%ID\\t%REF\\t%ALT\\n\" ${vcf} | awk '{if(\$3!=\".\") print \$3,\$2,\$4,\$5;else if (\$3==\".\") print \"chr\"\$1\":\"\$2\":\"\$5,\$2,\$4,\$5}'|sed '1 i\rsID position a0 a1'| gzip -c > ${outdir}/${chr}/${chr}.INGI_REF.${cohort}.legend.gz" | bsub -J"extract_${stage}_${cohort}_legend_${first_suffix}" -o"${outdir}/LOG_${stage}/1.%J_extract_${mode}_${cohort}_legend_${first_suffix}.o" -M 1000 -R "select[mem>=1000] rusage[mem=1000]" -q normal
 #than we need to create the hap file we need to create the legend file
 # echo "bcftools query -f\"[%GT ]\\n\" ${vcf} | tr \"|\" \" \" | gzip -c > ${outdir}/${chr}/${chr}.INGI_REF.${cohort}.hap.gz" | bsub -J"extract_${mode}_${cohort}_hap_${first_suffix}" -o"${outdir}/LOG_${stage}/2.%J_extract_${stage}_${cohort}_hap_${first_suffix}.o" -M 1000 -R "select[mem>=1000] rusage[mem=1000]" -q normal
-bcftools convert -h ${outdir}/${chr}/${chr}.INGI_REF.${cohort}.hap.gz ${outdir}/${chr}/${chr}.INGI_REF.${cohort}.legend.gz ${outdir}/${chr}/INGI_REF.${cohort}.samples ${vcf}
-
+bcftools convert -h ${outdir}/${chr}/${chr}.INGI_REF.${cohort}.hap.gz,${outdir}/${chr}/${chr}.INGI_REF.${cohort}.legend.gz,${outdir}/${chr}/INGI_REF.${cohort}.samples ${vcf}
 ;;
 PANEL_MERGE )
 #this has to be an iterative process
