@@ -21,7 +21,9 @@
 # /nfs/users/nfs_m/mc14/Work/bash_scripts/wgs_panel_process.sh /lustre/scratch113/projects/esgi-vbseq/08092015/12112015_FILTERED_REL/22.vcf.gz VBI /lustre/scratch113/projects/esgi-vbseq/27112015_INGI_REF_PANEL
 set -e
 
-stage=$1
+# stage=$1
+# we need to have stage as $4 when we run the panel conversion
+stage=$4
 #we're going to split snps and indels, than put them back together again
 
 case ${stage} in
