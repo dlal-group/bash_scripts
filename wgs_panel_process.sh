@@ -183,7 +183,7 @@ CONVERT_VCF)
 cohorts=$2
 chr=${LSB_JOBINDEX}
 
-bcftools convert -H /lustre/scratch113/projects/esgi-vbseq/02032016_INGI_REF_PANEL/IMPUTE/${chr}/${chr}.INGI_REF.${cohorts}.hap.gz,/lustre/scratch113/projects/esgi-vbseq/02032016_INGI_REF_PANEL/IMPUTE/${chr}/${chr}.INGI_REF.${cohorts}.legend.gz,/lustre/scratch113/projects/esgi-vbseq/02032016_INGI_REF_PANEL/IMPUTE/${cohorts}/${cohorts}.REF.samples -O z -o /lustre/scratch113/projects/esgi-vbseq/02032016_INGI_REF_PANEL/IMPUTE/${chr}/${chr}.INGI_REF.${cohorts}.vcf.gz
-tabix -f -p vcf /lustre/scratch113/projects/esgi-vbseq/02032016_INGI_REF_PANEL/IMPUTE/${chr}/${chr}.INGI_REF.${cohorts}.vcf.gz
+bcftools convert -H /lustre/scratch113/projects/esgi-vbseq/02032016_INGI_REF_PANEL/IMPUTE/${cohorts}/${chr}/${chr}.INGI_REF.${cohorts}.hap.gz,/lustre/scratch113/projects/esgi-vbseq/02032016_INGI_REF_PANEL/IMPUTE/${cohorts}/${chr}/${chr}.INGI_REF.${cohorts}.legend.gz,/lustre/scratch113/projects/esgi-vbseq/02032016_INGI_REF_PANEL/IMPUTE/${cohorts}/${cohorts}.REF.samples -O z -o /lustre/scratch113/projects/esgi-vbseq/02032016_INGI_REF_PANEL/IMPUTE/${cohorts}/${chr}/${chr}.INGI_REF.${cohorts}.vcf.gz
+tabix -f -p vcf /lustre/scratch113/projects/esgi-vbseq/02032016_INGI_REF_PANEL/IMPUTE/${cohorts}/${chr}/${chr}.INGI_REF.${cohorts}.vcf.gz
 ;;
 esac
