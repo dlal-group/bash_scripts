@@ -164,6 +164,7 @@ size=`wc -l /lustre/scratch113/projects/esgi-vbseq/02032016_INGI_REF_PANEL/IMPUT
 #merge back panel files
 bsub -J"merge_${chr}_${pop1}_${pop2}" -o"${outdir}/LOG_${stage}/%J_merge_${chr}_${pop1}_${pop2}.o" -w"ended(merge_ref_${pop1}_${pop2}_${chr}*)" -M 1000 -R"select[mem>=1000] rusage[mem=1000]" -q normal -- /nfs/users/nfs_m/mc14/Work/bash_scripts/chunk_merger.sh ${pop1} ${pop2} ${chr}
 
+
 fi
 done
 
@@ -177,5 +178,12 @@ CHECK )
 # (REMEMBER we're working in MULTIALLELIC SPLITTED MODE)
 
 ;;
+CONVERT_VCF)
+#cpnvert files to VCF format
+cohorts=$2
+chr=${LSB_JOBINDEX}
 
+bcftools convert -H /lustre/scratch113/projects/esgi-vbseq/02032016_INGI_REF_PANEL/IMPUTE/${chr}/${chr}.INGI_REF.${cohorts}.hap.gz,/lustre/scratch113/projects/esgi-vbseq/02032016_INGI_REF_PANEL/IMPUTE/${chr}/${chr}.INGI_REF.${cohorts}.legend.gz,/lustre/scratch113/projects/esgi-vbseq/02032016_INGI_REF_PANEL/IMPUTE/${cohorts}/${cohorts}.REF.samples -O z -o /lustre/scratch113/projects/esgi-vbseq/02032016_INGI_REF_PANEL/IMPUTE/${chr}/${chr}.INGI_REF.${cohorts}.vcf.gz
+tabix -f -p vcf /lustre/scratch113/projects/esgi-vbseq/02032016_INGI_REF_PANEL/IMPUTE/${chr}/${chr}.INGI_REF.${cohorts}.vcf.gz
+;;
 esac
