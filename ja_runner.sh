@@ -739,7 +739,7 @@ file=`sed -n "${LSB_JOBINDEX}p" $1`
 # tabix -s 1 -b 2 -e 3 ${file}
 #15/03/2016
 #extract stats
-filename=`basename ${file}`
+# filename=`basename ${file}`
 # samples=$2
 # pop=$3
 
@@ -751,11 +751,19 @@ filename=`basename ${file}`
 
 # for i in {1..22}
 # do
-echo ${file}
-tabix /lustre/scratch113/projects/esgi-vbseq/25082015_purging/26082015_ANNOTATED/GERP/annotations/${file}.GERP.bed.gz ${file}| awk 'BEGIN{OFS="\t"}{if($4 >= -2 && $4 < 2) print $1,$2,$3,$4,"neutral";else if($4 < 4 && $4 >= 2) print $1,$2,$3,$4,"moderate";else if($4 < 6 && $4 >= 4) print $1,$2,$3,$4,"large";else if($4 > 6 ) print $1,$2,$3,$4,"extreme"}'| bgzip -c > /lustre/scratch113/projects/esgi-vbseq/25082015_purging/26082015_ANNOTATED/GERP/annotations/${file}.GERP.CLASS.bed.gz
+# echo ${file}
+# tabix /lustre/scratch113/projects/esgi-vbseq/25082015_purging/26082015_ANNOTATED/GERP/annotations/${file}.GERP.bed.gz ${file}| awk 'BEGIN{OFS="\t"}{if($4 >= -2 && $4 < 2) print $1,$2,$3,$4,"neutral";else if($4 < 4 && $4 >= 2) print $1,$2,$3,$4,"moderate";else if($4 < 6 && $4 >= 4) print $1,$2,$3,$4,"large";else if($4 > 6 ) print $1,$2,$3,$4,"extreme"}'| bgzip -c > /lustre/scratch113/projects/esgi-vbseq/25082015_purging/26082015_ANNOTATED/GERP/annotations/${file}.GERP.CLASS.bed.gz
 #bgzip /lustre/scratch113/projects/esgi-vbseq/25082015_purging/26082015_ANNOTATED/GERP/annotations/${file}.GERP.CLASS.bed
-tabix -f -s 1 -b 2 -e 3 /lustre/scratch113/projects/esgi-vbseq/25082015_purging/26082015_ANNOTATED/GERP/annotations/${file}.GERP.CLASS.bed.gz
+# tabix -f -s 1 -b 2 -e 3 /lustre/scratch113/projects/esgi-vbseq/25082015_purging/26082015_ANNOTATED/GERP/annotations/${file}.GERP.CLASS.bed.gz
 # done
 
-bcftools annotate -a /lustre/scratch113/projects/esgi-vbseq/25082015_purging/26082015_ANNOTATED/GERP/annotations/${file}.GERP.CLASS.bed.gz -c CHROM,FROM,TO,-,GCLASS -h /lustre/scratch113/projects/esgi-vbseq/25082015_purging/26082015_ANNOTATED/GERP/annotations/header_gerp_class.txt -O z -o /lustre/scratch113/projects/esgi-vbseq/25082015_purging/26082015_ANNOTATED/GERP/CLASS/${file}.GERP.CLASS.vcf.gz /lustre/scratch113/projects/esgi-vbseq/25082015_purging/26082015_ANNOTATED/GERP/${file}.GERP.vcf.gz
-tabix -f -p vcf /lustre/scratch113/projects/esgi-vbseq/25082015_purging/26082015_ANNOTATED/GERP/CLASS/${file}.GERP.CLASS.vcf.gz
+# bcftools annotate -a /lustre/scratch113/projects/esgi-vbseq/25082015_purging/26082015_ANNOTATED/GERP/annotations/${file}.GERP.CLASS.bed.gz -c CHROM,FROM,TO,-,GCLASS -h /lustre/scratch113/projects/esgi-vbseq/25082015_purging/26082015_ANNOTATED/GERP/annotations/header_gerp_class.txt -O z -o /lustre/scratch113/projects/esgi-vbseq/25082015_purging/26082015_ANNOTATED/GERP/CLASS/${file}.GERP.CLASS.vcf.gz /lustre/scratch113/projects/esgi-vbseq/25082015_purging/26082015_ANNOTATED/GERP/${file}.GERP.vcf.gz
+# tabix -f -p vcf /lustre/scratch113/projects/esgi-vbseq/25082015_purging/26082015_ANNOTATED/GERP/CLASS/${file}.GERP.CLASS.vcf.gz
+
+#29/03/2016
+
+outpath=$2
+filename=`basename ${file}`
+
+bcftools plugin fill-tags ${file} -O z -o ${outpath}/${filename}
+tabix -f -p vcf ${outpath}/${filename}
