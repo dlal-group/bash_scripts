@@ -128,7 +128,7 @@ else
 fi
 
 ### step 1: pre-phase ###
-if [ $MODE=="PHASE" ]; then
+if [[ $MODE == "PHASE" ]]; then
 	echo phase $geno chr$chr
 	# echo -e "#!/usr/local/bin/bash
 	# \necho \"Starting on : \$(date); Running on : \$(hostname); Job ID : \$LSB_JOBID\"
