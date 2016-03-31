@@ -29,72 +29,83 @@ chr=$3
 MODE=$4 #set this to PHASE, if you want to phase and impute; set this to IMPUTE, if you're providing already phased genotypes
 
 # imputedir=/lustre/scratch113/projects/carl_seq/05272015_MERGED_REF_PANEL/IMPUTED/${pop}/${PANEL}$postfix
-imputedir=/lustre/scratch114/teams/soranzo/users/mc14/fromscratch113/INGI/14102015_MERGED_REF_PANEL/IMPUTED/${pop}/${PANEL}$postfix
+# imputedir=/lustre/scratch114/teams/soranzo/users/mc14/fromscratch113/INGI/14102015_MERGED_REF_PANEL/IMPUTED/${pop}/${PANEL}$postfix
+imputedir=/lustre/scratch113/projects/esgi-vbseq/31032016_IMPUTATION/${pop}/${PANEL}$postfix
 # mkdir -p ${phasedir}
 mkdir -p ${imputedir}
 
 case $pop in
 	VBI)
-	extra_str_excl_samples="-exclude_samples_g /lustre/scratch114/teams/soranzo/users/mc14/fromscratch113/INGI/05272015_MERGED_REF_PANEL/listpop/VBI_seq_samples.exclusion"
-	extra_str_excl_snps="-exclude_snps_g /lustre/scratch114/teams/soranzo/users/mc14/fromscratch113/INGI/05272015_MERGED_REF_PANEL/snplist/${pop}_chr${chr}.exclude -impute_excluded"
+	extra_str_excl_samples="-exclude_samples_g /lustre/scratch113/projects/esgi-vbseq/08092015/12112015_FILTERED_REL/LISTS/VBI_impute_exclude_sample.list"
+	# extra_str_excl_snps="-exclude_snps_g /lustre/scratch114/teams/soranzo/users/mc14/fromscratch113/INGI/05272015_MERGED_REF_PANEL/snplist/${pop}_chr${chr}.exclude -impute_excluded"
 	genodir=/lustre/scratch114/teams/soranzo/users/mc14/fromscratch113/INGI/MERGED_REF_PANEL_Feb2015/VBI_geno
 	phasedir=/lustre/scratch114/teams/soranzo/users/mc14/fromscratch113/INGI/MERGED_REF_PANEL_Feb2015/VBI_geno
 	;;
 	FVG)
-	extra_str_excl_samples="-exclude_samples_g /lustre/scratch114/teams/soranzo/users/mc14/fromscratch113/INGI/05272015_MERGED_REF_PANEL/listpop/FVG_seq_samples.exclusion"
-	extra_str_excl_snps="-exclude_snps_g /lustre/scratch114/teams/soranzo/users/mc14/fromscratch113/INGI/05272015_MERGED_REF_PANEL/snplist/${pop}_chr${chr}.exclude -impute_excluded"
+	extra_str_excl_samples="-exclude_samples_g /lustre/scratch113/projects/fvg_seq/16092015/12112015_FILTERED_REL/LISTS/FVG_impute_exclude_sample.list"
+	# extra_str_excl_snps="-exclude_snps_g /lustre/scratch114/teams/soranzo/users/mc14/fromscratch113/INGI/05272015_MERGED_REF_PANEL/snplist/${pop}_chr${chr}.exclude -impute_excluded"
 	genodir=/lustre/scratch114/teams/soranzo/users/mc14/fromscratch113/INGI/05272015_MERGED_REF_PANEL/GWAS/FVG/shapeit
 	phasedir=/lustre/scratch114/teams/soranzo/users/mc14/fromscratch113/INGI/05272015_MERGED_REF_PANEL/GWAS/FVG/shapeit
 	;;
 	CARL)
-	extra_str_excl_samples="-exclude_samples_g /lustre/scratch114/teams/soranzo/users/mc14/fromscratch113/INGI/05272015_MERGED_REF_PANEL/listpop/CARL_seq_samples.exclusion"
-	extra_str_excl_snps="-exclude_snps_g /lustre/scratch114/teams/soranzo/users/mc14/fromscratch113/INGI/05272015_MERGED_REF_PANEL/snplist/${pop}_chr${chr}.exclude -impute_excluded"
+	extra_str_excl_samples="-exclude_samples_g /lustre/scratch113/projects/carl_seq/variant_refinement/12112015_FILTERED_REL/LISTS/CARL_impute_exclude_sample.list"
+	# extra_str_excl_snps="-exclude_snps_g /lustre/scratch114/teams/soranzo/users/mc14/fromscratch113/INGI/05272015_MERGED_REF_PANEL/snplist/${pop}_chr${chr}.exclude -impute_excluded"
 	genodir=/lustre/scratch113/teams/soranzo/users/jh21/imputed/carl/shapeit
 	phasedir=/lustre/scratch113/teams/soranzo/users/jh21/imputed/carl/shapeit
 	;;
 	INCIPE2 )
-	extra_str_excl_snps="-exclude_snps_g /lustre/scratch114/teams/soranzo/users/mc14/fromscratch113/INGI/05272015_MERGED_REF_PANEL/snplist/${pop}_chr${chr}.exclude -impute_excluded"
+	# extra_str_excl_snps="-exclude_snps_g /lustre/scratch114/teams/soranzo/users/mc14/fromscratch113/INGI/05272015_MERGED_REF_PANEL/snplist/${pop}_chr${chr}.exclude -impute_excluded"
 	genodir=/lustre/scratch113/teams/soranzo/users/jh21/imputed/incipe2/shapeit
 	phasedir=/lustre/scratch113/teams/soranzo/users/jh21/imputed/incipe2/shapeit
 	;;
 esac
-case $PANEL in
-	FVG )
-	refdir=/lustre/scratch114/teams/soranzo/users/mc14/fromscratch113/INGI/MERGED_REF_PANEL_Feb2015/SHAPEIT/FVG_HAP_LEGEND
-	refhap=$refdir/${PANEL}.chr$chr.hap.gz
-	reflegend=$refdir/${PANEL}.chr$chr.legend.gz
-	;;
-	CARL )
-	refdir=/lustre/scratch114/teams/soranzo/users/mc14/fromscratch113/INGI/MERGED_REF_PANEL_Feb2015/SHAPEIT/CARL_HAP_LEGEND
-	refhap=$refdir/${PANEL}.chr$chr.hap.gz
-	reflegend=$refdir/${PANEL}.chr$chr.legend.gz
-	;;
-	VBI )
-	refdir=/lustre/scratch114/teams/soranzo/users/mc14/fromscratch113/INGI/MERGED_REF_PANEL_Feb2015/SHAPEIT/VBI_HAP_LEGEND
-	refhap=$refdir/${PANEL}.chr$chr.hap.gz
-	reflegend=$refdir/${PANEL}.chr$chr.legend.gz
-	;;
-	INGI )
-	refdir=/lustre/scratch114/teams/soranzo/users/mc14/fromscratch113/INGI/MERGED_REF_PANEL_Feb2015/MERGER_CARL_VBI_FVG
-	refhap=$refdir/${PANEL}.chr$chr.hap.gz
-	reflegend=$refdir/${PANEL}.chr$chr.legend.gz
-	;;
-	1000Gph1 )
-	refdir=/lustre/scratch114/resources/imputation/impute2/2015-05-08/ALL_1000G_phase1interim_jun2011_impute
-	refhap=$refdir/ALL_1000G_phase1interim_jun2011_chr${chr}_impute.hap.gz
-	reflegend=$refdir/ALL_1000G_phase1interim_jun2011_chr${chr}_impute.legend.gz
-	;;
-	INGI_1000GPh3 )
-	refdir=/lustre/scratch114/teams/soranzo/users/mc14/fromscratch113/INGI/MERGED_REF_PANEL_Feb2015/MERGER_INGI_1000GPh3
-	refhap=$refdir/${PANEL}.chr$chr.hap.gz
-	reflegend=$refdir/${PANEL}.chr$chr.legend.gz
-	;;
-	1000GP_Phase3)
-	refdir=/lustre/scratch114/resources/imputation/impute2/1000GP_Phase3_v1a
-	refhap=$refdir/${PANEL}_chr$chr.hap.gz
-	reflegend=$refdir/${PANEL}_chr$chr.legend.gz
-	;;
-esac
+
+refdir=/lustre/scratch113/projects/esgi-vbseq/02032016_INGI_REF_PANEL/IMPUTE/${PANEL}
+refhap=$refdir/${chr}/${chr}.INGI_REF.${PANEL}.hap.gz
+reflegend=$refdir/${chr}/${chr}.INGI_REF.${PANEL}.legend.gz
+
+# case $PANEL in
+# 	FVG )
+# 	refdir=/lustre/scratch114/teams/soranzo/users/mc14/fromscratch113/INGI/MERGED_REF_PANEL_Feb2015/SHAPEIT/FVG_HAP_LEGEND
+# 	refhap=$refdir/${PANEL}.chr$chr.hap.gz
+# 	reflegend=$refdir/${PANEL}.chr$chr.legend.gz
+# 	;;
+# 	CARL )
+# 	refdir=/lustre/scratch114/teams/soranzo/users/mc14/fromscratch113/INGI/MERGED_REF_PANEL_Feb2015/SHAPEIT/CARL_HAP_LEGEND
+# 	refhap=$refdir/${PANEL}.chr$chr.hap.gz
+# 	reflegend=$refdir/${PANEL}.chr$chr.legend.gz
+# 	;;
+# 	VBI )
+# 	refdir=/lustre/scratch114/teams/soranzo/users/mc14/fromscratch113/INGI/MERGED_REF_PANEL_Feb2015/SHAPEIT/VBI_HAP_LEGEND
+# 	refhap=$refdir/${PANEL}.chr$chr.hap.gz
+# 	reflegend=$refdir/${PANEL}.chr$chr.legend.gz
+# 	;;
+# 	INGI )
+# 	refdir=/lustre/scratch114/teams/soranzo/users/mc14/fromscratch113/INGI/MERGED_REF_PANEL_Feb2015/MERGER_CARL_VBI_FVG
+# 	refhap=$refdir/${PANEL}.chr$chr.hap.gz
+# 	reflegend=$refdir/${PANEL}.chr$chr.legend.gz
+# 	;;
+# 	1000Gph1 )
+# 	refdir=/lustre/scratch114/resources/imputation/impute2/2015-05-08/ALL_1000G_phase1interim_jun2011_impute
+# 	refhap=$refdir/ALL_1000G_phase1interim_jun2011_chr${chr}_impute.hap.gz
+# 	reflegend=$refdir/ALL_1000G_phase1interim_jun2011_chr${chr}_impute.legend.gz
+# 	;;
+# 	INGI_1000GPh3 )
+# 	refdir=/lustre/scratch114/teams/soranzo/users/mc14/fromscratch113/INGI/MERGED_REF_PANEL_Feb2015/MERGER_INGI_1000GPh3
+# 	refhap=$refdir/${PANEL}.chr$chr.hap.gz
+# 	reflegend=$refdir/${PANEL}.chr$chr.legend.gz
+# 	;;
+# 	1000GP_Phase3)
+# 	refdir=/lustre/scratch114/resources/imputation/impute2/1000GP_Phase3_v1a
+# 	refhap=$refdir/${PANEL}_chr$chr.hap.gz
+# 	reflegend=$refdir/${PANEL}_chr$chr.legend.gz
+# 	;;
+# 	INGI_1000GPh3_UK10K )
+# 	refdir=/lustre/scratch114/resources/imputation/impute2/1000GP_Phase3_v1a
+# 	refhap=$refdir/${PANEL}_chr$chr.hap.gz
+# 	reflegend=$refdir/${PANEL}_chr$chr.legend.gz
+# 	;;
+# esac
 
 extra_str=`echo $extra_str_excl_snps $extra_str_excl_samples`
 
@@ -147,12 +158,12 @@ for chunk in `seq 1 $chunk_num`; do
 		chunk_begin=$chr_begin
 	fi
 	if [[ $chunk -eq $chunk_num ]]; then
-		mem=20000
-		queue=long
+		mem=5000
+		queue=normal
 		chunk_end=$chr_end
 	else
-		mem=20000
-		queue=long
+		mem=5000
+		queue=normal
 		chunk_end=`echo "$chr_begin+($chunk*$chunk_size)" | bc`
 	fi
 	if [[ $chr.$chunkStr == 8.02 ]]; then
@@ -163,8 +174,9 @@ for chunk in `seq 1 $chunk_num`; do
 		refhap=$refdir/$refname/chr$chr.${chunkStr}$postfix.hap.gz
 		reflegend=$refdir/$refname/chr$chr.${chunkStr}$postfix.legend.gz
 	fi
+	gen_map=/lustre/scratch114/resources/imputation/impute2/2015-05-08/ALL_1000G_phase1interim_jun2011_impute/genetic_map_chr${chr}_combined_b37.txt
 	echo -e "#!/usr/local/bin/bash
-	\n$impute2 -allow_large_regions -m /lustre/scratch114/teams/soranzo/users/mc14/fromscratch113/INGI/MERGED_REF_PANEL_Feb2015/GENETIC_MAP/genetic_map_chr${chr}_combined_b37.txt -h $refhap -l $reflegend -known_haps_g $phasedir/chr$chr.hap.gz -sample_g $phasedir/chr$chr.sample $extra_str -use_prephased_g -k_hap $k_hap -int $chunk_begin $chunk_end -Ne 20000 -buffer $buffer_size -o chr$chr.$chunkStr.gen $chrX_impute_str
+	\n$impute2 -allow_large_regions -m ${gen_map} -h $refhap -l $reflegend -known_haps_g $phasedir/chr$chr.hap.gz -sample_g $phasedir/chr$chr.sample $extra_str -use_prephased_g -k_hap $k_hap -int $chunk_begin $chunk_end -Ne 20000 -buffer $buffer_size -o chr$chr.$chunkStr.gen $chrX_impute_str
 	\ngzip -f chr$chr.$chunkStr.gen
 	\nif [[ -e chr$chr.$chunkStr.gen_allele_probs ]]; then
 	\ngzip chr$chr.$chunkStr.gen_allele_probs chr$chr.$chunkStr.gen_haps
@@ -172,9 +184,9 @@ for chunk in `seq 1 $chunk_num`; do
 	\nN_info=\`awk 'NR>1' chr$chr.$chunkStr.gen_info | wc -l | awk '{printf \$1}'\`
 	\nN_gen=\`zcat chr$chr.$chunkStr.gen.gz | wc -l | awk '{printf \$1}'\`
             if [[ \$N_info != \$N_gen ]]; then
-                    echo \"chr$chr $chunkStr: \$N_info for info, \$N_gen for gen\" > ../chr$chr.$chunkStr.ERR
+                    echo \"chr$chr $chunkStr: \$N_info for info, \$N_gen for gen\" > $imputedir/chr$chr.$chunkStr.ERR
             fi
             " > $imputedir/chr$chr.$chunkStr.cmd
 	cd $imputedir
-	bsub -J ${refname}$postfix.$geno.chr$chr.$chunkStr -q $queue -R "select[mem>$mem] rusage[mem=$mem]" -M${mem} -o chr$chr.$chunkStr.log -e chr$chr.$chunkStr.err < chr$chr.$chunkStr.cmd
+	bsub -J ${refname}$postfix.$geno.chr$chr.$chunkStr -q $queue -R "select[mem>$mem] rusage[mem=$mem]" -M${mem} -o $imputedir/chr$chr.$chunkStr.log -e $imputedir/chr$chr.$chunkStr.err < $imputedir/chr$chr.$chunkStr.cmd
 done
