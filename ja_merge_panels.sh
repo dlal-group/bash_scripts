@@ -19,9 +19,14 @@ chunk_n=$(printf "%03d" ${LSB_JOBINDEX})
 
 out_ref=/lustre/scratch113/projects/esgi-vbseq/02032016_INGI_REF_PANEL/IMPUTE/${pop1}_${pop2}/${chr}/${chr}.INGI_REF.${pop1}_${pop2}.${chunk_n}
 
-if [[ -s ${out_ref} ]]; then
-	echo "existing chunk! ${out_ref}"
+if [[ -s ${out_ref}.hap ]]; then
+	echo "existing chunk! ${out_ref}, gzip only!!"
+	gzip ${out_ref}.hap
+	gzip ${out_ref}.legend
+
 else
 	/nfs/team151/software/impute_v2.3.2_x86_64_static/impute2 -allow_large_regions -m ${gen_map} -h ${hap_1} ${hap_2} -l ${leg_1} ${leg_2} -k_hap 2000 2000 -merge_ref_panels -merge_ref_panels_output_ref ${out_ref} -merge_ref_panels_output_gen ${out_ref} -int ${start_pos} ${end_pos} -Ne 20000 -buffer ${buffer} -i ${out_ref}.info
+	gzip ${out_ref}.hap
+	gzip ${out_ref}.legend
 fi
 # /nfs/team151/software/impute_v2.3.2_x86_64_static/impute2 -allow_large_regions -m ${gen_map} -h ${hap_1} ${hap_2} -l ${leg_1} ${leg_2} -k_hap 2000 2000 -merge_ref_panels -merge_ref_panels_output_gen ${out_ref} -int ${start_pos} ${end_pos} -Ne 20000 -buffer ${buffer} -i ${out_ref}.info
