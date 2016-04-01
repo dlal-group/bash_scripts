@@ -25,7 +25,8 @@ if [[ -s ${out_ref}.hap ]]; then
 	gzip ${out_ref}.legend
 
 else
-	/nfs/team151/software/impute_v2.3.2_x86_64_static/impute2 -allow_large_regions -m ${gen_map} -h ${hap_1} ${hap_2} -l ${leg_1} ${leg_2} -k_hap 2000 2000 -merge_ref_panels -merge_ref_panels_output_ref ${out_ref} -merge_ref_panels_output_gen ${out_ref} -int ${start_pos} ${end_pos} -Ne 20000 -buffer ${buffer} -i ${out_ref}.info
+	/nfs/team151/software/impute_v2.3.2_x86_64_static/impute2 -allow_large_regions -m ${gen_map} -h ${hap_1} ${hap_2} -l ${leg_1} ${leg_2} -k_hap 10000 10000 -merge_ref_panels -merge_ref_panels_output_ref ${out_ref} -merge_ref_panels_output_gen ${out_ref} -int ${start_pos} ${end_pos} -Ne 20000 -buffer ${buffer} -i ${out_ref}.info
+	# /nfs/team151/software/impute_v2.3.2_x86_64_static/impute2 -allow_large_regions -m ${gen_map} -h ${hap_1} ${hap_2} -l ${leg_1} ${leg_2} -k_hap 2000 2000 -merge_ref_panels -merge_ref_panels_output_ref ${out_ref} -merge_ref_panels_output_gen ${out_ref} -int ${start_pos} ${end_pos} -Ne 20000 -buffer ${buffer} -i ${out_ref}.info
 	gzip ${out_ref}.hap
 	gzip ${out_ref}.legend
 fi

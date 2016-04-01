@@ -45,7 +45,8 @@ while getopts ":dst" opt; do
       echo ${file4}
       file=${file1}\:${file2}\:${file3}\:${file4}
       script=$2
-      $script ${file} "${@:4}"
+      # $script ${file} "${@:4}"
+      $script ${file1} ${file2} ${file3} ${file4} "${@:4}"
       ;;
     s)
       echo $opt
