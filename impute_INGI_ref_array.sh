@@ -28,6 +28,7 @@ PANEL=$2
 chr=$3
 MODE=$4 #set this to PHASE, if you want to phase and impute; set this to IMPUTE, if you're providing already phased genotypes
 q=$5 #selected queue
+m=$6 #select memory amount
 
 # imputedir=/lustre/scratch113/projects/carl_seq/05272015_MERGED_REF_PANEL/IMPUTED/${pop}/${PANEL}$postfix
 # imputedir=/lustre/scratch114/teams/soranzo/users/mc14/fromscratch113/INGI/14102015_MERGED_REF_PANEL/IMPUTED/${pop}/${PANEL}$postfix
@@ -159,11 +160,11 @@ for chunk in `seq 1 $chunk_num`; do
 		chunk_begin=$chr_begin
 	fi
 	if [[ $chunk -eq $chunk_num ]]; then
-		mem=12000
+		mem=${m} #12000
 		queue=${q}
 		chunk_end=$chr_end
 	else
-		mem=12000
+		mem=${m} #12000
 		queue=${q}
 		chunk_end=`echo "$chr_begin+($chunk*$chunk_size)" | bc`
 	fi
