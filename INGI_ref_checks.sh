@@ -20,14 +20,15 @@ do
 # for pan in CARL_FVG_VBI.shapeit CARL_FVG_VBI_TSI.shapeit CARL.shapeit FVG.shapeit VBI.shapeit
 for pan in uk10k1kg.ref
 do
-    mkdir -p ${basefolder2}/${pop}/${pan}
+
+    mkdir -p ${basefolder2}/${pop^^}/${pan}
         for chr in 21
         do
             maf_bins="0,0.005,0.01,0.02,0.05,0.10,0.15,0.20,0.25,0.30,0.40,0.50"
             # chr=1
             (fgrep -h -v position ${basefolder}/${pop}/${pan}/chr${chr}.*.gen_info) | gzip -c > ${basefolder2}/${pop}/${pan}/chr${chr}.gen_info.gz
             # gzip ${pop}/${pan}/chr${chr}.gen_info
-            (echo "CHROM RS_ID POS EXP_FREQ_A1 INFO TYPE INFO_TYPE0 CONCORD_TYPE0 r2_TYPE0 COHORT PANEL MAF BIN";(zgrep -v position ${basefolder2}/${pop}/${pan}/chr${chr}.gen_info.gz | cut -f 2,3,6,7,9- -d " "| awk -v chrom=$chr -v cohort=$pop -v panel=$pan '{if($3 <= 0.5 ) print chrom,$0,cohort,panel,$3; else print chrom,$0,cohort,panel,1-$3}'|awk -v bins=$maf_bins '
+            (echo "CHROM RS_ID POS EXP_FREQ_A1 INFO TYPE INFO_TYPE0 CONCORD_TYPE0 r2_TYPE0 COHORT PANEL MAF BIN";(zgrep -v position ${basefolder2}/${pop}/${pan}/chr${chr}.gen_info.gz | cut -f 2,3,6,7,9- -d " "| awk -v chrom=$chr -v cohort=$pop -v panel=$pan '{if($3 <= 0.5 ) print chrom,$0,toupper(cohort),panel,$3; else print chrom,$0,toupper(cohort),panel,1-$3}'|awk -v bins=$maf_bins '
             {n=split(bins,mafs,",");}{
                 for (i=1;i<=n;i++){
                     if (mafs[i]==0){
