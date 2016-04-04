@@ -1,22 +1,26 @@
-#Script to prepare data for plotting after imputation
-    for pan in uk10k1kg.ref
-    for pan in INGI.shapeit CARL.shapeit FVG.shapeit VBI.shapeit 1000Gph1.shapeit 1000GP_Phase3.shapeit INGI_1000GPh3.shapeit uk10k1kg.ref
+#!/usr/local/bin/bash
 
-# for pop in CARL FVG INCIPE2 VBI
+#Script to prepare data for plotting after imputation
+    # for pan in uk10k1kg.ref
+# for pan in INGI.shapeit CARL.shapeit FVG.shapeit VBI.shapeit 1000Gph1.shapeit 1000GP_Phase3.shapeit INGI_1000GPh3.shapeit uk10k1kg.ref
+    # for pan in 1000GP_Phase3.shapeit
+
 # pop=CARL
     # for pan in INGI.shapeit CARL.shapeit FVG.shapeit VBI.shapeit 1000Gph1.shapeit INGI_1000GPh3.shapeit uk10k1kg.ref
     # pan=1000Gph1.shapeit
     # pan=uk10k1kg.ref
     # do
-for pop in INCIPE2
+basefolder="/lustre/scratch113/projects/esgi-vbseq/31032016_IMPUTATION"
+for pop in CARL FVG INCIPE2 VBI
+# for pop in INCIPE2
 do
-    for pan in 1000GP_Phase3.shapeit
+for pan in CARL_FVG_VBI.shapeit CARL_FVG_VBI_TSI.shapeit CARL.shapeit FVG.shapeit VBI.shapeit
 do
-        for chr in {1..1}
+        for chr in 21
         do
             maf_bins="0,0.005,0.01,0.02,0.05,0.10,0.15,0.20,0.25,0.30,0.40,0.50"
             # chr=1
-            # (fgrep -h -v position ~/carl_seq/05272015_MERGED_REF_PANEL/IMPUTED/${pop}/${pan}/chr${chr}.*.gen_info) | gzip -c > ~/carl_seq/05272015_MERGED_REF_PANEL/IMPUTED/${pop}/${pan}/chr${chr}.gen_info.gz
+            (fgrep -h -v position ${basefolder}/${pop}/${pan}/chr${chr}.*.gen_info) | gzip -c > ${basefolder}/${pop}/${pan}/chr${chr}.gen_info.gz
             # gzip ${pop}/${pan}/chr${chr}.gen_info
             (echo "CHROM RS_ID POS EXP_FREQ_A1 INFO TYPE INFO_TYPE0 CONCORD_TYPE0 r2_TYPE0 COHORT PANEL MAF BIN";(zgrep -v position /lustre/scratch114/teams/soranzo/users/mc14/fromscratch113/INGI/05272015_MERGED_REF_PANEL/IMPUTED/${pop}/${pan}/chr${chr}.gen_info.gz | cut -f 2,3,4,5,7- -d " "| awk -v chrom=$chr -v cohort=$pop -v panel=$pan '{if($3 <= 0.5 ) print chrom,$0,cohort,panel,$3; else print chrom,$0,cohort,panel,1-$3}'|awk -v bins=$maf_bins '
             {n=split(bins,mafs,",");}{
@@ -32,9 +36,9 @@ do
 
                     }
                 }
-            }'))| gzip -c > /lustre/scratch114/teams/soranzo/users/mc14/fromscratch113/INGI/05272015_MERGED_REF_PANEL/IMPUTED/${pop}/${pan}/chr${chr}.gen_info_partial_t2.gz
+            }'))| gzip -c > ${basefolder}/${pop}/${pan}/chr${chr}.gen_info_partial_t2.gz
 
-            (zcat /lustre/scratch114/teams/soranzo/users/mc14/fromscratch113/INGI/05272015_MERGED_REF_PANEL/IMPUTED/${pop}/${pan}/chr${chr}.gen_info_partial.gz| head -1;(zcat /lustre/scratch114/teams/soranzo/users/mc14/fromscratch113/INGI/05272015_MERGED_REF_PANEL/IMPUTED/${pop}/${pan}/chr${chr}.gen_info_partial.gz| awk '$6 == 2')) | gzip -c > /lustre/scratch114/teams/soranzo/users/mc14/fromscratch113/INGI/05272015_MERGED_REF_PANEL/IMPUTED/${pop}/${pan}/chr${chr}.gen_info_partial_t2.gz 
+            # (zcat /lustre/scratch114/teams/soranzo/users/mc14/fromscratch113/INGI/05272015_MERGED_REF_PANEL/IMPUTED/${pop}/${pan}/chr${chr}.gen_info_partial.gz| head -1;(zcat /lustre/scratch114/teams/soranzo/users/mc14/fromscratch113/INGI/05272015_MERGED_REF_PANEL/IMPUTED/${pop}/${pan}/chr${chr}.gen_info_partial.gz| awk '$6 == 2')) | gzip -c > /lustre/scratch114/teams/soranzo/users/mc14/fromscratch113/INGI/05272015_MERGED_REF_PANEL/IMPUTED/${pop}/${pan}/chr${chr}.gen_info_partial_t2.gz 
         done
     done
 done
