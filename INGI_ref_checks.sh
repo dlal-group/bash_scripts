@@ -22,7 +22,7 @@ do
             # chr=1
             (fgrep -h -v position ${basefolder}/${pop}/${pan}/chr${chr}.*.gen_info) | gzip -c > ${basefolder}/${pop}/${pan}/chr${chr}.gen_info.gz
             # gzip ${pop}/${pan}/chr${chr}.gen_info
-            (echo "CHROM RS_ID POS EXP_FREQ_A1 INFO TYPE INFO_TYPE0 CONCORD_TYPE0 r2_TYPE0 COHORT PANEL MAF BIN";(zgrep -v position /lustre/scratch114/teams/soranzo/users/mc14/fromscratch113/INGI/05272015_MERGED_REF_PANEL/IMPUTED/${pop}/${pan}/chr${chr}.gen_info.gz | cut -f 2,3,4,5,7- -d " "| awk -v chrom=$chr -v cohort=$pop -v panel=$pan '{if($3 <= 0.5 ) print chrom,$0,cohort,panel,$3; else print chrom,$0,cohort,panel,1-$3}'|awk -v bins=$maf_bins '
+            (echo "CHROM RS_ID POS EXP_FREQ_A1 INFO TYPE INFO_TYPE0 CONCORD_TYPE0 r2_TYPE0 COHORT PANEL MAF BIN";(zgrep -v position /lustre/scratch114/teams/soranzo/users/mc14/fromscratch113/INGI/05272015_MERGED_REF_PANEL/IMPUTED/${pop}/${pan}/chr${chr}.gen_info.gz | cut -f 2,3,6,7,9- -d " "| awk -v chrom=$chr -v cohort=$pop -v panel=$pan '{if($3 <= 0.5 ) print chrom,$0,cohort,panel,$3; else print chrom,$0,cohort,panel,1-$3}'|awk -v bins=$maf_bins '
             {n=split(bins,mafs,",");}{
                 for (i=1;i<=n;i++){
                     if (mafs[i]==0){
