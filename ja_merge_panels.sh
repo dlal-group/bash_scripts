@@ -19,7 +19,12 @@ chunk_n=$(printf "%03d" ${LSB_JOBINDEX})
 
 out_ref=/lustre/scratch113/projects/esgi-vbseq/02032016_INGI_REF_PANEL/IMPUTE/${pop1}_${pop2}/${chr}/${chr}.INGI_REF.${pop1}_${pop2}.${chunk_n}
 
-if [[ -s ${out_ref}.hap ]]; then
+if [[ -s ${out_ref}.hap.gz ]]; then
+	echo "existing chunk! ${out_ref}, no gzip!!"
+	# gzip ${out_ref}.hap
+	# gzip ${out_ref}.legend
+
+elif [[ -s ${out_ref}.hap ]]; then
 	echo "existing chunk! ${out_ref}, gzip only!!"
 	gzip ${out_ref}.hap
 	gzip ${out_ref}.legend
