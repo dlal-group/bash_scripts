@@ -762,25 +762,25 @@ file=`sed -n "${LSB_JOBINDEX}p" $1`
 
 #29/03/2016
 
-# outpath=$2
-# filename=`basename ${file}`
+outpath=$2
+filename=`basename ${file}`
 
 
 # # bcftools plugin fill-tags ${file} -O z -o ${outpath}/${filename}
 # # tabix -f -p vcf ${outpath}/${filename}
 
-# bcftools annotate -c CHROM,POS,ID,REF,ALT,EAS_AF,EUR_AF,AFR_AF,AMR_AF,SAS_AF,AA -a /lustre/scratch114/resources/1000g/release/20130502/ALL.autosomes.phase3_shapeit2_mvncall_integrated_v5.20130502.sites.vcf.gz  -O z -o ${outpath}/${filename} ${file}
-# tabix -f -p vcf ${outpath}/${filename}
+bcftools annotate -c CHROM,POS,ID,REF,ALT,EAS_AF,EUR_AF,AFR_AF,AMR_AF,SAS_AF,AA -a /lustre/scratch114/resources/1000g/release/20130502/ALL.autosomes.phase3_shapeit2_mvncall_integrated_v5.20130502.sites.vcf.gz  -O z -o ${outpath}/${filename} ${file}
+tabix -f -p vcf ${outpath}/${filename}
 
 #1/04/2016
 # Merge vcfs from all panels
 
-file1=`sed -n "${LSB_JOBINDEX}p" $1 | awk '{print $1}'`
-file2=`sed -n "${LSB_JOBINDEX}p" $1 | awk '{print $2}'`
-file3=`sed -n "${LSB_JOBINDEX}p" $1 | awk '{print $3}'`
-file4=`sed -n "${LSB_JOBINDEX}p" $1 | awk '{print $4}'`
-outpath=$2
-filename=`basename ${file1}`
+# file1=`sed -n "${LSB_JOBINDEX}p" $1 | awk '{print $1}'`
+# file2=`sed -n "${LSB_JOBINDEX}p" $1 | awk '{print $2}'`
+# file3=`sed -n "${LSB_JOBINDEX}p" $1 | awk '{print $3}'`
+# file4=`sed -n "${LSB_JOBINDEX}p" $1 | awk '{print $4}'`
+# outpath=$2
+# filename=`basename ${file1}`
 
-bcftools merge -m none -O z -o ${outpath}/${filename} ${file1} ${file2} ${file3} ${file4}
-tabix -f -p vcf ${outpath}/${filename}
+# bcftools merge -m none -O z -o ${outpath}/${filename} ${file1} ${file2} ${file3} ${file4}
+# tabix -f -p vcf ${outpath}/${filename}
