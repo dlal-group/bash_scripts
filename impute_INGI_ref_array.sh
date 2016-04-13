@@ -32,7 +32,7 @@ m=$6 #select memory amount
 
 # imputedir=/lustre/scratch113/projects/carl_seq/05272015_MERGED_REF_PANEL/IMPUTED/${pop}/${PANEL}$postfix
 # imputedir=/lustre/scratch114/teams/soranzo/users/mc14/fromscratch113/INGI/14102015_MERGED_REF_PANEL/IMPUTED/${pop}/${PANEL}$postfix
-imputedir=/lustre/scratch113/projects/esgi-vbseq/31032016_IMPUTATION/${pop}/${PANEL}$postfix
+imputedir=/lustre/scratch113/projects/esgi-vbseq/31032016_IMPUTATION/${pop}/${PANEL}$postfix/${chr}
 # mkdir -p ${phasedir}
 mkdir -p ${imputedir}
 

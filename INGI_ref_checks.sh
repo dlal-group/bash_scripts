@@ -17,14 +17,14 @@ basefolder="/lustre/scratch113/teams/soranzo/users/jh21/imputed"
 # for pop in fvg vbi
 for pop in carl fvg incipe2 vbi
 # for pop in INCIPE2
-# pop=carl
-# pop=fvg
-# pop=vbi
+# pop=CARL
+# pop=FVG
+# pop=VBI
 # pop=INCIPE2
 do
 # for pan in CARL_FVG_VBI.shapeit CARL_FVG_VBI_TSI.shapeit CARL.shapeit FVG.shapeit VBI.shapeit
 for pan in uk10k1kg.ref
-# pan=uk10k1kg.ref
+# pan=TGP3_ALL.shapeit
 # pan=CARL_FVG_VBI_TGP3_ALL.shapeit
 do
 
