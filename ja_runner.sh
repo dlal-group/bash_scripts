@@ -799,6 +799,7 @@ outpath=`dirname ${file}`
 filename=`basename ${file}`
 
 mkdir -p ${outpath}/NORMALIZED
-bcftools norm -m -both -f /lustre/scratch114/resources/ref/Homo_sapiens/1000Genomes_hs37d5/hs37d5.fa ${file} -O z -o ${outpath}/NORMALIZED/${filename}
+# bcftools norm -m -both -f /lustre/scratch114/resources/ref/Homo_sapiens/1000Genomes_hs37d5/hs37d5.fa ${file} -O z -o ${outpath}/NORMALIZED/${filename}
+bcftools norm -m -both ${file} -O z -o ${outpath}/NORMALIZED/${filename}
 tabix -p vcf ${outpath}/NORMALIZED/${filename}
 
