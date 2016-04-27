@@ -15,7 +15,8 @@ basefolder="/lustre/scratch113/teams/soranzo/users/jh21/imputed"
 
 # for pop in CARL FVG INCIPE2 VBI
 # for pop in fvg vbi
-for pop in carl fvg incipe2 vbi
+# for pop in carl fvg incipe2 vbi
+for pop in fvg
 # for pop in INCIPE2
 # pop=CARL
 # pop=FVG
@@ -23,7 +24,8 @@ for pop in carl fvg incipe2 vbi
 # pop=INCIPE2
 do
 # for pan in CARL_FVG_VBI.shapeit CARL_FVG_VBI_TSI.shapeit CARL.shapeit FVG.shapeit VBI.shapeit
-for pan in uk10k1kg.ref
+# for pan in TGP3_ALL.shapeit EUR.shapeit
+for pan in CARL_FVG_VBI_TGP3_ALL.shapeit
 # pan=TGP3_ALL.shapeit
 # pan=CARL_FVG_VBI_TGP3_ALL.shapeit
 do
@@ -34,7 +36,7 @@ do
         do
             maf_bins="0,0.005,0.01,0.02,0.05,0.10,0.15,0.20,0.25,0.30,0.40,0.50"
             # chr=21
-            (fgrep -h -v position ${basefolder2}/${pop}/${pan}/${chr}/chr${chr}.*.gen_info) | sed 's/\/lustre\/scratch113\/projects\/esgi-vbseq\/02032016_INGI_REF_PANEL\/IMPUTE\/CARL_FVG_VBI_TGP3_ALL\/'"${chr}"'\/'"${chr}"'.INGI_REF.CARL_FVG_VBI_TGP3_ALL.*.legend.gz://g'|gzip -c > ${basefolder2}/${pop^^}/${pan}/${chr}/chr${chr}.gen_info.gz
+            (fgrep -h -v position ${basefolder2}/${pop^^}/${pan}/${chr}/chr${chr}.*.gen_info) | sed 's/\/lustre\/scratch113\/projects\/esgi-vbseq\/02032016_INGI_REF_PANEL\/IMPUTE\/CARL_FVG_VBI_TGP3_ALL\/'"${chr}"'\/'"${chr}"'.INGI_REF.CARL_FVG_VBI_TGP3_ALL.*.legend.gz://g'|gzip -c > ${basefolder2}/${pop^^}/${pan}/${chr}/chr${chr}.gen_info.gz
             # (fgrep -h -v position ${basefolder}/${pop}/${pan}/final_stats/chr${chr}.stats)| cut -f 1,2,4,5,6,15,19 | tr "\t" " " | gzip -c > ${basefolder2}/${pop^^}/${pan}/${chr}/chr${chr}.gen_info.gz
             # gzip ${pop}/${pan}/chr${chr}.gen_info
 # (echo "CHROM RS_ID POS EXP_FREQ_A1 INFO TYPE INFO_TYPE0 CONCORD_TYPE0 r2_TYPE0 COHORT PANEL MAF BIN";(zgrep -v position ${basefolder2}/${pop^^}/${pan}/chr${chr}.gen_info.gz | cut -f 2,3,4,5,7- -d " "| awk -v chrom=$chr -v cohort=$pop -v panel=$pan '{if($3 <= 0.5 ) print chrom,$0,toupper(cohort),panel,$3; else print chrom,$0,toupper(cohort),panel,1-$3}'|awk -v bins=$maf_bins '
