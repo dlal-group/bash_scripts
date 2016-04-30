@@ -178,13 +178,13 @@ for chunk in `seq 1 $chunk_num`; do
 	fi
 	gen_map=/lustre/scratch114/resources/imputation/impute2/2015-05-08/ALL_1000G_phase1interim_jun2011_impute/genetic_map_chr${chr}_combined_b37.txt
 	echo -e "#!/usr/local/bin/bash
-	\n$impute2 -allow_large_regions -m ${gen_map} -h $refhap -l $reflegend -known_haps_g $phasedir/chr$chr.hap.gz -sample_g $phasedir/chr$chr.sample $extra_str -use_prephased_g -k_hap $k_hap -int $chunk_begin $chunk_end -Ne 20000 -buffer $buffer_size -o chr$chr.$chunkStr.gen $chrX_impute_str
-	\ngzip -f chr$chr.$chunkStr.gen
-	\nif [[ -e chr$chr.$chunkStr.gen_allele_probs ]]; then
-	\ngzip chr$chr.$chunkStr.gen_allele_probs chr$chr.$chunkStr.gen_haps
+	\n$impute2 -allow_large_regions -m ${gen_map} -h $refhap -l $reflegend -known_haps_g $phasedir/chr$chr.hap.gz -sample_g $phasedir/chr$chr.sample $extra_str -use_prephased_g -k_hap $k_hap -int $chunk_begin $chunk_end -Ne 20000 -buffer $buffer_size -o $imputedir/chr$chr.$chunkStr.gen $chrX_impute_str
+	\ngzip -f $imputedir/chr$chr.$chunkStr.gen
+	\nif [[ -e $imputedir/chr$chr.$chunkStr.gen_allele_probs ]]; then
+	\ngzip $imputedir/chr$chr.$chunkStr.gen_allele_probs $imputedir/chr$chr.$chunkStr.gen_haps
 	\nfi
-	\nN_info=\`awk 'NR>1' chr$chr.$chunkStr.gen_info | wc -l | awk '{printf \$1}'\`
-	\nN_gen=\`zcat chr$chr.$chunkStr.gen.gz | wc -l | awk '{printf \$1}'\`
+	\nN_info=\`awk 'NR>1' $imputedir/chr$chr.$chunkStr.gen_info | wc -l | awk '{printf \$1}'\`
+	\nN_gen=\`zcat $imputedir/chr$chr.$chunkStr.gen.gz | wc -l | awk '{printf \$1}'\`
             if [[ \$N_info != \$N_gen ]]; then
                     echo \"chr$chr $chunkStr: \$N_info for info, \$N_gen for gen\" > $imputedir/chr$chr.$chunkStr.ERR
             fi

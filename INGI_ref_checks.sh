@@ -16,7 +16,7 @@ basefolder="/lustre/scratch113/teams/soranzo/users/jh21/imputed"
 # for pop in CARL FVG INCIPE2 VBI
 # for pop in fvg vbi
 # for pop in carl fvg incipe2 vbi
-for pop in fvg
+for pop in carl
 # for pop in INCIPE2
 # pop=CARL
 # pop=FVG
@@ -25,9 +25,9 @@ for pop in fvg
 do
 # for pan in CARL_FVG_VBI.shapeit CARL_FVG_VBI_TSI.shapeit CARL.shapeit FVG.shapeit VBI.shapeit
 # for pan in TGP3_ALL.shapeit EUR.shapeit
-for pan in CARL_FVG_VBI_TGP3_ALL.shapeit
+for pan in CARL_FVG_VBI_UK10K_TGP3_ALL.shapeit
 # pan=TGP3_ALL.shapeit
-# pan=CARL_FVG_VBI_TGP3_ALL.shapeit
+# pan=CARL_FVG_VBI_UK10K_TGP3_ALL.shapeit
 do
 
     mkdir -p ${basefolder2}/${pop^^}/${pan}
