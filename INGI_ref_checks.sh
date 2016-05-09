@@ -48,7 +48,13 @@ basefolder="/lustre/scratch113/teams/soranzo/users/jh21/imputed"
                 else
                     pop2=$pop
                 fi
+                if [[ $pop == "fvg" ]]; then
+                (zgrep -h -v chromosome ${basefolder}/${pop2}/${pan}/master_stats/chr${chr}.gen.gz.stats.gz) | awk '{print $1,$2,$4,(($12*2)+$11)/(($10+$11+$12)*2),$9,$8,1,1,1,1}' | gzip -c > ${basefolder2}/${pop^^}/${pan}/${chr}/chr${chr}.gen_info.gz
+                else
                 (fgrep -h -v position ${basefolder}/${pop2}/${pan}/chr${chr}.*.gen_info) | sed 's/\/lustre\/scratch113\/projects\/esgi-vbseq\/02032016_INGI_REF_PANEL\/IMPUTE\/CARL_FVG_VBI_TGP3_ALL\/'"${chr}"'\/'"${chr}"'.INGI_REF.CARL_FVG_VBI_TGP3_ALL.*.legend.gz://g'|gzip -c > ${basefolder2}/${pop^^}/${pan}/${chr}/chr${chr}.gen_info.gz
+                    
+                fi
+                
                 (echo "CHROM RS_ID POS EXP_FREQ_A1 INFO TYPE INFO_TYPE0 CONCORD_TYPE0 r2_TYPE0 COHORT PANEL MAF BIN";(zgrep -v position ${basefolder2}/${pop^^}/${pan}/${chr}/chr${chr}.gen_info.gz | cut -f 2,3,4,5,7- -d " "| awk -v chrom=$chr -v cohort=$pop -v panel=$pan '{if($3 <= 0.5 ) print chrom,$0,toupper(cohort),panel,$3; else print chrom,$0,toupper(cohort),panel,1-$3}'|awk -v bins=$maf_bins '
                 {n=split(bins,mafs,",");}{
                 for (i=1;i<=n;i++){
