@@ -49,7 +49,7 @@ basefolder="/lustre/scratch113/teams/soranzo/users/jh21/imputed"
                     pop2=$pop
                 fi
                 if [[ $pop == "fvg" ]]; then
-                (zgrep -h -v chromosome ${basefolder}/${pop2}/${pan}/master_stats/chr${chr}.gen.gz.stats.gz) | awk '{print $1,$2,$4,(($12*2)+$11)/(($10+$11+$12)*2),$9,$8,1,1,1,1}' | gzip -c > ${basefolder2}/${pop^^}/${pan}/${chr}/chr${chr}.gen_info.gz
+                (zgrep -h -v chromosome ${basefolder}/${pop2}/${pan}/master_stats/chr${chr}.gen.gz.stats.gz) | awk '{print $1,$2,$4,(($12*2)+$11)/(($10+$11+$12)*2),$9,$8,"-1","-1","-1","-1"}' | gzip -c > ${basefolder2}/${pop^^}/${pan}/${chr}/chr${chr}.gen_info.gz
                 else
                 (fgrep -h -v position ${basefolder}/${pop2}/${pan}/chr${chr}.*.gen_info) | sed 's/\/lustre\/scratch113\/projects\/esgi-vbseq\/02032016_INGI_REF_PANEL\/IMPUTE\/CARL_FVG_VBI_TGP3_ALL\/'"${chr}"'\/'"${chr}"'.INGI_REF.CARL_FVG_VBI_TGP3_ALL.*.legend.gz://g'|gzip -c > ${basefolder2}/${pop^^}/${pan}/${chr}/chr${chr}.gen_info.gz
                     
