@@ -101,15 +101,20 @@ info_bins="0,0.2,0.4,0.6,0.8,1"
 (echo "CHROM RS_ID POS EXP_FREQ_A1 INFO TYPE INFO_TYPE0 CONCORD_TYPE0 r2_TYPE0 COHORT PANEL MAF BIN INFO_BIN";(zgrep -v CHROM ${basefolder2}/${pop^^}/${pan}/${chr}/chr${chr}.gen_info_partial_t2.gz|awk -v ibins=$info_bins '
 {n=split(ibins,info,",");}{
 for (i=1;i<=n;i++){
-if (info[i]==0){
-if($5 < info[i]){
-print $0,info[i]
-}
-}else{
-if($5 < info[i] && $5 >= info[i-1]){
-print $0,info[i]
-}
-
-}
+    if (info[i]==0){
+        if($5 < info[i]){
+            print $0,info[i]
+        }
+    }else{
+        if(info[i]==1){
+            if($5 == info[i]){
+                print $0,info[i]
+            }
+        }else{
+            if($5 < info[i] && $5 >= info[i-1]){
+                print $0,info[i]
+            }
+        }
+    }
 }
 }'))| gzip -c > ${basefolder2}/${pop^^}/${pan}/${chr}/chr${chr}.gen_info_partial_INFOBIN_t2.gz
