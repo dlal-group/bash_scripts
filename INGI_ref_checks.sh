@@ -107,7 +107,7 @@ for (i=1;i<=n;i++){
         }
     }else{
         if(info[i]==1){
-            if($5 == info[i]){
+            if($5==1){
                 print $0,info[i]
             }
         }else{

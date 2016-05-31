@@ -190,5 +190,7 @@ for chunk in `seq 1 $chunk_num`; do
             fi
             " > $imputedir/chr$chr.$chunkStr.cmd
 	cd $imputedir
-	bsub -J ${refname}$postfix.$geno.chr$chr.$chunkStr -q $queue -R "select[mem>$mem] rusage[mem=$mem]" -M${mem} -o $imputedir/chr$chr.$chunkStr.log -e $imputedir/chr$chr.$chunkStr.err < $imputedir/chr$chr.$chunkStr.cmd
+	ls $imputedir/chr$chr.$chunkStr.cmd >> $imputedir/chr${chr}_command.list
 done
+
+mkdir -p $imputedir/LOGS;size=`wc -l $imputedir/chr${chr}_command.list|cut -f 1 -d " "`;bsub -J "${refname}${postfix}.${geno}.chr${chr}[1-${size}]" -q $queue -R "select[mem>$mem] rusage[mem=$mem]" -M${mem} -o "$imputedir/LOGS/%J_${refname}${postfix}.${geno}.chr${chr}.%I.log" -e "$imputedir/LOGS/%J_${refname}${postfix}.${geno}.chr${chr}.%I.err" -- ~/Work/bash_scripts/ja_runner_par.sh $imputedir/chr${chr}_command.list
