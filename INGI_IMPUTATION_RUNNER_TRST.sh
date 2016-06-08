@@ -22,7 +22,7 @@ q=$4 #selected queue
 m=$5 #select memory amount
 genmap_dir=/netapp/nfs/resources/1000GP_phase3/impute
 base_out=/netapp/dati/WGS_REF_PANEL/08062016/IMPUTED
-exclude_base=/netapp/dati/INGI_WGS/18112015/
+exclude_base=/netapp/dati/INGI_WGS/18112015/${pop}/12112015_FILTERED_REL/LISTS
 genotype_base=/netapp/dati/WGS_REF_PANEL/genotypes
 refdir=/netapp/dati/WGS_REF_PANEL/REFERENCES/${PANEL}
 #run IMPUTE script generator
