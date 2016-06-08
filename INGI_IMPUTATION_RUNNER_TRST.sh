@@ -27,15 +27,15 @@ genotype_base=/netapp/dati/WGS_REF_PANEL/genotypes
 refdir=/netapp/dati/WGS_REF_PANEL/REFERENCES/${PANEL}
 imputedir=${base_out}/${pop}/${PANEL}$postfix/${chr}
 #run IMPUTE script generator
-for chr in {2 }
+for chr in 2 6 11 21
 do
 	echo "Generating scripts for ${pop},${chr} (PANEL: ${panel}) "
-	~/scripts/bash_scripts/impute_INGI_ref_array.sh ${impute2} ${shapeit2} ${plink2} ${chunk_size} ${buffer_size} ${window_size} ${thread} ${pop} ${PANEL} ${chr} ${MODE} ${q} ${m} ${genmap_dir} ${base_out} ${exclude_base} ${genotype_base} ${refdir}
+	~/scripts/bash_scripts/impute_INGI_ref_array_TRST.sh ${impute2} ${shapeit2} ${plink2} ${chunk_size} ${buffer_size} ${window_size} ${thread} ${pop} ${PANEL} ${chr} ${MODE} ${q} ${m} ${genmap_dir} ${base_out} ${exclude_base} ${genotype_base} ${refdir}
 	
 done
 
 #job submission
-for chr in {1..22}
+for chr in 2 6 11 21
 do
 	echo "Submitting jobs for ${pop},${chr} (PANEL: ${panel}) "
 	a_size=`wc -l $imputedir/chr${chr}_command.list| cut -f 1 -d " "`;qsub -J 1-${a_size} -o ${imputedir}/chr${chr}_${PBS_ARRAY_INDEX}.log -e ${imputedir}/chr${chr}_${PBS_ARRAY_INDEX}.log.e -V -N ${pop}_chr${chr}_${PBS_ARRAY_INDEX} ~/scripts/bash_scripts/ja_runner_TRST.sh $imputedir/chr${chr}_command.list
