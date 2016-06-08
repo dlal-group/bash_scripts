@@ -8,7 +8,7 @@
 # ~/Work/bash_scripts/INGI_IMPUTATION_RUNNER_TRST.sh FVG FVG ${chr} IMPUTE long 12000
 # ~/Work/bash_scripts/INGI_IMPUTATION_RUNNER_TRST.sh VBI VBI ${chr} IMPUTE long 12000
 # done
-
+postfix=".shapeit"
 impute2=/home/cocca/softwares/bin/impute2.3.2
 shapeit2=/home/cocca/softwares/bin/shapeit
 plink2=plink
@@ -18,18 +18,27 @@ window_size=2
 thread=8
 pop=$1
 PANEL=$2
-chr=$3
-MODE=$4 #set this to PHASE, if you want to phase and impute; set this to IMPUTE, if you're providing already phased genotypes
-q=$5 #selected queue
-m=$6 #select memory amount
+# chr=$3
+MODE=$3 #set this to PHASE, if you want to phase and impute; set this to IMPUTE, if you're providing already phased genotypes
+q=$4 #selected queue
+m=$5 #select memory amount
 genmap_dir=/netapp/nfs/resources/1000GP_phase3/impute
 base_out=/netapp/dati/WGS_REF_PANEL/08062016/IMPUTED
 exclude_base=/netapp/dati/INGI_WGS/18112015/
 genotype_base=/netapp/dati/WGS_REF_PANEL/genotypes
 refdir=/netapp/dati/WGS_REF_PANEL/REFERENCES/${PANEL}
-
+imputedir=${base_out}/${pop}/${PANEL}$postfix/${chr}
 #run IMPUTE script generator
-~/scripts/bash_scripts/impute_INGI_ref_array.sh ${impute2} ${shapeit2} ${plink2} ${chunk_size} ${buffer_size} ${window_size} ${thread} ${pop} ${PANEL} ${chr} ${MODE} ${q} ${m} ${genmap_dir} ${base_out} ${exclude_base} ${genotype_base} ${refdir}
+for chr in 1..22
+do
+	echo "Generating scripts for ${pop},${chr} (PANEL: ${panel}) "
+	~/scripts/bash_scripts/impute_INGI_ref_array.sh ${impute2} ${shapeit2} ${plink2} ${chunk_size} ${buffer_size} ${window_size} ${thread} ${pop} ${PANEL} ${chr} ${MODE} ${q} ${m} ${genmap_dir} ${base_out} ${exclude_base} ${genotype_base} ${refdir}
+	
+done
 
 #job submission
-qsub -o /netapp/dati/WGS_REF_PANEL/genotypes/${pop}/merged/cleaned/${chr}/chr${i}_shapeit.log -e /netapp/dati/WGS_REF_PANEL/genotypes/${pop}/merged/cleaned/${i}/chr${chr}_$chunkStr.e -V -N ${pop}_chr${chr}_$chunkStr -pe  $imputedir/chr$chr.$chunkStr.cmd
+for chr in {1..22}
+do
+	echo "Submitting jobs for ${pop},${chr} (PANEL: ${panel}) "
+	a_size=`wc -l $imputedir/chr${chr}_command.list| cut -f 1 -d " "`;qsub -J 1-${a_size} -o ${imputedir}/chr${chr}_${PBS_ARRAY_INDEX}.log -e ${imputedir}/chr${chr}_${PBS_ARRAY_INDEX}.log.e -V -N ${pop}_chr${chr}_${PBS_ARRAY_INDEX} ~/scripts/bash_scripts/ja_runner_TRST.sh $imputedir/chr${chr}_command.list
+done

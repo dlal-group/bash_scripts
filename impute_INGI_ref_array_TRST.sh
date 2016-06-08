@@ -194,7 +194,7 @@ for chunk in `seq 1 $chunk_num`; do
                     echo \"chr$chr $chunkStr: \$N_info for info, \$N_gen for gen\" > $imputedir/chr$chr.$chunkStr.ERR
             fi
             " > $imputedir/chr$chr.$chunkStr.cmd
-	cd $imputedir
+	# cd $imputedir
 	ls $imputedir/chr$chr.$chunkStr.cmd >> $imputedir/chr${chr}_command.list
 done
 
