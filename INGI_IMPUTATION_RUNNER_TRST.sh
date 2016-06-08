@@ -9,9 +9,9 @@
 # ~/Work/bash_scripts/INGI_IMPUTATION_RUNNER_TRST.sh VBI VBI ${chr} IMPUTE long 12000
 # done
 
-impute2=/nfs/team151/software/impute_v2.3.2_x86_64_static/impute2
-shapeit2=/nfs/team151/software/shapeit.v2.r790/shapeit
-plink2=/nfs/team151/software/plink2_18_April_2015/plink
+impute2=/home/cocca/softwares/bin/impute2.3.2
+shapeit2=/home/cocca/softwares/bin/shapeit
+plink2=plink
 chunk_size=3000000
 buffer_size=250
 window_size=2
@@ -29,7 +29,7 @@ genotype_base=/netapp/dati/WGS_REF_PANEL/genotypes
 refdir=/netapp/dati/WGS_REF_PANEL/REFERENCES/${PANEL}
 
 #run IMPUTE script generator
-
+~/Work/bash_scripts/impute_INGI_ref_array.sh CARL CARL ${chr} IMPUTE long 12000
 
 #job submission
 qsub -o /netapp/dati/WGS_REF_PANEL/genotypes/${pop}/merged/cleaned/${chr}/chr${i}_shapeit.log -e /netapp/dati/WGS_REF_PANEL/genotypes/${pop}/merged/cleaned/${i}/chr${chr}_$chunkStr.e -V -N ${pop}_chr${chr}_$chunkStr -pe  $imputedir/chr$chr.$chunkStr.cmd
