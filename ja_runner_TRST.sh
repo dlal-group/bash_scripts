@@ -3,7 +3,7 @@
 # This is the runner file run by qsub
 # Arguments: runner.sh filelist
 
-# Environment variables: ${PBS_ARRAY_INDEX}
+# Environment variables: ${SGE_TASK_ID}
 #Example command:
 #mkdir -p LOGS;size=`wc -l result.list|cut -f 1 -d " "`;bsub -J "p_check[1-${size}]" -o "LOGS/%J_p_check.%I.o" -M 5000 -R"select[mem>5000] rusage[mem=5000]" -q normal -- ~/Work/bash_scripts/ja_runner_par.sh ~/Work/bash_scripts/check_pvals_test.sh result.list
 #mkdir -p LOGS;size=`wc -l match_file.list|cut -f 1 -d " "`;bsub -J "sh_dens[1-${size}]" -o "LOGS/%J_sh_dens.%I.o" -M 5000 -R"select[mem>5000] rusage[mem=5000]" -q normal -- ~/Work/bash_scripts/ja_runner_par.sh ~/Work/bash_scripts/sharingDensity.sh match_file.list map.list
@@ -13,8 +13,8 @@ while getopts ":dst" opt; do
     d)
       echo $opt
       echo "Double column list mode triggered!" >&2
-      file=`sed -n "${PBS_ARRAY_INDEX}p" $3 | awk '{print $1}'`
-      file2=`sed -n "${PBS_ARRAY_INDEX}p" $3 | awk '{print $2}'`
+      file=`sed -n "${SGE_TASK_ID}p" $3 | awk '{print $1}'`
+      file2=`sed -n "${SGE_TASK_ID}p" $3 | awk '{print $2}'`
       echo ${file}
       echo ${file2}
       script=$2
@@ -23,9 +23,9 @@ while getopts ":dst" opt; do
     t)
       echo $opt
       echo "Triple column list mode triggered!" >&2
-      file1=`sed -n "${PBS_ARRAY_INDEX}p" $3 | awk '{print $1}'`
-      file2=`sed -n "${PBS_ARRAY_INDEX}p" $3 | awk '{print $2}'`
-      file3=`sed -n "${PBS_ARRAY_INDEX}p" $3 | awk '{print $3}'`
+      file1=`sed -n "${SGE_TASK_ID}p" $3 | awk '{print $1}'`
+      file2=`sed -n "${SGE_TASK_ID}p" $3 | awk '{print $2}'`
+      file3=`sed -n "${SGE_TASK_ID}p" $3 | awk '{print $3}'`
       echo ${file1}
       echo ${file2}
       echo ${file3}
@@ -36,10 +36,10 @@ while getopts ":dst" opt; do
     q)
       echo $opt
       echo "Quadruple column list mode triggered!" >&2
-      file1=`sed -n "${PBS_ARRAY_INDEX}p" $3 | awk '{print $1}'`
-      file2=`sed -n "${PBS_ARRAY_INDEX}p" $3 | awk '{print $2}'`
-      file3=`sed -n "${PBS_ARRAY_INDEX}p" $3 | awk '{print $3}'`
-      file4=`sed -n "${PBS_ARRAY_INDEX}p" $3 | awk '{print $4}'`
+      file1=`sed -n "${SGE_TASK_ID}p" $3 | awk '{print $1}'`
+      file2=`sed -n "${SGE_TASK_ID}p" $3 | awk '{print $2}'`
+      file3=`sed -n "${SGE_TASK_ID}p" $3 | awk '{print $3}'`
+      file4=`sed -n "${SGE_TASK_ID}p" $3 | awk '{print $4}'`
       echo ${file1}
       echo ${file2}
       echo ${file3}
@@ -52,11 +52,12 @@ while getopts ":dst" opt; do
     s)
       echo $opt
       echo "Single list mode triggered!!" >&2
-      file=`sed -n "${PBS_ARRAY_INDEX}p" $3`
+      file=`sed -n "${SGE_TASK_ID}p" $2`
       # echo ${file}
-      script=$2
+      script=${file}
       # $script ${file} $4 $5 $6 $7 $8
-      $script ${file} "${@:4}"
+      # $script ${file} "${@:3}"
+      $script "${@:3}"
       ;;
     *)
       echo $opt

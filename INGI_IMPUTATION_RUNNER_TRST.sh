@@ -38,5 +38,5 @@ done
 for chr in 2 6 11 21
 do
 	echo "Submitting jobs for ${pop},${chr} (PANEL: ${panel}) "
-	a_size=`wc -l $imputedir/chr${chr}_command.list| cut -f 1 -d " "`;qsub -J 1-${a_size} -o ${imputedir}/chr${chr}_${PBS_ARRAY_INDEX}.log -e ${imputedir}/chr${chr}_${PBS_ARRAY_INDEX}.log.e -V -N ${pop}_chr${chr}_${PBS_ARRAY_INDEX} ~/scripts/bash_scripts/ja_runner_TRST.sh $imputedir/chr${chr}_command.list
+	a_size=`wc -l $imputedir/chr${chr}_command.list| cut -f 1 -d " "`;qsub -t 1-${a_size} -o ${imputedir}/chr${chr}_${SGE_TASK_ID}.log -e ${imputedir}/chr${chr}_${SGE_TASK_ID}.e -V -N ${pop}_chr${chr}_${SGE_TASK_ID} -- ~/scripts/bash_scripts/ja_runner_TRST.sh -s $imputedir/chr${chr}_command.list
 done
