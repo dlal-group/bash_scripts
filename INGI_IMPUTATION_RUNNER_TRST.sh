@@ -4,9 +4,7 @@
 # for chr in {3..19}
 # do
 # echo "$chr $panel"
-# ~/Work/bash_scripts/INGI_IMPUTATION_RUNNER_TRST.sh CARL CARL ${chr} IMPUTE long 12000
-# ~/Work/bash_scripts/INGI_IMPUTATION_RUNNER_TRST.sh FVG FVG ${chr} IMPUTE long 12000
-# ~/Work/bash_scripts/INGI_IMPUTATION_RUNNER_TRST.sh VBI VBI ${chr} IMPUTE long 12000
+# ~/Work/bash_scripts/INGI_IMPUTATION_RUNNER_TRST.sh CARL CARL IMPUTE long 12000
 # done
 postfix=".shapeit"
 impute2=/home/cocca/softwares/bin/impute2.3.2
@@ -29,7 +27,7 @@ genotype_base=/netapp/dati/WGS_REF_PANEL/genotypes
 refdir=/netapp/dati/WGS_REF_PANEL/REFERENCES/${PANEL}
 imputedir=${base_out}/${pop}/${PANEL}$postfix/${chr}
 #run IMPUTE script generator
-for chr in 1..22
+for chr in {2 }
 do
 	echo "Generating scripts for ${pop},${chr} (PANEL: ${panel}) "
 	~/scripts/bash_scripts/impute_INGI_ref_array.sh ${impute2} ${shapeit2} ${plink2} ${chunk_size} ${buffer_size} ${window_size} ${thread} ${pop} ${PANEL} ${chr} ${MODE} ${q} ${m} ${genmap_dir} ${base_out} ${exclude_base} ${genotype_base} ${refdir}
