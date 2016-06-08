@@ -1,4 +1,4 @@
-#!/usr/local/bin/bash
+#!/usr/bin/env bash
 #
 #################################################
 #	CUSTOMIZED FOR CHRX imputation by max!!!!!		#
@@ -182,7 +182,7 @@ for chunk in `seq 1 $chunk_num`; do
 		reflegend=$refdir/$refname/chr$chr.${chunkStr}$postfix.legend.gz
 	fi
 	gen_map=${genmap_dir}/genetic_map_chr${chr}_combined_b37.txt
-	echo -e "#!/usr/local/bin/bash
+	echo -e "#!/usr/bin/env bash
 	\n$impute2 -allow_large_regions -m ${gen_map} -h $refhap -l $reflegend -known_haps_g $phasedir/chr$chr.haps.gz -sample_g $phasedir/chr$chr.sample $extra_str -use_prephased_g -k_hap $k_hap -int $chunk_begin $chunk_end -Ne 20000 -buffer $buffer_size -o $imputedir/chr$chr.$chunkStr.gen $chrX_impute_str
 	\ngzip -f $imputedir/chr$chr.$chunkStr.gen
 	\nif [[ -e $imputedir/chr$chr.$chunkStr.gen_allele_probs ]]; then
