@@ -45,25 +45,25 @@ case $pop in
 	VBI)
 	extra_str_excl_samples="-exclude_samples_g ${exclude_base}/${pop}_impute_exclude_sample.list"
 	# extra_str_excl_snps="-exclude_snps_g /lustre/scratch114/teams/soranzo/users/mc14/fromscratch113/INGI/05272015_MERGED_REF_PANEL/snplist/${pop}_chr${chr}.exclude -impute_excluded"
-	genodir=${genotype_base}/${chr}
-	phasedir=${genotype_base}/${chr}
+	genodir=${genotype_base}/${pop}/${chr}
+	phasedir=${genotype_base}/${pop}/${chr}
 	;;
 	FVG)
 	extra_str_excl_samples="-exclude_samples_g ${exclude_base}/${pop}_impute_exclude_sample.list"
 	# extra_str_excl_snps="-exclude_snps_g /lustre/scratch114/teams/soranzo/users/mc14/fromscratch113/INGI/05272015_MERGED_REF_PANEL/snplist/${pop}_chr${chr}.exclude -impute_excluded"
-	genodir=${genotype_base}/${chr}
-	phasedir=${genotype_base}/${chr}
+	genodir=${genotype_base}/${pop}/${chr}
+	phasedir=${genotype_base}/${pop}/${chr}
 	;;
 	CARL)
 	extra_str_excl_samples="-exclude_samples_g ${exclude_base}/${pop}_impute_exclude_sample.list"
 	# extra_str_excl_snps="-exclude_snps_g /lustre/scratch114/teams/soranzo/users/mc14/fromscratch113/INGI/05272015_MERGED_REF_PANEL/snplist/${pop}_chr${chr}.exclude -impute_excluded"
-	genodir=${genotype_base}/${chr}
-	phasedir=${genotype_base}/${chr}
+	genodir=${genotype_base}/${pop}/${chr}
+	phasedir=${genotype_base}/${pop}/${chr}
 	;;
 	INCIPE2 )
 	# extra_str_excl_snps="-exclude_snps_g /lustre/scratch114/teams/soranzo/users/mc14/fromscratch113/INGI/05272015_MERGED_REF_PANEL/snplist/${pop}_chr${chr}.exclude -impute_excluded"
-	genodir=${genotype_base}/${chr}
-	phasedir=${genotype_base}/${chr}
+	genodir=${genotype_base}/${pop}/${chr}
+	phasedir=${genotype_base}/${pop}/${chr}
 	;;
 esac
 
