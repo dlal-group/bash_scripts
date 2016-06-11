@@ -196,6 +196,7 @@ for chunk in `seq 1 $chunk_num`; do
             " > $imputedir/chr$chr.$chunkStr.cmd
             chmod ug+x $imputedir/chr$chr.$chunkStr.cmd
 	# cd $imputedir
+	
 	ls $imputedir/chr$chr.$chunkStr.cmd >> $imputedir/chr${chr}_command.list
 done
 
