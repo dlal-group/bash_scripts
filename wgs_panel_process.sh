@@ -71,7 +71,9 @@ PANEL_MERGE )
 
 #first:write a chunk file
 chr=$2
-cohorts=(${@:3})
+q=$3
+m=$4
+cohorts=(${@:5})
 
 # cohorts=(TSI CARL FVG VBI)
 
@@ -116,7 +118,7 @@ Buffer: ${buffer}\n
 Output folder: ${outdir}"
 
 # run panel merging
-size=`wc -l /lustre/scratch113/projects/esgi-vbseq/02032016_INGI_REF_PANEL/IMPUTE/${pop1}_${pop2}/${chr}/${chr}.chunks.txt|cut -f 1 -d " "`;bsub -J "merge_ref_${pop1}_${pop2}_${chr}[1-${size}]" -o "${outdir}/LOG_${stage}/%J_merge_ref_${pop1}_${pop2}_${chr}.%I.o" -M32000 -R"select[mem>=32000] rusage[mem=32000]" -q hugemem -- /nfs/users/nfs_m/mc14/Work/bash_scripts/ja_merge_panels.sh /lustre/scratch113/projects/esgi-vbseq/02032016_INGI_REF_PANEL/IMPUTE/${pop1}_${pop2}/${chr}/${chr}.chunks.txt ${pop1} ${pop2} ${chr} ${gen_map} ${hap_1} ${hap_2} ${leg_1} ${leg_2} ${buffer}
+size=`wc -l /lustre/scratch113/projects/esgi-vbseq/02032016_INGI_REF_PANEL/IMPUTE/${pop1}_${pop2}/${chr}/${chr}.chunks.txt|cut -f 1 -d " "`;bsub -J "merge_ref_${pop1}_${pop2}_${chr}[1-${size}]" -o "${outdir}/LOG_${stage}/%J_merge_ref_${pop1}_${pop2}_${chr}.%I.o" -M${m} -R"select[mem>=${m}] rusage[mem=${m}]" -q ${q} -- /nfs/users/nfs_m/mc14/Work/bash_scripts/ja_merge_panels.sh /lustre/scratch113/projects/esgi-vbseq/02032016_INGI_REF_PANEL/IMPUTE/${pop1}_${pop2}/${chr}/${chr}.chunks.txt ${pop1} ${pop2} ${chr} ${gen_map} ${hap_1} ${hap_2} ${leg_1} ${leg_2} ${buffer}
 
 #merge back panel files
 bsub -J"merge_${chr}_${pop1}_${pop2}" -o"${outdir}/LOG_${stage}/%J_merge_${chr}_${pop1}_${pop2}.o" -w"ended(merge_ref_${pop1}_${pop2}_${chr}*)" -M1000 -R"select[mem>=1000] rusage[mem=1000]" -q normal -- /nfs/users/nfs_m/mc14/Work/bash_scripts/chunk_merger.sh ${pop1} ${pop2} ${chr}
