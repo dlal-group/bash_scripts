@@ -182,6 +182,10 @@ for chunk in `seq 1 $chunk_num`; do
 		reflegend=$refdir/$refname/chr$chr.${chunkStr}$postfix.legend.gz
 	fi
 	gen_map=${genmap_dir}/genetic_map_chr${chr}_combined_b37.txt
+
+	if [[ -s $imputedir/chr$chr.$chunkStr.gen.gz ]];then
+		echo "Chunk $imputedir/chr$chr.$chunkStr.gen.gz already imputed!!!Skip!"
+	else
 	echo -e "#!/usr/bin/env bash
 	\n$impute2 -allow_large_regions -m ${gen_map} -h $refhap -l $reflegend -known_haps_g $phasedir/chr$chr.haps.gz -sample_g $phasedir/chr$chr.sample $extra_str -use_prephased_g -k_hap $k_hap -int $chunk_begin $chunk_end -Ne 20000 -buffer $buffer_size -o $imputedir/chr$chr.$chunkStr.gen $chrX_impute_str
 	\ngzip -f $imputedir/chr$chr.$chunkStr.gen
@@ -198,6 +202,7 @@ for chunk in `seq 1 $chunk_num`; do
 	# cd $imputedir
 	
 	ls $imputedir/chr$chr.$chunkStr.cmd >> $imputedir/chr${chr}_command.list
+	fi
 done
 
 # mkdir -p $imputedir/LOGS;size=`wc -l $imputedir/chr${chr}_command.list|cut -f 1 -d " "`;bsub -J "${refname}${postfix}.${geno}.chr${chr}[1-${size}]" -q $queue -R "select[mem>$mem] rusage[mem=$mem]" -M${mem} -o "$imputedir/LOGS/%J_${refname}${postfix}.${geno}.chr${chr}.%I.log" -e "$imputedir/LOGS/%J_${refname}${postfix}.${geno}.chr${chr}.%I.err" -- ~/Work/bash_scripts/ja_runner_par.sh $imputedir/chr${chr}_command.list
