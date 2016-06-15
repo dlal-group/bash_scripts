@@ -201,8 +201,12 @@ for chunk in `seq 1 $chunk_num`; do
             chmod ug+x $imputedir/chr$chr.$chunkStr.cmd
 	# cd $imputedir
 	
-	ls $imputedir/chr$chr.$chunkStr.cmd >> $imputedir/chr${chr}_command.list
+	ls $imputedir/chr$chr.$chunkStr.cmd >> $imputedir/chr${chr}_command.list.tmp
 	fi
 done
+
+#delete duplicate lines from the command file
+awk '!_[$0]++' $imputedir/chr${chr}_command.list.tmp > $imputedir/chr${chr}_command.list
+rm $imputedir/chr${chr}_command.list.tmp
 
 # mkdir -p $imputedir/LOGS;size=`wc -l $imputedir/chr${chr}_command.list|cut -f 1 -d " "`;bsub -J "${refname}${postfix}.${geno}.chr${chr}[1-${size}]" -q $queue -R "select[mem>$mem] rusage[mem=$mem]" -M${mem} -o "$imputedir/LOGS/%J_${refname}${postfix}.${geno}.chr${chr}.%I.log" -e "$imputedir/LOGS/%J_${refname}${postfix}.${geno}.chr${chr}.%I.err" -- ~/Work/bash_scripts/ja_runner_par.sh $imputedir/chr${chr}_command.list
