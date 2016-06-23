@@ -99,6 +99,8 @@ case $pan in
     }
     }
     }'))| gzip -c > ${basefolder2}/${pop^^}/${pan}/${chr}/chr${chr}.gen_info_partial_t2.gz
+    #need to format everything in bed format
+    (header=`zcat ${basefolder2}/${pop^^}/${pan}/${chr}/chr${chr}.gen_info_partial_t2.gz | head -1`;echo "chrom chromStart chromEnd ${header}" ;zcat ${basefolder2}/${pop^^}/${pan}/${chr}/chr${chr}.gen_info_partial_t2.gz|tail -n+2| awk '{print $1,$3-1,$3,$0}') > ${basefolder2}/${pop^^}/${pan}/${chr}/chr${chr}.gen_info_partial_t2.bed
     ;;
 esac
 
@@ -125,3 +127,6 @@ for (i=1;i<=n;i++){
     }
 }
 }'))| gzip -c > ${basefolder2}/${pop^^}/${pan}/${chr}/chr${chr}.gen_info_partial_INFOBIN_t2.gz
+#need to format everything in bed format
+(header=`zcat ${basefolder2}/${pop^^}/${pan}/${chr}/chr${chr}.gen_info_partial_INFOBIN_t2.gz | head -1`;echo "chrom chromStart chromEnd ${header}" ;zcat ${basefolder2}/${pop^^}/${pan}/${chr}/chr${chr}.gen_info_partial_INFOBIN_t2.gz|tail -n+2| awk '{print $1,$3-1,$3,$0}') > ${basefolder2}/${pop^^}/${pan}/${chr}/chr${chr}.gen_info_partial_INFOBIN_t2.bed
+
