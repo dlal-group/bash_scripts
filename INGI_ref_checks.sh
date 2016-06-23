@@ -1,4 +1,4 @@
-#!/usr/local/bin/bash
+#!/usr/bin/env bash
 
 #Script to prepare data for plotting after imputation
     # for pan in uk10k1kg.ref
