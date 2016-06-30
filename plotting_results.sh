@@ -75,15 +75,19 @@ res_path=$2
 # tot_sites=`wc -l ${res_path}/${trait}.*.result.maf_info_hwe_filtered.join | grep "total"| awk '{print $1}'`
 
 #modified to read raw result files to plot
+echo "Working on ${trait}"...
 raw_file=${res_path}/${trait}.all.tab.assoc.txt.gz
 
 zcat ${raw_file} | awk '{print $1,$2,$3,$5,$6,$9,$11}'| gzip -c > ${res_path}/${trait}.column_filtered.txt.gz
 
+echo "Generated reformatted ${trait} file"
 # res_file=${res_path}/${trait}.all.result.maf_info_hwe_filtered.join.plot
 res_file=${res_path}/${trait}.column_filtered.txt.gz
 
 # R CMD BATCH '--args '${trait}' '${res_file}' '${pos_con_list}' '${tot_sites}'' /nfs/users/nfs_m/mc14/Work/r_scripts/replica_plotter.r
+echo "Launch plotting script..."
 R CMD BATCH '--args '${trait}' '${res_file}'' ~/scripts/r_scripts/replica_plotter.r ${res_path}/${trait}.Rout
 
+echo "${trait} done!!"
 #done
 
