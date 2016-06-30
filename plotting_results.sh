@@ -5,7 +5,7 @@
 
 trait=$1
 res_path=$2
-pos_con_list=$3
+# pos_con_list=$3
 
 #IFS=$'\n'
 #set $(cat parameter_file.txt)
@@ -71,15 +71,19 @@ pos_con_list=$3
 
 # gnuplot ${file}_gnuplot.gp
 
-#for chr in {1..22} X
-#do
-# res_file=${res_path}/${trait}.all.tab.assoc.1e-1.to_plot
 #we need to know how many sites in total we have before the downsampling...
 # tot_sites=`wc -l ${res_path}/${trait}.*.result.maf_info_hwe_filtered.join | grep "total"| awk '{print $1}'`
-res_file=${res_path}/${trait}.all.result.maf_info_hwe_filtered.join.plot
+
+#modified to read raw result files to plot
+raw_file=${res_path}/${trait}.all.tab.assoc.txt.gz
+
+zcat ${raw_file} | awk {print $1,$2,$3,$5,$6,$9,$10,$11}| gzip -c > ${res_path}/${trait}.column_filtered.txt.gz
+
+# res_file=${res_path}/${trait}.all.result.maf_info_hwe_filtered.join.plot
+res_file=${res_path}/${trait}.column_filtered.txt.gz
 
 # R CMD BATCH '--args '${trait}' '${res_file}' '${pos_con_list}' '${tot_sites}'' /nfs/users/nfs_m/mc14/Work/r_scripts/replica_plotter.r
-R CMD BATCH '--args '${trait}' '${res_file}' '${pos_con_list}'' /nfs/users/nfs_m/mc14/Work/r_scripts/replica_plotter.r ${res_path}/${trait}.Rout
+R CMD BATCH '--args '${trait}' '${res_file}'' ~/Work/scripts/r_scripts/replica_plotter.r ${res_path}/${trait}.Rout
 
 #done
 
