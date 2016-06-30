@@ -77,7 +77,7 @@ res_path=$2
 #modified to read raw result files to plot
 raw_file=${res_path}/${trait}.all.tab.assoc.txt.gz
 
-zcat ${raw_file} | awk {print $1,$2,$3,$5,$6,$9,$11}| gzip -c > ${res_path}/${trait}.column_filtered.txt.gz
+zcat ${raw_file} | awk '{print $1,$2,$3,$5,$6,$9,$11}'| gzip -c > ${res_path}/${trait}.column_filtered.txt.gz
 
 # res_file=${res_path}/${trait}.all.result.maf_info_hwe_filtered.join.plot
 res_file=${res_path}/${trait}.column_filtered.txt.gz
