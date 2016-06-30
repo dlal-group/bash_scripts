@@ -1,4 +1,4 @@
-#!/usr/local/bin/bash
+#!/usr/bin/env bash
 #ARGS:
 #$1=trait
 #$2=filepath
