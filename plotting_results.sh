@@ -78,11 +78,15 @@ res_path=$2
 echo "Working on ${trait}"...
 raw_file=${res_path}/${trait}.all.tab.assoc.txt.gz
 
-zcat ${raw_file} | awk '{print $1,$2,$3,$5,$6,$9,$11}'| gzip -c > ${res_path}/${trait}.column_filtered.txt.gz
-
-echo "Generated reformatted ${trait} file"
 # res_file=${res_path}/${trait}.all.result.maf_info_hwe_filtered.join.plot
+if [ ! -s ${res_path}/${trait}.column_filtered.txt.gz ]; then
+	echo "Reformatted ${trait} file missing! Generating ..."
+	zcat ${raw_file} | awk '{print $1,$2,$3,$5,$6,$9,$11}'| gzip -c > ${res_path}/${trait}.column_filtered.txt.gz
+	echo "Generated reformatted ${trait} file"
+fi
 res_file=${res_path}/${trait}.column_filtered.txt.gz
+#create plot folder
+mkdir -p ${res_path}/PLOTS
 
 # R CMD BATCH '--args '${trait}' '${res_file}' '${pos_con_list}' '${tot_sites}'' /nfs/users/nfs_m/mc14/Work/r_scripts/replica_plotter.r
 echo "Launch plotting script..."
