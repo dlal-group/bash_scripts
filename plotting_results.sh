@@ -83,7 +83,7 @@ zcat ${raw_file} | awk {print $1,$2,$3,$5,$6,$9,$11}| gzip -c > ${res_path}/${tr
 res_file=${res_path}/${trait}.column_filtered.txt.gz
 
 # R CMD BATCH '--args '${trait}' '${res_file}' '${pos_con_list}' '${tot_sites}'' /nfs/users/nfs_m/mc14/Work/r_scripts/replica_plotter.r
-R CMD BATCH '--args '${trait}' '${res_file}'' ~/Work/scripts/r_scripts/replica_plotter.r ${res_path}/${trait}.Rout
+R CMD BATCH '--args '${trait}' '${res_file}'' ~/scripts/r_scripts/replica_plotter.r ${res_path}/${trait}.Rout
 
 #done
 
