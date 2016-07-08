@@ -10,9 +10,7 @@ pops="FVG VBI TSI CEU CARL"
 MODE=$1
 CHR=$2
 # define the output folder relative to the chromosome, if specified
-outdir=CHR${CHR}
 mkdir -p LOGS
-mkdir -p ${outdir}
 
 case $MODE in
   HOMDAC)
@@ -37,15 +35,21 @@ case $MODE in
     #set parameters for beagle:
     window=$3
     overlap=$4
+    outdir=$5/CHR${CHR}
+    mkdir -p ${outdir}
     ;;
   SPLITCSQ*)
     #set parameters for splitting in consequences
     category=$3
     fixed=$4
+    outdir=CHR${CHR}
+    mkdir -p ${outdir}
     ;;
   SHARED )
     #set parameters for file input/output
     in_dir=$3
+    outdir=CHR${CHR}
+    mkdir -p ${outdir}
     ;;
   SHAREDVILL )
     #set parameters for file input/output
@@ -57,20 +61,27 @@ case $MODE in
   MERGEROH )
       #set parameters for file input/output
       in_dir=$3
+      outdir=CHR${CHR}
+      mkdir -p ${outdir}
       ;;
   IBDCLUST )
       #set parameters for file input/output
       win_size=$3
       density=$4
       in_dir=$5
+      outdir=CHR${CHR}
+      mkdir -p ${outdir}
       ;;
   MANCLUSTIBD )
       in_dir=$3
+      outdir=CHR${CHR}
       ;;
   MAFSPEC )
       #set parameters for file input/output
       input_file=$3
       maf_file_path=$4
+      outdir=CHR${CHR}
+      mkdir -p ${outdir}
     ;;
   GERMLINE )
     # set up args for germline command line
@@ -78,6 +89,8 @@ case $MODE in
     HOM=$4
     HET=$5
     BITS=$6
+    outdir=CHR${CHR}
+    mkdir -p ${outdir}
   ;;
   GERMLINEREG )
     # set up args for germline command line, no need for CHR!
@@ -90,14 +103,20 @@ case $MODE in
   PRISHCOUNT )
     # set up args for germline command line, no need for CHR!
     in_path=$3
+    outdir=CHR${CHR}
+    mkdir -p ${outdir}
   ;;
   EXTRMAF )
     pop_path=$3
     # in_path=$4
+    outdir=CHR${CHR}
+    mkdir -p ${outdir}
   ;;
   RANDLIST )
   ROUNDS=$2
   SIZE=$3
+  outdir=CHR${CHR}
+  mkdir -p ${outdir}
   ;;
 esac
 
@@ -1063,60 +1082,6 @@ all_hom=`bcftools query -s ${sample} -R ${shared_cat} -f '%CHROM\t%POS\t%REF\t%A
     done
 
   ;;
-  ROHVILLAGE2 )
-    echo "Calculate ROH from a unified vcf file....with BEAGLE...we need a file without missing genotypes(NO MAF filter)!!"
-    echo "We'll have also data separate for villages in FVG"
-    echo -e "Parameters: \nwindow=${window}\noverlap=${overlap}"
-    #use he same vcf file for all the samples but change the sample list of individuals toi exclude from the analysis
-    pops_updated="FVG VBI TSI CEU CARL Erto Resia Illegio Sauris"
-    for pop in $pops_updated
-    do
-
-      case $pop in
-        FVG )
-          pop_path=/lustre/scratch113/projects/esgi-vbseq/20140430_purging/UNRELATED/POP_MERGED_FILES/FIVE_POPS/20140801_NONMISSING
-          ;;
-        VBI )
-          pop_path=/lustre/scratch113/projects/esgi-vbseq/20140430_purging/UNRELATED/POP_MERGED_FILES/FIVE_POPS/20140801_NONMISSING
-            ;;
-        TSI )
-          pop_path=/lustre/scratch113/projects/esgi-vbseq/20140430_purging/UNRELATED/POP_MERGED_FILES/FIVE_POPS/20140801_NONMISSING
-            ;;
-        CEU )
-          pop_path=/lustre/scratch113/projects/esgi-vbseq/20140430_purging/UNRELATED/POP_MERGED_FILES/FIVE_POPS/20140801_NONMISSING
-            ;;
-        CARL )
-          pop_path=/lustre/scratch113/projects/esgi-vbseq/20140430_purging/UNRELATED/POP_MERGED_FILES/FIVE_POPS/20140801_NONMISSING
-            ;;
-        Erto )
-          pop_path=/lustre/scratch113/projects/esgi-vbseq/20140430_purging/UNRELATED/POP_MERGED_FILES/FIVE_POPS/20140801_NONMISSING
-            ;;
-        Sauris )
-          pop_path=/lustre/scratch113/projects/esgi-vbseq/20140430_purging/UNRELATED/POP_MERGED_FILES/FIVE_POPS/20140801_NONMISSING
-            ;;
-        Illegio )
-          pop_path=/lustre/scratch113/projects/esgi-vbseq/20140430_purging/UNRELATED/POP_MERGED_FILES/FIVE_POPS/20140801_NONMISSING
-            ;;
-        Resia )
-          pop_path=/lustre/scratch113/projects/esgi-vbseq/20140430_purging/UNRELATED/POP_MERGED_FILES/FIVE_POPS/20140801_NONMISSING
-            ;;
-      esac
-        pop_list=/lustre/scratch113/projects/esgi-vbseq/20140430_purging/46_SAMPLES/listpop/BEAGLE/all_pop_but_${pop}.txt
-        # pop_list=/lustre/scratch113/projects/esgi-vbseq/20140430_purging/UNRELATED/listpop/FIVE_POPS/all_pop_but_${pop}.txt
-        # pop_list=/lustre/scratch113/projects/esgi-vbseq/20140430_purging/UNRELATED/listpop/all_pop_but_${pop}.txt
-        # pop_list=/lustre/scratch113/projects/esgi-vbseq/20140430_purging/ALL/listpop/all_pop_but_${pop}.txt
-        # marker_list=/lustre/scratch113/projects/esgi-vbseq/20140430_purging/POP_MERGED_FILES/20140520_ROH/sites_with_missing_genotypes.list
-        #use freq data
-        # bsub -J"roh_${pop}" -o"%J_roh_${pop}.o" -q normal -M8000 -n2 -R"span[hosts=1] select[mem>=8000] rusage[mem=8000]" -- java -Xms5000m -Xmx5000m -jar /nfs/team151/software/beagle_4/b4.r1274.jar gtgl=${pop_path}/22.vcf.gz ibd=true nthreads=2 excludesamples=${pop_list} excludemarkers=${marker_list} out=${pop}.roh
-        # bsub -J"roh_${pop}" -o"%J_roh_${pop}.o" -q normal -M8000 -n2 -R"span[hosts=1] select[mem>=8000] rusage[mem=8000]" -- java -Xms5000m -Xmx5000m -jar /nfs/team151/software/beagle_4/b4.r1274.jar gt=${pop_path}/22.nonmissing.vcf.gz ibd=true nthreads=2 excludesamples=${pop_list} out=${pop}.roh
-        # bsub -J"roh_${pop}" -o"%J_roh_${pop}.o" -q normal -M8000 -n2 -R"span[hosts=1] select[mem>=8000] rusage[mem=8000]" -- java -Xms5000m -Xmx5000m -jar /nfs/team151/software/beagle_4/b4.r1274.jar gt=${pop_path}/${CHR}.nonmissing.maf_gt_05.vcf.gz ibd=true nthreads=2 excludesamples=${pop_list} window=${window} overlap=${overlap} out=${pop}.roh
-        # bsub -J"roh_${pop}" -o"%J_roh_${pop}.o" -q normal -M8000 -n2 -R"span[hosts=1] select[mem>=8000] rusage[mem=8000]" -- java -Xms5000m -Xmx5000m -jar /nfs/team151/software/beagle_4/b4.r1274.jar gt=${pop_path}/${CHR}.non_missing.vcf.gz ibd=true nthreads=2 excludesamples=${pop_list} window=${window} overlap=${overlap} out=${outdir}/${pop}.roh
-        # bsub -J"roh_${pop}" -o"%J_roh_${pop}.o" -q yesterday -M8000 -n2 -R"span[hosts=1] select[mem>=8000] rusage[mem=8000]" -- java -Xms5000m -Xmx5000m -jar /nfs/team151/software/beagle_4/b4.r1274.jar gt=${pop_path}/${CHR}.nonmissing.vcf.gz ibd=true nthreads=2 excludesamples=${pop_list} window=${window} overlap=${overlap} out=${outdir}/${pop}.roh
-        bsub -J"roh_${pop}_${CHR}" -o"%J_roh_${pop}_${CHR}.o" -q normal -M8000 -n4 -R"span[hosts=1] select[mem>=8000] rusage[mem=8000]" -- java -Xms5000m -Xmx5000m -jar /nfs/team151/software/beagle_4/b4.r1274.jar gt=${pop_path}/${CHR}.non_missing.vcf.gz ibd=true nthreads=4 excludesamples=${pop_list} window=${window} overlap=${overlap} out=${outdir}/${pop}.roh
-      
-    done
-
-  ;;
   ROH3 )
     echo "Calculate ROH from a unified vcf file....with BEAGLE...we need a file without missing genotypes(currently is filtered on MAF>5%)!!"
     echo -e "Parameters: \nwindow=${window}\noverlap=${overlap}"
@@ -1313,7 +1278,58 @@ all_hom=`bcftools query -s ${sample} -R ${shared_cat} -f '%CHROM\t%POS\t%REF\t%A
         bsub -J"roh_${pop}_${CHR}" -o"%J_roh_${pop}_${CHR}.o" -q normal -M8000 -n4 -R"span[hosts=1] select[mem>=8000] rusage[mem=8000]" -- beagle 5000 gt=${pop_path}/${CHR}.GERP.vcf.gz ibd=true nthreads=4 excludesamples=${pop_list} window=${window} overlap=${overlap} out=${outdir}/${pop}.roh
     done
 
-  ;;  
+  ;;
+  ROHINGI )
+    echo "Calculate ROH for INGI populations from splitted vcf files with IBDseq (NO MAF filter)!!"
+    echo "We'll have also data separate for villages in FVG"
+    echo -e "Parameters: \nwindow=${window}\noverlap=${overlap}"
+    #use he same vcf file for all the samples but change the sample list of individuals toi exclude from the analysis
+    pops_updated="FVG VBI CARL Erto Resia Illegio Sauris"
+    for pop in $pops_updated
+    do
+
+      case $pop in
+        FVG )
+          pop_path=/lustre/scratch113/projects/fvg_seq/16092015/12112015_FILTERED_REL
+          ;;
+        VBI )
+          pop_path=/lustre/scratch113/projects/esgi-vbseq/08092015/12112015_FILTERED_REL
+            ;;
+        CARL )
+          pop_path=/lustre/scratch113/projects/carl_seq/variant_refinement/12112015_FILTERED_REL
+            ;;
+        Erto )
+          pop_path=/lustre/scratch113/projects/fvg_seq/16092015/12112015_FILTERED_REL
+            ;;
+        Sauris )
+          pop_path=/lustre/scratch113/projects/fvg_seq/16092015/12112015_FILTERED_REL
+            ;;
+        Illegio )
+          pop_path=/lustre/scratch113/projects/fvg_seq/16092015/12112015_FILTERED_REL
+            ;;
+        Resia )
+          pop_path=/lustre/scratch113/projects/fvg_seq/16092015/12112015_FILTERED_REL
+            ;;
+      esac
+
+        #we can filter out unrelated after the calculation
+        # pop_list=/lustre/scratch113/projects/esgi-vbseq/20140430_purging/46_SAMPLES/listpop/BEAGLE/all_pop_but_${pop}.txt
+        # pop_list=/lustre/scratch113/projects/esgi-vbseq/20140430_purging/UNRELATED/listpop/FIVE_POPS/all_pop_but_${pop}.txt
+        # pop_list=/lustre/scratch113/projects/esgi-vbseq/20140430_purging/UNRELATED/listpop/all_pop_but_${pop}.txt
+        # pop_list=/lustre/scratch113/projects/esgi-vbseq/20140430_purging/ALL/listpop/all_pop_but_${pop}.txt
+        # marker_list=/lustre/scratch113/projects/esgi-vbseq/20140430_purging/POP_MERGED_FILES/20140520_ROH/sites_with_missing_genotypes.list
+        #use freq data
+        # bsub -J"roh_${pop}" -o"%J_roh_${pop}.o" -q normal -M8000 -n2 -R"span[hosts=1] select[mem>=8000] rusage[mem=8000]" -- java -Xms5000m -Xmx5000m -jar /nfs/team151/software/beagle_4/b4.r1274.jar gtgl=${pop_path}/22.vcf.gz ibd=true nthreads=2 excludesamples=${pop_list} excludemarkers=${marker_list} out=${pop}.roh
+        # bsub -J"roh_${pop}" -o"%J_roh_${pop}.o" -q normal -M8000 -n2 -R"span[hosts=1] select[mem>=8000] rusage[mem=8000]" -- java -Xms5000m -Xmx5000m -jar /nfs/team151/software/beagle_4/b4.r1274.jar gt=${pop_path}/22.nonmissing.vcf.gz ibd=true nthreads=2 excludesamples=${pop_list} out=${pop}.roh
+        # bsub -J"roh_${pop}" -o"%J_roh_${pop}.o" -q normal -M8000 -n2 -R"span[hosts=1] select[mem>=8000] rusage[mem=8000]" -- java -Xms5000m -Xmx5000m -jar /nfs/team151/software/beagle_4/b4.r1274.jar gt=${pop_path}/${CHR}.nonmissing.maf_gt_05.vcf.gz ibd=true nthreads=2 excludesamples=${pop_list} window=${window} overlap=${overlap} out=${pop}.roh
+        # bsub -J"roh_${pop}" -o"%J_roh_${pop}.o" -q normal -M8000 -n2 -R"span[hosts=1] select[mem>=8000] rusage[mem=8000]" -- java -Xms5000m -Xmx5000m -jar /nfs/team151/software/beagle_4/b4.r1274.jar gt=${pop_path}/${CHR}.non_missing.vcf.gz ibd=true nthreads=2 excludesamples=${pop_list} window=${window} overlap=${overlap} out=${outdir}/${pop}.roh
+        # bsub -J"roh_${pop}" -o"%J_roh_${pop}.o" -q yesterday -M8000 -n2 -R"span[hosts=1] select[mem>=8000] rusage[mem=8000]" -- java -Xms5000m -Xmx5000m -jar /nfs/team151/software/beagle_4/b4.r1274.jar gt=${pop_path}/${CHR}.nonmissing.vcf.gz ibd=true nthreads=2 excludesamples=${pop_list} window=${window} overlap=${overlap} out=${outdir}/${pop}.roh
+        # bsub -J"roh_${pop}_${CHR}" -o"%J_roh_${pop}_${CHR}.o" -q normal -M8000 -n4 -R"span[hosts=1] select[mem>=8000] rusage[mem=8000]" -- java -Xms5000m -Xmx5000m -jar /nfs/team151/software/beagle_4/b4.r1274.jar gt=${pop_path}/${CHR}.non_missing.vcf.gz ibd=true nthreads=4 excludesamples=${pop_list} window=${window} overlap=${overlap} out=${outdir}/${pop}.roh
+        # bsub -J"roh_${pop}_${CHR}" -o"%J_roh_${pop}_${CHR}.o" -q normal -M8000 -n4 -R"span[hosts=1] select[mem>=8000] rusage[mem=8000]" -- java -Xms5000m -Xmx5000m -jar /nfs/team151/software/IBDseq/ibdseq.r1206.jar gt=${pop_path}/${CHR}.non_missing.vcf.gz nthreads=4 excludesamples=${pop_list} out=${outdir}/${pop}.roh
+        bsub -J"roh_${pop}_${CHR}" -o"%J_roh_${pop}_${CHR}.o" -q normal -M8000 -n4 -R"span[hosts=1] select[mem>=8000] rusage[mem=8000]" -- java -Xms5000m -Xmx5000m -jar /nfs/team151/software/IBDseq/ibdseq.r1206.jar gt=${pop_path}/${CHR}.vcf.gz nthreads=4 out=${outdir}/${pop}.roh
+    done
+
+  ;;
   SPLITCSQ )
     echo "Split a chromosome file using a list of consequences"
     if [ $fixed == "fixed" ]
