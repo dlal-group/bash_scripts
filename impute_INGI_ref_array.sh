@@ -32,6 +32,7 @@ m=$6 #select memory amount
 genmap_dir=$7
 base_out=$8
 SETUP=$9
+genotype_base=/lustre/scratch113/projects/carl_seq/08072016_INGI_IMPUTE/genotypes
 # imputedir=/lustre/scratch113/projects/carl_seq/05272015_MERGED_REF_PANEL/IMPUTED/${pop}/${PANEL}$postfix
 # imputedir=/lustre/scratch114/teams/soranzo/users/mc14/fromscratch113/INGI/14102015_MERGED_REF_PANEL/IMPUTED/${pop}/${PANEL}$postfix
 imputedir=${base_out}/${pop}/${PANEL}$postfix/${chr}
