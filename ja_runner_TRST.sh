@@ -57,7 +57,7 @@ while getopts ":dst" opt; do
       # $script ${file} $4 $5 $6 $7 $8
       $script ${file} "${@:4}"
       ;;
-    slist)
+    l)
       echo $opt
       echo "Sscript list mode triggered!!" >&2
       file=`sed -n "${SGE_TASK_ID}p" $2`
