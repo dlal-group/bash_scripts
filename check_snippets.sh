@@ -169,6 +169,7 @@ done > 07072016_impute_check.txt
 
 
 for panel in CARL_FVG_VBI_UK10K_TGP3_ALL
+for panel in CARL_FVG_VBI_TGP3_ALL
 do
 for chr in $(seq 22)
 do

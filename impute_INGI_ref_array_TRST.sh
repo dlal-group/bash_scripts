@@ -34,6 +34,7 @@ base_out=${15}
 exclude_base=${16}
 genotype_base=${17}
 refdir=${18}
+SETUP=${19}
 
 # imputedir=/lustre/scratch113/projects/carl_seq/05272015_MERGED_REF_PANEL/IMPUTED/${pop}/${PANEL}$postfix
 # imputedir=/lustre/scratch114/teams/soranzo/users/mc14/fromscratch113/INGI/14102015_MERGED_REF_PANEL/IMPUTED/${pop}/${PANEL}$postfix
@@ -113,8 +114,12 @@ reflegend=$refdir/${chr}/${chr}.INGI_REF.${PANEL}.legend.gz
 # 	reflegend=$refdir/${PANEL}_chr$chr.legend.gz
 # 	;;
 # esac
+if [[ "$SETUP" == "test"]];then
+	extra_str=`echo $extra_str_excl_snps $extra_str_excl_samples`
+else
+	extra_str=""
+fi
 
-extra_str=`echo $extra_str_excl_snps $extra_str_excl_samples`
 
 if [[ "$chr" == "X_PAR1" ]]; then # (60,001 - 2,699,520)
 	plink_str="--chr X --from-bp 60001 --to-bp 2699520"
@@ -173,10 +178,7 @@ for chunk in `seq 1 $chunk_num`; do
 		queue=${q}
 		chunk_end=`echo "$chr_begin+($chunk*$chunk_size)" | bc`
 	fi
-	if [[ $chr.$chunkStr == 8.02 ]]; then
-		mem=36000
-		queue=hugemem
-	fi
+	
 	if [[ $by_chunk == "Y" ]]; then
 		refhap=$refdir/$refname/chr$chr.${chunkStr}$postfix.hap.gz
 		reflegend=$refdir/$refname/chr$chr.${chunkStr}$postfix.legend.gz
