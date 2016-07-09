@@ -186,7 +186,10 @@ for chunk in `seq 1 $chunk_num`; do
 		reflegend=$refdir/$refname/chr$chr.${chunkStr}$postfix.legend.gz
 	fi
 	gen_map=${genmap_dir}/genetic_map_chr${chr}_combined_b37.txt
-	echo -e "#!/usr/local/bin/bash
+	if [[ -s $imputedir/chr$chr.$chunkStr.gen.gz ]];then
+		echo "Chunk $imputedir/chr$chr.$chunkStr.gen.gz already imputed!!!Skip!"
+	else
+	echo -e "#!/usr/bin/env bash
 	\n$impute2 -allow_large_regions -m ${gen_map} -h $refhap -l $reflegend -known_haps_g $phasedir/chr$chr.hap.gz -sample_g $phasedir/chr$chr.sample $extra_str -use_prephased_g -k_hap $k_hap -int $chunk_begin $chunk_end -Ne 20000 -buffer $buffer_size -o $imputedir/chr$chr.$chunkStr.gen $chrX_impute_str
 	\ngzip -f $imputedir/chr$chr.$chunkStr.gen
 	\nif [[ -e $imputedir/chr$chr.$chunkStr.gen_allele_probs ]]; then
@@ -198,9 +201,11 @@ for chunk in `seq 1 $chunk_num`; do
                     echo \"chr$chr $chunkStr: \$N_info for info, \$N_gen for gen\" > $imputedir/chr$chr.$chunkStr.ERR
             fi
             " > $imputedir/chr$chr.$chunkStr.cmd
-	cd $imputedir
-	# qsub -o /netapp/dati/WGS_REF_PANEL/genotypes/${pop}/merged/cleaned/${chr}/chr${i}_shapeit.log -e /netapp/dati/WGS_REF_PANEL/genotypes/${pop}/merged/cleaned/${i}/chr${chr}_$chunkStr.e -V -N ${pop}_chr${chr}_$chunkStr -pe  $imputedir/chr$chr.$chunkStr.cmd
-	ls $imputedir/chr$chr.$chunkStr.cmd >> $imputedir/chr${chr}_command.list
+            chmod ug+x $imputedir/chr$chr.$chunkStr.cmd
+	# cd $imputedir
+
+	ls $imputedir/chr$chr.$chunkStr.cmd >> $imputedir/chr${chr}_command.list.tmp
+	fi
 done
 
 #delete duplicate lines from the command file
