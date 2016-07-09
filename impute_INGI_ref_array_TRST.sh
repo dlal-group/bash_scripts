@@ -159,6 +159,12 @@ let "chunk_num=($chr_end - $chr_begin)/$chunk_size" # bash rounds automatically
 if [[ $chunk_num <1 ]]; then
 	chunk_num=1
 fi
+
+#check if command list file exists and remove it
+if [[ -s $imputedir/chr${chr}_command.list ]];then
+	rm $imputedir/chr${chr}_command.list
+fi
+
 for chunk in `seq 1 $chunk_num`; do
 	chunkStr=`printf "%02d" $chunk`
 	if [[ -e $imputedir/chr$chr.$chunkStr.log ]]; then
