@@ -31,6 +31,7 @@ q=$5 #selected queue
 m=$6 #select memory amount
 genmap_dir=$7
 base_out=$8
+SETUP=$9
 # imputedir=/lustre/scratch113/projects/carl_seq/05272015_MERGED_REF_PANEL/IMPUTED/${pop}/${PANEL}$postfix
 # imputedir=/lustre/scratch114/teams/soranzo/users/mc14/fromscratch113/INGI/14102015_MERGED_REF_PANEL/IMPUTED/${pop}/${PANEL}$postfix
 imputedir=${base_out}/${pop}/${PANEL}$postfix/${chr}
@@ -41,20 +42,23 @@ case $pop in
 	VBI)
 	extra_str_excl_samples="-exclude_samples_g /lustre/scratch113/projects/esgi-vbseq/08092015/12112015_FILTERED_REL/LISTS/VBI_impute_exclude_sample.list"
 	# extra_str_excl_snps="-exclude_snps_g /lustre/scratch114/teams/soranzo/users/mc14/fromscratch113/INGI/05272015_MERGED_REF_PANEL/snplist/${pop}_chr${chr}.exclude -impute_excluded"
-	genodir=/lustre/scratch114/teams/soranzo/users/mc14/fromscratch113/INGI/MERGED_REF_PANEL_Feb2015/VBI_geno
-	phasedir=/lustre/scratch114/teams/soranzo/users/mc14/fromscratch113/INGI/MERGED_REF_PANEL_Feb2015/VBI_geno
+	# genodir=/lustre/scratch114/teams/soranzo/users/mc14/fromscratch113/INGI/MERGED_REF_PANEL_Feb2015/VBI_geno
+	genodir=${genotype_base}/${pop}/merged/cleaned/${chr}
+	phasedir=${genotype_base}/${pop}/merged/cleaned/${chr}
 	;;
 	FVG)
 	extra_str_excl_samples="-exclude_samples_g /lustre/scratch113/projects/fvg_seq/16092015/12112015_FILTERED_REL/LISTS/FVG_impute_exclude_sample.list"
 	# extra_str_excl_snps="-exclude_snps_g /lustre/scratch114/teams/soranzo/users/mc14/fromscratch113/INGI/05272015_MERGED_REF_PANEL/snplist/${pop}_chr${chr}.exclude -impute_excluded"
-	genodir=/lustre/scratch114/teams/soranzo/users/mc14/fromscratch113/INGI/05272015_MERGED_REF_PANEL/GWAS/FVG/shapeit
-	phasedir=/lustre/scratch114/teams/soranzo/users/mc14/fromscratch113/INGI/05272015_MERGED_REF_PANEL/GWAS/FVG/shapeit
+	# genodir=/lustre/scratch114/teams/soranzo/users/mc14/fromscratch113/INGI/05272015_MERGED_REF_PANEL/GWAS/FVG/shapeit
+	genodir=${genotype_base}/${pop}/merged/cleaned/${chr}
+	phasedir=${genotype_base}/${pop}/merged/cleaned/${chr}
 	;;
 	CARL)
 	extra_str_excl_samples="-exclude_samples_g /lustre/scratch113/projects/carl_seq/variant_refinement/12112015_FILTERED_REL/LISTS/CARL_impute_exclude_sample.list"
 	# extra_str_excl_snps="-exclude_snps_g /lustre/scratch114/teams/soranzo/users/mc14/fromscratch113/INGI/05272015_MERGED_REF_PANEL/snplist/${pop}_chr${chr}.exclude -impute_excluded"
-	genodir=/lustre/scratch113/teams/soranzo/users/jh21/imputed/carl/shapeit
-	phasedir=/lustre/scratch113/teams/soranzo/users/jh21/imputed/carl/shapeit
+	# genodir=/lustre/scratch113/teams/soranzo/users/jh21/imputed/carl/shapeit
+	genodir=${genotype_base}/${pop}/merged/cleaned/${chr}
+	phasedir=${genotype_base}/${pop}/merged/cleaned/${chr}
 	;;
 	INCIPE2 )
 	# extra_str_excl_snps="-exclude_snps_g /lustre/scratch114/teams/soranzo/users/mc14/fromscratch113/INGI/05272015_MERGED_REF_PANEL/snplist/${pop}_chr${chr}.exclude -impute_excluded"
@@ -110,7 +114,11 @@ reflegend=$refdir/${chr}/${chr}.INGI_REF.${PANEL}.legend.gz
 # 	;;
 # esac
 
-extra_str=`echo $extra_str_excl_snps $extra_str_excl_samples`
+if [[ "$SETUP" == "test" ]];then
+	extra_str=`echo $extra_str_excl_snps $extra_str_excl_samples`
+else
+	extra_str=""
+fi
 
 if [[ "$chr" == "X_PAR1" ]]; then # (60,001 - 2,699,520)
 	plink_str="--chr X --from-bp 60001 --to-bp 2699520"
@@ -195,4 +203,8 @@ for chunk in `seq 1 $chunk_num`; do
 	ls $imputedir/chr$chr.$chunkStr.cmd >> $imputedir/chr${chr}_command.list
 done
 
-# mkdir -p $imputedir/LOGS;size=`wc -l $imputedir/chr${chr}_command.list|cut -f 1 -d " "`;bsub -J "${refname}${postfix}.${geno}.chr${chr}[1-${size}]" -q $queue -R "select[mem>$mem] rusage[mem=$mem]" -M${mem} -o "$imputedir/LOGS/%J_${refname}${postfix}.${geno}.chr${chr}.%I.log" -e "$imputedir/LOGS/%J_${refname}${postfix}.${geno}.chr${chr}.%I.err" -- ~/Work/bash_scripts/ja_runner_par.sh $imputedir/chr${chr}_command.list
+#delete duplicate lines from the command file
+awk '!_[$0]++' $imputedir/chr${chr}_command.list.tmp > $imputedir/chr${chr}_command.list
+rm $imputedir/chr${chr}_command.list.tmp
+
+mkdir -p $imputedir/LOGS;size=`wc -l $imputedir/chr${chr}_command.list|cut -f 1 -d " "`;bsub -J "${refname}${postfix}.${geno}.chr${chr}[1-${size}]" -q $queue -R "select[mem>$mem] rusage[mem=$mem]" -M${mem} -o "$imputedir/LOGS/%J_${refname}${postfix}.${geno}.chr${chr}.%I.log" -e "$imputedir/LOGS/%J_${refname}${postfix}.${geno}.chr${chr}.%I.err" -- ~/Work/bash_scripts/ja_runner_par.sh -slist $imputedir/chr${chr}_command.list

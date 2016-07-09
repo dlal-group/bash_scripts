@@ -52,6 +52,14 @@ while getopts ":dst" opt; do
     s)
       echo $opt
       echo "Single list mode triggered!!" >&2
+      file=`sed -n "${SGE_TASK_ID}p" $3`
+      echo ${file}
+      # $script ${file} $4 $5 $6 $7 $8
+      $script ${file} "${@:4}"
+      ;;
+    slist)
+      echo $opt
+      echo "Sscript list mode triggered!!" >&2
       file=`sed -n "${SGE_TASK_ID}p" $2`
       # echo ${file}
       script=${file}
