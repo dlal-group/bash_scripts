@@ -114,7 +114,7 @@ reflegend=$refdir/${chr}/${chr}.INGI_REF.${PANEL}.legend.gz
 # 	reflegend=$refdir/${PANEL}_chr$chr.legend.gz
 # 	;;
 # esac
-if [[ "$SETUP" == "test"]];then
+if [[ "$SETUP" == "test" ]];then
 	extra_str=`echo $extra_str_excl_snps $extra_str_excl_samples`
 else
 	extra_str=""
