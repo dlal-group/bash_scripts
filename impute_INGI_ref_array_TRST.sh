@@ -212,9 +212,11 @@ for chunk in `seq 1 $chunk_num`; do
 	ls $imputedir/chr$chr.$chunkStr.cmd >> $imputedir/chr${chr}_command.list.tmp
 	fi
 done
-
-#delete duplicate lines from the command file
-awk '!_[$0]++' $imputedir/chr${chr}_command.list.tmp > $imputedir/chr${chr}_command.list
-rm $imputedir/chr${chr}_command.list.tmp
-
+if [[ -s $imputedir/chr${chr}_command.list.tmp ]]; then
+	#delete duplicate lines from the command file
+	awk '!_[$0]++' $imputedir/chr${chr}_command.list.tmp > $imputedir/chr${chr}_command.list
+	rm $imputedir/chr${chr}_command.list.tmp
+else
+	echo "Chromosome ${chr} already COMPLETED!!job not submitted!! "
+fi
 # mkdir -p $imputedir/LOGS;size=`wc -l $imputedir/chr${chr}_command.list|cut -f 1 -d " "`;bsub -J "${refname}${postfix}.${geno}.chr${chr}[1-${size}]" -q $queue -R "select[mem>$mem] rusage[mem=$mem]" -M${mem} -o "$imputedir/LOGS/%J_${refname}${postfix}.${geno}.chr${chr}.%I.log" -e "$imputedir/LOGS/%J_${refname}${postfix}.${geno}.chr${chr}.%I.err" -- ~/Work/bash_scripts/ja_runner_par.sh $imputedir/chr${chr}_command.list
