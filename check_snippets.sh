@@ -149,12 +149,14 @@ done
 done
 done
 
+for pop in CARL
 for pop in CARL FVG VBI
 do
 # for panel in CARL_FVG_VBI.shapeit CARL_FVG_VBI_TGP3_ALL.shapeit CARL_FVG_VBI_TSI.shapeit EUR.shapeit TGP3_ALL.shapeit
 for panel in CARL_FVG_VBI_TGP3_ALL.shapeit
 do
-for chr in {1..22}
+for chr in {1..19}
+# for chr in {20..22}
 do
 genz=`ls ${pop}/${panel}/${chr}/*.gen.gz|wc -l | cut -f 1 -d " "`
 cmdz=`ls ${pop}/${panel}/${chr}/*.cmd|wc -l | cut -f 1 -d " "`
@@ -165,7 +167,8 @@ echo "$pop $panel $chr $genz $cmdz WARNING"
 fi
 done
 done
-done > 07072016_impute_check.txt
+done 2> /dev/null
+ > 07072016_impute_check.txt
 
 
 for panel in CARL_FVG_VBI_UK10K_TGP3_ALL
@@ -198,4 +201,23 @@ plink --bfile /netapp/dati/WGS_REF_PANEL/genotypes/${pop}/merged/cleaned/${chr}/
 
 done
 done
+
+
+for pop in CARL FVG VBI
+do
+for panel in TGP3_ALL.shapeit CARL_FVG_VBI.shapeit CARL_FVG_VBI_TSI.shapeit CARL_FVG_VBI_TGP3_ALL.shapeit CARL_FVG_VBI_UK10K_TGP3_ALL.shapeit
+# for panel in CARL_FVG_VBI_TGP3_ALL.shapeit
+do
+for chr in 2 6 11 21
+do
+genz=`ls ${pop}/${panel}/${chr}/*.gen.gz|wc -l | cut -f 1 -d " "`
+cmdz=`ls ${pop}/${panel}/${chr}/*.cmd|wc -l | cut -f 1 -d " "`
+if [ $genz -eq $cmdz ];then
+echo "$pop $panel $chr $genz $cmdz OK"
+else
+echo "$pop $panel $chr $genz $cmdz WARNING"
+fi
+done
+done
+done 2> /dev/null
 
