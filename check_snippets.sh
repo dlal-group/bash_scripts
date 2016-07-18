@@ -155,8 +155,8 @@ do
 # for panel in CARL_FVG_VBI.shapeit CARL_FVG_VBI_TGP3_ALL.shapeit CARL_FVG_VBI_TSI.shapeit EUR.shapeit TGP3_ALL.shapeit
 for panel in CARL_FVG_VBI_TGP3_ALL.shapeit
 do
-for chr in {1..19}
-# for chr in {20..22}
+# for chr in {1..19}
+for chr in {20..22}
 do
 genz=`ls ${pop}/${panel}/${chr}/*.gen.gz|wc -l | cut -f 1 -d " "`
 cmdz=`ls ${pop}/${panel}/${chr}/*.cmd|wc -l | cut -f 1 -d " "`
