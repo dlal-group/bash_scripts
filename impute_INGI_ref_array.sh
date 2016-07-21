@@ -15,7 +15,8 @@ postfix=".shapeit" ## "" or ".shapeit"
 by_chunk=N  ## "Y" or "N"
 # phasedir=$scratch113/imputed/$geno/shapeit
 
-impute2=/nfs/team151/software/impute_v2.3.2_x86_64_static/impute2
+# impute2=/nfs/team151/software/impute_v2.3.2_x86_64_static/impute2
+impute2=/nfs/team151/software/impute_v2.3.2_x86_64_dynamic/impute2
 shapeit2=/nfs/team151/software/shapeit.v2.r790/shapeit
 plink2=/nfs/team151/software/plink2_18_April_2015/plink
 chunk_size=3000000
