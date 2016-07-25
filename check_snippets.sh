@@ -172,22 +172,35 @@ done 2> /dev/null
 
 
 for panel in CARL_FVG_VBI_UK10K_TGP3_ALL
+
 for panel in CARL_FVG_VBI_TGP3_ALL
 do
-for chr in $(seq 22)
+for chr in 1 5
 do
+last=`wc -l ${panel}/${chr}/${chr}.chunks.txt| cut -f 1 -d " "`
+for chunk in $(seq ${last})
+do
+
+size=${#chunk}
+if [[ $size -eq 1 ]]; then
+	c_chunk=`echo "00${chunk}"`
+else
+	c_chunk=`echo "0${chunk}"`
+
+fi
 # legs=$(ls ${chr}.INGI_REF.${panel}.*.legend.gz)
 # last=${leg[-1]}
 # IFS="." read -ra ZNAME <<< "$last"
 # last=${ZNAME[-3]}
-last=`wc -l ${panel}/${chr}/${chr}.chunks.txt| cut -f 1 -d " "`
-legendz=`ls ${panel}/${chr}/${chr}.INGI_REF.${panel}.*.legend.gz|wc -l | cut -f 1 -d " "`
-hapz=`ls ${panel}/${chr}/${chr}.INGI_REF.${panel}.*.hap.gz|wc -l | cut -f 1 -d " "`
-if [ $legendz -eq $last ];then
-echo "$pop $panel $chr $legendz $hapz $last OK"
+
+legendz=`zcat ${panel}/${chr}/${chr}.INGI_REF.${panel}.${c_chunk}.legend.gz| tail -n+2|wc -l | cut -f 1 -d " "`
+hapz=`zcat ${panel}/${chr}/${chr}.INGI_REF.${panel}.${c_chunk}.hap.gz|wc -l | cut -f 1 -d " "`
+if [ $legendz -eq $hapz ];then
+echo "$panel $chr ${c_chunk} $legendz $hapz OK"
 else
-echo "$pop $panel $chr $legendz $hapz $last WARNING"
+echo "$panel $chr ${c_chunk} $legendz $hapz WARNING"
 fi
+done
 done
 done
 
@@ -221,3 +234,14 @@ done
 done
 done 2> /dev/null
 
+
+for pop in CARL FVG VBI INCIPE2
+do
+for panel in TGP3_ALL.shapeit CARL_FVG_VBI.shapeit CARL_FVG_VBI_TSI.shapeit CARL_FVG_VBI_TGP3_ALL.shapeit CARL_FVG_VBI_UK10K_TGP3_ALL.shapeit
+do
+for chr in 2 6 11 21
+do
+tail -n11 ${pop}/${panel}/${chr}/chr${chr}.*.gen_summary > ${pop}_${panel}_chr${chr}.concordance_tables
+done
+done
+done
