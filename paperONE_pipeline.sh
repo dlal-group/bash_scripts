@@ -36,6 +36,15 @@ case $MODE in
   variant=$3
 
   ;;
+  INGIROH)
+    window=$3
+    overlap=$4
+    ld_win=$5
+    r2=$6
+    mac=$7
+    outdir=$8/CHR${CHR}
+    mkdir -p ${outdir}
+    ;;  
   ROH*)
     #set parameters for beagle:
     window=$3
@@ -43,15 +52,6 @@ case $MODE in
     outdir=$5/CHR${CHR}
     mkdir -p ${outdir}
     ;;
-  ROHINGI)
-    window=$3
-    overlap=$4
-    ld_win=$5
-    r2=$6
-    mac=$7
-    outdir=$6/CHR${CHR}
-    mkdir -p ${outdir}
-    ;;  
   SPLITCSQ*)
     #set parameters for splitting in consequences
     category=$3
@@ -1293,7 +1293,7 @@ all_hom=`bcftools query -s ${sample} -R ${shared_cat} -f '%CHROM\t%POS\t%REF\t%A
     done
 
   ;;
-  ROHINGI )
+  INGIROH )
     echo "Calculate ROH for INGI populations from splitted vcf files with IBDseq (NO MAF filter)!!"
     # echo "We'll have also data separate for villages in FVG"
     echo -e "Parameters: \nwindow=${window}\noverlap=${overlap}\nr2=${r2}\nMAC=${mac}"
