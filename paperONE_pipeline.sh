@@ -43,6 +43,13 @@ case $MODE in
     outdir=$5/CHR${CHR}
     mkdir -p ${outdir}
     ;;
+  ROHINGI)
+    window=$3
+    overlap=$4
+    ld_win=$5
+    outdir=$6/CHR${CHR}
+    mkdir -p ${outdir}
+    ;;  
   SPLITCSQ*)
     #set parameters for splitting in consequences
     category=$3
