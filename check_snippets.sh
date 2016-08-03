@@ -245,3 +245,46 @@ tail -n11 ${pop}/${panel}/${chr}/chr${chr}.*.gen_summary > ${pop}_${panel}_chr${
 done
 done
 done
+
+#merge back imputed chunks
+for pop in CARL FVG VBI
+do
+
+for chr in {2..22}
+do
+basefolder=/netapp02/data/imputation/INGI_TGP3/impute
+pop=FVG
+# chr=1
+last_chunk=`ls ${basefolder}/${pop}/${chr}/*.gz| sort| tail -n1`
+last_chunk_n=`echo ${last_chunk}| cut -f 2 -d "."`
+#first, merge all chunks for gen and info
+for chunk in `seq $last_chunk_n`
+do
+chunkStr=`printf "%02d" $chunk`
+echo ${chr} ${chunkStr}
+
+cat ${basefolder}/${pop}/${chr}/chr${chr}.${chunkStr}.gen.gz >> ${basefolder}/${pop}/chr${chr}.gen_tmp1.gz
+cat ${basefolder}/${pop}/${chr}/chr${chr}.${chunkStr}.gen_info | sed 's,'"/lustre/scratch113/projects/esgi-vbseq/02032016_INGI_REF_PANEL/IMPUTE/CARL_FVG_VBI_TGP3_ALL/${chr}/${chr}.INGI_REF.CARL_FVG_VBI_TGP3_ALL.*.legend.gz:"',,g' >> ${basefolder}/${pop}/chr${chr}.gen_info_tmp1
+
+done
+
+#than clean up useless text and recode long alleles, creating a map file for decoding
+zcat ${basefolder}/${pop}/chr${chr}.gen_tmp1.gz | sed 's,'"/lustre/scratch113/projects/esgi-vbseq/02032016_INGI_REF_PANEL/IMPUTE/CARL_FVG_VBI_TGP3_ALL/${chr}/${chr}.INGI_REF.CARL_FVG_VBI_TGP3_ALL.*.legend.gz:"',,g' | gzip -c > ${basefolder}/${pop}/chr${chr}.gen_tmp2.gz
+
+
+done
+done
+
+
+
+#!/usr/bin/env bash
+#
+#merge back chunks of haplotypes and legend files to generate the gz format
+pop1=$1
+pop2=$2
+chr=$3
+
+(echo "id position a0 a1";(zgrep -h -v position /lustre/scratch113/projects/esgi-vbseq/02032016_INGI_REF_PANEL/IMPUTE/${pop1}_${pop2}/${chr}/${chr}.INGI_REF.${pop1}_${pop2}.*.legend.gz | sort -g -k2,2 | sed 's,'"/lustre/scratch113/projects/esgi-vbseq/02032016_INGI_REF_PANEL/IMPUTE/${pop1}_${pop2}/${chr}/${chr}.INGI_REF.${pop1}_${pop2}.*.legend.gz:"',,g') ) | gzip -c > /lustre/scratch113/projects/esgi-vbseq/02032016_INGI_REF_PANEL/IMPUTE/${pop1}_${pop2}/${chr}/${chr}.INGI_REF.${pop1}_${pop2}.legend.gz
+(zcat /lustre/scratch113/projects/esgi-vbseq/02032016_INGI_REF_PANEL/IMPUTE/${pop1}_${pop2}/${chr}/${chr}.INGI_REF.${pop1}_${pop2}.*.hap.gz ) | gzip -c > /lustre/scratch113/projects/esgi-vbseq/02032016_INGI_REF_PANEL/IMPUTE/${pop1}_${pop2}/${chr}/${chr}.INGI_REF.${pop1}_${pop2}.hap.gz
+# (echo "id position a0 a1";(zgrep -v position -h /lustre/scratch113/projects/esgi-vbseq/02032016_INGI_REF_PANEL/IMPUTE/${pop1}_${pop2}/${chr}/${chr}.INGI_REF.${pop1}_${pop2}.legend.gz | awk -v chrom=${chr} '{print chrom":"$2"_"$3"_"$4,$2,$3,$4}')) | gzip -c > /lustre/scratch113/projects/esgi-vbseq/02032016_INGI_REF_PANEL/IMPUTE/${pop1}_${pop2}/${chr}/${chr}.INGI_REF.${pop1}_${pop2}.reformatted.legend.gz
+/lustre/scratch113/projects/esgi-vbseq/02032016_INGI_REF_PANEL/IMPUTE/CARL_FVG_VBI_TGP3_ALL/1/1.INGI_REF.CARL_FVG_VBI_TGP3_ALL.050.legend.gz:
