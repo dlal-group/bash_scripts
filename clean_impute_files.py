@@ -1,4 +1,4 @@
-#!/software/bin/python2.7
+#!/usr/bin/env python2.7
 #script used to re filter vcf files for reference generation
 import gzip 
 import re 
@@ -12,15 +12,37 @@ import time
 
 # vcfdata = sys.stdin.readlines()
 # vcfdata ="test_last_chr4_REF_keep.vcf"
-file_name=sys.argv[1]
+
+file_prefix=sys.argv[1]
+# file_prefix="chr10.gen_tmp1_TEST"
 chrom=sys.argv[2]
+# chrom=10
+
 pop=sys.argv[3]
+# pop="FVG"
 mode=sys.argv[4]
+# mode="INFO"
+# mode="GEN"
+
+# first, we need to create a dictionary with chr_pos_a1_a2 as key and [chr,pos,a1,a2,variant type] as value
+# this is the same for both info and gen files, but we'll have a gzipped file
+file_info=file_prefix + "_info"
+file_gen=file_prefix + ".gz"
+
+all_sites={}
+with open('%s' %(file_info) ,'r') as info_file:
+	for c_row in info_file:
+		site=c_row.rstrip().split(" ")
+		if len(site[3]) != len(site[4]):
+			all_sites[site[1]] = [chrom,site[2],site[3],site[4], "INDEL"]
+		else:
+			all_sites[site[1]] = [chrom,site[2],site[3],site[4], "SNP"]
+
+
 
 #we need to work in different ways depending on the MODE parameter
 #it could have two values => INFO or GEN
 if mode == "INFO":
-	
 	
 elif mode == "GEN":
 
