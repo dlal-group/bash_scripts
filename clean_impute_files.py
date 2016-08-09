@@ -5,6 +5,7 @@ import re
 import sys 
 import subprocess as sub
 import time
+import collections
 
 
 #this script is meant to be usede to check stuff on the reference panel input files, like duplicates or triplicates row
@@ -12,87 +13,66 @@ import time
 
 # vcfdata = sys.stdin.readlines()
 # vcfdata ="test_last_chr4_REF_keep.vcf"
+start_time = time.time()
+start_time1 = time.ctime(int(start_time))
+print start_time1
 
 file_prefix=sys.argv[1]
-# file_prefix="chr10.gen_tmp1_TEST"
+# file_prefix="chr1.62.gen"
 chrom=sys.argv[2]
-# chrom=10
+# chrom=1
 
 pop=sys.argv[3]
 # pop="FVG"
-mode=sys.argv[4]
-# mode="INFO"
-# mode="GEN"
+outdir=sys.argv[4]
+# outdir="/netapp02/data/imputation/INGI_TGP3/impute/FVG/MERGED/CLEANED"
 
 # first, we need to create a dictionary with chr_pos_a1_a2 as key and [chr,pos,a1,a2,variant type] as value
 # this is the same for both info and gen files, but we'll have a gzipped file
 file_info=file_prefix + "_info"
 file_gen=file_prefix + ".gz"
 
-all_sites={}
+all_sites=collections.defaultdict(lambda: collections.defaultdict(list))
 with open('%s' %(file_info) ,'r') as info_file:
+	next(info_file)
 	for c_row in info_file:
 		site=c_row.rstrip().split(" ")
 		if len(site[3]) != len(site[4]):
-			all_sites[site[1]] = [chrom,site[2],site[3],site[4], "INDEL"]
+			all_sites[site[2]]["INDEL"].append([chrom,site[2],site[3],site[4]])
 		else:
-			all_sites[site[1]] = [chrom,site[2],site[3],site[4], "SNP"]
+			all_sites[site[2]]["SNP"].append([chrom,site[2],site[3],site[4]])
 
+	#1)We need to remove duplicates for INDELs and SNPs
+	# we'll print al list of sites TO KEEP formatted as:
+	# CHR POS REF ALT
+	# first we need to check all position with both snp and indel
+keep_in=open('%s/chr%s.gen.to_keep' %(outdir, chrom), 'w')
+keep_variants = []
+for key in all_sites:
+	if len(all_sites[key]) > 1:
+		#this means we have both snps and indels in our dictionary's entry
+		if len(all_sites[key]['SNP']) == 1:
+			variant = map(str,all_sites[key]['SNP'][0])
+			# keep_variants.append(variant)
+			print >> keep_in,'%s' %(' '.join(variant))
+			# print variant[0],' ',variant[1],' ',variant[2],' ',variant[3],' ','SNP'
+	else:
+		#we only have a single type of variant in that position
+		for v_type in all_sites[key]:
+			#we keep it if its not multiallelic
+			if len(all_sites[key][v_type]) == 1:
+				variant = map(str,all_sites[key][v_type][0])
+				# keep_variants.append(variant)
+				print >> keep_in,'%s' %(' '.join(variant))
+				# print variant[0],' ',variant[1],' ',variant[2],' ',variant[3],' ',v_type
 
-
-#we need to work in different ways depending on the MODE parameter
-#it could have two values => INFO or GEN
-if mode == "INFO":
-	
-elif mode == "GEN":
-
-
-
-
-#first thing we want to check for duplicates/triplicates rows
-# the input data has to be in the form of a table with:
-# CHROM POS REF ALT INFO/DP4 INFO/DP4 INFO/DP INFO/HOB INFO/ICB INFO/IDV
-all_list_name=all_list.split("/")[-1]
-
-all_sites_dict={}
-# pos_dict={}
-
-start_time1 = time.time()
-
-print start_time1
-
-with open('%s' %(all_list) , 'r') as keep_file:
-	for keep_row in keep_file:
-		keep_line=keep_row.rstrip().split("\t")yep, mee
-		# check_string=single_line[0]+single_line[1]+single_line[4]+single_line[5]+single_line[6]+single_line[7]+single_line[8]+single_line[9]
-		sites_key=(keep_line[0],keep_line[1],keep_line[2],keep_line[3],keep_line[4])
-		# first mark all duplicates by position
-		all_sites_dict[sites_key] = keep_line[5]
-
-endtime1=time.time() - start_time1
-print endtime1
-
-print "Dictionaries created!"
+#now lets print the list of sites to keep			
+print "Keeplist created!"
 #now we need to read the stream from the vcf file and for each line
 # decide if we want to keep it or not, based on matching fields
-keep_in=open('%s/%s.%s.%s.to_keep.vcf' %(outdir, all_list_name, cohort, mode), 'w')
-# keep_out=open('%s/%s.%s.%s.to_remove.vcf' %(outdir, all_list_name, cohort, mode), 'w')
-# keep_in=open('%s.keep_TEST.vcf' %(all_list_name), 'w')
 
-# with open('%s' %(vcfdata) , 'r') as vcfdata_file:
-	# for vcf_row in vcfdata_file:
-for vcf_row in vcfdata:
-		# infile = open('%s' %(vcfdata) , 'r')
-		# vcf_row = infile.readline()
-	vcf_line=vcf_row.rstrip().split("\t")
-	info_field=vcf_line[7].rstrip().split(";")
-	# info_key=";".join([info_field[0],info_field[1],info_field[2],info_field[3],info_field[4]])
-	info_key=";".join([info_field[0],info_field[1]])
-	sites_key_vcf=(vcf_line[0],vcf_line[1],vcf_line[3],vcf_line[4],info_key)
-	if sites_key_vcf in all_sites_dict:
-		print >> keep_in,'%s' %(vcf_row.rstrip())
-	# else :
-	# 	print >> keep_out,'%s' %(vcf_row.rstrip())
+endtime1=time.time() - start_time
 
+print time.ctime(int(endtime1))
 
 keep_in.close()
