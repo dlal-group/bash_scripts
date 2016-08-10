@@ -36,6 +36,8 @@ case $mode in
 		#extract a list of sites to keep:this sites will be uniq by position!
 		/home/cocca/scripts/bash_scripts/clean_impute_files.py ${basefolder}/${pop}/MERGED/ALL/chr${chr}.gen ${chr} ${pop} ${basefolder}/${pop}/MERGED/CLEANED
 
+		#sort the keeplist
+		sort -g -k2,2 ${basefolder}/${pop}/MERGED/CLEANED/chr${chr}.gen.to_keep -o ${basefolder}/${pop}/MERGED/CLEANED/chr${chr}.gen.to_keep
 		#now we have the list of stuff we want to keep, so we'll just grep what we need
 		(echo "snp_id rs_id position a0 a1 exp_freq_a1 info certainty type info_type0 concord_type0 r2_type0";fgrep -w -f ${basefolder}/${pop}/MERGED/CLEANED/chr${chr}.gen.to_keep ${basefolder}/${pop}/MERGED/ALL/chr${chr}.gen_info) > ${basefolder}/${pop}/MERGED/CLEANED/chr${chr}.gen_info
 		zgrep -w -f ${basefolder}/${pop}/MERGED/CLEANED/chr${chr}.gen.to_keep ${basefolder}/${pop}/MERGED/ALL/chr${chr}.gen.gz | gzip -c > ${basefolder}/${pop}/MERGED/CLEANED/chr${chr}.gen.gz
