@@ -41,7 +41,7 @@ gunzip -c ${geno_file} | awk '!($0 in a){a[$0];print}' > ${output_file_path}/${c
 
 echo "Convert to mach..."
 #script to launch with qsub impute 2 mach conversion
-/software/bin/R CMD BATCH '--args '${chr}' '${geno_file_name}.gen' '${info_file}' '${sample_file}' '${output_file}'' /home/cocca/scripts/r_scripts/impute2mach.R ${output_file_path}/${chr}.Rout
+R CMD BATCH '--args '${chr}' '${geno_file_name}.gen' '${info_file}' '${sample_file}' '${output_file}'' /home/cocca/scripts/r_scripts/impute2mach.R ${output_file_path}/${chr}.Rout
 
 echo "Sort the converted file..."
 #sort the files obtained in mach format
