@@ -40,7 +40,7 @@ echo "Cleaning step...."
 
 #now we have the list of stuff we want to keep, so we'll just grep what we need
 zgrep -f ${basefolder}/${pop}/MERGED/CLEANED/chr${chr}.gen.to_keep ${basefolder}/${pop}/MERGED/ALL/chr${chr}.gen.gz | gzip -c > ${basefolder}/${pop}/MERGED/CLEANED/chr${chr}.gen.gz
-fgrep -f ${basefolder}/${pop}/MERGED/CLEANED/chr${chr}.gen.to_keep ${basefolder}/${pop}/MERGED/ALL/chr${chr}.gen_info > ${basefolder}/${pop}/MERGED/CLEANED/chr${chr}.gen_info
+(echo "snp_id rs_id position a0 a1 exp_freq_a1 info certainty type info_type0 concord_type0 r2_type0";fgrep -f ${basefolder}/${pop}/MERGED/CLEANED/chr${chr}.gen.to_keep ${basefolder}/${pop}/MERGED/ALL/chr${chr}.gen_info) > ${basefolder}/${pop}/MERGED/CLEANED/chr${chr}.gen_info
 
 #and last thing we need is to RECODE long alleles names
 awk '{
