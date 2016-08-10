@@ -38,9 +38,9 @@ with open('%s' %(file_info) ,'r') as info_file:
 	for c_row in info_file:
 		site=c_row.rstrip().split(" ")
 		if len(site[3]) != len(site[4]):
-			all_sites[site[2]]["INDEL"].append([chrom,site[2],site[3],site[4]])
+			all_sites[site[2]]["INDEL"].append([chrom,site[1],site[2],site[3],site[4]])
 		else:
-			all_sites[site[2]]["SNP"].append([chrom,site[2],site[3],site[4]])
+			all_sites[site[2]]["SNP"].append([chrom,site[1],site[2],site[3],site[4]])
 
 	#1)We need to remove duplicates for INDELs and SNPs
 	# we'll print al list of sites TO KEEP formatted as:
@@ -54,7 +54,7 @@ for key in all_sites:
 		if len(all_sites[key]['SNP']) == 1:
 			variant = map(str,all_sites[key]['SNP'][0])
 			# keep_variants.append(variant)
-			print >> keep_in,'%s:%s_%s_%s %s %s %s' %(variant[0],variant[1],variant[2],variant[3],variant[1],variant[2],variant[3])
+			print >> keep_in,'%s %s %s %s' %(variant[1],variant[2],variant[3],variant[4])
 			# 9:10025_A_T 10025 A T
 			# print variant[0],' ',variant[1],' ',variant[2],' ',variant[3],' ','SNP'
 	else:
@@ -64,7 +64,7 @@ for key in all_sites:
 			if len(all_sites[key][v_type]) == 1:
 				variant = map(str,all_sites[key][v_type][0])
 				# keep_variants.append(variant)
-				print >> keep_in,'%s:%s_%s_%s %s %s %s' %(variant[0],variant[1],variant[2],variant[3],variant[1],variant[2],variant[3])
+				print >> keep_in,'%s %s %s %s' %(variant[1],variant[2],variant[3],variant[4])
 				# print variant[0],' ',variant[1],' ',variant[2],' ',variant[3],' ',v_type
 
 #now lets print the list of sites to keep			
