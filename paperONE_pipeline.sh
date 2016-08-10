@@ -36,6 +36,12 @@ case $MODE in
   variant=$3
 
   ;;
+  HWECLEAN)
+  module add hgi/vcftools/0.1.14
+  hwe=$3
+  outdir=$4
+  mkdir -p ${outdir}
+  ;;
   INGIROH)
     window=$3
     overlap=$4
@@ -1096,33 +1102,28 @@ all_hom=`bcftools query -s ${sample} -R ${shared_cat} -f '%CHROM\t%POS\t%REF\t%A
     done
 
   ;;
-  ROH3 )
-    echo "Calculate ROH from a unified vcf file....with BEAGLE...we need a file without missing genotypes(currently is filtered on MAF>5%)!!"
-    echo -e "Parameters: \nwindow=${window}\noverlap=${overlap}"
-    #use he same vcf file for all the samples but change the sample list of individuals toi exclude from the analysis
+  HWECLEAN )
+    echo "Clean data using VCFTOOLS filtering by HWE p"
+    echo -e "Parameters: \nhwe threshold=${hwe}"
+    #We'll use PLINK formatted files, which we will reconvert back to VCF after filtering
     for pop in $pops
     do
 
       case $pop in
         FVG )
-          pop_path=/lustre/scratch113/projects/esgi-vbseq/20140430_purging/POP_MERGED_FILES/20140419_ANNOTATED
+          pop_path=/lustre/scratch113/projects/fvg_seq/16092015/12112015_FILTERED_REL/ALL_FVG_20151113.vcf.gz
           ;;
         VBI )
-          pop_path=/lustre/scratch113/projects/esgi-vbseq/20140430_purging/POP_MERGED_FILES/20140419_ANNOTATED
+          pop_path=/lustre/scratch113/projects/esgi-vbseq/08092015/12112015_FILTERED_REL/ALL_VBI_20151113.vcf.gz
             ;;
-        TSI )
-          pop_path=/lustre/scratch113/projects/esgi-vbseq/20140430_purging/POP_MERGED_FILES/20140419_ANNOTATED
+        CARL )
+          pop_path=/lustre/scratch113/projects/carl_seq/variant_refinement/12112015_FILTERED_REL/ALL_CARL_20151113.vcf.gz
             ;;
-        CEU )
-          pop_path=/lustre/scratch113/projects/esgi-vbseq/20140430_purging/POP_MERGED_FILES/20140419_ANNOTATED
-            ;;
-      esac
-        pop_list=/lustre/scratch113/projects/esgi-vbseq/20140430_purging/listpop/all_pop_but_${pop}.txt
-        # marker_list=/lustre/scratch113/projects/esgi-vbseq/20140430_purging/POP_MERGED_FILES/20140520_ROH/sites_with_missing_genotypes.list
+        esac
         #use freq data
         # bsub -J"roh_${pop}" -o"%J_roh_${pop}.o" -q normal -M8000 -n2 -R"span[hosts=1] select[mem>=8000] rusage[mem=8000]" -- java -Xms5000m -Xmx5000m -jar /nfs/team151/software/beagle_4/b4.r1274.jar gtgl=${pop_path}/22.vcf.gz ibd=true nthreads=2 excludesamples=${pop_list} excludemarkers=${marker_list} out=${pop}.roh
         # bsub -J"roh_${pop}" -o"%J_roh_${pop}.o" -q normal -M8000 -n2 -R"span[hosts=1] select[mem>=8000] rusage[mem=8000]" -- java -Xms5000m -Xmx5000m -jar /nfs/team151/software/beagle_4/b4.r1274.jar gt=${pop_path}/22.nonmissing.vcf.gz ibd=true nthreads=2 excludesamples=${pop_list} out=${pop}.roh
-        bsub -J"roh_${pop}" -o"%J_roh_${pop}.o" -q normal -M8000 -n2 -R"span[hosts=1] select[mem>=8000] rusage[mem=8000]" -- java -Xms5000m -Xmx5000m -jar /nfs/team151/software/beagle_4/b4.r1274.jar gt=${pop_path}/${CHR}.nonmissing.maf_gt_05.vcf.gz ibd=true nthreads=2 excludesamples=${pop_list} window=${window} overlap=${overlap} out=${outdir}/${pop}.roh
+        echo "vcftools --gzvcf ${pop_path} --hwe 1e-8 --stdout | bgzip -c > ${pop_path}.hwe_filt.vcf.gz;vcftools --gzvcf ${pop_path}.hwe_filt.vcf.gz --het --SNPdensity 3000 --out ${pop_path}.hwe_filt" | bsub -J"filter_${pop}" -o"%J_filter_${pop}.o" -q normal -M3000 -R"select[mem>=3000] rusage[mem=3000]"
       
     done
 
