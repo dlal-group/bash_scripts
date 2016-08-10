@@ -54,7 +54,8 @@ for key in all_sites:
 		if len(all_sites[key]['SNP']) == 1:
 			variant = map(str,all_sites[key]['SNP'][0])
 			# keep_variants.append(variant)
-			print >> keep_in,'%s' %(' '.join(variant))
+			print >> keep_in,'%s:%s_%s_%s %s %s %s' %(variant[0],variant[1],variant[2],variant[3],variant[1],variant[2],variant[3])
+			# 9:10025_A_T 10025 A T
 			# print variant[0],' ',variant[1],' ',variant[2],' ',variant[3],' ','SNP'
 	else:
 		#we only have a single type of variant in that position
@@ -63,7 +64,7 @@ for key in all_sites:
 			if len(all_sites[key][v_type]) == 1:
 				variant = map(str,all_sites[key][v_type][0])
 				# keep_variants.append(variant)
-				print >> keep_in,'%s' %(' '.join(variant))
+				print >> keep_in,'%s:%s_%s_%s %s %s %s' %(variant[0],variant[1],variant[2],variant[3],variant[1],variant[2],variant[3])
 				# print variant[0],' ',variant[1],' ',variant[2],' ',variant[3],' ',v_type
 
 #now lets print the list of sites to keep			
