@@ -1,5 +1,6 @@
 #!/usr/bin/env bash
 #
+set -e
 
 pop=$1
 chr=$2
