@@ -1,4 +1,4 @@
-#!/usr/local/bin/bash
+#!/usr/bin/env bash
 
 #inner command for the script to convert impute2 output files to bimbam comma sepatarated mean genotype files
 #args:
