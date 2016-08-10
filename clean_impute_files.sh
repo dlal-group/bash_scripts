@@ -72,13 +72,13 @@ case $mode in
 		print $0
 		}}' | gzip -c > ${basefolder}/${pop}/MERGED/CLEANED/RECODED/chr${chr}.gen.gz
 		;;
-	STEP4 )
+	STEP5 )
 	echo "Fourth step: Bimbam conversion"
 		#we conver the unfiltered and not recoded files, to bimbam format
 		mkdir -p ${basefolder}/${pop}/MERGED/ALL/BIMBAM
 		/home/cocca/scripts/bash_scripts/impute2bimbam_inner.sh ${basefolder}/${pop}/MERGED/ALL/chr${chr}.gen.gz ${chr} ${basefolder}/${pop}/MERGED/ALL/BIMBAM
 		;;
-	STEP5 )
+	STEP4 )
 	echo "Fifth step: Filevector conversion"
 	mkdir -p ${basefolder}/${pop}/MERGED/CLEANED/RECODED/FILEVECTOR
 	#here we can convert the RECODED version of the CLEANED files (no duplicates by position)
