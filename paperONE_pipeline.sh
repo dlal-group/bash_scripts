@@ -39,6 +39,7 @@ case $MODE in
   HWECLEAN)
   module add hgi/vcftools/0.1.14
   hwe=$3
+  pops="FVG VBI CARL"
   ;;
   INGIROH)
     window=$3
