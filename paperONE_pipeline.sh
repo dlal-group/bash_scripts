@@ -39,8 +39,6 @@ case $MODE in
   HWECLEAN)
   module add hgi/vcftools/0.1.14
   hwe=$3
-  outdir=$4
-  mkdir -p ${outdir}
   ;;
   INGIROH)
     window=$3
