@@ -27,6 +27,7 @@ chr=$7
 exclude_base=/netapp/dati/INGI_WGS/18112015/${pop}/12112015_FILTERED_REL/LISTS
 genotype_base=/netapp/dati/WGS_REF_PANEL/genotypes
 refdir=/netapp/dati/WGS_REF_PANEL/REFERENCES/${PANEL}
+
 #run IMPUTE script generator
 # for chr in 2 6 11 21
 # for chr in 20 21 22

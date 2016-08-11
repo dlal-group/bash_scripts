@@ -155,3 +155,46 @@ echo "/netapp/nfs/Max/software/shapeit/bin/shapeit -B /netapp/dati/WGS_REF_PANEL
 done
 done
 
+####################################################################################
+#11/08/2016
+#Prepare input data for Impute test on MATULLO's samples
+#clean genotypes removing samples with only exome data (low call rate)
+for pop in MATULLO
+do
+for i in 2
+do
+    mkdir -p /netapp/dati/WGS_REF_PANEL/genotypes/${pop}/merged/cleaned/${i}
+    plink --bfile /netapp/dati/WGS_REF_PANEL/genotypes/${pop}/${i}/chr${i} --mind 0.01 --hwe 0.00001 --geno 0.01 --make-bed --out /netapp/dati/WGS_REF_PANEL/genotypes/${pop}/merged/cleaned/${i}/chr${i}
+done
+done
+
+# calculate freqs for merged dataset
+for pop in MATULLO
+do
+for i in 2
+do
+    plink --bfile /netapp/dati/WGS_REF_PANEL/genotypes/${pop}/merged/cleaned/${i}/chr${i} --nonfounders --freq --out /netapp/dati/WGS_REF_PANEL/genotypes/${pop}/merged/cleaned/${i}/chr${i}_freq
+    awk '{OFS="\t"}{print $1,$2,$3,$4,$5,$6}' /netapp/dati/WGS_REF_PANEL/genotypes/${pop}/merged/cleaned/${i}/chr${i}_freq.frq > /netapp/dati/WGS_REF_PANEL/genotypes/${pop}/merged/cleaned/${i}/chr${i}_freq.tab
+done
+done
+
+# print all freq together
+for pop in MATULLO
+do
+(echo -e "CHR\tSNP\tA1\tA2\tMAF\tNCHROBS";
+for i  in 2
+do
+fgrep -v NCHROBS /netapp/dati/WGS_REF_PANEL/genotypes/${pop}/merged/cleaned/${i}/chr${i}_freq.tab
+done) > /netapp/dati/WGS_REF_PANEL/genotypes/${pop}/${pop}_freq.tab
+done
+
+#run phasing for all merged chromosomes
+for pop in MATULLO
+do
+for i in 2
+do
+echo "/home/cocca/softwares/bin/shapeit -B /netapp/dati/WGS_REF_PANEL/genotypes/${pop}/merged/cleaned/${i}/chr${i} -M /netapp/nfs/resources/1000GP_phase3/impute/genetic_map_chr${i}_combined_b37.txt -O /netapp/dati/WGS_REF_PANEL/genotypes/${pop}/merged/cleaned/${i}/chr${i}.haps.gz /netapp/dati/WGS_REF_PANEL/genotypes/${pop}/merged/cleaned/${i}/chr${i}.sample -T 8"| qsub -o /netapp/dati/WGS_REF_PANEL/genotypes/${pop}/merged/cleaned/${i}/chr${i}_shapeit.log -e /netapp/dati/WGS_REF_PANEL/genotypes/${pop}/merged/cleaned/${i}/chr${i}_shapeit.e -V -N ${pop}_chr${i}_shapeit -l h_vmem=8G 
+done
+done
+
+

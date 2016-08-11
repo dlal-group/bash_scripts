@@ -1,4 +1,4 @@
-#!/usr/local/bin/bash
+#!/usr/bin/env bash
 
 #extract duplicates for imputation results:
 #from info and geno files
