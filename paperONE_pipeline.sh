@@ -38,6 +38,7 @@ case $MODE in
   ;;
   HWECLEAN)
   module add hgi/vcftools/0.1.14
+  module add hgi/zlib/1.2.8
   hwe=$3
   q=$4
   mem=$5
