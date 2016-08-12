@@ -75,19 +75,22 @@ case $mode in
 		print $0
 		}}' | gzip -c > ${basefolder}/${pop}/MERGED/CLEANED/RECODED/chr${chr}.gen.gz
 		;;
-	STEP5 )
-	echo "Fourth step: Bimbam conversion"
-		#we conver the unfiltered and not recoded files, to bimbam format
-		mkdir -p ${basefolder}/${pop}/MERGED/ALL/BIMBAM
-		/home/cocca/scripts/bash_scripts/impute2bimbam_inner.sh ${basefolder}/${pop}/MERGED/ALL/chr${chr}.gen.gz ${chr} ${basefolder}/${pop}/MERGED/ALL/BIMBAM
-		;;
 	STEP4 )
-	echo "Fifth step: Filevector conversion"
+	echo "Fourth step: Filevector conversion"
 	mkdir -p ${basefolder}/${pop}/MERGED/CLEANED/RECODED/FILEVECTOR
 	#here we can convert the RECODED version of the CLEANED files (no duplicates by position)
 	/home/cocca/scripts/bash_scripts/impute2mach_launcher.sh ${chr} ${basefolder}/${pop}/MERGED/CLEANED/RECODED/chr${chr}.gen.gz ${basefolder}/${pop}/MERGED/CLEANED/RECODED/chr${chr}.gen_info ${basefolder}/${pop}/MERGED/CLEANED/chr${chr}.gen_samples ${basefolder}/${pop}/MERGED/CLEANED/RECODED/FILEVECTOR
 		;;
+	STEP5 )
+	echo "Fifth step: Bimbam conversion"
+		#we conver the unfiltered and not recoded files, to bimbam format
+		mkdir -p ${basefolder}/${pop}/MERGED/ALL/BIMBAM
+		/home/cocca/scripts/bash_scripts/impute2bimbam_inner.sh ${basefolder}/${pop}/MERGED/ALL/chr${chr}.gen.gz ${chr} ${basefolder}/${pop}/MERGED/ALL/BIMBAM
+		;;
 	CLEAN )
 	echo "Clean temporary files"
+		rm ${basefolder}/${pop}/MERGED/CLEANED/RECODED/FILEVECTOR/${chr}/chr${chr}.gen.gz.gen
+
 		;;
+	}
 esac
