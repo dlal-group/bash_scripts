@@ -53,23 +53,23 @@ case $mode in
 	STEP3 )
 	echo "Third step: Long allele names recode"
 		#and last thing we need is to RECODE long alleles names
-		awk '{
+		awk -v chr=${chr} '{
 		if (length($4)!=length($5)){
 		if(length($4)>length($5)){
-		printf $1" "$2" "$3" R D ";for(i=6;i<=NF;i++) printf "%s ", $i; printf "\n"
+		printf chr":"$2"R_D "$2" "$3" R D ";for(i=6;i<=NF;i++) printf "%s ", $i; printf "\n"
 		} else {
-		printf $1" "$2" "$3" R I ";for(i=6;i<=NF;i++) printf "%s ", $i; printf "\n"
+		printf chr":"$2"R_I "$2" "$3" R I ";for(i=6;i<=NF;i++) printf "%s ", $i; printf "\n"
 		}
 		} else {
 		print $0
 		}}' ${basefolder}/${pop}/MERGED/CLEANED/chr${chr}.gen_info > ${basefolder}/${pop}/MERGED/CLEANED/RECODED/chr${chr}.gen_info
 
-		zcat ${basefolder}/${pop}/MERGED/CLEANED/chr${chr}.gen.gz | awk '{
+		zcat ${basefolder}/${pop}/MERGED/CLEANED/chr${chr}.gen.gz | awk -v chr=${chr} '{
 		if (length($4)!=length($5)){
 		if(length($4)>length($5)){
-		printf $1" "$2" "$3" R D ";for(i=6;i<=NF;i++) printf "%s ", $i; printf "\n"
+		printf chr":"$2"R_D "$2" "$3" R D ";for(i=6;i<=NF;i++) printf "%s ", $i; printf "\n"
 		} else {
-		printf $1" "$2" "$3" R I ";for(i=6;i<=NF;i++) printf "%s ", $i; printf "\n"
+		printf chr":"$2"R_I "$2" "$3" R I ";for(i=6;i<=NF;i++) printf "%s ", $i; printf "\n"
 		}
 		} else {
 		print $0
