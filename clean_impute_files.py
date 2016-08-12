@@ -30,7 +30,7 @@ outdir=sys.argv[4]
 # first, we need to create a dictionary with chr_pos_a1_a2 as key and [chr,pos,a1,a2,variant type] as value
 # this is the same for both info and gen files, but we'll have a gzipped file
 file_info=file_prefix + "_info"
-file_gen=file_prefix + ".gz"
+# file_gen=file_prefix + ".gz"
 
 all_sites=collections.defaultdict(lambda: collections.defaultdict(list))
 with open('%s' %(file_info) ,'r') as info_file:

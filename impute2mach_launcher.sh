@@ -14,7 +14,7 @@ info_file=$3
 sample_file=$4
 output_file_path=$5
 
-index=$[LSB_JOBINDEX - 1]
+# index=$[LSB_JOBINDEX - 1]
 
 #Args submitted
 echo ${chr}

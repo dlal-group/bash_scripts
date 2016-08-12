@@ -1126,9 +1126,9 @@ all_hom=`bcftools query -s ${sample} -R ${shared_cat} -f '%CHROM\t%POS\t%REF\t%A
         # bsub -J"roh_${pop}" -o"%J_roh_${pop}.o" -q normal -M8000 -n2 -R"span[hosts=1] select[mem>=8000] rusage[mem=8000]" -- java -Xms5000m -Xmx5000m -jar /nfs/team151/software/beagle_4/b4.r1274.jar gtgl=${pop_path}/22.vcf.gz ibd=true nthreads=2 excludesamples=${pop_list} excludemarkers=${marker_list} out=${pop}.roh
         # bsub -J"roh_${pop}" -o"%J_roh_${pop}.o" -q normal -M8000 -n2 -R"span[hosts=1] select[mem>=8000] rusage[mem=8000]" -- java -Xms5000m -Xmx5000m -jar /nfs/team151/software/beagle_4/b4.r1274.jar gt=${pop_path}/22.nonmissing.vcf.gz ibd=true nthreads=2 excludesamples=${pop_list} out=${pop}.roh
         log_dir=`dirname ${pop_path}`
-        echo "vcftools --gzvcf ${pop_path} --hwe ${hwe} --recode --recode-INFO-all --stdout | bgzip -c > ${pop_path}.hwe_filt.vcf.gz" | bsub -J"filter_hwe_${pop}" -o"${log_dir}/%J_filter_${pop}.o" -q ${q} -M${mem} -R"select[mem>=${mem}] rusage[mem=${mem}]"
-        echo "vcftools --gzvcf ${pop_path}.hwe_filt.vcf.gz --het --out ${pop_path}.hwe_filt_HET" | bsub -J"calc_inbreed_${pop}" -o"${log_dir}/%J_calc_inbreed_${pop}.o" -q ${q} -M${mem} -R"select[mem>=${mem}] rusage[mem=${mem}]" -w "ended(filter_hwe_${pop})"
-        echo "vcftools --gzvcf ${pop_path}.hwe_filt.vcf.gz --SNPdensity 3000 --out ${pop_path}.hwe_filt_density" | bsub -J"calc_density_${pop}" -o"${log_dir}/%J_calc_density_${pop}.o" -q ${q} -M${mem} -R"select[mem>=${mem}] rusage[mem=${mem}]" -w "ended(filter_hwe_${pop})"
+        # echo "vcftools --gzvcf ${pop_path} --hwe ${hwe} --recode --recode-INFO-all --stdout | bgzip -c > ${pop_path}.hwe_filt.vcf.gz" | bsub -J"filter_hwe_${pop}" -o"${log_dir}/%J_filter_${pop}.o" -q ${q} -M${mem} -R"select[mem>=${mem}] rusage[mem=${mem}]"
+        # echo "vcftools --gzvcf ${pop_path}.hwe_filt.vcf.gz --het --out ${pop_path}.hwe_filt_HET" | bsub -J"calc_inbreed_${pop}" -o"${log_dir}/%J_calc_inbreed_${pop}.o" -q ${q} -M${mem} -R"select[mem>=${mem}] rusage[mem=${mem}]" -w "ended(filter_hwe_${pop})"
+        echo "vcftools --gzvcf ${pop_path}.hwe_filt.vcf.gz --SNPdensity 3000000 --out ${pop_path}.hwe_filt_density" | bsub -J"calc_density_${pop}" -o"${log_dir}/%J_calc_density_${pop}.o" -q ${q} -M${mem} -R"select[mem>=${mem}] rusage[mem=${mem}]" -w "ended(filter_hwe_${pop})"
       
     done
 
