@@ -90,7 +90,5 @@ case $mode in
 	CLEAN )
 	echo "Clean temporary files"
 		rm ${basefolder}/${pop}/MERGED/CLEANED/RECODED/FILEVECTOR/${chr}/chr${chr}.gen.gz.gen
-
 		;;
-	}
 esac
