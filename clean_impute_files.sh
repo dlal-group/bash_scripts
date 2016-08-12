@@ -64,9 +64,9 @@ case $mode in
 		awk -v chr=${chr} '{
 		if (length($4)!=length($5)){
 		if(length($4)>length($5)){
-		printf chr":"$2"R_D "$2" "$3" R D ";for(i=6;i<=NF;i++) printf "%s ", $i; printf "\n"
+		printf $1" "chr":"$3"R_D "$3" R D ";for(i=6;i<=NF;i++) printf "%s ", $i; printf "\n"
 		} else {
-		printf chr":"$2"R_I "$2" "$3" R I ";for(i=6;i<=NF;i++) printf "%s ", $i; printf "\n"
+		printf $1" "chr":"$3"R_I "$3" R I ";for(i=6;i<=NF;i++) printf "%s ", $i; printf "\n"
 		}
 		} else {
 		print $0
@@ -75,9 +75,9 @@ case $mode in
 		zcat ${basefolder}/${pop}/MERGED/CLEANED/chr${chr}.gen.gz | awk -v chr=${chr} '{
 		if (length($4)!=length($5)){
 		if(length($4)>length($5)){
-		printf chr":"$2"R_D "$2" "$3" R D ";for(i=6;i<=NF;i++) printf "%s ", $i; printf "\n"
+		printf $1" "chr":"$3"R_D "$3" R D ";for(i=6;i<=NF;i++) printf "%s ", $i; printf "\n"
 		} else {
-		printf chr":"$2"R_I "$2" "$3" R I ";for(i=6;i<=NF;i++) printf "%s ", $i; printf "\n"
+		printf $1" "chr":"$3"R_I "$3" R I ";for(i=6;i<=NF;i++) printf "%s ", $i; printf "\n"
 		}
 		} else {
 		print $0
