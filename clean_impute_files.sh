@@ -34,6 +34,10 @@ case $mode in
 		;;
 	STEP2 )
 	echo "Second step: Multiallelic removal"
+	mkdir -p ${basefolder}/${pop}/MERGED/ALL
+		mkdir -p ${basefolder}/${pop}/MERGED/CLEANED
+		mkdir -p ${basefolder}/${pop}/MERGED/CLEANED/RECODED
+
 		#extract a list of sites to keep:this sites will be uniq by position!
 		/home/cocca/scripts/bash_scripts/clean_impute_files.py ${basefolder}/${pop}/MERGED/ALL/chr${chr}.gen ${chr} ${pop} ${basefolder}/${pop}/MERGED/CLEANED
 
@@ -52,6 +56,10 @@ case $mode in
 		;;
 	STEP3 )
 	echo "Third step: Long allele names recode"
+	mkdir -p ${basefolder}/${pop}/MERGED/ALL
+		mkdir -p ${basefolder}/${pop}/MERGED/CLEANED
+		mkdir -p ${basefolder}/${pop}/MERGED/CLEANED/RECODED
+
 		#and last thing we need is to RECODE long alleles names
 		awk -v chr=${chr} '{
 		if (length($4)!=length($5)){
