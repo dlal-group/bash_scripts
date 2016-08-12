@@ -56,7 +56,6 @@ case $mode in
 		;;
 	STEP3 )
 	echo "Third step: Long allele names recode"
-	mkdir -p ${basefolder}/${pop}/MERGED/ALL
 		mkdir -p ${basefolder}/${pop}/MERGED/CLEANED
 		mkdir -p ${basefolder}/${pop}/MERGED/CLEANED/RECODED
 
@@ -71,7 +70,7 @@ case $mode in
 		} else {
 		print $0
 		}}' ${basefolder}/${pop}/MERGED/CLEANED/chr${chr}.gen_info > ${basefolder}/${pop}/MERGED/CLEANED/RECODED/chr${chr}.gen_info
-
+		
 		zcat ${basefolder}/${pop}/MERGED/CLEANED/chr${chr}.gen.gz | awk -v chr=${chr} '{
 		if (length($4)!=length($5)){
 		if(length($4)>length($5)){
