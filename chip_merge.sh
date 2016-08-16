@@ -163,8 +163,11 @@ for pop in MATULLO
 do
 for i in 2
 do
+    mkdir -p /netapp/dati/WGS_REF_PANEL/genotypes/${pop}/merged/${i}
     mkdir -p /netapp/dati/WGS_REF_PANEL/genotypes/${pop}/merged/cleaned/${i}
-    plink --bfile /netapp/dati/WGS_REF_PANEL/genotypes/${pop}/${i}/chr${i} --mind 0.01 --hwe 0.00001 --geno 0.01 --make-bed --out /netapp/dati/WGS_REF_PANEL/genotypes/${pop}/merged/cleaned/${i}/chr${i}
+    plink --bfile /netapp/dati/WGS_REF_PANEL/genotypes/${pop}/${i}/chr${i} --mind 0.01 --hwe 0.00001 --geno 0.01 --make-bed --out /netapp/dati/WGS_REF_PANEL/genotypes/${pop}/merged/${i}/chr${i}
+    #clean all duplicate position
+    plink --bfile /netapp/dati/WGS_REF_PANEL/genotypes/${pop}/merged/${i}/chr${i} --exclude /netapp/dati/WGS_REF_PANEL/genotypes/MATULLO/${i}/chr${i}_dupe_rs.list --make-bed --out /netapp/dati/WGS_REF_PANEL/genotypes/${pop}/merged/cleaned/${i}/chr${i}
 done
 done
 
