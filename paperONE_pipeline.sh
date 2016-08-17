@@ -847,8 +847,8 @@ case $MODE in
     echo -e "Parameters: \nwindow=${window}\noverlap=${overlap}"
     #use he same vcf file for all the samples but change the sample list of individuals toi exclude from the analysis
     module add hgi/beagle/4.1-22Feb16.8ef
-
-    for pop in $pops
+    pops_updated="FVG VBI CARL"
+    for pop in $pops_updated
     do
 
       case $pop in
