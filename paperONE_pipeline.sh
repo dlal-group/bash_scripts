@@ -969,6 +969,7 @@ case $MODE in
           
         fi
     done
+    ;;
   SPLITCSQ )
     echo "Split a chromosome file using a list of consequences"
     if [ $fixed == "fixed" ]
