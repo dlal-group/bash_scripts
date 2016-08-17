@@ -169,7 +169,7 @@ case $MODE in
   
   mkdir -p /lustre/scratch113/projects/carl_seq/08072016_paperONE/TGP3_INGI_MERGE/${CHR}
 
-  bsub -J"merge_vcf" -o"%J_merge_vcf.o" -q long -M8000 -R"select[mem>=8000] rusage[mem=8000]" -- bcftools merge -m both ${1000G_path} ${CARL_path} ${FVG_path} ${VBI_path} -O z -o /lustre/scratch113/projects/carl_seq/08072016_paperONE/TGP3_INGI_MERGE/${CHR}/${CHR}.vcf.gz
+  bsub -J"merge_vcf_${CHR}" -o"%J_merge_vcf_${CHR}.o" -q long -M8000 -R"select[mem>=8000] rusage[mem=8000]" -- bcftools merge -m both ${1000G_path} ${CARL_path} ${FVG_path} ${VBI_path} -O z -o /lustre/scratch113/projects/carl_seq/08072016_paperONE/TGP3_INGI_MERGE/${CHR}/${CHR}.vcf.gz
 
   ;;
   RANDLIST )
