@@ -140,6 +140,9 @@ case $MODE in
   outdir=CHR${CHR}
   mkdir -p ${outdir}
   ;;
+  MERGEVCF)
+
+  ;;
 esac
 
 # Merge different popuplation together
@@ -149,6 +152,26 @@ esac
 
 #create a case statement to select the operation to do:
 case $MODE in
+  MERGEVCF)
+  #17/08/2016
+  #merge files for IBD/ROH calc for SIGU slides
+  # chr=${file}
+  module purge
+  module add hgi/bcftools/1.3.1
+  module add hgi/htslib/1.3.1
+  module add hgi/samtools/1.3.1
+
+
+  1000G_path=/lustre/scratch114/resources/1000g/release/20130502/ALL.chr${CHR}.phase3_shapeit2_mvncall_integrated_v5.20130502.genotypes.vcf.gz
+  CARL_path=/lustre/scratch113/projects/carl_seq/variant_refinement/12112015_FILTERED_REL/${CHR}.vcf.gz
+  FVG_path=/lustre/scratch113/projects/fvg_seq/16092015/12112015_FILTERED_REL/${CHR}.vcf.gz
+  VBI_path=/lustre/scratch113/projects/esgi-vbseq/08092015/12112015_FILTERED_REL/${CHR}.vcf.gz
+  
+  mkdir -p /lustre/scratch113/projects/carl_seq/08072016_paperONE/TGP3_INGI_MERGE/
+
+  bsub -J"merge_vcf" -o"%J_merge_vcf.o" -q long -M8000 -R"select[mem>=8000] rusage[mem=8000]" -- bcftools merge -m both ${1000G_path} ${CARL_path} ${FVG_path} ${VBI_path} -O z -o /lustre/scratch113/projects/carl_seq/08072016_paperONE/TGP3_INGI_MERGE/${CHR}.vcf.gz
+
+  ;;
   RANDLIST )
   #create random list for subsampling
   for pop in CARL CEU Erto FVG Illegio Resia Sauris TSI VBI
@@ -294,7 +317,7 @@ case $MODE in
   echo "Cluster Density: ${density}"
 
   pops_updated="FVG VBI TSI CEU CARL Erto Resia Illegio Sauris"
-    for pop in $pops_updated
+    for pop in $pops_updatedbsub -J"inb_${pop}" -o"%J_inb_${pop}.o" -w "ended(freq_${pop})" -q yesterday -M8000 -n2 -R"span[hosts=1] select[mem>=8000] rusage[mem=8000]" -- 
     do
       case $pop in
         FVG )
