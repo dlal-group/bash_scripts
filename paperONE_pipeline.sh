@@ -162,14 +162,14 @@ case $MODE in
   module add hgi/samtools/1.3.1
 
 
-  1000G_path=/lustre/scratch114/resources/1000g/release/20130502/ALL.chr${CHR}.phase3_shapeit2_mvncall_integrated_v5.20130502.genotypes.vcf.gz
+  TGP3_path=/lustre/scratch114/resources/1000g/release/20130502/ALL.chr${CHR}.phase3_shapeit2_mvncall_integrated_v5.20130502.genotypes.vcf.gz
   CARL_path=/lustre/scratch113/projects/carl_seq/variant_refinement/12112015_FILTERED_REL/${CHR}.vcf.gz
   FVG_path=/lustre/scratch113/projects/fvg_seq/16092015/12112015_FILTERED_REL/${CHR}.vcf.gz
   VBI_path=/lustre/scratch113/projects/esgi-vbseq/08092015/12112015_FILTERED_REL/${CHR}.vcf.gz
   
   mkdir -p /lustre/scratch113/projects/carl_seq/08072016_paperONE/TGP3_INGI_MERGE/${CHR}
 
-  bsub -J"merge_vcf_${CHR}" -o"%J_merge_vcf_${CHR}.o" -q long -M8000 -R"select[mem>=8000] rusage[mem=8000]" -- bcftools merge -m both ${1000G_path} ${CARL_path} ${FVG_path} ${VBI_path} -O z -o /lustre/scratch113/projects/carl_seq/08072016_paperONE/TGP3_INGI_MERGE/${CHR}/${CHR}.vcf.gz
+  bsub -J"merge_vcf_${CHR}" -o"%J_merge_vcf_${CHR}.o" -q long -M8000 -R"select[mem>=8000] rusage[mem=8000]" -- bcftools merge -m both ${TGP3_path} ${CARL_path} ${FVG_path} ${VBI_path} -O z -o /lustre/scratch113/projects/carl_seq/08072016_paperONE/TGP3_INGI_MERGE/${CHR}/${CHR}.vcf.gz
 
   ;;
   RANDLIST )
