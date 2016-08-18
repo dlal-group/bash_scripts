@@ -805,4 +805,12 @@ file=`sed -n "${LSB_JOBINDEX}p" $1`
 
 # 18/08/2016
 # index vcf files
-tabix -p vcf ${file}
+# tabix -p vcf ${file}
+module purge
+module add hgi/bcftools/1.3.1
+module add hgi/htslib/1.3.1
+module add hgi/samtools/1.3.1
+
+#filter our missing values and maf < 1%
+bcftools view --genotype ^miss --min-af 0.01:minor -O z -o ${file}.filt.vcf.gz
+tabix -p vcf ${file}.filt.vcf.gz
