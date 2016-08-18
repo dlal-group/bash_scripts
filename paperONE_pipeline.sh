@@ -380,8 +380,9 @@ case $MODE in
   HET )
     #Extract Inbreeding coeff information for each population. Here we are using plink2 (1.9)
     #we'll use the --het option as long as the --ibc option
-    echo "Calculate Inbreeding...."
-    for pop in $pops
+    echo "Calculate Inbreeding for all pops in a vcf files...."
+    pops_updated="FVG VBI CARL"
+    for pop in $pops_updated
     do
       case $pop in
         FVG )
@@ -401,17 +402,17 @@ case $MODE in
             ;;
       esac
         #calculate frequencies, before:
-        bsub -J"freq_${pop}" -o"%J_freq_${pop}.o" -q yesterday -M8000 -n2 -R"span[hosts=1] select[mem>=8000] rusage[mem=8000]" -- plink2 --bfile ${pop_path}/22.${pop,,} --freq --nonfounders --out ${outdir}/freq_${pop}
+        # bsub -J"freq_${pop}" -o"%J_freq_${pop}.o" -q yesterday -M8000 -n2 -R"span[hosts=1] select[mem>=8000] rusage[mem=8000]" -- plink2 --bfile ${pop_path}/22.${pop,,} --freq --nonfounders --out ${outdir}/freq_${pop}
         
         #use freq data
-        bsub -J"inb_${pop}" -o"%J_inb_${pop}.o" -w "ended(freq_${pop})" -q yesterday -M8000 -n2 -R"span[hosts=1] select[mem>=8000] rusage[mem=8000]" -- plink2 --bfile ${pop_path}/22.${pop,,} --het --out ${outdir}/inb_${pop}
-        bsub -J"ibc_${pop}" -o"%J_ibc_${pop}.o" -w "ended(freq_${pop})" -q yesterday -M8000 -n2 -R"span[hosts=1] select[mem>=8000] rusage[mem=8000]" -- plink2 --bfile ${pop_path}/22.${pop,,} --ibc --out ${outdir}/ibc_${pop}
+        bsub -J"inb_${pop}" -o"%J_inb_${pop}.o" -w "ended(freq_${pop})" -q normal -M8000 -n2 -R"span[hosts=1] select[mem>=8000] rusage[mem=8000]" -- plink --vcf ${pop_path} --het --out ${outdir}/inb_${pop}
+        bsub -J"ibc_${pop}" -o"%J_ibc_${pop}.o" -w "ended(freq_${pop})" -q normal -M8000 -n2 -R"span[hosts=1] select[mem>=8000] rusage[mem=8000]" -- plink --vcf ${pop_path} --ibc --out ${outdir}/ibc_${pop}
       done
   ;;
   SHARED )
     #calculate shared and private sites for all populations
     pops_updated="FVG VBI CARL TSI CEU Erto Resia Illegio Sauris"
-    for pop in $pops_updated="FVG VBI CARL TSI CEU Erto Resia Illegio Sauris"
+    for pop in $pops_updated
     do
       case $pop in
         FVG )

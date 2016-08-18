@@ -812,5 +812,10 @@ module add hgi/htslib/1.3.1
 module add hgi/samtools/1.3.1
 
 #filter our missing values and maf < 1%
-bcftools view --genotype ^miss --min-af 0.01:minor -O z -o ${file}.filt.vcf.gz ${file}
-tabix -p vcf ${file}.filt.vcf.gz
+# bcftools view --genotype ^miss --min-af 0.01:minor -O z -o ${file}.filt.vcf.gz ${file}
+# tabix -p vcf ${file}.filt.vcf.gz
+
+#compute stats for unfiltered and filtered files
+bcftools stats -v -s - -d 0,5000,100 ${file} > ${file}.vcfchk
+bcftools stats -v -s - -d 0,5000,100 ${file}.filt.vcf.gz > ${file}.filt.vcf.gz.vcfchk
+
