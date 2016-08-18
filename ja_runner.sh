@@ -794,12 +794,15 @@ file=`sed -n "${LSB_JOBINDEX}p" $1`
 
 # 13/04/2016
 # run bcftools norm
-set -e
-outpath=`dirname ${file}`
-filename=`basename ${file}`
+# set -e
+# outpath=`dirname ${file}`
+# filename=`basename ${file}`
 
-mkdir -p ${outpath}/NORMALIZED
-# bcftools norm -m -both -f /lustre/scratch114/resources/ref/Homo_sapiens/1000Genomes_hs37d5/hs37d5.fa ${file} -O z -o ${outpath}/NORMALIZED/${filename}
-bcftools norm -m -both ${file} -O z -o ${outpath}/NORMALIZED/${filename}
-tabix -p vcf ${outpath}/NORMALIZED/${filename}
+# mkdir -p ${outpath}/NORMALIZED
+# # bcftools norm -m -both -f /lustre/scratch114/resources/ref/Homo_sapiens/1000Genomes_hs37d5/hs37d5.fa ${file} -O z -o ${outpath}/NORMALIZED/${filename}
+# bcftools norm -m -both ${file} -O z -o ${outpath}/NORMALIZED/${filename}
+# tabix -p vcf ${outpath}/NORMALIZED/${filename}
 
+# 18/08/2016
+# index vcf files
+tabix -p vcf ${file}
