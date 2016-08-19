@@ -822,8 +822,12 @@ module add hgi/samtools/1.3.1
 filename=`basename ${file}`
 basedir=`dirname ${file}`
 
-mkdir -p ${basedir}/NO_CSQ
+# mkdir -p ${basedir}/NO_CSQ
+mkdir -p ${basedir}/19082016_CADD
 
 #remove csq annotation for new reannotation
-bcftools annotate ${file} -x INFO/CSQ -O z -o ${basedir}/NO_CSQ/${filename}
-tabix -p vcf ${basedir}/NO_CSQ/${filename}
+# bcftools annotate ${file} -x INFO/CSQ -O z -o ${basedir}/NO_CSQ/${filename}
+# tabix -p vcf ${basedir}/NO_CSQ/${filename}
+
+#calculate CADD scores
+gunzip -c ${file} | python ~/Work/bash_scripts/extractScoresVCF.py -p /lustre/scratch114/resources/cadd_scores/20150729-v1.3/whole_genome_SNVs_inclAnno.tsv.gz | gzip -c > ${basedir}/19082016_CADD/${filename}.scores.tsv.gz
