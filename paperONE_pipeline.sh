@@ -494,7 +494,7 @@ case $MODE in
 
       # 2) generate filtered files
       #we'll have a prune.out and prune.in files, we'll use to filter
-      plink --bfile ${outdir}/PRUNED/${r2}/${pop}_filtered --exclude ${outdir}/PRUNED/${r2}/${pop}_prune.out --make-bed --out ${outdir}/PRUNED/${r2}/${pop}_19082016_PRUNED
+      plink --bfile ${outdir}/PRUNED/${r2}/${pop}_filtered --exclude ${outdir}/PRUNED/${r2}/${pop}_prune.prune.out --make-bed --out ${outdir}/PRUNED/${r2}/${pop}_19082016_PRUNED
 
       # 3) calculate ROH
       plink --bfile ${outdir}/PRUNED/${r2}/${pop}_19082016_PRUNED --homozyg --homozyg-window-snp 50 --homozyg-snp 50 --homozyg-kb 100 --homozyg-gap 100 --homozyg-density 50 --homozyg-window-missing 3 --homozyg-window-het 0 --out ${outdir}/PRUNED/${r2}/${pop}_19082016_PRUNED_ROH
