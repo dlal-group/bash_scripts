@@ -392,7 +392,7 @@ case $MODE in
     pops_updated=$(cut -f 2 -d " " ${pop_count})
     for pop in $pops_updated
     do
-        poplist=${pop_base}/lists/${pop}.ped
+        poplist=${pop_base}/lists/${pop}.ped.keeplist
         #calculate frequencies, before:
         # bsub -J"freq_${pop}" -o"${outdir}/%J_freq_${pop}.o" -q normal -M4000 -n2 -R"span[hosts=1] select[mem>=4000] rusage[mem=4000]" -- plink --vcf ${pop_path} --biallelic-only --double-id --keep-allele-order --snps-only --keep ${poplist} --freq --nonfounders --out ${outdir}/freq_${pop}
         
