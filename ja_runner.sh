@@ -823,7 +823,7 @@ filename=`basename ${file}`
 basedir=`dirname ${file}`
 
 # mkdir -p ${basedir}/NO_CSQ
-mkdir -p ${basedir}/19082016_CADD
+mkdir -p ${basedir}/19082016_CADD/TAB
 
 #remove csq annotation for new reannotation
 # bcftools annotate ${file} -x INFO/CSQ -O z -o ${basedir}/NO_CSQ/${filename}
