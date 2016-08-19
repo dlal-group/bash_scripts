@@ -820,7 +820,7 @@ module add hgi/samtools/1.3.1
 # bcftools stats -v -s - -d 0,5000,100 ${file}.filt.vcf.gz > ${file}.filt.vcf.gz.vcfchk
 
 filename=`basename ${file}`
-basedir=`dir ${file}`
+basedir=`dirname ${file}`
 
 mkdir -p ${basedir}/NO_CSQ
 
