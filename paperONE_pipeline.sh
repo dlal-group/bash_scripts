@@ -484,21 +484,21 @@ case $MODE in
       mkdir -p ${outdir}/PRUNED/${r2}
 
       # 1) filter by ld same as IBDseq (0.15 - 0.2)
-      plink --bfile ${pop_path} --hwe 1e-8 --make-bed --threads 2 --out ${outdir}/PRUNED/${r2}/${pop}_filtered
+      plink --bfile ${pop_path} --hwe 1e-8 --make-bed --out ${outdir}/PRUNED/${r2}/${pop}_filtered
       #modify bim file to have rsID
       echo "Fix RsID in bim file..."
       source fix_bim.sh
       fix_bim ${outdir}/PRUNED/${r2}/${pop}_filtered.bim 
 
       #now extract the sites to prune 
-      plink --bfile ${outdir}/PRUNED/${r2}/${pop}_filtered --threads 2 --indep-pairwise 5000 1000 ${r2} --out ${outdir}/PRUNED/${r2}/${pop}_prune
+      plink --bfile ${outdir}/PRUNED/${r2}/${pop}_filtered --indep-pairwise 5000 1000 ${r2} --out ${outdir}/PRUNED/${r2}/${pop}_prune
 
       # 2) generate filtered files
       #we'll have a prune.out and prune.in files, we'll use to filter
-      plink --bfile ${outdir}/PRUNED/${r2}/${pop}_filtered --threads 2 --exclude ${outdir}/PRUNED/${r2}/${pop}_prune.prune.out --make-bed --out ${outdir}/PRUNED/${r2}/${pop}_19082016_PRUNED
+      plink --bfile ${outdir}/PRUNED/${r2}/${pop}_filtered --exclude ${outdir}/PRUNED/${r2}/${pop}_prune.prune.out --make-bed --out ${outdir}/PRUNED/${r2}/${pop}_19082016_PRUNED
 
       # 3) calculate ROH
-      plink --bfile ${outdir}/PRUNED/${r2}/${pop}_19082016_PRUNED --threads 2 --homozyg --homozyg-window-snp 50 --homozyg-snp 50 --homozyg-kb 100 --homozyg-gap 100 --homozyg-density 50 --homozyg-window-missing 3 --homozyg-window-het 0 --out ${outdir}/PRUNED/${r2}/${pop}_19082016_PRUNED_ROH
+      plink --bfile ${outdir}/PRUNED/${r2}/${pop}_19082016_PRUNED --homozyg --homozyg-window-snp 50 --homozyg-snp 50 --homozyg-kb 100 --homozyg-gap 100 --homozyg-density 50 --homozyg-window-missing 3 --homozyg-window-het 0 --out ${outdir}/PRUNED/${r2}/${pop}_19082016_PRUNED_ROH
   
     done
   ;;
