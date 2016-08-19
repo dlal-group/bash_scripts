@@ -830,4 +830,4 @@ mkdir -p ${basedir}/19082016_CADD/TAB
 # tabix -p vcf ${basedir}/NO_CSQ/${filename}
 
 #calculate CADD scores
-gunzip -c ${file} | python ~/Work/bash_scripts/extractScoresVCF.py -p /lustre/scratch114/resources/cadd_scores/20150729-v1.3/whole_genome_SNVs_inclAnno.tsv.gz | gzip -c > ${basedir}/19082016_CADD/${filename}.scores.tsv.gz
+gunzip -c ${file} | python ~/Work/bash_scripts/extractScoresVCF.py -p /lustre/scratch114/resources/cadd_scores/20150729-v1.3/whole_genome_SNVs_inclAnno.tsv.gz | gzip -c > ${basedir}/19082016_CADD/TAB/${filename}.scores.tsv.gz
