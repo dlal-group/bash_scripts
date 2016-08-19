@@ -1,4 +1,4 @@
-#!/usr/local/bin/bash
+#!/usr/bin/env bash
 #Script to create a pipeline for the purge through inbreeding work
 #
 #
@@ -401,388 +401,6 @@ case $MODE in
         bsub -J"ibc_${pop}" -o"${outdir}/%J_ibc_${pop}.o" -q normal -M4000 -n2 -R"span[hosts=1] select[mem>=4000] rusage[mem=4000]" -- plink --vcf ${pop_path} --biallelic-only --double-id --keep-allele-order --snps-only --keep ${poplist} --ibc --out ${outdir}/ibc_${pop}
     done
   ;;
-
-  SHARED )
-    #calculate shared and private sites for all populations
-    pops_updated="FVG VBI CARL TSI CEU Erto Resia Illegio Sauris"
-    for pop in $pops_updated
-    do
-      case $pop in
-        FVG )
-          # pop_path=/lustre/scratch113/projects/esgi-vbseq/20140430_purging/UNRELATED/RESULTS/DAF/FIVE_POP
-          #Private calculation without fixed sites
-          zcat ${in_dir}/CHR${CHR}/INGI_chr${CHR}.merged_daf.tab.gz | awk '$8 !="NA" && $8 > 0 && $8 < 1 && $6 == 0 && $5 == 0'| gzip -c > ${outdir}/FVG_private_chr${CHR}.merged_daf.tab.gz
-          # Fixed in Isolate and private
-          zcat ${in_dir}/CHR${CHR}/INGI_chr${CHR}.merged_daf.tab.gz | awk '$8 !="NA" && $8 == 1 && $6 == 0 && $5 == 0'| gzip -c > ${outdir}/FVG_private_chr${CHR}.merged_daf.fixed.tab.gz
-          # Shared calculation without fixed sites
-          zcat ${in_dir}/CHR${CHR}/INGI_chr${CHR}.merged_daf.tab.gz | awk '$8 !="NA" && $8 > 0 && $8 < 1 && ($6 > 0 || $5 > 0)'| gzip -c > ${outdir}/FVG_shared_chr${CHR}.merged_daf.tab.gz
-          # Fixed in Isolate and shared
-          zcat ${in_dir}/CHR${CHR}/INGI_chr${CHR}.merged_daf.tab.gz | awk '$8 !="NA" && $8 == 1 && ($6 > 0 || $5 > 0)'| gzip -c > ${outdir}/FVG_shared_chr${CHR}.merged_daf.fixed.tab.gz
-          # NOVEL in Isolate
-          zcat ${in_dir}/CHR${CHR}/INGI_chr${CHR}.merged_daf.tab.gz | awk '$8 =="NA" && ($6 == "NA" && $5 == "NA")'| gzip -c > ${outdir}/FVG_novel_chr${CHR}.merged_daf.tab.gz
-          ;;
-        VBI )
-          #Private calculation without fixed sites
-          zcat ${in_dir}/CHR${CHR}/INGI_chr${CHR}.merged_daf.tab.gz | awk '$7 !="NA" && $7 > 0 && $7 < 1 && $6 == 0 && $5 == 0'| gzip -c > ${outdir}/VBI_private_chr${CHR}.merged_daf.tab.gz
-          # Fixed in Isolate and private
-          zcat ${in_dir}/CHR${CHR}/INGI_chr${CHR}.merged_daf.tab.gz | awk '$7 !="NA" && $7 == 1 && $6 == 0 && $5 == 0'| gzip -c > ${outdir}/VBI_private_chr${CHR}.merged_daf.fixed.tab.gz
-          # Shared calculation without fixed sites
-          zcat ${in_dir}/CHR${CHR}/INGI_chr${CHR}.merged_daf.tab.gz | awk '$7 !="NA" && $7 > 0 && $7 < 1 && ($6 > 0 || $5 > 0)'| gzip -c > ${outdir}/VBI_shared_chr${CHR}.merged_daf.tab.gz
-          # Fixed in Isolate and shared
-          zcat ${in_dir}/CHR${CHR}/INGI_chr${CHR}.merged_daf.tab.gz | awk '$7 !="NA" && $7 == 1 && ($6 > 0 || $5 > 0)'| gzip -c > ${outdir}/VBI_shared_chr${CHR}.merged_daf.fixed.tab.gz
-          # NOVEL in Isolate
-          zcat ${in_dir}/CHR${CHR}/INGI_chr${CHR}.merged_daf.tab.gz | awk '$7 =="NA" && ($6 == "NA" && $5 == "NA")'| gzip -c > ${outdir}/VBI_novel_chr${CHR}.merged_daf.tab.gz
-          # pop_path=/lustre/scratch113/projects/esgi-vbseq/20140430_purging/UNRELATED/RESULTS/DAF/FIVE_POP
-          ;;
-        CARL )
-          # pop_path=/lustre/scratch113/projects/esgi-vbseq/20140430_purging/UNRELATED/RESULTS/DAF/FIVE_POP
-          #Private calculation without fixed sites
-          zcat ${in_dir}/CHR${CHR}/INGI_chr${CHR}.merged_daf.tab.gz | awk '$9 !="NA" && $9 > 0 && $9 < 1 && $6 == 0 && $5 == 0'| gzip -c > ${outdir}/CARL_private_chr${CHR}.merged_daf.tab.gz
-          # Fixed in Isolate and private
-          zcat ${in_dir}/CHR${CHR}/INGI_chr${CHR}.merged_daf.tab.gz | awk '$9 !="NA" && $9 == 1 && $6 == 0 && $5 == 0'| gzip -c > ${outdir}/CARL_private_chr${CHR}.merged_daf.fixed.tab.gz
-          # Shared calculation without fixed sites
-          zcat ${in_dir}/CHR${CHR}/INGI_chr${CHR}.merged_daf.tab.gz | awk '$9 !="NA" && $9 > 0 && $9 < 1 && ($6 > 0 || $5 > 0)'| gzip -c > ${outdir}/CARL_shared_chr${CHR}.merged_daf.tab.gz
-          # Fixed in Isolate and shared
-          zcat ${in_dir}/CHR${CHR}/INGI_chr${CHR}.merged_daf.tab.gz | awk '$9 !="NA" && $9 == 1 && ($6 > 0 || $5 > 0)'| gzip -c > ${outdir}/CARL_shared_chr${CHR}.merged_daf.fixed.tab.gz
-          # NOVEL in Isolate
-          zcat ${in_dir}/CHR${CHR}/INGI_chr${CHR}.merged_daf.tab.gz | awk '$9 =="NA" && ($6 == "NA" && $5 == "NA")'| gzip -c > ${outdir}/CARL_novel_chr${CHR}.merged_daf.tab.gz
-          ;;
-        Erto )
-          # pop_path=/lustre/scratch113/projects/esgi-vbseq/20140430_purging/UNRELATED/RESULTS/DAF/FIVE_POP
-          ;;
-        Resia )
-          # pop_path=/lustre/scratch113/projects/esgi-vbseq/20140430_purging/UNRELATED/RESULTS/DAF/FIVE_POP
-          ;;
-        Illegio )
-          # pop_path=/lustre/scratch113/projects/esgi-vbseq/20140430_purging/UNRELATED/RESULTS/DAF/FIVE_POP
-          ;;
-        Sauris )
-          # pop_path=/lustre/scratch113/projects/esgi-vbseq/20140430_purging/UNRELATED/RESULTS/DAF/FIVE_POP
-          ;;
-      esac
-    done
-  ;;
-  SHAREDVILL )
-    #calculate shared and private sites for all populations with fvg splitted by villages
-    # $4 CEU
-    # $5 TSI
-    # $6 VBI
-    # $7 FVG
-    # $8 CARL
-    # $9 Erto
-    # $10 Illegio
-    # $11 Resia
-    # $12 Sauris
-
-    # pops_updated="FVG VBI CARL TSI CEU Erto Resia Illegio Sauris"
-    pops_updated="TSI CEU"
-    for pop in $pops_updated
-    do
-      case $pop in
-        TSI )
-          #Private calculation without fixed sites
-          # zcat ${in_file} | awk '$6 !="NA" && $6 > 0 && $6 < 1 && $5 == 0 && $4 == 0'| gzip -c > ${outdir}/${pop}_private_chr${CHR}.merged_frq.tab.gz
-          zcat ${in_file} | cut -f 1,3-| awk '$5 !="NA" && $5 > 0 && ($6 == 0 || $7 == 0 || $8 == 0 || $9 == 0 || $10 == 0 || $11 == 0 || $12 == 0)'| gzip -c > ${outdir}/${pop}_private_chr${CHR}.merged_frq.tab.gz
-          # # Fixed in Isolate and private
-          # zcat ${in_file} | awk '$6 !="NA" && $6 == 1 && $5 == 0 && $4 == 0'| gzip -c > ${outdir}/${pop}_private_chr${CHR}.merged_frq.fixed.tab.gz
-          # # Shared calculation without fixed sites
-          zcat ${in_file} | cut -f 1,3-| awk '$5 !="NA" && $5 > 0 && $5 < 1 && ($6 > 0 || $7 > 0 || $8 > 0 || $9 > 0 || $10 > 0 || $11 > 0 || $12 > 0)'| gzip -c > ${outdir}/${pop}_shared_chr${CHR}.merged_frq.tab.gz
-          # # Fixed in Isolate and shared
-          # zcat ${in_file} | awk '$6 !="NA" && $6 == 1 && ($5 > 0 || $4 > 0)'| gzip -c > ${outdir}/${pop}_shared_chr${CHR}.merged_frq.fixed.tab.gz
-          # # NOVEL in my population
-          zcat ${in_file}| cut -f 1,3- | awk '$5 !="NA" && ($6 == "NA" || $7 == "NA" || $8 == "NA" || $9 == "NA" || $10 == "NA" || $11 == "NA" || $12 == "NA")'| gzip -c > ${outdir}/${pop}_novel_chr${CHR}.merged_frq.tab.gz
-          # pop_path=/lustre/scratch113/projects/esgi-vbseq/20140430_purging/UNRELATED/RESULTS/DAF/FIVE_POP
-          ;;
-        CEU )
-          #Private calculation without fixed sites
-          # zcat ${in_file} | awk '$4 !="NA" && $4 > 0 && $6 < 1 && $5 == 0 && $4 == 0'| gzip -c > ${outdir}/${pop}_private_chr${CHR}.merged_frq.tab.gz
-          zcat ${in_file}| cut -f 1,3- | awk '$4 !="NA" && $4 > 0 && ($6 == 0 || $7 == 0 || $8 == 0 || $9 == 0 || $10 == 0 || $11 == 0 || $12 == 0)'| gzip -c > ${outdir}/${pop}_private_chr${CHR}.merged_frq.tab.gz
-          # # Fixed in Isolate and private
-          # zcat ${in_file} | awk '$4 !="NA" && $4 == 1 && $5 == 0 && $4 == 0'| gzip -c > ${outdir}/${pop}_private_chr${CHR}.merged_frq.fixed.tab.gz
-          # # Shared calculation without fixed sites
-          zcat ${in_file}| cut -f 1,3-| awk '$4 !="NA" && $4 > 0 && $4 < 1 && ($6 > 0 || $7 > 0 || $8 > 0 || $9 > 0 || $10 > 0 || $11 > 0 || $12 > 0)'| gzip -c > ${outdir}/${pop}_shared_chr${CHR}.merged_frq.tab.gz
-          # # Fixed in Isolate and shared
-          # zcat ${in_file} | awk '$4 !="NA" && $4 == 1 && ($5 > 0 || $4 > 0)'| gzip -c > ${outdir}/${pop}_shared_chr${CHR}.merged_frq.fixed.tab.gz
-          # NOVEL in my population
-          zcat ${in_file}| cut -f 1,3- | awk '$4 !="NA" && ($6 == "NA" || $7 == "NA" || $8 == "NA" || $9 == "NA" || $10 == "NA" || $11 == "NA" || $12 == "NA")'| gzip -c > ${outdir}/${pop}_novel_chr${CHR}.merged_frq.tab.gz
-          # pop_path=/lustre/scratch113/projects/esgi-vbseq/20140430_purging/UNRELATED/RESULTS/DAF/FIVE_POP
-          ;;
-        VBI )
-          #Private calculation without fixed sites
-          zcat ${in_file}| cut -f 1,3- | awk '$6 !="NA" && $6 > 0 && $6 < 1 && $5 == 0 && $4 == 0'| gzip -c > ${outdir}/${pop}_private_chr${CHR}.merged_frq.tab.gz
-          # Fixed in Isolate and private
-          zcat ${in_file}| cut -f 1,3- | awk '$6 !="NA" && $6 == 1 && $5 == 0 && $4 == 0'| gzip -c > ${outdir}/${pop}_private_chr${CHR}.merged_frq.fixed.tab.gz
-          # Shared calculation without fixed sites
-          zcat ${in_file}| cut -f 1,3- | awk '$6 !="NA" && $6 > 0 && $6 < 1 && ($5 > 0 || $4 > 0)'| gzip -c > ${outdir}/${pop}_shared_chr${CHR}.merged_frq.tab.gz
-          # Fixed in Isolate and shared
-          zcat ${in_file}| cut -f 1,3- | awk '$6 !="NA" && $6 == 1 && ($5 > 0 || $4 > 0)'| gzip -c > ${outdir}/${pop}_shared_chr${CHR}.merged_frq.fixed.tab.gz
-          # NOVEL in Isolate
-          zcat ${in_file}| cut -f 1,3- | awk '$6 !="NA" && ($5 == "NA" && $4 == "NA")'| gzip -c > ${outdir}/${pop}_novel_chr${CHR}.merged_frq.tab.gz
-          # pop_path=/lustre/scratch113/projects/esgi-vbseq/20140430_purging/UNRELATED/RESULTS/DAF/FIVE_POP
-          ;;
-        FVG )
-          # pop_path=/lustre/scratch113/projects/esgi-vbseq/20140430_purging/UNRELATED/RESULTS/DAF/FIVE_POP
-          #Private calculation without fixed sites
-          zcat ${in_file}| cut -f 1,3- | awk '$7 !="NA" && $7 > 0 && $7 < 1 && $5 == 0 && $4 == 0'| gzip -c > ${outdir}/${pop}_private_chr${CHR}.merged_frq.tab.gz
-          # Fixed in Isolate and private
-          zcat ${in_file} | cut -f 1,3-| awk '$7 !="NA" && $7 == 1 && $5 == 0 && $4 == 0'| gzip -c > ${outdir}/${pop}_private_chr${CHR}.merged_frq.fixed.tab.gz
-          # Shared calculation without fixed sites
-          zcat ${in_file}| cut -f 1,3- | awk '$7 !="NA" && $7 > 0 && $7 < 1 && ($5 > 0 || $4 > 0)'| gzip -c > ${outdir}/${pop}_shared_chr${CHR}.merged_frq.tab.gz
-          # Fixed in Isolate and shared
-          zcat ${in_file}| cut -f 1,3- | awk '$7 !="NA" && $7 == 1 && ($5 > 0 || $4 > 0)'| gzip -c > ${outdir}/${pop}_shared_chr${CHR}.merged_frq.fixed.tab.gz
-          # NOVEL in Isolate
-          zcat ${in_file}| cut -f 1,3- | awk '$7 !="NA" && ($5 == "NA" && $4 == "NA")'| gzip -c > ${outdir}/${pop}_novel_chr${CHR}.merged_frq.tab.gz
-          ;;
-    
-        CARL )
-          # pop_path=/lustre/scratch113/projects/esgi-vbseq/20140430_purging/UNRELATED/RESULTS/DAF/FIVE_POP
-          #Private calculation without fixed sites
-          zcat ${in_file}| cut -f 1,3- | awk '$8 !="NA" && $8 > 0 && $8 < 1 && $5 == 0 && $4 == 0'| gzip -c > ${outdir}/${pop}_private_chr${CHR}.merged_frq.tab.gz
-          # Fixed in Isolate and private
-          zcat ${in_file}| cut -f 1,3- | awk '$8 !="NA" && $8 == 1 && $5 == 0 && $4 == 0'| gzip -c > ${outdir}/${pop}_private_chr${CHR}.merged_frq.fixed.tab.gz
-          # Shared calculation without fixed sites
-          zcat ${in_file}| cut -f 1,3- | awk '$8 !="NA" && $8 > 0 && $8 < 1 && ($5 > 0 || $4 > 0)'| gzip -c > ${outdir}/${pop}_shared_chr${CHR}.merged_frq.tab.gz
-          # Fixed in Isolate and shared
-          zcat ${in_file}| cut -f 1,3- | awk '$8 !="NA" && $8 == 1 && ($5 > 0 || $4 > 0)'| gzip -c > ${outdir}/${pop}_shared_chr${CHR}.merged_frq.fixed.tab.gz
-          # NOVEL in Isolate
-          zcat ${in_file}| cut -f 1,3- | awk '$8 !="NA" && ($5 == "NA" && $4 == "NA")'| gzip -c > ${outdir}/${pop}_novel_chr${CHR}.merged_frq.tab.gz
-    
-          ;;
-        Erto )
-          #Private calculation without fixed sites
-          zcat ${in_file}| cut -f 1,3- | awk '$9 !="NA" && $9 > 0 && $9 < 1 && $5 == 0 && $4 == 0'| gzip -c > ${outdir}/${pop}_private_chr${CHR}.merged_frq.tab.gz
-          # Fixed in Isolate and private
-          zcat ${in_file}| cut -f 1,3- | awk '$9 !="NA" && $9 == 1 && $5 == 0 && $4 == 0'| gzip -c > ${outdir}/${pop}_private_chr${CHR}.merged_frq.fixed.tab.gz
-          # Shared calculation without fixed sites
-          zcat ${in_file}| cut -f 1,3- | awk '$9 !="NA" && $9 > 0 && $9 < 1 && ($5 > 0 || $4 > 0)'| gzip -c > ${outdir}/${pop}_shared_chr${CHR}.merged_frq.tab.gz
-          # Fixed in Isolate and shared
-          zcat ${in_file}| cut -f 1,3- | awk '$9 !="NA" && $9 == 1 && ($5 > 0 || $4 > 0)'| gzip -c > ${outdir}/${pop}_shared_chr${CHR}.merged_frq.fixed.tab.gz
-          # NOVEL in Isolate
-          zcat ${in_file}| cut -f 1,3- | awk '$9 !="NA" && ($5 == "NA" && $4 == "NA")'| gzip -c > ${outdir}/${pop}_novel_chr${CHR}.merged_frq.tab.gz
-          ;;
-        Illegio )
-         #Private calculation without fixed sites
-          zcat ${in_file}| cut -f 1,3- | awk '$10 !="NA" && $10 > 0 && $10 < 1 && $5 == 0 && $4 == 0'| gzip -c > ${outdir}/${pop}_private_chr${CHR}.merged_frq.tab.gz
-          # Fixed in Isolate and private
-          zcat ${in_file}| cut -f 1,3- | awk '$10 !="NA" && $10 == 1 && $5 == 0 && $4 == 0'| gzip -c > ${outdir}/${pop}_private_chr${CHR}.merged_frq.fixed.tab.gz
-          # Shared calculation without fixed sites
-          zcat ${in_file}| cut -f 1,3- | awk '$10 !="NA" && $10 > 0 && $10 < 1 && ($5 > 0 || $4 > 0)'| gzip -c > ${outdir}/${pop}_shared_chr${CHR}.merged_frq.tab.gz
-          # Fixed in Isolate and shared
-          zcat ${in_file}| cut -f 1,3- | awk '$10 !="NA" && $10 == 1 && ($5 > 0 || $4 > 0)'| gzip -c > ${outdir}/${pop}_shared_chr${CHR}.merged_frq.fixed.tab.gz
-          # NOVEL in Isolate
-          zcat ${in_file}| cut -f 1,3- | awk '$10 !="NA" && ($5 == "NA" && $4 == "NA")'| gzip -c > ${outdir}/${pop}_novel_chr${CHR}.merged_frq.tab.gz 
-          ;;
-        Resia )
-          #Private calculation without fixed sites
-          #Private calculation without fixed sites
-          zcat ${in_file} | cut -f 1,3-| awk '$11 !="NA" && $11 > 0 && $11 < 1 && $5 == 0 && $4 == 0'| gzip -c > ${outdir}/${pop}_private_chr${CHR}.merged_frq.tab.gz
-          # Fixed in Isolate and private
-          zcat ${in_file}| cut -f 1,3- | awk '$11 !="NA" && $11 == 1 && $5 == 0 && $4 == 0'| gzip -c > ${outdir}/${pop}_private_chr${CHR}.merged_frq.fixed.tab.gz
-          # Shared calculation without fixed sites
-          zcat ${in_file}| cut -f 1,3- | awk '$11 !="NA" && $11 > 0 && $11 < 1 && ($5 > 0 || $4 > 0)'| gzip -c > ${outdir}/${pop}_shared_chr${CHR}.merged_frq.tab.gz
-          # Fixed in Isolate and shared
-          zcat ${in_file}| cut -f 1,3- | awk '$11 !="NA" && $11 == 1 && ($5 > 0 || $4 > 0)'| gzip -c > ${outdir}/${pop}_shared_chr${CHR}.merged_frq.fixed.tab.gz
-          # NOVEL in Isolate
-          zcat ${in_file} | cut -f 1,3-| awk '$11 !="NA" && ($5 == "NA" && $4 == "NA")'| gzip -c > ${outdir}/${pop}_novel_chr${CHR}.merged_frq.tab.gz
-          ;;
-        Sauris )
-         #Private calculation without fixed sites
-          zcat ${in_file} | cut -f 1,3-| awk '$12 !="NA" && $12 > 0 && $12 < 1 && $5 == 0 && $4 == 0'| gzip -c > ${outdir}/${pop}_private_chr${CHR}.merged_frq.tab.gz
-          # Fixed in Isolate and private
-          zcat ${in_file}| cut -f 1,3- | awk '$12 !="NA" && $12 == 1 && $5 == 0 && $4 == 0'| gzip -c > ${outdir}/${pop}_private_chr${CHR}.merged_frq.fixed.tab.gz
-          # Shared calculation without fixed sites
-          zcat ${in_file}| cut -f 1,3- | awk '$12 !="NA" && $12 > 0 && $12 < 1 && ($5 > 0 || $4 > 0)'| gzip -c > ${outdir}/${pop}_shared_chr${CHR}.merged_frq.tab.gz
-          # Fixed in Isolate and shared
-          zcat ${in_file}| cut -f 1,3- | awk '$12 !="NA" && $12 == 1 && ($5 > 0 || $4 > 0)'| gzip -c > ${outdir}/${pop}_shared_chr${CHR}.merged_frq.fixed.tab.gz
-          # NOVEL in Isolate
-          zcat ${in_file}| cut -f 1,3- | awk '$12 !="NA" && ($5 == "NA" && $4 == "NA")'| gzip -c > ${outdir}/${pop}_novel_chr${CHR}.merged_frq.tab.gz 
-          ;;
-        
-      esac
-      echo ${in_file}
-      echo ${pop}
-      echo ${CHR}
-      echo ${outdir}
-    done
-    
-  ;;
-  PRISHCOUNT )
-    #extract data from different files categories and count to summarize all in Isolates
-    echo "Count sites...."
-    for pop in $pops
-    do
-      case $pop in
-        FVG )
-          # pop_path_pref=/lustre/scratch113/projects/esgi-vbseq/20140430_purging/UNRELATED/RESULTS/DAF/FIVE_POP/CHR${CHR}/${pop}
-          ;;
-        VBI )
-          # pop_path_pref=/lustre/scratch113/projects/esgi-vbseq/20140430_purging/UNRELATED/RESULTS/DAF/FIVE_POP/CHR${CHR}/${pop}
-          ;;
-        CARL )
-          # pop_path_pref=/lustre/scratch113/projects/esgi-vbseq/20140430_purging/UNRELATED/RESULTS/DAF/FIVE_POP/CHR${CHR}/${pop}
-          ;;
-      esac
-      pop_path_pref=${in_path}/CHR${CHR}/${pop}
-      #create a folder for results
-      mkdir -p ${pop}
-
-      zcat ${pop_path_pref}_private_chr${CHR}.merged_daf.tab.gz >> ${pop}/${pop}_private.merged_daf.tab
-      zcat ${pop_path_pref}_private_chr${CHR}.merged_daf.fixed.tab.gz >> ${pop}/${pop}_private.merged_daf.fixed.tab
-      zcat ${pop_path_pref}_shared_chr${CHR}.merged_daf.tab.gz >> ${pop}/${pop}_shared.merged_daf.tab
-      zcat ${pop_path_pref}_shared_chr${CHR}.merged_daf.fixed.tab.gz >> ${pop}/${pop}_shared.merged_daf.fixed.tab
-      zcat ${pop_path_pref}_novel_chr${CHR}.merged_daf.tab.gz >> ${pop}/${pop}_novel.merged_daf.tab
-
-    done
-  ;;
-  DACMAF )
-    #extract data in bed format for different populations in a separate way
-    echo "Create bed formatted files..."
-    pops_updated="Erto Resia Illegio Sauris"
-    # for pop in $pops_updated
-    for pop in $pops
-    do
-      case $pop in
-        FVG )
-          # pop_path=/lustre/scratch113/projects/esgi-vbseq/20140430_purging/UNRELATED/listpop/FVG_unrelated.list
-          pop_path=/lustre/scratch113/projects/esgi-vbseq/20140430_purging/80_SAMPLES/listpop/FVG_unrelated.list
-          ;;
-        VBI )
-          # pop_path=/lustre/scratch113/projects/esgi-vbseq/20140430_purging/UNRELATED/listpop/VBI_unrelated.list
-          pop_path=/lustre/scratch113/projects/esgi-vbseq/20140430_purging/80_SAMPLES/listpop/VBI_unrelated.list
-          ;;
-        CARL )
-          # pop_path=/lustre/scratch113/projects/esgi-vbseq/20140430_purging/UNRELATED/listpop/CARL_unrelated.list
-          pop_path=/lustre/scratch113/projects/esgi-vbseq/20140430_purging/80_SAMPLES/listpop/CARL_unrelated.list
-          ;;
-        TSI )
-          # pop_path=/lustre/scratch113/projects/esgi-vbseq/20140430_purging/UNRELATED/listpop/TSI.list
-          pop_path=/lustre/scratch113/projects/esgi-vbseq/20140430_purging/80_SAMPLES/listpop/TSI_unrelated.list
-          ;;
-        CEU )
-          # pop_path=/lustre/scratch113/projects/esgi-vbseq/20140430_purging/UNRELATED/listpop/CEU.list
-          pop_path=/lustre/scratch113/projects/esgi-vbseq/20140430_purging/80_SAMPLES/listpop/CEU_unrelated.list
-          ;;
-        Erto )
-          pop_path=/lustre/scratch113/projects/esgi-vbseq/20140430_purging/UNRELATED/listpop/Erto_unrelated.list
-            ;;
-        Sauris )
-          pop_path=/lustre/scratch113/projects/esgi-vbseq/20140430_purging/UNRELATED/listpop/Sauris_unrelated.list
-            ;;
-        Illegio )
-          pop_path=/lustre/scratch113/projects/esgi-vbseq/20140430_purging/UNRELATED/listpop/Illegio_unrelated.list
-            ;;
-        Resia )
-          pop_path=/lustre/scratch113/projects/esgi-vbseq/20140430_purging/UNRELATED/listpop/Resia_unrelated.list
-            ;;
-      esac
-      in_vcf=/lustre/scratch113/projects/esgi-vbseq/20140430_purging/UNRELATED/POP_MERGED_FILES/FIVE_POPS/20140711_ANNOTATED/${CHR}.vcf.gz
-      # in_vcf=/lustre/scratch113/projects/esgi-vbseq/20140430_purging/ALL/POP_MERGED_FILES/FIVE_POPS/20140730_ANNOTATED/${CHR}.clean_annotated.vcf.gz
-      out_tab=${pop}.chr${CHR}.tab
-      #create files for each population for each chromosome in a separate folder
-      echo "ec_dacmacdafmaf2bed.py ${pop_path} ${in_vcf} ${out_tab}; mv ${pop}.chr${CHR}.tab ${outdir}/;gzip ${outdir}/${pop}.chr${CHR}.tab" | bsub -J"dac_exract_${CHR}_${pop}" -o"%J_dac_exract_${CHR}_${pop}.o" -M3000 -R"select[mem>=3000] rusage[mem=3000]" -q normal
-      # echo "mv ${pop}.chr${CHR}.tab ${outdir}/;gzip ${outdir}/${pop}.chr${CHR}.tab" | bsub -J"dac_exract_${CHR}_${pop}" -o"%J_dac_exract_${CHR}_${pop}.o" -M3000 -R"select[mem>=3000] rusage[mem=3000]" -q normal
-
-    done
-  ;;
-  EXTRMAF )
-    #extract data in bed format for different populations in a separate way
-    echo "Extract from tables for each population, complete info about shared/private sites"
-    pops_updated="FVG VBI CARL TSI CEU Erto Resia Illegio Sauris"
-    for pop in $pops_updated="FVG VBI CARL TSI CEU Erto Resia Illegio Sauris"
-    do
-      #those are the files I need to use to extract the info splitted by chr
-      # pop_path=/lustre/scratch113/projects/esgi-vbseq/20140430_purging/UNRELATED/RESULTS/DAF/FIVE_POP
-      
-      private=${pop_path}/${pop}/${pop}_private.merged_daf.tab
-      private_fixed=${pop_path}/${pop}/${pop}_private.merged_daf.fixed.tab
-      shared=${pop_path}/${pop}/${pop}_shared.merged_daf.tab
-      shared_fixed=${pop_path}/${pop}/${pop}_shared.merged_daf.fixed.tab
-
-      # #create the list of variants we need to extract
-      # awk '{print $1"O"$2"O"$3}' ${private} | tr " " "\t" | dos2unix > ${private}.list
-      # awk '{print $1"O"$2"O"$3}' ${private_fixed} | tr " " "\t" | dos2unix > ${private_fixed}.list
-      # awk '{print $1"O"$2"O"$3}' ${shared} | tr " " "\t" | dos2unix > ${shared}.list
-      # awk '{print $1"O"$2"O"$3}' ${shared_fixed} | tr " " "\t" | dos2unix > ${shared_fixed}.list
-
-      #create temporary files to do the extraction
-      in_file=${pop_path}/CHR${CHR}/INGI_chr${CHR}.merged_maf.tab.gz
-      # zcat ${in_file} | awk '{print $1"O"$2"O"$3,$0}' | tr " " "\t" | dos2unix > ${in_file}.tmp
-
-      zcat ${in_file} |awk '{print $1"O"$2"O"$3"O"$4,$0}'|tr " " "\t" | fgrep -w -f <(awk -v cro=${CHR} '{if($1==cro) print $1"O"$2"O"$3"O"$4}' ${private})|cut -f 2- |gzip -c > ${in_file}.${pop}.private.tab.gz
-      zcat ${in_file} |awk '{print $1"O"$2"O"$3"O"$4,$0}'|tr " " "\t" | fgrep -w -f <(awk -v cro=${CHR} '{if($1==cro) print $1"O"$2"O"$3"O"$4}' ${private_fixed})|cut -f 2- |gzip -c > ${in_file}.${pop}.private_fixed.tab.gz
-      zcat ${in_file} |awk '{print $1"O"$2"O"$3"O"$4,$0}'|tr " " "\t" | fgrep -w -f <(awk -v cro=${CHR} '{if($1==cro) print $1"O"$2"O"$3"O"$4}' ${shared})|cut -f 2- |gzip -c > ${in_file}.${pop}.shared.tab.gz
-      zcat ${in_file} |awk '{print $1"O"$2"O"$3"O"$4,$0}'|tr " " "\t" | fgrep -w -f <(awk -v cro=${CHR} '{if($1==cro) print $1"O"$2"O"$3"O"$4}' ${shared_fixed})|cut -f 2- |gzip -c > ${in_file}.${pop}.shared_fixed.tab.gz
-      
-      # #now grep the file to extract the data we need, using different lists
-      # (fgrep -w -f <(grep "^${CHR}" ${private}.list) ${in_file}.tmp)| cut -f 2- | dos2unix |gzip -c > ${in_file}.private.tab.gz
-      # (fgrep -w -f <(grep "^${CHR}" ${private_fixed}.list) ${in_file}.tmp)| cut -f 2- | dos2unix |gzip -c > ${in_file}.private_fixed.tab.gz
-      # (fgrep -w -f <(grep "^${CHR}" ${shared}.list) ${in_file}.tmp)| cut -f 2- | dos2unix |gzip -c > ${in_file}.shared.tab.gz
-      # (fgrep -w -f <(grep "^${CHR}" ${shared_fixed}.list) ${in_file}.tmp)| cut -f 2- | dos2unix |gzip -c > ${in_file}.shared_fixed.tab.gz
-
-      # rm ${in_file}.tmp
-
-    done
-  ;;
-  MAFSPEC )
-    #extract MAF data different populations from a given list
-    echo "Extract data for af/maf spectrum plot"
-    pops_updated="VBI CARL TSI CEU Erto Resia Illegio Sauris"
-   
-      maf_file=${maf_file_path}/INGI_villages_chr${CHR}.merged_maf.tab.gz
-      out_tmp=`basename ${input_file}`
-
-      (zcat ${maf_file} | cut -f 1,3-|head -1;zcat ${maf_file} | cut -f 1,3- | fgrep -w -f <(awk '{print $3}' ${input_file}) )| tr " " "\t" | gzip -c > ${out_tmp}.maf_file.gz
-  ;;
-  GERMLINE )
-    echo "Calculate IBD using GERMLINE from plink formatted files!!"
-    echo -e "Parameters: \nmin_match=${MATCH}\nerr_hom=${HOM}\nerr_het=${HET}\nbits=${BITS}"
-    #use he same vcf file for all the samples but change the sample list of individuals toi exclude from the analysis
-    # pops_updated="FVG VBI TSI CEU CARL Erto Resia Illegio Sauris"
-    pops_updated="ALL"
-    for pop in $pops_updated
-    do
-
-        # ped_path=/lustre/scratch113/projects/esgi-vbseq/20140430_purging/UNRELATED/INPUT_FILES/FIVE_POPS/IBD_INPUT/GERMLINE
-        ped_path=/lustre/scratch113/projects/esgi-vbseq/20140430_purging/UNRELATED/INPUT_FILES/FIVE_POPS/IBD_INPUT/GERMLINE/FILTERED
-        pop_list=/lustre/scratch113/projects/esgi-vbseq/20140430_purging/UNRELATED/listpop/FIVE_POPS/all_pop_but_${pop}.removelist
-        
-        
-        # #we need to create the input file for GERMLINE (WTF!!)
-        echo "1" > ${pop}.${CHR}.run
-        echo "${ped_path}/${pop}.${CHR}.non_missing.filtered.map" >> ${pop}.${CHR}.run
-        echo "${ped_path}/${pop}.${CHR}.non_missing.filtered.ped" >> ${pop}.${CHR}.run
-        echo "${outdir}/${pop}.${CHR}.non_missing.filtered" >> ${pop}.${CHR}.run
-
-        # commented to use the ALL population files
-        # echo "germline -min_m ${MATCH} -err_hom ${HOM} -err_het ${HET} -bits ${BITS} -h_extend -homoz -from_snp rs62224610 -to_snp rs7410320 < ${pop}.${CHR}.run" | bsub -J"LOGS/ibd_${pop}_${CHR}" -o"LOGS/%J_ibd_${pop}_${CHR}.o" -q basement -M8000 -R"span[hosts=1] select[mem>=8000] rusage[mem=8000]"
-        echo "germline -min_m ${MATCH} -err_hom ${HOM} -err_het ${HET} -bits ${BITS} -h_extend -homoz < ${pop}.${CHR}.run" | bsub -J"LOGS/ibd_${pop}_${CHR}" -o"LOGS/%J_ibd_${pop}_${CHR}.o" -q basement -M8000 -R"span[hosts=1] select[mem>=8000] rusage[mem=8000]"
-    done
-  ;;
-  GERMLINEREG )
-    echo "Calculate IBD using GERMLINE from plink formatted files!!"
-    echo -e "Parameters: \nmin_match=${MATCH}\nerr_hom=${HOM}\nerr_het=${HET}\nbits=${BITS}"
-    #use he same vcf file for all the samples but change the sample list of individuals toi exclude from the analysis
-    # pops_updated="FVG VBI TSI CEU CARL Erto Resia Illegio Sauris"
-    pops_updated="ALL"
-    for pop in $pops_updated
-    do
-
-        ped_path=/lustre/scratch113/projects/esgi-vbseq/20140430_purging/UNRELATED/INPUT_FILES/FIVE_POPS/IBD_INPUT/GERMLINE/HOM2PED
-        pop_list=/lustre/scratch113/projects/esgi-vbseq/20140430_purging/UNRELATED/listpop/FIVE_POPS/all_pop_but_${pop}.removelist
-        
-        for filename in `ls ${ped_path}/*.ped`; do
-          #we need to create the input file for GERMLINE (WTF!!)
-          file=`basename ${filename}`
-          echo "1" > ${file}.run
-          echo "${filename%*.ped}.map" >> ${file}.run
-          echo "${filename}" >> ${file}.run
-          echo "${file}.filtered" >> ${file}.run
-
-          echo "germline -min_m ${MATCH} -err_hom ${HOM} -err_het ${HET} -bits ${BITS} -h_extend -homoz < ${file}.run" | bsub -J"LOGS/ibd_${file}" -o"LOGS/%J_ibd_${file}.o" -q normal -M8000 -R"span[hosts=1] select[mem>=8000] rusage[mem=8000]"
-        done
-    done
-
-  ;;
   HWECLEAN )
     echo "Clean data using VCFTOOLS filtering by HWE p"
     echo -e "Parameters: \nhwe threshold=${hwe}"
@@ -813,52 +431,6 @@ case $MODE in
     done
 
   ;;
-  ROHVILLAGENEW )
-    echo "Calculate ROH from a unified vcf file....with IBDseq...we need a file without missing genotypes(NO MAF filter)!!"
-    echo "We'll have also data separate for villages in FVG"
-    echo -e "Parameters: \nwindow=${window}\noverlap=${overlap}"
-    #use he same vcf file for all the samples but change the sample list of individuals toi exclude from the analysis
-    pops_updated="FVG VBI TSI CEU Erto Resia Illegio Sauris"
-    for pop in $pops_updated
-    do
-
-      case $pop in
-        FVG )
-          pop_path=/lustre/scratch113/projects/esgi-vbseq/25082015_purging/26082015_ANNOTATED/GERP
-          ;;
-        VBI )
-          pop_path=/lustre/scratch113/projects/esgi-vbseq/25082015_purging/26082015_ANNOTATED/GERP
-            ;;
-        TSI )
-          pop_path=/lustre/scratch113/projects/esgi-vbseq/25082015_purging/26082015_ANNOTATED/GERP
-            ;;
-        CEU )
-          pop_path=/lustre/scratch113/projects/esgi-vbseq/25082015_purging/26082015_ANNOTATED/GERP
-            ;;
-        CARL )
-          pop_path=/lustre/scratch113/projects/esgi-vbseq/25082015_purging/26082015_ANNOTATED/GERP
-            ;;
-        Erto )
-          pop_path=/lustre/scratch113/projects/esgi-vbseq/25082015_purging/26082015_ANNOTATED/GERP
-            ;;
-        Sauris )
-          pop_path=/lustre/scratch113/projects/esgi-vbseq/25082015_purging/26082015_ANNOTATED/GERP
-            ;;
-        Illegio )
-          pop_path=/lustre/scratch113/projects/esgi-vbseq/25082015_purging/26082015_ANNOTATED/GERP
-            ;;
-        Resia )
-          pop_path=/lustre/scratch113/projects/esgi-vbseq/25082015_purging/26082015_ANNOTATED/GERP
-            ;;
-      esac
-
-        pop_list=/lustre/scratch113/projects/esgi-vbseq/25082015_purging/26082015_ANNOTATED/listpop/HRC_all_samples_but_${pop}.list
-        #use freq data
-        # bsub -J"roh_${pop}_${CHR}" -o"%J_roh_${pop}_${CHR}.o" -q normal -M8000 -n4 -R"span[hosts=1] select[mem>=8000] rusage[mem=8000]" -- java -Xms5000m -Xmx5000m -jar /nfs/team151/software/beagle_4/beagle.22Feb16.8ef.jar gt=${pop_path}/${chr}.GERP.vcf.gz nthreads=4 excludesamples=${pop_list} out=${outdir}/${pop}.roh
-        bsub -J"roh_${pop}_${CHR}" -o"%J_roh_${pop}_${CHR}.o" -q normal -M8000 -n4 -R"span[hosts=1] select[mem>=8000] rusage[mem=8000]" -- beagle 5000 gt=${pop_path}/${CHR}.GERP.vcf.gz ibd=true nthreads=4 excludesamples=${pop_list} window=${window} overlap=${overlap} out=${outdir}/${pop}.roh
-    done
-
-  ;;
   ROHBEAGLE )
     echo "Calculate ROH from different files for each population....using BEAGLE4.1!(filtered by HWE!!))"
     echo -e "Parameters: \nwindow=${window}\noverlap=${overlap}"
@@ -882,6 +454,51 @@ case $MODE in
         #use freq data
         bsub -J"roh_${pop}_${CHR}_bg" -o"%J_roh_${pop}_${CHR}_bg.o" -q normal -M8000 -n16 -R"span[hosts=1] select[mem>=8000] rusage[mem=8000]" -- beagle 8000 gt=${pop_path} ibd=true ibdlod=1 nthreads=16 window=${window} overlap=${overlap} chrom=${CHR} out=${outdir}/${pop}.roh
     
+    done
+  ;;
+  PLINKROH )
+    echo "Calculate ROH from different files for each population....using PLINK!(filtered by HWE!!))"
+    echo -e "Parameters: \nwindow=${window}\noverlap=${overlap}"
+    #use he same vcf file for all the samples but change the sample list of individuals toi exclude from the analysis
+    module add hgi/plink/1.90b3w
+
+    #work with plink conevrted files
+    pops_updated=$3
+    for pop in $pops_updated
+    do
+      case $pop in
+        FVG )
+          pop_path=/lustre/scratch113/projects/fvg_seq/16092015/12112015_FILTERED_REL/PLINK/ALL_FVG_20151113.vcf.gz
+          ;;
+        VBI )
+          pop_path=/lustre/scratch113/projects/esgi-vbseq/08092015/12112015_FILTERED_REL/PLINK/ALL_VBI_20151113.vcf.gz
+          ;;
+        CARL )
+          pop_path=/lustre/scratch113/projects/carl_seq/variant_refinement/12112015_FILTERED_REL/PLINK/ALL_CARL_20151113.vcf.gz
+          ;;
+      esac
+
+      #select r2 threshold command line
+      r2=$2
+      outdir=`dirname ${pop_path}`
+      mkdir -p ${outdir}/PRUNED/${r2}
+
+      # 1) filter by ld same as IBDseq (0.15 - 0.2)
+      plink --bfile ${pop_path} --hardy 1e-8 --make-bed --out ${outdir}/PRUNED/${r2}/${pop}_filtered
+      #modify bim file to have rsID
+      source fix_bim.sh
+      fix_bim ${outdir}/PRUNED/${r2}/${pop}_filtered.bim 
+
+      #now extract the sites to prune 
+      plink --bfile ${outdir}/PRUNED/${r2}/${pop}_filtered --indep-pairwise 5000 1000 ${r2} --out ${outdir}/PRUNED/${r2}/${pop}_prune
+
+      # 2) generate filtered files
+      #we'll have a prune.out and prune.in files, we'll use to filter
+      plink --bfile ${outdir}/PRUNED/${r2}/${pop}_filtered --exclude ${outdir}/PRUNED/${r2}/${pop}_prune.out --make-bed --out ${outdir}/PRUNED/${r2}/${pop}_19082016_PRUNED
+
+      # 3) calculate ROH
+      plink --bfile ${outdir}/PRUNED/${r2}/${pop}_19082016_PRUNED --homozyg --homozyg-window-snp 50 --homozyg-snp 50 --homozyg-kb 100 --homozyg-gap 100 --homozyg-density 50 --homozyg-window-missing 3 --homozyg-window-het 0 --out ${outdir}/PRUNED/${r2}/${pop}_19082016_PRUNED_ROH
+  
     done
   ;;
   INGIROH )
