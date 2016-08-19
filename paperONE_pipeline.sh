@@ -486,6 +486,7 @@ case $MODE in
       # 1) filter by ld same as IBDseq (0.15 - 0.2)
       plink --bfile ${pop_path} --hwe 1e-8 --make-bed --threads 2 --out ${outdir}/PRUNED/${r2}/${pop}_filtered
       #modify bim file to have rsID
+      echo "Fix RsID in bim file..."
       source fix_bim.sh
       fix_bim ${outdir}/PRUNED/${r2}/${pop}_filtered.bim 
 
