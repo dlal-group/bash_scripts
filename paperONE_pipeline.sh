@@ -380,6 +380,8 @@ case $MODE in
   HET )
     #Extract Inbreeding coeff information for each population. Here we are using plink2 (1.9)
     #we'll use the --het option as long as the --ibc option
+    module add hgi/plink/1.90b3w
+
     echo "Calculate Inbreeding for all pops in a vcf files...."
     pop_path=$2
     pop_count=$3
@@ -399,7 +401,7 @@ case $MODE in
         bsub -J"ibc_${pop}" -o"${outdir}/%J_ibc_${pop}.o" -w "ended(freq_${pop})" -q normal -M8000 -n2 -R"span[hosts=1] select[mem>=8000] rusage[mem=8000]" -- plink --vcf ${pop_path} --biallelic-only --double-id --keep-allele-order --snps-only --keep ${poplist} --ibc --out ${outdir}/ibc_${pop}
     done
   ;;
-  
+
   SHARED )
     #calculate shared and private sites for all populations
     pops_updated="FVG VBI CARL TSI CEU Erto Resia Illegio Sauris"
