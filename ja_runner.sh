@@ -816,6 +816,14 @@ module add hgi/samtools/1.3.1
 # tabix -p vcf ${file}.filt.vcf.gz
 
 #compute stats for unfiltered and filtered files
-bcftools stats -v -s - -d 0,5000,100 ${file} > ${file}.vcfchk
-bcftools stats -v -s - -d 0,5000,100 ${file}.filt.vcf.gz > ${file}.filt.vcf.gz.vcfchk
+# bcftools stats -v -s - -d 0,5000,100 ${file} > ${file}.vcfchk
+# bcftools stats -v -s - -d 0,5000,100 ${file}.filt.vcf.gz > ${file}.filt.vcf.gz.vcfchk
 
+filename=`basename ${file}`
+basedir=`dir ${file}`
+
+mkdir -p ${basedir}/NO_CSQ
+
+#remove csq annotation for new reannotation
+bcftools annotate ${file} -x INFO/CSQ -O z -o ${basedir}/NO_CSQ/${filename}
+tabix -p vcf ${basedir}/NO_CSQ/${filename}

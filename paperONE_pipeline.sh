@@ -381,33 +381,23 @@ case $MODE in
     #Extract Inbreeding coeff information for each population. Here we are using plink2 (1.9)
     #we'll use the --het option as long as the --ibc option
     echo "Calculate Inbreeding for all pops in a vcf files...."
-    pops_updated="FVG VBI CARL"
+    pop_path=$2
+    pop_count=$3
+    pop_base=$4
+    outdir=${pop_base}/results
+    mkdir -p ${outdir}
+
+    pops_updated=$(cut -f 2 -d " " ${pop_count})
     for pop in $pops_updated
     do
-      case $pop in
-        FVG )
-          pop_path=/lustre/scratch113/projects/fvg_seq/20140410/INGI/FVG/PLINK
-          ;;
-        VBI )
-          pop_path=/lustre/scratch113/projects/fvg_seq/20140410/INGI/VBI/PLINK
-            ;;
-        TSI )
-          pop_path=/lustre/scratch113/projects/fvg_seq/20140410/TGP/TSI/PLINK
-            ;;
-        CEU )
-          pop_path=/lustre/scratch113/projects/fvg_seq/20140410/TGP/CEU/PLINK
-            ;;
-        CARL )
-          pop_path=/lustre/scratch113/projects/fvg_seq/20140410/INGI/CARL/PLINK
-            ;;
-      esac
         #calculate frequencies, before:
-        # bsub -J"freq_${pop}" -o"%J_freq_${pop}.o" -q yesterday -M8000 -n2 -R"span[hosts=1] select[mem>=8000] rusage[mem=8000]" -- plink2 --bfile ${pop_path}/22.${pop,,} --freq --nonfounders --out ${outdir}/freq_${pop}
+        bsub -J"freq_${pop}" -o"${outdir}/%J_freq_${pop}.o" -q normal -M4000 -n2 -R"span[hosts=1] select[mem>=4000] rusage[mem=4000]" -- plink --cf ${pop_path} --double-id --keep ${poplist} --freq --nonfounders --out ${outdir}/freq_${pop}
         
+        poplist=${pop_base}/lists/${pop}.ped
         #use freq data
-        bsub -J"inb_${pop}" -o"%J_inb_${pop}.o" -w "ended(freq_${pop})" -q normal -M8000 -n2 -R"span[hosts=1] select[mem>=8000] rusage[mem=8000]" -- plink --vcf ${pop_path} --het --out ${outdir}/inb_${pop}
-        bsub -J"ibc_${pop}" -o"%J_ibc_${pop}.o" -w "ended(freq_${pop})" -q normal -M8000 -n2 -R"span[hosts=1] select[mem>=8000] rusage[mem=8000]" -- plink --vcf ${pop_path} --ibc --out ${outdir}/ibc_${pop}
-      done
+        bsub -J"inb_${pop}" -o"${outdir}/%J_inb_${pop}.o" -w "ended(freq_${pop})" -q normal -M8000 -n2 -R"span[hosts=1] select[mem>=8000] rusage[mem=8000]" -- plink --vcf ${pop_path} --double-id --keep ${poplist} --het --out ${outdir}/inb_${pop}
+        bsub -J"ibc_${pop}" -o"${outdir}/%J_ibc_${pop}.o" -w "ended(freq_${pop})" -q normal -M8000 -n2 -R"span[hosts=1] select[mem>=8000] rusage[mem=8000]" -- plink --vcf ${pop_path} --double-id --keep ${poplist} --ibc --out ${outdir}/ibc_${pop}
+    done
   ;;
   SHARED )
     #calculate shared and private sites for all populations
