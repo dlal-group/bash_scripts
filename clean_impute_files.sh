@@ -31,6 +31,7 @@ case $mode in
 
 		zcat ${basefolder}/${pop}/chr${chr}.gen_tmp1.gz | sed 's,'"/lustre/scratch113/projects/esgi-vbseq/02032016_INGI_REF_PANEL/IMPUTE/CARL_FVG_VBI_TGP3_ALL/${chr}/${chr}.INGI_REF.CARL_FVG_VBI_TGP3_ALL.*.legend.gz:"',,g'| gzip -c > ${basefolder}/${pop}/MERGED/ALL/chr${chr}.gen.gz
 		(echo "snp_id rs_id position a0 a1 exp_freq_a1 info certainty type info_type0 concord_type0 r2_type0";fgrep -v -w rs_id ${basefolder}/${pop}/chr${chr}.gen_tmp1_info) > ${basefolder}/${pop}/MERGED/ALL/chr${chr}.gen_info
+		echo "ENDED!!"
 		;;
 	STEP2 )
 	echo "Second step: Multiallelic removal"
@@ -53,6 +54,7 @@ case $mode in
 		qctool -g ${basefolder}/${pop}/MERGED/ALL/chr${chr}.gen.gz -incl-rsids ${basefolder}/${pop}/MERGED/CLEANED/chr${chr}.gen_rsID.to_keep -omit-chromosome -og ${basefolder}/${pop}/MERGED/CLEANED/chr${chr}.gen.gz 
 		#create sample file
 		cut -f -6 -d " " ${basefolder}/${pop}/${chr}/chr${chr}.05.gen_samples > ${basefolder}/${pop}/MERGED/CLEANED/chr${chr}.gen_samples
+		echo "ENDED!!!"
 		;;
 	STEP3 )
 	echo "Third step: Long allele names recode"
@@ -81,21 +83,25 @@ case $mode in
 		} else {
 		print $0
 		}}' | gzip -c > ${basefolder}/${pop}/MERGED/CLEANED/RECODED/chr${chr}.gen.gz
+		echo "ENDED!!"
 		;;
 	STEP4 )
 	echo "Fourth step: Filevector conversion"
 	mkdir -p ${basefolder}/${pop}/MERGED/CLEANED/RECODED/FILEVECTOR
 	#here we can convert the RECODED version of the CLEANED files (no duplicates by position)
 	/home/cocca/scripts/bash_scripts/impute2mach_launcher.sh ${chr} ${basefolder}/${pop}/MERGED/CLEANED/RECODED/chr${chr}.gen.gz ${basefolder}/${pop}/MERGED/CLEANED/RECODED/chr${chr}.gen_info ${basefolder}/${pop}/MERGED/CLEANED/chr${chr}.gen_samples ${basefolder}/${pop}/MERGED/CLEANED/RECODED/FILEVECTOR
+		echo "ENDED!!"
 		;;
 	STEP5 )
 	echo "Fifth step: Bimbam conversion"
 		#we conver the unfiltered and not recoded files, to bimbam format
 		mkdir -p ${basefolder}/${pop}/MERGED/ALL/BIMBAM
 		/home/cocca/scripts/bash_scripts/impute2bimbam_inner.sh ${basefolder}/${pop}/MERGED/ALL/chr${chr}.gen.gz ${chr} ${basefolder}/${pop}/MERGED/ALL/BIMBAM
+		echo "ENDED!!"
 		;;
 	CLEAN )
 	echo "Clean temporary files"
 		rm ${basefolder}/${pop}/MERGED/CLEANED/RECODED/FILEVECTOR/${chr}/chr${chr}.gen.gz.gen
+		echo "ENDED!!"
 		;;
 esac
