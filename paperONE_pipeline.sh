@@ -396,10 +396,18 @@ case $MODE in
         poplist=${pop_base}/lists/${pop}.ped.keeplist
         #calculate frequencies, before:
         # bsub -J"freq_${pop}" -o"${outdir}/%J_freq_${pop}.o" -q normal -M4000 -n2 -R"span[hosts=1] select[mem>=4000] rusage[mem=4000]" -- plink --vcf ${pop_path} --biallelic-only --double-id --keep-allele-order --snps-only --keep ${poplist} --freq --nonfounders --out ${outdir}/freq_${pop}
-        
-        #use freq data
+        #use freq data\\
+        #check if data already exists befor running the job
+        if [[ ! -s ${outdir}/inb_${pop}.het ]]; then
         bsub -J"inb_${pop}" -o"${outdir}/%J_inb_${pop}.o" -q normal -M${mem} -n2 -R"span[hosts=1] select[mem>=${mem}] rusage[mem=${mem}]" -- plink --vcf ${pop_path} --biallelic-only --double-id --keep-allele-order --snps-only --keep ${poplist} --het --out ${outdir}/inb_${pop}
+        else
+          echo "File ${outdir}/inb_${pop}.het already generated!!"  #statements
+        fi
+        if [[ ! -s ${outdir}/ibc_${pop}.ibc ]]; then
         bsub -J"ibc_${pop}" -o"${outdir}/%J_ibc_${pop}.o" -q normal -M${mem} -n2 -R"span[hosts=1] select[mem>=${mem}] rusage[mem=${mem}]" -- plink --vcf ${pop_path} --biallelic-only --double-id --keep-allele-order --snps-only --keep ${poplist} --ibc --out ${outdir}/ibc_${pop}
+        else
+          echo "File ${outdir}/ibc_${pop}.ibc already generated!!"  #statements
+        fi
     done
   ;;
   HWECLEAN )
