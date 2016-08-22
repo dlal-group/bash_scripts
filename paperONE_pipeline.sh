@@ -386,6 +386,7 @@ case $MODE in
     pop_path=$2
     pop_count=$3
     pop_base=$4
+    mem=$5
     outdir=${pop_base}/results
     mkdir -p ${outdir}
 
@@ -397,8 +398,8 @@ case $MODE in
         # bsub -J"freq_${pop}" -o"${outdir}/%J_freq_${pop}.o" -q normal -M4000 -n2 -R"span[hosts=1] select[mem>=4000] rusage[mem=4000]" -- plink --vcf ${pop_path} --biallelic-only --double-id --keep-allele-order --snps-only --keep ${poplist} --freq --nonfounders --out ${outdir}/freq_${pop}
         
         #use freq data
-        bsub -J"inb_${pop}" -o"${outdir}/%J_inb_${pop}.o" -q normal -M4000 -n2 -R"span[hosts=1] select[mem>=4000] rusage[mem=4000]" -- plink --vcf ${pop_path} --biallelic-only --double-id --keep-allele-order --snps-only --keep ${poplist} --het --out ${outdir}/inb_${pop}
-        bsub -J"ibc_${pop}" -o"${outdir}/%J_ibc_${pop}.o" -q normal -M4000 -n2 -R"span[hosts=1] select[mem>=4000] rusage[mem=4000]" -- plink --vcf ${pop_path} --biallelic-only --double-id --keep-allele-order --snps-only --keep ${poplist} --ibc --out ${outdir}/ibc_${pop}
+        bsub -J"inb_${pop}" -o"${outdir}/%J_inb_${pop}.o" -q normal -M${mem} -n2 -R"span[hosts=1] select[mem>=${mem}] rusage[mem=${mem}]" -- plink --vcf ${pop_path} --biallelic-only --double-id --keep-allele-order --snps-only --keep ${poplist} --het --out ${outdir}/inb_${pop}
+        bsub -J"ibc_${pop}" -o"${outdir}/%J_ibc_${pop}.o" -q normal -M${mem} -n2 -R"span[hosts=1] select[mem>=${mem}] rusage[mem=${mem}]" -- plink --vcf ${pop_path} --biallelic-only --double-id --keep-allele-order --snps-only --keep ${poplist} --ibc --out ${outdir}/ibc_${pop}
     done
   ;;
   HWECLEAN )
