@@ -27,12 +27,12 @@ chrom=sys.argv[5]
 # chrom=1
 outdir=sys.argv[6]
 
-# legend1="1.INGI_REF.CARL_FVG_VBI.legend.gz"
+# legend1="/netapp/dati/WGS_REF_PANEL/REFERENCES/CARL_FVG_VBI/1/1.INGI_REF.CARL_FVG_VBI.legend.gz"
 # panel1="CARL_FVG_VBI"
-# legend2="1.INGI_REF.CARL_FVG_VBI_TGP3_ALL.legend.gz"
+# legend2="/netapp/dati/WGS_REF_PANEL/REFERENCES/CARL_FVG_VBI_TGP3_ALL/1/1.INGI_REF.CARL_FVG_VBI_TGP3_ALL.legend.gz"
 # panel2="CARL_FVG_VBI_TGP3_ALL"
 # chrom=1
-# outdir="/netapp/dati/WGS_REF_PANEL/REFERENCES/TEST/1/"
+# outdir="/netapp/dati/WGS_REF_PANEL/REFERENCES/OVERLAP/1/"
 
 # we need to read one legend file and transform all in a dictionary
 legend1_dict={}
@@ -58,6 +58,12 @@ for d in (legend1_dict, legend2_dict):
 	for k,v in d.iteritems():
 		all_panels[k].append(v)
 
+ingi_only=open('%s/chr%s_%s_%s.ingi_only' %(outdir, chrom,panel1,panel2), 'w')
+for key in all_panels:
+	if all_panels[key] == ["CARL_FVG_VBI"]:
+		print >> ingi_only,'%s %s %s ' %(chrom,key.split("_")[0],key.split("_")[1],key.split("_")[2])
+ingi_only.close()
+		
 #now we count how many sites are in panel 1, how manin in panel 2 and how many in both, and print it
 share_count = [(k, len(list(v))) for k, v in itertools.groupby(sorted(all_panels.values()))]
 
