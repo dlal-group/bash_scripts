@@ -301,3 +301,12 @@ chr=$3
 (zcat /lustre/scratch113/projects/esgi-vbseq/02032016_INGI_REF_PANEL/IMPUTE/${pop1}_${pop2}/${chr}/${chr}.INGI_REF.${pop1}_${pop2}.*.hap.gz ) | gzip -c > /lustre/scratch113/projects/esgi-vbseq/02032016_INGI_REF_PANEL/IMPUTE/${pop1}_${pop2}/${chr}/${chr}.INGI_REF.${pop1}_${pop2}.hap.gz
 # (echo "id position a0 a1";(zgrep -v position -h /lustre/scratch113/projects/esgi-vbseq/02032016_INGI_REF_PANEL/IMPUTE/${pop1}_${pop2}/${chr}/${chr}.INGI_REF.${pop1}_${pop2}.legend.gz | awk -v chrom=${chr} '{print chrom":"$2"_"$3"_"$4,$2,$3,$4}')) | gzip -c > /lustre/scratch113/projects/esgi-vbseq/02032016_INGI_REF_PANEL/IMPUTE/${pop1}_${pop2}/${chr}/${chr}.INGI_REF.${pop1}_${pop2}.reformatted.legend.gz
 /lustre/scratch113/projects/esgi-vbseq/02032016_INGI_REF_PANEL/IMPUTE/CARL_FVG_VBI_TGP3_ALL/1/1.INGI_REF.CARL_FVG_VBI_TGP3_ALL.050.legend.gz:
+
+check overlapping data between INGI and TGP3
+
+for i in {1..22}
+do
+	
+
+
+done
