@@ -1,7 +1,7 @@
 #!/usr/bin/env python2.7
 #script used to check overlap between two different legend files
-import gzip 
 import re 
+import gzip 
 import sys 
 import subprocess as sub
 import time
@@ -26,7 +26,13 @@ panel2=sys.argv[4]
 chrom=sys.argv[5]
 # chrom=1
 outdir=sys.argv[6]
-# outdir="/netapp02/data/imputation/INGI_TGP3/impute/FVG/MERGED/CLEANED"
+
+# legend1="1.INGI_REF.CARL_FVG_VBI.legend.gz"
+# panel1="CARL_FVG_VBI"
+# legend2="1.INGI_REF.CARL_FVG_VBI_TGP3_ALL.legend.gz"
+# panel2="CARL_FVG_VBI_TGP3_ALL"
+# chrom=1
+# outdir="/netapp/dati/WGS_REF_PANEL/REFERENCES/TEST/1/"
 
 # we need to read one legend file and transform all in a dictionary
 legend1_dict={}
@@ -35,21 +41,22 @@ with gzip.open('%s' %(legend1) ,'r') as legend1_file:
 	next(legend1_file)
 	for c_row in legend1_file:
 		site=c_row.rstrip().split(" ")
-		legend1_dict["_".join(site)] = panel1
+		legend1_dict["_".join((site[1],site[2],site[3]))] = panel1
 
 legend2_dict={}
 with gzip.open('%s' %(legend2) ,'r') as legend2_file:
 	next(legend2_file)
 	for c_row2 in legend2_file:
 		site2=c_row2.rstrip().split(" ")
-		legend2_dict["_".join(site2)] = panel2
+		legend2_dict["_".join((site2[1],site2[2],site2[3]))] = panel2
 
 #now we define a dictionary in wich we will merge the two dict previously created
 #so that we have the same key, but the value will be the name of one panel o the othe or both of them
 all_panels=collections.defaultdict(list)
 
-for k,v in itertools.chain(legend1_dict.iteritems(), legend2_dict.iteritems()):
-	all_panels.setdefault(k, []).extend(v)
+for d in (legend1_dict, legend2_dict):
+	for k,v in d.iteritems():
+		all_panels[k].append(v)
 
 #now we count how many sites are in panel 1, how manin in panel 2 and how many in both, and print it
 share_count = [(k, len(list(v))) for k, v in itertools.groupby(sorted(all_panels.values()))]
