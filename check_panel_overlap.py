@@ -55,8 +55,8 @@ for k,v in itertools.chain(legend1_dict.iteritems(), legend2_dict.iteritems()):
 share_count = [(k, len(list(v))) for k, v in itertools.groupby(sorted(all_panels.values()))]
 
 panel_share=open('%s/chr%s_%s_%s.share' %(outdir, chrom,panel1,panel2), 'w')
-print >> panel_share,'%s %s %s ' %(panel_share[0][0],panel_share[1][0].panel_share[2][0])
-print >> panel_share,'%s %s %s ' %(panel_share[0][1],panel_share[1][1].panel_share[2][1])
+print >> panel_share,'%s %s %s ' %(share_count[0][0],share_count[1][0].share_count[2][0])
+print >> panel_share,'%s %s %s ' %(share_count[0][1],share_count[1][1].share_count[2][1])
 panel_share.close()
 
 #now lets print the list of sites to keep			
