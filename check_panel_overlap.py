@@ -35,14 +35,14 @@ with gzip.open('%s' %(legend1) ,'r') as legend1_file:
 	next(legend1_file)
 	for c_row in legend1_file:
 		site=c_row.rstrip().split(" ")
-		legend1_dict[site.join("_")] = panel1
+		legend1_dict["_".join(site)] = panel1
 
 legend2_dict={}
 with gzip.open('%s' %(legend2) ,'r') as legend2_file:
 	next(legend2_file)
 	for c_row2 in legend2_file:
 		site2=c_row2.rstrip().split(" ")
-		legend2_dict[site2.join("_")] = panel2
+		legend2_dict["_".join(site2)] = panel2
 
 #now we define a dictionary in wich we will merge the two dict previously created
 #so that we have the same key, but the value will be the name of one panel o the othe or both of them
