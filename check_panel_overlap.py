@@ -6,7 +6,7 @@ import sys
 import subprocess as sub
 import time
 import collections
-from itertools
+import itertools
 
 #this script is meant to be usede to check stuff on the reference panel input files, like duplicates or triplicates row
 # alleles mismatches or other stuff
