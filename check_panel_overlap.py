@@ -48,7 +48,7 @@ with gzip.open('%s' %(legend2) ,'r') as legend2_file:
 #so that we have the same key, but the value will be the name of one panel o the othe or both of them
 all_panels=collections.defaultdict(list)
 
-for k,v in itertools.chain(legend1.iteritems(), legend2.iteritems()):
+for k,v in itertools.chain(legend1_dict.iteritems(), legend2_dict.iteritems()):
 	all_panels.setdefault(k, []).extend(v)
 
 #now we count how many sites are in panel 1, how manin in panel 2 and how many in both, and print it
