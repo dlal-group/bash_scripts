@@ -10,6 +10,7 @@ file=$1
 chr=$2
 outpath=$3
 file_name=`basename ${file}`
+mode=$4
 # chr=`echo ${file_name%%.*}|sed 's/chr//g'`
 ##################################################################################################################################################
 #ATTENTION: to generate the bimbam file we check if the snp id column matches the pattern "rs*" if this is not the case, we set the rsID to "NA"!!!
@@ -19,10 +20,28 @@ file_name=`basename ${file}`
 
 # this is to generate bimbam without allele information in the rsID field
 # zcat $file | awk '{s=(NF-5)/3;gsub(/,/, "_", $2);printf $2 "," $4 "," $5; for(i=1; i<=s; i++) printf "," $(i*3+3)*2+$(i*3+4); printf "\n"}' | gzip > $outpath/$file_name
+case $mode in
+	ALL )
+		#just in case of qctool merging of files we need to remove the first column
+		# zcat $file|cut -f 2- -d " " | awk -v chr=${chr} '{ snp=(NF-5)/3; printf "chr"chr":"$3","$4","$5; for(i=1; i<=snp; i++) printf "," $(i*3+3)*2+$(i*3+4); printf "\n" }' > ${outpath}/${file_name}.bimbam
+		zcat ${file} | awk -v chr=${chr} '{ snp=(NF-5)/3; printf "chr"chr":"$3","$4","$5; for(i=1; i<=snp; i++) printf "," $(i*3+3)*2+$(i*3+4); printf "\n" }' | gzip -c > ${outpath}/${file_name}.bimbam.gz
+		#just in case of qctool merging of files we need to remove the first column
+		# zcat $file|cut -f 2- -d " " | awk -v chrom=$chr '{printf "chr"chrom":"$3","$3","chrom"\n"}' > $outpath/$file_name.pos
+		zcat $file | awk -v chr=${chr} '{printf "chr"chr":"$3","$3","chr"\n"}' > $outpath/$file_name.pos
+	;;
+	GEN)
+		#just in case of qctool merging of files we need to remove the first column
+		# zcat $file|cut -f 2- -d " " | awk -v chr=${chr} '{ snp=(NF-5)/3; printf "chr"chr":"$3","$4","$5; for(i=1; i<=snp; i++) printf "," $(i*3+3)*2+$(i*3+4); printf "\n" }' > ${outpath}/${file_name}.bimbam
+		zcat ${file} | awk -v chr=${chr} '{ snp=(NF-5)/3; printf "chr"chr":"$3","$4","$5; for(i=1; i<=snp; i++) printf "," $(i*3+3)*2+$(i*3+4); printf "\n" }' | gzip -c > ${outpath}/${file_name}.bimbam.gz
+	;;
+	POS)
+		#command to create position annotation files for gemma
+		zcat $file | awk -v chr=${chr} '{printf "chr"chr":"$3","$3","chr"\n"}' > $outpath/$file_name.pos
+		#just in case of qctool merging of files we need to remove the first column
+		# zcat $file|cut -f 2- -d " " | awk -v chrom=$chr '{printf "chr"chrom":"$3","$3","chrom"\n"}' > $outpath/$file_name.pos
+	;;
+esac
 
-zcat ${file} | awk -v chr=${chr} '{ snp=(NF-5)/3; printf "chr"chr":"$3","$4","$5; for(i=1; i<=snp; i++) printf "," $(i*3+3)*2+$(i*3+4); printf "\n" }' | gzip -c > ${outpath}/${file_name}.bimbam.gz
-#just in case of qctool merging of files we need to remove the first column
-# zcat $file|cut -f 2- -d " " | awk -v chr=${chr} '{ snp=(NF-5)/3; printf "chr"chr":"$3","$4","$5; for(i=1; i<=snp; i++) printf "," $(i*3+3)*2+$(i*3+4); printf "\n" }' > ${outpath}/${file_name}.bimbam
 
 #command to create position annotation files for gemma
 # chrom=${file_name%%.*}
@@ -30,8 +49,5 @@ zcat ${file} | awk -v chr=${chr} '{ snp=(NF-5)/3; printf "chr"chr":"$3","$4","$5
 
 # zcat $file | awk -v chrom=$chr '{gsub(/,/, "_", $2);printf $2 "," $3 "," chrom "\n"}' > $outpath/$file_name.pos
 
-zcat $file | awk -v chr=${chr} '{printf "chr"chr":"$3","$3","chrom"\n"}' > $outpath/$file_name.pos
-#just in case of qctool merging of files we need to remove the first column
-# zcat $file|cut -f 2- -d " " | awk -v chrom=$chr '{printf "chr"chrom":"$3","$3","chrom"\n"}' > $outpath/$file_name.pos
 
 
