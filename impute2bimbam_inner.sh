@@ -27,7 +27,7 @@ case $mode in
 		zcat ${file} | awk -v chr=${chr} '{ snp=(NF-5)/3; printf "chr"chr":"$3","$4","$5; for(i=1; i<=snp; i++) printf "," $(i*3+3)*2+$(i*3+4); printf "\n" }' | gzip -c > ${outpath}/${file_name}.bimbam.gz
 		#just in case of qctool merging of files we need to remove the first column
 		# zcat $file|cut -f 2- -d " " | awk -v chrom=$chr '{printf "chr"chrom":"$3","$3","chrom"\n"}' > $outpath/$file_name.pos
-		zcat $file | awk -v chr=${chr} '{printf "chr"chr":"$3","$3","chr"\n"}' > $outpath/$file_name.pos
+		zcat $file | awk -v chrom=${chr} '{printf "chr"chrom":"$3","$3","chrom"\n"}' > $outpath/$file_name.pos
 	;;
 	GEN)
 		#just in case of qctool merging of files we need to remove the first column
@@ -36,7 +36,7 @@ case $mode in
 	;;
 	POS)
 		#command to create position annotation files for gemma
-		zcat $file | awk -v chr=${chr} '{printf "chr"chr":"$3","$3","chr"\n"}' > $outpath/$file_name.pos
+		zcat $file | awk -v chrom=${chr} '{printf "chr"chrom":"$3","$3","chrom"\n"}' > $outpath/$file_name.pos
 		#just in case of qctool merging of files we need to remove the first column
 		# zcat $file|cut -f 2- -d " " | awk -v chrom=$chr '{printf "chr"chrom":"$3","$3","chrom"\n"}' > $outpath/$file_name.pos
 	;;
