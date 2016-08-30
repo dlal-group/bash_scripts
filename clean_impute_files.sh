@@ -101,8 +101,10 @@ case $mode in
 		echo "ENDED!!"
 		;;
 	CLEAN )
-	echo "Clean temporary files"
+	echo "Clean temporary files from all steps!"
 		rm ${basefolder}/${pop}/MERGED/CLEANED/RECODED/FILEVECTOR/${chr}/chr${chr}.gen.gz.gen
+		rm ${basefolder}/${pop}/chr${chr}.gen_tmp1.gz
+		rm ${basefolder}/${pop}/chr${chr}.gen_tmp1_info
 		echo "ENDED!!"
 		;;
 esac
