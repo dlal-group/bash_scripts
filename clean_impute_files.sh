@@ -105,6 +105,8 @@ case $mode in
 		rm ${basefolder}/${pop}/MERGED/CLEANED/RECODED/FILEVECTOR/${chr}/chr${chr}.gen.gz.gen
 		rm ${basefolder}/${pop}/chr${chr}.gen_tmp1.gz
 		rm ${basefolder}/${pop}/chr${chr}.gen_tmp1_info
+		mv ${basefolder}/${pop}/MERGED/ALL/BIMBAM/chr${chr}.gen.gz.bimbam.gz ${basefolder}/${pop}/MERGED/ALL/BIMBAM/chr${chr}.bimbam.gz
+		mv ${basefolder}/${pop}/MERGED/ALL/BIMBAM/chr${chr}.gen.gz.pos ${basefolder}/${pop}/MERGED/ALL/BIMBAM/chr${chr}.bimbam.pos
 		echo "ENDED!!"
 		;;
 esac

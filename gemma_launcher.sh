@@ -12,6 +12,7 @@ pheno_path=$2 #phenotype file path
 #we'll read a phenotype list file: each row containd the phenotype name and the phenotype column number in the gemma phenotype file
 kinship=$3 #kinship matrix path
 cov=$4 #covariate file path
+platform=$5 #could be SANGER or GENEMONSTER
 
 
 if [ $# -lt 3 ]
@@ -54,8 +55,7 @@ do
 	then
 	#here goes the for loop for the chr
 		echo $line
-		# for chr in {1..22} X
-		for chr in X
+		for chr in 22
 		do
 			#command for farm 3
 			if [ $# -eq 4 ]
@@ -71,7 +71,14 @@ do
 				##gemma 0.93
 				# bsub -J "gemma_${trait}_${chr}" -o "LOGS/%J_gemma_${trait}_${chr}.log" -e "LOGS/%J_gemma_${trait}_${chr}.err" -M3500 -R"select[mem>=3500] rusage[mem=3500]" -q normal -- /nfs/users/nfs_j/jh21/programs/gemma.0.93 -g ${bimbam_path}/chr${chr}.bimbam -p ${pheno_path}/gemma_pheno.txt -a ${bimbam_path}/chr${chr}.bimbam.pos -k ${kinship} -c ${cov} -maf 0 -miss 0 -lmm 4 -n ${trait_n} -o ${outfile}
 				##gemma 0.94
-				bsub -J "gemma_${trait}_${chr}" -o "LOGS/%J_gemma_${trait}_${chr}.log" -e "LOGS/%J_gemma_${trait}_${chr}.err" -M3500 -R"select[mem>=3500] rusage[mem=3500]" -q normal -- gemma -g ${bimbam_path}/chr${chr}.bimbam.gz -p ${pheno_path}/gemma_pheno.txt -a ${bimbam_path}/chr${chr}.bimbam.pos -k ${kinship} -c ${cov} -maf 0 -miss 0 -fa 4 -n ${trait_n} -o ${outfile}
+				case $platform in
+					SANGER )
+						bsub -J "gemma_${trait}_${chr}" -o "LOGS/%J_gemma_${trait}_${chr}.log" -e "LOGS/%J_gemma_${trait}_${chr}.err" -M3500 -R"select[mem>=3500] rusage[mem=3500]" -q normal -- gemma -g ${bimbam_path}/chr${chr}.bimbam.gz -p ${pheno_path}/gemma_pheno.txt -a ${bimbam_path}/chr${chr}.bimbam.pos -k ${kinship} -c ${cov} -maf 0 -miss 0 -fa 4 -n ${trait_n} -o ${outfile}
+					;;
+					GENEMONSTER )
+						qsub -o "LOGS/\$JOB_ID_gemma_${trait}_${chr}.log" -e "LOGS/\$JOB_ID_gemma_${trait}_${chr}.err" -V -N gemma_${trait}_${chr} -l h_vmem=5G -- gemma -g ${bimbam_path}/chr${chr}.bimbam.gz -p ${pheno_path}/gemma_pheno.txt -a ${bimbam_path}/chr${chr}.bimbam.pos -k ${kinship} -c ${cov} -maf 0 -miss 0 -fa 4 -n ${trait_n} -o ${outfile}
+					;;
+				esac
 			else
 				outfile=$trait.chr$chr.tab
 				#with the first command we launch gemma on the whole set of snps, regardless of missing genotypes due to panel merging for fvg cohort
@@ -80,7 +87,14 @@ do
 				# bsub -J "gemma_${trait}_${chr}" -o "LOGS/%J_gemma_${trait}_${chr}.log" -e "LOGS/%J_gemma_${trait}_${chr}.err" -M3500 -R"select[mem>=3500] rusage[mem=3500]" -q normal -- /nfs/users/nfs_j/jh21/programs/gemma.0.93 -g ${bimbam_path}/chr${chr}.bimbam -p ${pheno_path}/gemma_pheno.txt -a ${bimbam_path}/chr${chr}.bimbam.pos -k ${kinship} -maf 0 -miss 0 -lmm 4 -n ${trait_n} -o ${outfile}
 				
 				##gemma 0.94
-				bsub -J "gemma_${trait}_${chr}" -o "LOGS/%J_gemma_${trait}_${chr}.log" -e "LOGS/%J_gemma_${trait}_${chr}.err" -M3500 -R"select[mem>=3500] rusage[mem=3500]" -q normal -- gemma -g ${bimbam_path}/chr${chr}.bimbam.gz -p ${pheno_path}/gemma_pheno.txt -a ${bimbam_path}/chr${chr}.bimbam.pos -k ${kinship} -maf 0 -miss 0 -fa 4 -n ${trait_n} -o ${outfile}
+				case $platform in
+					SANGER )
+						bsub -J "gemma_${trait}_${chr}" -o "LOGS/%J_gemma_${trait}_${chr}.log" -e "LOGS/%J_gemma_${trait}_${chr}.err" -M3500 -R"select[mem>=3500] rusage[mem=3500]" -q normal -- gemma -g ${bimbam_path}/chr${chr}.bimbam.gz -p ${pheno_path}/gemma_pheno.txt -a ${bimbam_path}/chr${chr}.bimbam.pos -k ${kinship} -maf 0 -miss 0 -fa 4 -n ${trait_n} -o ${outfile}
+						;;
+					GENEMONSTER )
+						qsub -N gemma_${trait}_${chr} -o "LOGS/\$JOB_ID_gemma_${trait}_${chr}.log" -e "LOGS/\$JOB_ID_gemma_${trait}_${chr}.err" -V -l h_vmem=5G -- gemma -g ${bimbam_path}/chr${chr}.bimbam.gz -p ${pheno_path}/gemma_pheno.txt -a ${bimbam_path}/chr${chr}.bimbam.pos -k ${kinship} -maf 0 -miss 0 -fa 4 -n ${trait_n} -o ${outfile}
+						;;
+				esac
 				
 				#if we want to remove snps with missing data!!(but the miss option removes the sample or the snp??)
 				#bsub -J "gemma_${trait}_${chr}" -o "%J_gemma_${trait}_${chr}.log" -e "%J_gemma_${trait}_${chr}.err" -M7000 -R"select[mem>=7000] rusage[mem=7000]" -q normal -- /nfs/users/nfs_y/ym3/bin/gemma -g ${bimbam_path}/chr${chr}.bimbam -p ${pheno_path}/gemma_pheno.txt -a ${bimbam_path}/chr${chr}.bimbam.pos -k ${kinship} -maf 0 -fa 4 -n ${trait_n} -o $trait.chr$chr.tab
@@ -95,7 +109,13 @@ do
 
 				# if [[ $chr_code != "X" ]]
 				# then
-					echo "(head -1 output/${outfile}.assoc.txt;awk '{if(\$1 != \"X\") print \"X\",\$0;else print \$1,\$0}' output/${outfile}.assoc.txt | tail -n+2 | tr \" \" \"\t\" | cut -f 1,3-) | gzip -c > output/${outfile}.assoc.txt.gz" | bsub -J "gemma_${trait}_${chr}_shrink" -o "LOGS/%J_gemma_${trait}_${chr}_shrink.log" -e "LOGS/%J_gemma_${trait}_${chr}_shrink.err" -M2000 -R"select[mem>=2000] rusage[mem=2000]" -q normal
+				case $platform in
+					SANGER )
+						echo "(head -1 output/${outfile}.assoc.txt;awk '{if(\$1 != \"X\") print \"X\",\$0;else print \$1,\$0}' output/${outfile}.assoc.txt | tail -n+2 | tr \" \" \"\t\" | cut -f 1,3-) | gzip -c > output/${outfile}.assoc.txt.gz" | bsub -J "gemma_${trait}_${chr}_shrink" -o "LOGS/%J_gemma_${trait}_${chr}_shrink.log" -e "LOGS/%J_gemma_${trait}_${chr}_shrink.err" -M2000 -R"select[mem>=2000] rusage[mem=2000]" -q normal
+						;;
+					GENEMONSTER )
+						;;
+				esac
 					# echo "(head -1 output/${outfile}.assoc.txt;awk '{if(\$1 != \"X\") print \"X\",\$0;else print \$1,\$0}' output/${outfile}.assoc.txt | tail -n+2 | tr \" \" \"\t\" | cut -f 1,3-) | gzip -c > output/${outfile}.assoc.txt.gz" | bsub -J "gemma_${trait}_${chr}_shrink" -w "ended(gemma_${trait}_${chr})" -o "LOGS/%J_gemma_${trait}_${chr}_shrink.log" -e "LOGS/%J_gemma_${trait}_${chr}_shrink.err" -M2000 -R"select[mem>=2000] rusage[mem=2000]" -q normal
 				# fi
 			else
@@ -103,7 +123,14 @@ do
 					#statements
 					# echo "skipping output/${outfile}.assoc.txt, already compressed or not existing!!!"
 				# else
-					bsub -J "gemma_${trait}_${chr}_shrink" -w "ended(gemma_${trait}_${chr})" -o "LOGS/%J_gemma_${trait}_${chr}_shrink.log" -e "LOGS/%J_gemma_${trait}_${chr}_shrink.err" -M1000 -R"select[mem>=1000] rusage[mem=1000]" -q normal --  gzip output/${outfile}.assoc.txt
+				case $platform in
+					SANGER )
+						bsub -J "gemma_${trait}_${chr}_shrink" -w "ended(gemma_${trait}_${chr})" -o "LOGS/%J_gemma_${trait}_${chr}_shrink.log" -e "LOGS/%J_gemma_${trait}_${chr}_shrink.err" -M1000 -R"select[mem>=1000] rusage[mem=1000]" -q normal --  gzip output/${outfile}.assoc.txt
+						;;
+					GENEMONSTER )
+						qsub -N gemma_${trait}_${chr}_shrink -o "LOGS/\$JOB_ID_gemma_${trait}_${chr}_shrink.log" -e "LOGS/\$JOB_ID_gemma_${trait}_${chr}_shrink.err" -V -l h_vmem=1G -hold_jid gemma_${trait}_${chr} -- gzip output/${outfile}.assoc.txt
+						;;
+				esac
 					# bsub -J "gemma_${trait}_${chr}_shrink" -o "LOGS/%J_gemma_${trait}_${chr}_shrink.log" -e "LOGS/%J_gemma_${trait}_${chr}_shrink.err" -M1000 -R"select[mem>=1000] rusage[mem=1000]" -q normal --  gzip output/${outfile}.assoc.txt
 				# fi
 			fi
