@@ -88,13 +88,14 @@ do
 				# bsub -J "gemma_${trait}_${chr}" -o "LOGS/%J_gemma_${trait}_${chr}.log" -e "LOGS/%J_gemma_${trait}_${chr}.err" -M3500 -R"select[mem>=3500] rusage[mem=3500]" -q normal -- /nfs/users/nfs_j/jh21/programs/gemma.0.93 -g ${bimbam_path}/chr${chr}.bimbam -p ${pheno_path}/gemma_pheno.txt -a ${bimbam_path}/chr${chr}.bimbam.pos -k ${kinship} -maf 0 -miss 0 -lmm 4 -n ${trait_n} -o ${outfile}
 				
 				##gemma 0.94
+				echo ${platform}
 				case $platform in
 					SANGER )
 						bsub -J "gemma_${trait}_${chr}" -o "LOGS/%J_gemma_${trait}_${chr}.log" -e "LOGS/%J_gemma_${trait}_${chr}.err" -M3500 -R"select[mem>=3500] rusage[mem=3500]" -q normal -- gemma -g ${bimbam_path}/chr${chr}.bimbam.gz -p ${pheno_path}/gemma_pheno.txt -a ${bimbam_path}/chr${chr}.bimbam.pos -k ${kinship} -maf 0 -miss 0 -fa 4 -n ${trait_n} -o ${outfile}
 						;;
 					GENEMONSTER )
 						gemma_cmd=/home/cocca/softwares/gemma095alpha/gemma
-						qsub -N gemma_${trait}_${chr} -o LOGS/\${JOB_ID}_gemma_${trait}_${chr}.log -e LOGS/\${JOB_ID}_gemma_${trait}_${chr}.err -V -l h_vmem=5G -- ${gemma_cmd} -g ${bimbam_path}/chr${chr}.bimbam.gz -p ${pheno_path}/gemma_pheno.txt -a ${bimbam_path}/chr${chr}.bimbam.pos -k ${kinship} -maf 0 -miss 0 -fa 4 -n ${trait_n} -o ${outfile}
+						echo "qsub -N gemma_${trait}_${chr} -o LOGS/\${JOB_ID}_gemma_${trait}_${chr}.log -e LOGS/\${JOB_ID}_gemma_${trait}_${chr}.err -V -l h_vmem=5G -- ${gemma_cmd} -g ${bimbam_path}/chr${chr}.bimbam.gz -p ${pheno_path}/gemma_pheno.txt -a ${bimbam_path}/chr${chr}.bimbam.pos -k ${kinship} -maf 0 -miss 0 -fa 4 -n ${trait_n} -o ${outfile}"
 						;;
 				esac
 				
@@ -121,6 +122,7 @@ do
 					# echo "(head -1 output/${outfile}.assoc.txt;awk '{if(\$1 != \"X\") print \"X\",\$0;else print \$1,\$0}' output/${outfile}.assoc.txt | tail -n+2 | tr \" \" \"\t\" | cut -f 1,3-) | gzip -c > output/${outfile}.assoc.txt.gz" | bsub -J "gemma_${trait}_${chr}_shrink" -w "ended(gemma_${trait}_${chr})" -o "LOGS/%J_gemma_${trait}_${chr}_shrink.log" -e "LOGS/%J_gemma_${trait}_${chr}_shrink.err" -M2000 -R"select[mem>=2000] rusage[mem=2000]" -q normal
 				# fi
 			else
+				echo "Submitting compression job..."
 				# if [[ ! -f output/${outfile}.assoc.txt ]]; then
 					#statements
 					# echo "skipping output/${outfile}.assoc.txt, already compressed or not existing!!!"
