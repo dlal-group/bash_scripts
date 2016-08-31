@@ -55,7 +55,7 @@ do
 	then
 	#here goes the for loop for the chr
 		echo "${trait} -> ${trait_n}"
-		for chr in 22
+		for chr in {1..22}
 		do
 			#command for farm 3
 			if [ $# -eq 5 ]
