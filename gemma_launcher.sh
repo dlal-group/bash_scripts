@@ -48,8 +48,8 @@ mkdir -p LOGS
 while read line
 do
 	#line="7 TLM"
-	trait=$(echo $line | cut -f 2 -d " ")
-	trait_n=$(echo $line | cut -f 1 -d " ")
+	trait=`echo $line | cut -f 2 -d " "`
+	trait_n=`echo $line | cut -f 1 -d " "`
 
 	if [[ $trait != "ID" ]]
 	then
@@ -129,7 +129,7 @@ do
 				# else
 				case $platform in
 					SANGER )
-						bsub -J "gemma_${trait}_${chr}_shrink" -w "ended(gemma_${trait}_${chr})" -o "LOGS/%J_gemma_${trait}_${chr}_shrink.log" -e "LOGS/%J_gemma_${trait}_${chr}_shrink.err" -M1000 -R"select[mem>=1000] rusage[mem=1000]" -q normal --  gzip output/${outfile}.assoc.txt
+						bsub -J "gemma_${trait}_${chr}_shrink" -w "ended(gemma_${trait}_${chr})" -o "LOGS/%J_gemma_${trait}_${chr}_shrink.log" -e "LOGS/%J_gemma_${trait}_${chr}_shrink.err" -M1000 -R"select[mem>=1000] rusage[mem=1000]" -q normal -- gzip output/${outfile}.assoc.txt
 						;;
 					GENEMONSTER )
 						qsub -cwd -N gemma_${trait}_${chr}_shrink -o LOGS/\$JOB_ID_gemma_${trait}_${chr}_shrink.log -e LOGS/\$JOB_ID_gemma_${trait}_${chr}_shrink.err -V -l h_vmem=1G -hold_jid gemma_${trait}_${chr} -- gzip output/${outfile}.assoc.txt
