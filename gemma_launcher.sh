@@ -76,7 +76,8 @@ do
 						bsub -J "gemma_${trait}_${chr}" -o "LOGS/%J_gemma_${trait}_${chr}.log" -e "LOGS/%J_gemma_${trait}_${chr}.err" -M3500 -R"select[mem>=3500] rusage[mem=3500]" -q normal -- gemma -g ${bimbam_path}/chr${chr}.bimbam.gz -p ${pheno_path}/gemma_pheno.txt -a ${bimbam_path}/chr${chr}.bimbam.pos -k ${kinship} -c ${cov} -maf 0 -miss 0 -fa 4 -n ${trait_n} -o ${outfile}
 					;;
 					GENEMONSTER )
-						qsub -o "LOGS/\$JOB_ID_gemma_${trait}_${chr}.log" -e "LOGS/\$JOB_ID_gemma_${trait}_${chr}.err" -V -N gemma_${trait}_${chr} -l h_vmem=5G -- ${gemma_cmd} -g ${bimbam_path}/chr${chr}.bimbam.gz -p ${pheno_path}/gemma_pheno.txt -a ${bimbam_path}/chr${chr}.bimbam.pos -k ${kinship} -c ${cov} -maf 0 -miss 0 -fa 4 -n ${trait_n} -o ${outfile}
+						gemma_cmd=/home/cocca/softwares/gemma095alpha/gemma
+						qsub -o LOGS/\$JOB_ID_gemma_${trait}_${chr}.log -e LOGS/\$JOB_ID_gemma_${trait}_${chr}.err -V -N gemma_${trait}_${chr} -l h_vmem=5G -- ${gemma_cmd} -g ${bimbam_path}/chr${chr}.bimbam.gz -p ${pheno_path}/gemma_pheno.txt -a ${bimbam_path}/chr${chr}.bimbam.pos -k ${kinship} -c ${cov} -maf 0 -miss 0 -fa 4 -n ${trait_n} -o ${outfile}
 					;;
 				esac
 			else
@@ -93,7 +94,7 @@ do
 						;;
 					GENEMONSTER )
 						gemma_cmd=/home/cocca/softwares/gemma095alpha/gemma
-						qsub -N gemma_${trait}_${chr} -o "LOGS/\$JOB_ID_gemma_${trait}_${chr}.log" -e "LOGS/\$JOB_ID_gemma_${trait}_${chr}.err" -V -l h_vmem=5G -- ${gemma_cmd} -g ${bimbam_path}/chr${chr}.bimbam.gz -p ${pheno_path}/gemma_pheno.txt -a ${bimbam_path}/chr${chr}.bimbam.pos -k ${kinship} -maf 0 -miss 0 -fa 4 -n ${trait_n} -o ${outfile}
+						qsub -N gemma_${trait}_${chr} -o LOGS/\$JOB_ID_gemma_${trait}_${chr}.log -e LOGS/\$JOB_ID_gemma_${trait}_${chr}.err -V -l h_vmem=5G -- ${gemma_cmd} -g ${bimbam_path}/chr${chr}.bimbam.gz -p ${pheno_path}/gemma_pheno.txt -a ${bimbam_path}/chr${chr}.bimbam.pos -k ${kinship} -maf 0 -miss 0 -fa 4 -n ${trait_n} -o ${outfile}
 						;;
 				esac
 				
@@ -129,7 +130,7 @@ do
 						bsub -J "gemma_${trait}_${chr}_shrink" -w "ended(gemma_${trait}_${chr})" -o "LOGS/%J_gemma_${trait}_${chr}_shrink.log" -e "LOGS/%J_gemma_${trait}_${chr}_shrink.err" -M1000 -R"select[mem>=1000] rusage[mem=1000]" -q normal --  gzip output/${outfile}.assoc.txt
 						;;
 					GENEMONSTER )
-						qsub -N gemma_${trait}_${chr}_shrink -o "LOGS/\$JOB_ID_gemma_${trait}_${chr}_shrink.log" -e "LOGS/\$JOB_ID_gemma_${trait}_${chr}_shrink.err" -V -l h_vmem=1G -hold_jid gemma_${trait}_${chr} -- gzip output/${outfile}.assoc.txt
+						qsub -N gemma_${trait}_${chr}_shrink -o LOGS/\$JOB_ID_gemma_${trait}_${chr}_shrink.log -e LOGS/\$JOB_ID_gemma_${trait}_${chr}_shrink.err -V -l h_vmem=1G -hold_jid gemma_${trait}_${chr} -- gzip output/${outfile}.assoc.txt
 						;;
 				esac
 					# bsub -J "gemma_${trait}_${chr}_shrink" -o "LOGS/%J_gemma_${trait}_${chr}_shrink.log" -e "LOGS/%J_gemma_${trait}_${chr}_shrink.err" -M1000 -R"select[mem>=1000] rusage[mem=1000]" -q normal --  gzip output/${outfile}.assoc.txt
