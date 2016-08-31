@@ -132,7 +132,7 @@ do
 						bsub -J "gemma_${trait}_${chr}_shrink" -w "ended(gemma_${trait}_${chr})" -o "LOGS/%J_gemma_${trait}_${chr}_shrink.log" -e "LOGS/%J_gemma_${trait}_${chr}_shrink.err" -M1000 -R"select[mem>=1000] rusage[mem=1000]" -q normal --  gzip output/${outfile}.assoc.txt
 						;;
 					GENEMONSTER )
-						qsub -cvd -N gemma_${trait}_${chr}_shrink -o LOGS/\${JOB_ID}_gemma_${trait}_${chr}_shrink.log -e LOGS/\${JOB_ID}_gemma_${trait}_${chr}_shrink.err -V -l h_vmem=1G -hold_jid gemma_${trait}_${chr} -- gzip output/${outfile}.assoc.txt
+						qsub -cvd -N gemma_${trait}_${chr}_shrink -o LOGS/\$JOB_ID_gemma_${trait}_${chr}_shrink.log -e LOGS/\$JOB_ID_gemma_${trait}_${chr}_shrink.err -V -l h_vmem=1G -hold_jid gemma_${trait}_${chr} -- gzip output/${outfile}.assoc.txt
 						;;
 				esac
 					# bsub -J "gemma_${trait}_${chr}_shrink" -o "LOGS/%J_gemma_${trait}_${chr}_shrink.log" -e "LOGS/%J_gemma_${trait}_${chr}_shrink.err" -M1000 -R"select[mem>=1000] rusage[mem=1000]" -q normal --  gzip output/${outfile}.assoc.txt
