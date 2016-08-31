@@ -95,7 +95,7 @@ do
 						;;
 					GENEMONSTER )
 						gemma_cmd=/home/cocca/softwares/gemma095alpha/gemma
-						qsub -cwd -N gemma_${trait}_${chr} -o LOGS/\$JOB_ID_gemma_${trait}_${chr}.log -e LOGS/\$JOB_ID_gemma_${trait}_${chr}.err -V -l h_vmem=5G -- ${gemma_cmd} -g ${bimbam_path}/chr${chr}.bimbam.gz -p ${pheno_path}/gemma_pheno.txt -a ${bimbam_path}/chr${chr}.bimbam.pos -k ${kinship} -maf 0 -miss 0 -fa 4 -n ${trait_n} -o ${outfile}
+						qsub -cwd -N gemma_${trait}_${chr} -o LOGS/\$JOB_ID_gemma_${trait}_${chr}.log -e LOGS/\$JOB_ID_gemma_${trait}_${chr}.err -V -l h_vmem=5G -- /home/cocca/softwares/gemma095alpha/gemma -g ${bimbam_path}/chr${chr}.bimbam.gz -p ${pheno_path}/gemma_pheno.txt -a ${bimbam_path}/chr${chr}.bimbam.pos -k ${kinship} -maf 0 -miss 0 -fa 4 -n ${trait_n} -o ${outfile}
 						;;
 				esac
 				
