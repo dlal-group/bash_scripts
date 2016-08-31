@@ -45,7 +45,7 @@ echo "Correct names for phenotype files detected!!"
 echo "Cracking!!"
 mkdir -p LOGS
 
-while read -r line
+while read line
 do
 	#line="7 TLM"
 	trait=$(echo $line | cut -f 2 -d " ")
