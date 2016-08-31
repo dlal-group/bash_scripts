@@ -102,7 +102,7 @@ case $mode in
 		;;
 	CLEAN )
 	echo "Clean temporary files from all steps and format files!"
-		# rm ${basefolder}/${pop}/MERGED/CLEANED/RECODED/FILEVECTOR/${chr}/chr${chr}.gen.gz.gen
+		rm -r ${basefolder}/${pop}/MERGED/CLEANED/RECODED/FILEVECTOR/${chr}
 		# rm ${basefolder}/${pop}/chr${chr}.gen_tmp1.gz
 		# rm ${basefolder}/${pop}/chr${chr}.gen_tmp1_info
 		# mv ${basefolder}/${pop}/MERGED/ALL/BIMBAM/chr${chr}.gen.gz.bimbam.gz ${basefolder}/${pop}/MERGED/ALL/BIMBAM/chr${chr}.bimbam.gz
