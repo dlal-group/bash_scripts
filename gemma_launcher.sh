@@ -11,18 +11,18 @@ bimbam_path=$1 #same for genotypes and pos files
 pheno_path=$2 #phenotype file path
 #we'll read a phenotype list file: each row containd the phenotype name and the phenotype column number in the gemma phenotype file
 kinship=$3 #kinship matrix path
-cov=$4 #covariate file path
-platform=$5 #could be SANGER or GENEMONSTER
+platform=$4 #could be SANGER or GENEMONSTER
+cov=$5 #covariate file path
 
 
-if [ $# -lt 3 ]
+if [ $# -lt 4 ]
 then
 	echo "MISSING ARGUMENTS!!!"
-	echo -e "USAGE:\ngemma_launcher.sh <bimbam_path> <pheno_path> <kinship_file_path> [<cov file path>]"
+	echo -e "USAGE:\ngemma_launcher.sh <bimbam_path> <pheno_path> <kinship_file_path> <platform[SANGER|GENEMONSTER]> [<cov file path>]"
 	exit 1
 fi
 
-if [ $# -eq 4 ]
+if [ $# -eq 5 ]
 then
 	echo "ADDED COVARIATE FILE!!!"
 fi
@@ -58,7 +58,7 @@ do
 		for chr in 22
 		do
 			#command for farm 3
-			if [ $# -eq 4 ]
+			if [ $# -eq 5 ]
 			then
 				#we want to provide also a covariate file for conditional analyses
 				#so we check for a new argument: the covariate file path. If provided we run the analyses with this covariate
@@ -76,7 +76,7 @@ do
 						bsub -J "gemma_${trait}_${chr}" -o "LOGS/%J_gemma_${trait}_${chr}.log" -e "LOGS/%J_gemma_${trait}_${chr}.err" -M3500 -R"select[mem>=3500] rusage[mem=3500]" -q normal -- gemma -g ${bimbam_path}/chr${chr}.bimbam.gz -p ${pheno_path}/gemma_pheno.txt -a ${bimbam_path}/chr${chr}.bimbam.pos -k ${kinship} -c ${cov} -maf 0 -miss 0 -fa 4 -n ${trait_n} -o ${outfile}
 					;;
 					GENEMONSTER )
-						qsub -o "LOGS/\$JOB_ID_gemma_${trait}_${chr}.log" -e "LOGS/\$JOB_ID_gemma_${trait}_${chr}.err" -V -N gemma_${trait}_${chr} -l h_vmem=5G -- gemma -g ${bimbam_path}/chr${chr}.bimbam.gz -p ${pheno_path}/gemma_pheno.txt -a ${bimbam_path}/chr${chr}.bimbam.pos -k ${kinship} -c ${cov} -maf 0 -miss 0 -fa 4 -n ${trait_n} -o ${outfile}
+						qsub -o "LOGS/\$JOB_ID_gemma_${trait}_${chr}.log" -e "LOGS/\$JOB_ID_gemma_${trait}_${chr}.err" -V -N gemma_${trait}_${chr} -l h_vmem=5G -- ${gemma_cmd} -g ${bimbam_path}/chr${chr}.bimbam.gz -p ${pheno_path}/gemma_pheno.txt -a ${bimbam_path}/chr${chr}.bimbam.pos -k ${kinship} -c ${cov} -maf 0 -miss 0 -fa 4 -n ${trait_n} -o ${outfile}
 					;;
 				esac
 			else
@@ -92,7 +92,8 @@ do
 						bsub -J "gemma_${trait}_${chr}" -o "LOGS/%J_gemma_${trait}_${chr}.log" -e "LOGS/%J_gemma_${trait}_${chr}.err" -M3500 -R"select[mem>=3500] rusage[mem=3500]" -q normal -- gemma -g ${bimbam_path}/chr${chr}.bimbam.gz -p ${pheno_path}/gemma_pheno.txt -a ${bimbam_path}/chr${chr}.bimbam.pos -k ${kinship} -maf 0 -miss 0 -fa 4 -n ${trait_n} -o ${outfile}
 						;;
 					GENEMONSTER )
-						qsub -N gemma_${trait}_${chr} -o "LOGS/\$JOB_ID_gemma_${trait}_${chr}.log" -e "LOGS/\$JOB_ID_gemma_${trait}_${chr}.err" -V -l h_vmem=5G -- gemma -g ${bimbam_path}/chr${chr}.bimbam.gz -p ${pheno_path}/gemma_pheno.txt -a ${bimbam_path}/chr${chr}.bimbam.pos -k ${kinship} -maf 0 -miss 0 -fa 4 -n ${trait_n} -o ${outfile}
+						gemma_cmd=/home/cocca/softwares/gemma095alpha/gemma
+						qsub -N gemma_${trait}_${chr} -o "LOGS/\$JOB_ID_gemma_${trait}_${chr}.log" -e "LOGS/\$JOB_ID_gemma_${trait}_${chr}.err" -V -l h_vmem=5G -- ${gemma_cmd} -g ${bimbam_path}/chr${chr}.bimbam.gz -p ${pheno_path}/gemma_pheno.txt -a ${bimbam_path}/chr${chr}.bimbam.pos -k ${kinship} -maf 0 -miss 0 -fa 4 -n ${trait_n} -o ${outfile}
 						;;
 				esac
 				

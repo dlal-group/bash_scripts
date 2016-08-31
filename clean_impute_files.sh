@@ -86,10 +86,14 @@ case $mode in
 		echo "ENDED!!"
 		;;
 	STEP4 )
-	echo "Fourth step: Filevector conversion"
-	mkdir -p ${basefolder}/${pop}/MERGED/CLEANED/RECODED/FILEVECTOR
-	#here we can convert the RECODED version of the CLEANED files (no duplicates by position)
-	/home/cocca/scripts/bash_scripts/impute2mach_launcher.sh ${chr} ${basefolder}/${pop}/MERGED/CLEANED/RECODED/chr${chr}.gen.gz ${basefolder}/${pop}/MERGED/CLEANED/RECODED/chr${chr}.gen_info ${basefolder}/${pop}/MERGED/CLEANED/chr${chr}.gen_samples ${basefolder}/${pop}/MERGED/CLEANED/RECODED/FILEVECTOR
+		echo "Fourth step: Filevector conversion"
+		mkdir -p ${basefolder}/${pop}/MERGED/CLEANED/RECODED/FILEVECTOR
+		#here we can convert the RECODED version of the CLEANED files (no duplicates by position)
+		/home/cocca/scripts/bash_scripts/impute2mach_launcher.sh ${chr} ${basefolder}/${pop}/MERGED/CLEANED/RECODED/chr${chr}.gen.gz ${basefolder}/${pop}/MERGED/CLEANED/RECODED/chr${chr}.gen_info ${basefolder}/${pop}/MERGED/CLEANED/chr${chr}.gen_samples ${basefolder}/${pop}/MERGED/CLEANED/RECODED/FILEVECTOR
+		#create MAP files (move it in filevector creation step!!)
+		(echo "SNP Position A0 A1 Rsq";tail -n+2 /netapp02/data/imputation/INGI_TGP3/impute/${pop}/MERGED/CLEANED/RECODED/chr${chr}.gen_info | cut -f 2-5,7 -d " ") > ${basefolder}/${pop}/MERGED/CLEANED/RECODED/FILEVECTOR/dose/${pop}_INGI_TGP3_chr${chr}.map
+		(echo "SNP Position A0 A1 Rsq";tail -n+2 /netapp02/data/imputation/INGI_TGP3/impute/${pop}/MERGED/CLEANED/RECODED/chr${chr}.gen_info | cut -f 2-5,7 -d " ") > ${basefolder}/${pop}/MERGED/CLEANED/RECODED/FILEVECTOR/prob/${pop}_INGI_TGP3_chr${chr}.info
+
 		echo "ENDED!!"
 		;;
 	STEP5 )
@@ -103,22 +107,19 @@ case $mode in
 	CLEAN )
 	echo "Clean temporary files from all steps and format files!"
 		rm -r ${basefolder}/${pop}/MERGED/CLEANED/RECODED/FILEVECTOR/${chr}
-		# rm ${basefolder}/${pop}/chr${chr}.gen_tmp1.gz
-		# rm ${basefolder}/${pop}/chr${chr}.gen_tmp1_info
-		# mv ${basefolder}/${pop}/MERGED/ALL/BIMBAM/chr${chr}.gen.gz.bimbam.gz ${basefolder}/${pop}/MERGED/ALL/BIMBAM/chr${chr}.bimbam.gz
-		# mv ${basefolder}/${pop}/MERGED/ALL/BIMBAM/chr${chr}.gen.gz.pos ${basefolder}/${pop}/MERGED/ALL/BIMBAM/chr${chr}.bimbam.pos
-		# mkdir -p ${basefolder}/${pop}/MERGED/CLEANED/RECODED/FILEVECTOR/dose
-		# mkdir -p ${basefolder}/${pop}/MERGED/CLEANED/RECODED/FILEVECTOR/prob
-		# mv ${basefolder}/${pop}/MERGED/CLEANED/RECODED/FILEVECTOR/${chr}.dose.* ${basefolder}/${pop}/MERGED/CLEANED/RECODED/FILEVECTOR/dose/
-		# mv ${basefolder}/${pop}/MERGED/CLEANED/RECODED/FILEVECTOR/${chr}.prob.* ${basefolder}/${pop}/MERGED/CLEANED/RECODED/FILEVECTOR/prob/
+		rm ${basefolder}/${pop}/chr${chr}.gen_tmp1.gz
+		rm ${basefolder}/${pop}/chr${chr}.gen_tmp1_info
+		mv ${basefolder}/${pop}/MERGED/ALL/BIMBAM/chr${chr}.gen.gz.bimbam.gz ${basefolder}/${pop}/MERGED/ALL/BIMBAM/chr${chr}.bimbam.gz
+		mv ${basefolder}/${pop}/MERGED/ALL/BIMBAM/chr${chr}.gen.gz.pos ${basefolder}/${pop}/MERGED/ALL/BIMBAM/chr${chr}.bimbam.pos
+		mkdir -p ${basefolder}/${pop}/MERGED/CLEANED/RECODED/FILEVECTOR/dose
+		mkdir -p ${basefolder}/${pop}/MERGED/CLEANED/RECODED/FILEVECTOR/prob
+		mv ${basefolder}/${pop}/MERGED/CLEANED/RECODED/FILEVECTOR/${chr}.dose.* ${basefolder}/${pop}/MERGED/CLEANED/RECODED/FILEVECTOR/dose/
+		mv ${basefolder}/${pop}/MERGED/CLEANED/RECODED/FILEVECTOR/${chr}.prob.* ${basefolder}/${pop}/MERGED/CLEANED/RECODED/FILEVECTOR/prob/
 		mv ${basefolder}/${pop}/MERGED/CLEANED/RECODED/FILEVECTOR/dose/${chr}.dose.fvd ${basefolder}/${pop}/MERGED/CLEANED/RECODED/FILEVECTOR/dose/${pop}_INGI_TGP3_chr${chr}.fvd
 		mv ${basefolder}/${pop}/MERGED/CLEANED/RECODED/FILEVECTOR/dose/${chr}.dose.fvi ${basefolder}/${pop}/MERGED/CLEANED/RECODED/FILEVECTOR/dose/${pop}_INGI_TGP3_chr${chr}.fvi
 		mv ${basefolder}/${pop}/MERGED/CLEANED/RECODED/FILEVECTOR/prob/${chr}.prob.fvd ${basefolder}/${pop}/MERGED/CLEANED/RECODED/FILEVECTOR/prob/${pop}_INGI_TGP3_chr${chr}.fvd
 		mv ${basefolder}/${pop}/MERGED/CLEANED/RECODED/FILEVECTOR/prob/${chr}.prob.fvi ${basefolder}/${pop}/MERGED/CLEANED/RECODED/FILEVECTOR/prob/${pop}_INGI_TGP3_chr${chr}.fvi
-		#create MAP files (move it in filevector creation step!!)
-		(echo "SNP Position A0 A1 Rsq";tail -n+2 /netapp02/data/imputation/INGI_TGP3/impute/${pop}/MERGED/CLEANED/RECODED/chr${chr}.gen_info | cut -f 2-5,7 -d " ") > ${basefolder}/${pop}/MERGED/CLEANED/RECODED/FILEVECTOR/dose/${pop}_INGI_TGP3_chr${chr}.map
-		(echo "SNP Position A0 A1 Rsq";tail -n+2 /netapp02/data/imputation/INGI_TGP3/impute/${pop}/MERGED/CLEANED/RECODED/chr${chr}.gen_info | cut -f 2-5,7 -d " ") > ${basefolder}/${pop}/MERGED/CLEANED/RECODED/FILEVECTOR/prob/${pop}_INGI_TGP3_chr${chr}.info
-
+		
 		echo "ENDED!!"
 		;;
 esac
