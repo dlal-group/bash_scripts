@@ -1,4 +1,4 @@
-#!/usr/local/bin/bash
+#!/usr/bin/env bash
 
 #script to submit a bunch of gemma jobs
 # input COMPRESSED genotype file = /lustre/scratch113/projects/uk10k/users/jh21/imputed/fvg/uk10k1kg.shapeit
