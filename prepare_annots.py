@@ -56,7 +56,7 @@ for key in all_sites:
 		if len(all_sites[key][v_type]) == 1:
 			variant = map(str,all_sites[key][v_type][0])
 			# keep_variants.append(variant)
-			print '%s' %("\t".join(variant))
+			print "\t".join(variant)
 			# print variant[0],' ',variant[1],' ',variant[2],' ',variant[3],' ',v_type
 		else:
 			#we need to collapse stuff and remove duplicates and print
@@ -64,5 +64,5 @@ for key in all_sites:
 			collapsed_all=[]
 			for a in collapsed:
 				collapsed_all.append(list(set(a)))
-				print '%s' %("\t".join([",".join(sublist) for sublist in collapsed_all]))
+			print "\t".join([",".join(sublist) for sublist in collapsed_all])
 
