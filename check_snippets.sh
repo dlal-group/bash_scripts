@@ -307,6 +307,10 @@ check overlapping data between INGI and TGP3
 for i in {1..22}
 do
 	
+	zcat /netapp/dati/WGS_REF_PANEL/REFERENCES/CARL_FVG_VBI_TGP3_ALL/${i}/${i}.INGI_REF.CARL_FVG_VBI_TGP3_ALL.legend.gz | cut -f 2,3,4 -d " " > zcat /netapp/dati/WGS_REF_PANEL/REFERENCES/CARL_FVG_VBI_TGP3_ALL/${i}/${i}.INGI_REF.CARL_FVG_VBI_TGP3_ALL.pos_all_list
+	zcat /netapp/dati/WGS_REF_PANEL/REFERENCES/TGP3_ALL/${i}/${i}.INGI_REF.TGP3_ALL.legend.gz | cut -f 2,3,4 -d " " > zcat /netapp/dati/WGS_REF_PANEL/REFERENCES/TGP3_ALL/${i}/${i}.INGI_REF.TGP3_ALL.pos_all_list
+
+	awk ''
 
 
 done
