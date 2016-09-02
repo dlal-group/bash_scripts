@@ -36,7 +36,7 @@ for key in all_sites:
 		#we need to behave in a different way if it's multiallelic
 		if len(all_sites[key][v_type]) == 1:
 			variant = map(str,all_sites[key][v_type][0])
-			print "\t".join(variant)
+			sys.stdout.write("\t".join(variant))
 			# print variant[0],' ',variant[1],' ',variant[2],' ',variant[3],' ',v_type
 		else:
 			#we need to collapse stuff and remove duplicates and print
@@ -44,4 +44,4 @@ for key in all_sites:
 			collapsed_all=[]
 			for a in collapsed:
 				collapsed_all.append(list(set(a)))
-			print "\t".join([",".join(sublist) for sublist in collapsed_all])
+			sys.stdout.write("\t".join([",".join(sublist) for sublist in collapsed_all]))
