@@ -6,6 +6,7 @@ import sys
 import time
 import collections
 import itertools
+# import enumerate
 
 
 #prepare data in tab format to be used to add annotations in VCF files
@@ -19,13 +20,15 @@ anno_file = sys.stdin.readlines()
 
 all_sites=collections.defaultdict(lambda: collections.defaultdict(list))
 # with open('%s' %(annotdata) ,'r') as anno_file:
-next(anno_file)
-for c_row in anno_file:
-	site=c_row.rstrip().split(" ")
-	if len(site[2]) != len(site[3]):
-		all_sites[site[1]]["INDEL"].append([site[0],site[1],site[2],site[3],site[4],site[5]])
-	else:
-		all_sites[site[1]]["SNP"].append([site[0],site[1],site[2],site[3],site[4],site[5]])
+for linenum, c_row in enumerate(anno_file):
+# next(anno_file)
+# for c_row in anno_file:
+	if linenum != 0:
+		site=c_row.rstrip().split(" ")
+		if len(site[2]) != len(site[3]):
+			all_sites[site[1]]["INDEL"].append([site[0],site[1],site[2],site[3],site[4],site[5]])
+		else:
+			all_sites[site[1]]["SNP"].append([site[0],site[1],site[2],site[3],site[4],site[5]])
 
 #We need to collapse overlapping annotations
 for key in all_sites:
