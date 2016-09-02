@@ -29,14 +29,13 @@ with open('%s' %(annotdata) ,'r') as anno_file:
 			all_sites[site[1]]["SNP"].append([site[0],site[1],site[2],site[3],site[4],site[5]])
 
 #We need to collapse overlapping annotations
-
 for key in all_sites:
 # key='119902046'
 	for v_type in all_sites[key]:
 		#we need to behave in a different way if it's multiallelic
 		if len(all_sites[key][v_type]) == 1:
 			variant = map(str,all_sites[key][v_type][0])
-			print >> sys.stdout , "\t".join(variant)
+			print >> sys.stdout , '%s' %("\t".join(variant))
 			# print variant[0],' ',variant[1],' ',variant[2],' ',variant[3],' ',v_type
 		else:
 			#we need to collapse stuff and remove duplicates and print
@@ -44,4 +43,4 @@ for key in all_sites:
 			collapsed_all=[]
 			for a in collapsed:
 				collapsed_all.append(list(set(a)))
-			print >> sys.stdout,  "\t".join([",".join(sublist) for sublist in collapsed_all])
+			print >> sys.stdout, '%s' %("\t".join([",".join(sublist) for sublist in collapsed_all]))
