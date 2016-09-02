@@ -32,30 +32,10 @@ with open('%s' %(annotdata) ,'r') as anno_file:
 
 for key in all_sites:
 # key='119902046'
-	# if len(all_sites[key]) > 1:
-	# 	# we have more types of variants in the list
-	# 	if len(all_sites[key]['SNP']) == 1:
-	# 		# nothing to collapse
-	# 		variant = map(str,all_sites[key]['SNP'][0])
-	# 		# keep_variants.append(variant)
-	# 		print '%s' %("\t".join(variant))
-	# 		# print >> keep_in,'%s' %("\t".join(variant))
-	# 		# 9:10025_A_T 10025 A T
-	# 		# print variant[0],' ',variant[1],' ',variant[2],' ',variant[3],' ','SNP'
-	# 	else:
-	# 		#we need to collapse stuff and remove duplicates and print
-	# 		collapsed = zip(*all_sites[key]['SNP'])
-	# 		collapsed_all=[]
-	# 		for a in collapsed:
-	# 			collapsed_all.append(list(set(a)))
-	# 			print '%s' %("\t".join([",".join(sublist) for sublist in collapsed_all]))
-	# else:
-	# 	#we only have a single type of variant in that position
 	for v_type in all_sites[key]:
-		#we keep it if its not multiallelic
+		#we need to behave in a different way if it's multiallelic
 		if len(all_sites[key][v_type]) == 1:
 			variant = map(str,all_sites[key][v_type][0])
-			# keep_variants.append(variant)
 			print "\t".join(variant)
 			# print variant[0],' ',variant[1],' ',variant[2],' ',variant[3],' ',v_type
 		else:
@@ -65,4 +45,3 @@ for key in all_sites:
 			for a in collapsed:
 				collapsed_all.append(list(set(a)))
 			print "\t".join([",".join(sublist) for sublist in collapsed_all])
-
