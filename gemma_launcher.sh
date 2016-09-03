@@ -77,7 +77,7 @@ do
 					;;
 					GENEMONSTER )
 						gemma_cmd=/home/cocca/softwares/gemma095alpha/gemma
-						echo "${gemma_cmd} -g ${bimbam_path}/chr${chr}.bimbam.gz -p ${pheno_path}/gemma_pheno.txt -a ${bimbam_path}/chr${chr}.bimbam.pos -k ${kinship} -c ${cov} -maf 0 -miss 0 -lm 4 -n ${trait_n} -o ${outfile}" | qsub -cwd -o LOGS/\$JOB_ID_gemma_${trait}_${chr}.log -e LOGS/\$JOB_ID_gemma_${trait}_${chr}.err -V -N gemma_${trait}_${chr} -l h_vmem=15G 
+						echo "${gemma_cmd} -g ${bimbam_path}/chr${chr}.bimbam.gz -p ${pheno_path}/gemma_pheno.txt -a ${bimbam_path}/chr${chr}.bimbam.pos -k ${kinship} -c ${cov} -maf 0 -miss 0 -lm 4 -n ${trait_n} -o ${outfile}" | qsub -cwd -o LOGS/\$JOB_ID_gemma_${trait}_${chr}.log -e LOGS/\$JOB_ID_gemma_${trait}_${chr}.err -V -N gemma_${trait}_${chr} -l h_vmem=12G 
 					;;
 				esac
 			else
@@ -96,7 +96,7 @@ do
 					GENEMONSTER )
 						echo "We're about to submit the analysis..."
 						gemma_cmd=/home/cocca/softwares/gemma095alpha/gemma
-						echo "${gemma_cmd} -g ${bimbam_path}/chr${chr}.bimbam.gz -p ${pheno_path}/gemma_pheno.txt -a ${bimbam_path}/chr${chr}.bimbam.pos -k ${kinship} -maf 0 -miss 0 -lm 4 -n ${trait_n} -o ${outfile}" | qsub -cwd -N "gemma_${trait}_${chr}" -o "LOGS/\$JOB_ID_gemma_${trait}_${chr}.log" -e "LOGS/\$JOB_ID_gemma_${trait}_${chr}.err" -V -l h_vmem=15G 
+						echo "${gemma_cmd} -g ${bimbam_path}/chr${chr}.bimbam.gz -p ${pheno_path}/gemma_pheno.txt -a ${bimbam_path}/chr${chr}.bimbam.pos -k ${kinship} -maf 0 -miss 0 -lm 4 -n ${trait_n} -o ${outfile}" | qsub -cwd -N "gemma_${trait}_${chr}" -o "LOGS/\$JOB_ID_gemma_${trait}_${chr}.log" -e "LOGS/\$JOB_ID_gemma_${trait}_${chr}.err" -V -l h_vmem=12G 
 						;;
 				esac
 				
