@@ -13,16 +13,24 @@ import itertools
 #right now we have six colunms TODO: extend to different number of cols
 
 anno_file = sys.stdin.readlines()
-# annotdata ="test_annots_dupe.tsv"
+# annotdata ="11.TEST.annot"
 
 # Easy peasy:create a dictionary with position and ref alelle as key
 # Values will be annotations
 
 all_sites=collections.defaultdict(lambda: collections.defaultdict(list))
+# FOR TESTING POURPUSES ONLY...or to use file name as argument
 # with open('%s' %(annotdata) ,'r') as anno_file:
+# 	next(anno_file)
+# 	for c_row in anno_file:
+# 		site=c_row.rstrip().split(" ")
+# 		if len(site[2]) != len(site[3]):
+# 			all_sites[site[1]]["INDEL"].append([site[0],site[1],site[2],site[3],site[4],site[5]])
+# 		else:
+# 			all_sites[site[1]]["SNP"].append([site[0],site[1],site[2],site[3],site[4],site[5]])
+
+#loop to leave in to use stdandard input 
 for linenum, c_row in enumerate(anno_file):
-# next(anno_file)
-# for c_row in anno_file:
 	if linenum != 0:
 		site=c_row.rstrip().split(" ")
 		if len(site[2]) != len(site[3]):
@@ -32,8 +40,9 @@ for linenum, c_row in enumerate(anno_file):
 
 #We need to collapse overlapping annotations
 for key in all_sites:
-# key='119902046'
+# key='48266736'
 	for v_type in all_sites[key]:
+		# v_type='SNP'
 		#we need to behave in a different way if it's multiallelic
 		if len(all_sites[key][v_type]) == 1:
 			variant = map(str,all_sites[key][v_type][0])
@@ -41,8 +50,12 @@ for key in all_sites:
 			# print variant[0],' ',variant[1],' ',variant[2],' ',variant[3],' ',v_type
 		else:
 			#we need to collapse stuff and remove duplicates and print
+			(all_sites[key][v_type]).sort(key=lambda x: x[3])
 			collapsed = zip(*all_sites[key][v_type])
 			collapsed_all=[]
-			for a in collapsed:
-				collapsed_all.append(list(set(a)))
+			for a_num, a in enumerate(collapsed):
+				if a_num < 3:
+					collapsed_all.append(list(set(a)))
+				else:
+					collapsed_all.append(list(a))
 			print >> sys.stdout, '%s' %("\t".join([",".join(sublist) for sublist in collapsed_all]))
