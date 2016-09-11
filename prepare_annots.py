@@ -14,8 +14,8 @@ import itertools
 
 anno_file = sys.stdin.readlines()
 ref_alleles=sys.argv[1]
-# ref_alleles="11.MULTI_SNP.list"
-# annotdata ="11.TEST.annot"
+# ref_alleles="1.MULTI_SNP.list"
+# annotdata ="1.UNFORMATTED.CADD.tab"
 
 # Easy peasy:create a dictionary with position and ref alelle as key
 # Values will be annotations
@@ -63,10 +63,11 @@ for linenum, c_row in enumerate(anno_file):
 
 #We need to collapse overlapping annotations
 for key in all_sites:
-# key='48266736'
+# key='230571673'
 	for v_type in all_sites[key]:
 		# v_type='SNP'
 		#we need to behave in a different way if it's multiallelic
+		print(key)
 		if len(all_sites[key][v_type]) == 1:
 			variant = map(str,all_sites[key][v_type][0])
 			print >> sys.stdout , '%s' %("\t".join(variant))
