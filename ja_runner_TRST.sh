@@ -1,4 +1,4 @@
-#!/usr/local/env bash
+#!/usr/bin/env bash
 
 # This is the runner file run by SGE
 # Arguments: runner.sh filelist
