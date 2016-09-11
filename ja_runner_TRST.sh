@@ -11,6 +11,13 @@ file=`sed -n "${SGE_TASK_ID}p" $1`
 #remove duplicate lines from vcf files
 base_dir=`dirname ${file}`
 file_name=`basename ${file}`
-mkdir -p ${base_dir}/1109206_ANN
-(bcftools view -h ${file};bcftools view -H ${file}| uniq)|bgzip -c > ${base_dir}/1109206_ANN/${file_name}
-tabix -f -p vcf ${base_dir}/1109206_ANN/${file_name}
+mkdir -p ${base_dir}/11092016_ANN
+mkdir -p ${base_dir}/11092016_ANN/TAB
+mkdir -p ${base_dir}/11092016_ANN/TAB_INDEL
+
+(bcftools view -h ${file};bcftools view -H ${file}| uniq)|bgzip -c > ${base_dir}/11092016_ANN/${file_name}
+tabix -f -p vcf ${base_dir}/11092016_ANN/${file_name}
+
+#remove also eventually duplicate lines from CADD annotation files
+zcat ${base_dir}/TAB/${file_name}.scores.tsv.gz| uniq | gzip -c > ${base_dir}/11092016_ANN/TAB/${file_name}.scores.tsv.gz
+zcat ${base_dir}/TAB_INDEL/${file_name}.scores.tsv.gz| uniq | gzip -c > ${base_dir}/11092016_ANN/TAB_INDEL/${file_name}.scores.tsv.gz
