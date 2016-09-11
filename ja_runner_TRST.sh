@@ -4,6 +4,7 @@
 # Arguments: runner.sh filelist
 # Environment variables: SGE_TASK_ID
 # a_size=`wc -l chr${chr}_command.list| cut -f 1 -d " "`;echo "~/scripts/bash_scripts/ja_runner_par_TRST.sh -l $imputedir/chr${chr}_command.list"|qsub -t 1-${a_size} -o ${imputedir}/chr${chr}_\$JOB_ID_\$TASK_ID.log -e ${imputedir}/chr${chr}_\$JOB_ID_\$TASK_ID.e -V -N ${pop}_chr${chr} -l h_vmem=${m}
+set -e
 
 file=`sed -n "${SGE_TASK_ID}p" $1`
 
@@ -35,11 +36,21 @@ do
 
 U_TYPE=`echo ${type^^}`
 
+echo "working on ${U_TYPE}..."
+
 bcftools query -f "%CHROM\t%POS\t%REF\t%ALT\n" -i"TYPE='${type}'" ${base_dir}/11092016_ANN/${file_name} | awk '{if($4~",") print $0}' > ${base_dir}/11092016_ANN/TAB_${U_TYPE}/${chr}.MULTI_${U_TYPE}.list
 
 echo "chr ${chr} .."
 echo "Preparing annotation file...."
-zcat ${base_dir}/11092016_ANN/TAB_${U_TYPE}/${file_name}.scores.tsv.gz| tail -n+2 | awk '{print $1,$2,$3,$5,$(NF-1),$NF}' | prepare_annots.py ${base_dir}/11092016_ANN/TAB_${U_TYPE}/${chr}.MULTI_${U_TYPE}.list | sort -g -k2,2 | bgzip -c > ${base_dir}/11092016_ANN/TAB_${U_TYPE}/${chr}.formatted.CADD.tab.gz
+case ${type} in
+	snp )
+		zcat ${base_dir}/11092016_ANN/TAB_${U_TYPE}/${file_name}.scores.tsv.gz| tail -n+2 | awk '{print $1,$2,$3,$5,$(NF-1),$NF}' | prepare_annots.py ${base_dir}/11092016_ANN/TAB_${U_TYPE}/${chr}.MULTI_${U_TYPE}.list | sort -g -k2,2 | bgzip -c > ${base_dir}/11092016_ANN/TAB_${U_TYPE}/${chr}.formatted.CADD.tab.gz
+	;;
+	indel)
+		zcat ${base_dir}/11092016_ANN/TAB_${U_TYPE}/${file_name}.scores.tsv.gz| tail -n+2 | awk '{print $1,$2,$3,$4,$(NF-1),$NF}' | prepare_annots.py ${base_dir}/11092016_ANN/TAB_${U_TYPE}/${chr}.MULTI_${U_TYPE}.list | sort -g -k2,2 | bgzip -c > ${base_dir}/11092016_ANN/TAB_${U_TYPE}/${chr}.formatted.CADD.tab.gz
+	;;	
+esac
+
 tabix -f -s 1 -b 2 -e 2 ${base_dir}/11092016_ANN/TAB_${U_TYPE}/${chr}.formatted.CADD.tab.gz
 
 mkdir -p ${base_dir}/11092016_ANN/11092016_CADD_ANNOT
