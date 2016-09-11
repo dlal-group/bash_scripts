@@ -67,7 +67,6 @@ for key in all_sites:
 	for v_type in all_sites[key]:
 		# v_type='SNP'
 		#we need to behave in a different way if it's multiallelic
-		print(key)
 		if len(all_sites[key][v_type]) == 1:
 			variant = map(str,all_sites[key][v_type][0])
 			print >> sys.stdout , '%s' %("\t".join(variant))
