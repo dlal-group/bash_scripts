@@ -69,5 +69,5 @@ echo "Join INDEL and SNP file for chr${chr} ..."
 bcftools concat ${base_dir}/11092016_ANN/11092016_CADD_ANNOT/${chr}.SNP.vcf.gz ${base_dir}/11092016_ANN/11092016_CADD_ANNOT/${chr}.INDEL.vcf.gz -O z -o ${base_dir}/11092016_ANN/11092016_CADD_ANNOT/${chr}.JOINT.vcf.gz
 
 echo "Sort by position the JOINT file for chr${chr} ..."
-(bcftools view -h ${base_dir}/11092016_ANN/11092016_CADD_ANNOT/${chr}.JOINT.vcf.gz;bcftools view -H ${base_dir}/11092016_ANN/11092016_CADD_ANNOT/${chr}.JOINT.vcf.gz | sort -g -k2,2 ) | bgzip -c > ${base_dir}/11092016_ANN/11092016_CADD_ANNOT/${chr}.vcf.gz
+(bcftools view -h ${base_dir}/11092016_ANN/11092016_CADD_ANNOT/${chr}.JOINT.vcf.gz;bcftools view -H ${base_dir}/11092016_ANN/11092016_CADD_ANNOT/${chr}.JOINT.vcf.gz | sort -g -k2,2 -T ${base_dir}/11092016_ANN/11092016_CADD_ANNOT/) | bgzip -c > ${base_dir}/11092016_ANN/11092016_CADD_ANNOT/${chr}.vcf.gz
 tabix -p vcf ${base_dir}/11092016_ANN/11092016_CADD_ANNOT/${chr}.vcf.gz
