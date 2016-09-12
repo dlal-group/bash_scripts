@@ -16,12 +16,15 @@ mkdir -p ${base_dir}/11092016_ANN
 mkdir -p ${base_dir}/11092016_ANN/TAB_SNP
 mkdir -p ${base_dir}/11092016_ANN/TAB_INDEL
 
-(bcftools view -h ${file};bcftools view -H ${file}| uniq)|bgzip -c > ${base_dir}/11092016_ANN/${file_name}
-tabix -f -p vcf ${base_dir}/11092016_ANN/${file_name}
+# echo "Cleaning possible duplicate rows in annotated vcfs...."
 
-#remove also eventually duplicate lines from CADD annotation files
-zcat ${base_dir}/TAB/${file_name}.scores.tsv.gz| uniq | gzip -c > ${base_dir}/11092016_ANN/TAB_SNP/${file_name}.scores.tsv.gz
-zcat ${base_dir}/TAB_INDEL/${file_name}.scores.tsv.gz| uniq | gzip -c > ${base_dir}/11092016_ANN/TAB_INDEL/${file_name}.scores.tsv.gz
+# (bcftools view -h ${file};bcftools view -H ${file}| uniq)|bgzip -c > ${base_dir}/11092016_ANN/${file_name}
+# tabix -f -p vcf ${base_dir}/11092016_ANN/${file_name}
+
+# #remove also eventually duplicate lines from CADD annotation files
+# echo "Cleaning possible duplicate rows in annotation files...."
+# zcat ${base_dir}/TAB/${file_name}.scores.tsv.gz| uniq | gzip -c > ${base_dir}/11092016_ANN/TAB_SNP/${file_name}.scores.tsv.gz
+# zcat ${base_dir}/TAB_INDEL/${file_name}.scores.tsv.gz| uniq | gzip -c > ${base_dir}/11092016_ANN/TAB_INDEL/${file_name}.scores.tsv.gz
 
 #Preparing CADD tables to annotate vcf files
 #SNP section
@@ -62,7 +65,9 @@ echo "Chromosome ${chr} done."
 done
 
 #now we join indels and snps back together
-echo "Join INDEL and SNP file for chr${chr}"
+echo "Join INDEL and SNP file for chr${chr} ..."
 bcftools concat ${base_dir}/11092016_ANN/11092016_CADD_ANNOT/${chr}.SNP.vcf.gz ${base_dir}/11092016_ANN/11092016_CADD_ANNOT/${chr}.INDEL.vcf.gz -O z -o ${base_dir}/11092016_ANN/11092016_CADD_ANNOT/${chr}.JOINT.vcf.gz
+
+echo "Sort by position the JOINT file for chr${chr} ..."
 (bcftools view -h ${base_dir}/11092016_ANN/11092016_CADD_ANNOT/${chr}.JOINT.vcf.gz;bcftools view -H ${base_dir}/11092016_ANN/11092016_CADD_ANNOT/${chr}.JOINT.vcf.gz | sort -g -k2,2 ) | bgzip -c > ${base_dir}/11092016_ANN/11092016_CADD_ANNOT/${chr}.vcf.gz
 tabix -p vcf ${base_dir}/11092016_ANN/11092016_CADD_ANNOT/${chr}.vcf.gz
