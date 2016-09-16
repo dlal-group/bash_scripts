@@ -49,7 +49,8 @@ if [[ -s $imputedir/chr${chr}_command.list ]]; then
 	#delete duplicate lines from the command file
 	imputedir=${base_out}/${pop}/${PANEL}$postfix/${chr}
 	echo "Submitting jobs for ${pop},${chr} (PANEL: ${PANEL}) "
-	a_size=`wc -l $imputedir/chr${chr}_command.list| cut -f 1 -d " "`;echo "~/scripts/bash_scripts/ja_runner_par_TRST.sh -l $imputedir/chr${chr}_command.list"|qsub -t 1-${a_size} -o ${imputedir}/chr${chr}_\$JOB_ID_\$TASK_ID.log -e ${imputedir}/chr${chr}_\$JOB_ID_\$TASK_ID.e -V -N ${pop}_chr${chr} -l h_vmem=${m}
+	source ~.time_format_sge
+	a_size=`wc -l $imputedir/chr${chr}_command.list| cut -f 1 -d " "`;echo "/usr/bin/time -f${TIME_FORMAT_SGE} ~/scripts/bash_scripts/ja_runner_par_TRST.sh -l $imputedir/chr${chr}_command.list"|qsub -t 1-${a_size} -o ${imputedir}/chr${chr}_\$JOB_ID_\$TASK_ID.log -e ${imputedir}/chr${chr}_\$JOB_ID_\$TASK_ID.e -V -N ${pop}_chr${chr} -l h_vmem=${m}
 else
 	echo "Chromosome ${chr} already COMPLETED!!job not submitted!! "
 fi
