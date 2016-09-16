@@ -9,7 +9,7 @@
 
 ## from Shane: /lustre/scratch106/projects/uk10k/RELEASE/UK10K_COHORT/REL-2012-06-02/v3/
 
-k_hap=10000 #numbers of haplotypes used by Impute
+# k_hap=10000 #numbers of haplotypes used by Impute
 # refname=uk10k1kg ## 1kg, uk10k, uk10k1kg
 postfix=".shapeit" ## "" or ".shapeit"
 by_chunk=N  ## "Y" or "N"
@@ -34,7 +34,8 @@ base_out=${15}
 exclude_base=${16}
 genotype_base=${17}
 refdir=${18}
-SETUP=${19}
+k_hap=${19} #numbers of haplotypes used by Impute
+SETUP=${20}
 
 # imputedir=/lustre/scratch113/projects/carl_seq/05272015_MERGED_REF_PANEL/IMPUTED/${pop}/${PANEL}$postfix
 # imputedir=/lustre/scratch114/teams/soranzo/users/mc14/fromscratch113/INGI/14102015_MERGED_REF_PANEL/IMPUTED/${pop}/${PANEL}$postfix
