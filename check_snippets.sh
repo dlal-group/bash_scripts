@@ -219,7 +219,6 @@ done
 for pop in MATULLO
 do
 for panel in TGP3_ALL.shapeit CARL_FVG_VBI.shapeit CARL_FVG_VBI_TSI.shapeit CARL_FVG_VBI_TGP3_ALL.shapeit CARL_FVG_VBI_UK10K_TGP3_ALL.shapeit
-# for panel in CARL_FVG_VBI_TGP3_ALL.shapeit
 do
 for chr in 2
 do
