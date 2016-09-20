@@ -52,6 +52,6 @@ if [[ -s $imputedir/chr${chr}_command.list ]]; then
 	source ~/.time_format_sge
 	a_size=`wc -l $imputedir/chr${chr}_command.list| cut -f 1 -d " "`;echo "/usr/bin/time -f'${TIME_FORMAT_SGE}' ~/scripts/bash_scripts/ja_runner_par_TRST.sh -l $imputedir/chr${chr}_command.list"|qsub -t 1-${a_size} -o ${imputedir}/chr${chr}_\$JOB_ID_\$TASK_ID.log -e ${imputedir}/chr${chr}_\$JOB_ID_\$TASK_ID.e -V -N ${pop}_chr${chr} -l h_vmem=${m}
 else
-	echo "Chromosome ${chr} already COMPLETED!!job not submitted!! "
+	echo "Chromosome ${chr} already COMPLETED!!job not submitted!!"
 fi
 # done

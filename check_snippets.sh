@@ -216,7 +216,7 @@ done
 done
 
 
-for pop in MATULLO
+for pop in MATULLO CARL FVG VBI
 do
 for panel in TGP3_ALL.shapeit CARL_FVG_VBI.shapeit CARL_FVG_VBI_TSI.shapeit CARL_FVG_VBI_TGP3_ALL.shapeit CARL_FVG_VBI_UK10K_TGP3_ALL.shapeit
 do
