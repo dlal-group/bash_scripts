@@ -203,13 +203,14 @@ done
 #21/09/2016 fix CARL chr 13 and 18 samples issue
 for pop in CARL
 do
-for i in 13 18
+for i in 18
 do
 nohup /home/cocca/softwares/bin/shapeit -B /netapp/dati/WGS_REF_PANEL/genotypes/${pop}/merged/cleaned/${i}/chr${i} -M /netapp/nfs/resources/1000GP_phase3/impute/genetic_map_chr${i}_combined_b37.txt -O /netapp/dati/WGS_REF_PANEL/genotypes/${pop}/merged/cleaned/${i}/chr${i}.haps.gz /netapp/dati/WGS_REF_PANEL/genotypes/${pop}/merged/cleaned/${i}/chr${i}.sample -T 2 2>&1 &
 done
 done
 
-
+#21/09/2016
+#fix samples number on chr 13 and 18
 nohup /netapp/nfs/softwares/gtool/gtool -S --g /netapp02/data/imputation/INGI_TGP3/CARL/carl/MERGED/ALL/UNFILTERED/chr13.gen.gz --s /netapp02/data/imputation/INGI_TGP3/CARL/carl/MERGED/ALL/UNFILTERED/chr13.gen_samples --sample_id /netapp02/data/imputation/INGI_TGP3/CARL/carl/MERGED/ALL/UNFILTERED/imputed_keeplist.samples --og /netapp02/data/imputation/INGI_TGP3/CARL/carl/MERGED/ALL/FILTERED/chr13.gen.gz --os /netapp02/data/imputation/INGI_TGP3/CARL/carl/MERGED/ALL/FILTERED/chr13.gen_samples 2>&1 &
 
 mkdir -p /netapp02/data/imputation/INGI_TGP3/CARL/carl/MERGED/CLEANED/RECODED/FILTERED
