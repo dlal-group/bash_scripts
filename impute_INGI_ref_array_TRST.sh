@@ -50,8 +50,8 @@ case $pop in
 	# genodir=${genotype_base}/${pop}/merged/cleaned/${chr}
 	# phasedir=${genotype_base}/${pop}/merged/cleaned/${chr}
 	#24/09/2016 - modified path to use old standard genoypes
-	genodir=${genotype_base}/${pop}/shapeit/${chr}
-	phasedir=${genotype_base}/${pop}/shapeit/${chr}
+	genodir=${genotype_base}/${pop}/shapeit
+	phasedir=${genotype_base}/${pop}/shapeit
 
 	;;
 	FVG)
@@ -60,8 +60,8 @@ case $pop in
 	# genodir=${genotype_base}/${pop}/merged/cleaned/${chr}
 	# phasedir=${genotype_base}/${pop}/merged/cleaned/${chr}
 	#24/09/2016 - modified path to use old standard genoypes
-	genodir=${genotype_base}/${pop}/shapeit/${chr}
-	phasedir=${genotype_base}/${pop}/shapeit/${chr}
+	genodir=${genotype_base}/${pop}/shapeit
+	phasedir=${genotype_base}/${pop}/shapeit
 	;;
 	CARL)
 	extra_str_excl_samples="-exclude_samples_g ${exclude_base}/${pop}_impute_exclude_sample.list"
@@ -69,8 +69,8 @@ case $pop in
 	# genodir=${genotype_base}/${pop}/merged/cleaned/${chr}
 	# phasedir=${genotype_base}/${pop}/merged/cleaned/${chr}
 	#24/09/2016 - modified path to use old standard genoypes
-	genodir=${genotype_base}/${pop}/shapeit/${chr}
-	phasedir=${genotype_base}/${pop}/shapeit/${chr}
+	genodir=${genotype_base}/${pop}/shapeit
+	phasedir=${genotype_base}/${pop}/shapeit
 	;;
 	INCIPE2 )
 	# extra_str_excl_snps="-exclude_snps_g /lustre/scratch114/teams/soranzo/users/mc14/fromscratch113/INGI/05272015_MERGED_REF_PANEL/snplist/${pop}_chr${chr}.exclude -impute_excluded"
