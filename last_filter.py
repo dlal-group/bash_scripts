@@ -36,7 +36,7 @@ print start_time1
 
 with open('%s' %(all_list) , 'r') as keep_file:
 	for keep_row in keep_file:
-		keep_line=keep_row.rstrip().split("\t")yep, mee
+		keep_line=keep_row.rstrip().split("\t")
 		# check_string=single_line[0]+single_line[1]+single_line[4]+single_line[5]+single_line[6]+single_line[7]+single_line[8]+single_line[9]
 		sites_key=(keep_line[0],keep_line[1],keep_line[2],keep_line[3],keep_line[4])
 		# first mark all duplicates by position
