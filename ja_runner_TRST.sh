@@ -71,3 +71,9 @@ bcftools concat ${base_dir}/11092016_ANN/11092016_CADD_ANNOT/${chr}.SNP.vcf.gz $
 echo "Sort by position the JOINT file for chr${chr} ..."
 (bcftools view -h ${base_dir}/11092016_ANN/11092016_CADD_ANNOT/${chr}.JOINT.vcf.gz;bcftools view -H ${base_dir}/11092016_ANN/11092016_CADD_ANNOT/${chr}.JOINT.vcf.gz | sort -g -k2,2 -T ${base_dir}/11092016_ANN/11092016_CADD_ANNOT/) | bgzip -c > ${base_dir}/11092016_ANN/11092016_CADD_ANNOT/${chr}.vcf.gz
 tabix -p vcf ${base_dir}/11092016_ANN/11092016_CADD_ANNOT/${chr}.vcf.gz
+
+###################################
+#30/09/2016
+
+# Convert IDs in CADD annotated files and generate UNRELATED data set from them
+

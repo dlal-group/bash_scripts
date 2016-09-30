@@ -22,9 +22,9 @@
 set -e
 
 # we need to have stage as $1 when we run the panel merging
-stage=$1
+# stage=$1
 # we need to have stage as $4 when we run the panel conversion
-# stage=$4
+stage=$4
 #we're going to split snps and indels, than put them back together again
 
 case ${stage} in
