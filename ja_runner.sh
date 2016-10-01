@@ -762,15 +762,15 @@ file=`sed -n "${LSB_JOBINDEX}p" $1`
 
 #29/03/2016
 
-# outpath=$2
-# filename=`basename ${file}`
+outpath=$2
+filename=`basename ${file}`
 
 
-# # # bcftools plugin fill-tags ${file} -O z -o ${outpath}/${filename}
-# # # tabix -f -p vcf ${outpath}/${filename}
+# # bcftools plugin fill-tags ${file} -O z -o ${outpath}/${filename}
+# # tabix -f -p vcf ${outpath}/${filename}
 
-# bcftools annotate -c CHROM,POS,ID,REF,ALT,EAS_AF,EUR_AF,AFR_AF,AMR_AF,SAS_AF,AA -a /lustre/scratch114/resources/1000g/release/20130502/ALL.autosomes.phase3_shapeit2_mvncall_integrated_v5.20130502.sites.vcf.gz  -O z -o ${outpath}/${filename} ${file}
-# tabix -f -p vcf ${outpath}/${filename}
+bcftools annotate -c CHROM,POS,ID,REF,ALT,EAS_AF,EUR_AF,AFR_AF,AMR_AF,SAS_AF,AA -a /lustre/scratch114/resources/1000g/release/20130502/ALL.autosomes.phase3_shapeit2_mvncall_integrated_v5.20130502.sites.vcf.gz  -O z -o ${outpath}/${filename} ${file}
+tabix -f -p vcf ${outpath}/${filename}
 
 #1/04/2016
 # Merge vcfs from all panels
@@ -806,10 +806,10 @@ file=`sed -n "${LSB_JOBINDEX}p" $1`
 # 18/08/2016
 # index vcf files
 # tabix -p vcf ${file}
-module purge
-module add hgi/bcftools/1.3.1
-module add hgi/htslib/1.3.1
-module add hgi/samtools/1.3.1
+# module purge
+# module add hgi/bcftools/1.3.1
+# module add hgi/htslib/1.3.1
+# module add hgi/samtools/1.3.1
 
 #filter our missing values and maf < 1%
 # bcftools view --genotype ^miss --min-af 0.01:minor -O z -o ${file}.filt.vcf.gz ${file}
@@ -819,15 +819,15 @@ module add hgi/samtools/1.3.1
 # bcftools stats -v -s - -d 0,5000,100 ${file} > ${file}.vcfchk
 # bcftools stats -v -s - -d 0,5000,100 ${file}.filt.vcf.gz > ${file}.filt.vcf.gz.vcfchk
 
-filename=`basename ${file}`
-basedir=`dirname ${file}`
+# filename=`basename ${file}`
+# basedir=`dirname ${file}`
 
-# mkdir -p ${basedir}/NO_CSQ
-mkdir -p ${basedir}/19082016_CADD/TAB
+# # mkdir -p ${basedir}/NO_CSQ
+# mkdir -p ${basedir}/19082016_CADD/TAB
 
-#remove csq annotation for new reannotation
-# bcftools annotate ${file} -x INFO/CSQ -O z -o ${basedir}/NO_CSQ/${filename}
-# tabix -f -p vcf ${basedir}/NO_CSQ/${filename}
+# #remove csq annotation for new reannotation
+# # bcftools annotate ${file} -x INFO/CSQ -O z -o ${basedir}/NO_CSQ/${filename}
+# # tabix -f -p vcf ${basedir}/NO_CSQ/${filename}
 
-#calculate CADD scores
-gunzip -c ${file} | python ~/Work/bash_scripts/extractScoresVCF.py -p /lustre/scratch114/resources/cadd_scores/20150729-v1.3/whole_genome_SNVs_inclAnno.tsv.gz | gzip -c > ${basedir}/19082016_CADD/TAB/${filename}.scores.tsv.gz
+# #calculate CADD scores
+# gunzip -c ${file} | python ~/Work/bash_scripts/extractScoresVCF.py -p /lustre/scratch114/resources/cadd_scores/20150729-v1.3/whole_genome_SNVs_inclAnno.tsv.gz | gzip -c > ${basedir}/19082016_CADD/TAB/${filename}.scores.tsv.gz
