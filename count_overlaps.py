@@ -17,7 +17,7 @@ start_time1 = time.ctime(int(start_time))
 print start_time1
 
 isec_sites_file=sys.argv[1]
-# isec_sites_file="/lustre/scratch113/projects/esgi-vbseq/09022016_PANEL_SESOURCES/INGI/UNION/1/sites.txt"
+# isec_sites_file="/lustre/scratch113/projects/esgi-vbseq/01032016_PANEL_SESOURCES/INGI/UNION/1/sites_test.txt"
 # out_file=sys.argv[2]
 # out_file="/lustre/scratch113/projects/esgi-vbseq/09022016_PANEL_SESOURCES/INGI/UNION/1/overlap_count"
 n_pop=int(sys.argv[2])
@@ -68,12 +68,15 @@ all_count={}
 all_count["SNP"]={y:0 for x,y in pops_share.iteritems()}
 all_count["INDEL"]={y:0 for x,y in pops_share.iteritems()}
 
+all_class_sites=collections.defaultdict(lambda: collections.defaultdict(list))
+
 for key in all_sites:
 	for v_type in all_sites[key]:
 		dupe_map=[]
 		dupe_sum=[]
 		if len(all_sites[key][v_type]) == 1:
-			all_count[v_type][all_sites[key][v_type][0][4]] = all_count[v_type][all_sites[key][v_type][0][4]]+1 
+			all_count[v_type][all_sites[key][v_type][0][4]] = all_count[v_type][all_sites[key][v_type][0][4]]+1
+			all_class_sites[v_type][all_sites[key][v_type][0][4]].append(all_sites[key][v_type][0])
 		else:
 			#we need to manage the duplicates
 			for dupe in all_sites[key][v_type]:
@@ -84,15 +87,28 @@ for key in all_sites:
 					dupe_b_sum.append(dupe_b[dupe_i])
 				dupe_sum.append(dupe_b_sum)
 			dupe_pop_count="".join(list(str(int(bool(sum(x)))) for x in dupe_sum))
-			all_count[v_type][dupe_pop_count] = all_count[v_type][dupe_pop_count]+1 
+			all_count[v_type][dupe_pop_count] = all_count[v_type][dupe_pop_count]+1
+			for dupe in all_sites[key][v_type]:
+				all_class_sites[v_type][dupe_pop_count].append(dupe)
 
-#now we need to write the outfile
+
+#now we need to write the two outfile
+#1) the table with the counts
 for vtype in all_count:
 	share_count=open('%s.%s.share_count.tab' %(isec_sites_file,vtype), 'w')
 	#match count key with pop
 	for p_key in all_count[vtype]:
 		print >> share_count,'%s %s' %(pops_share_inv[p_key],all_count[vtype][p_key])
 	share_count.close()
+#2) the table with the the variants to perform frequency check
+for var_type in all_class_sites:
+	for s_key in all_class_sites[var_type]:
+		share_table=open('%s.%s.%s.share_count.tab' %(isec_sites_file,var_type,pops_share_inv[s_key]), 'w')
+		for variant in all_class_sites[var_type][s_key]:
+			#match count key with pop
+			print >> share_table,'%s' %(" ".join(variant))
+		share_count.close()
+
 
 
 #now lets print the list of sites to keep			
