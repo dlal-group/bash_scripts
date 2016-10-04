@@ -18,12 +18,12 @@ print start_time1
 
 isec_sites_file=sys.argv[1]
 # isec_sites_file="/lustre/scratch113/projects/esgi-vbseq/09022016_PANEL_SESOURCES/INGI/UNION/1/sites.txt"
-out_file=sys.argv[2]
+# out_file=sys.argv[2]
 # out_file="/lustre/scratch113/projects/esgi-vbseq/09022016_PANEL_SESOURCES/INGI/UNION/1/overlap_count"
-n_pop=int(sys.argv[3])
+n_pop=int(sys.argv[2])
 # n_pop=3
 #we need to use this to get out the correct header
-pops=sys.argv[4:]
+pops=sys.argv[3:]
 # pops=["CARL","VBI","FVG"]
 
 # first, we need to create a dictionary with position as the key, than splitted by 
@@ -88,7 +88,7 @@ for key in all_sites:
 
 #now we need to write the outfile
 for vtype in all_count:
-	share_count=open('%s.%s.tab' %(out_file,vtype), 'w')
+	share_count=open('%s.%s.share_count.tab' %(isec_sites_file,vtype), 'w')
 	#match count key with pop
 	for p_key in all_count[vtype]:
 		print >> share_count,'%s %s' %(pops_share_inv[p_key],all_count[vtype][p_key])
