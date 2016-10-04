@@ -73,7 +73,6 @@ for key in all_sites:
 		dupe_map=[]
 		dupe_sum=[]
 		if len(all_sites[key][v_type]) == 1:
-			print all_sites[key][v_type]
 			all_count[v_type][all_sites[key][v_type][0][4]] = all_count[v_type][all_sites[key][v_type][0][4]]+1 
 		else:
 			#we need to manage the duplicates
