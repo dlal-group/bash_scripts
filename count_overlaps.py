@@ -20,7 +20,7 @@ isec_sites_file=sys.argv[1]
 # isec_sites_file="/lustre/scratch113/projects/esgi-vbseq/09022016_PANEL_SESOURCES/INGI/UNION/1/sites_test.txt"
 out_file=sys.argv[2]
 # out_file="/lustre/scratch113/projects/esgi-vbseq/09022016_PANEL_SESOURCES/INGI/UNION/1/count.txt"
-n_pop=sys.argv[3]
+n_pop=int(sys.argv[3])
 # n_pop=3
 
 #we need to use this to get out the correct header
