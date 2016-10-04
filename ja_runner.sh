@@ -831,3 +831,8 @@ tabix -f -p vcf ${outpath}/${filename}
 
 # #calculate CADD scores
 # gunzip -c ${file} | python ~/Work/bash_scripts/extractScoresVCF.py -p /lustre/scratch114/resources/cadd_scores/20150729-v1.3/whole_genome_SNVs_inclAnno.tsv.gz | gzip -c > ${basedir}/19082016_CADD/TAB/${filename}.scores.tsv.gz
+
+#04/10/2016
+#Merge back multiallelic sites for counts
+
+bcftools norm -f /lustre/scratch114/resources/ref/Homo_sapiens/1000Genomes_hs37d5/hs37d5.fa -m + -O z -o ${file}.norm.vcf.gz ${file}
