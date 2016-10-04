@@ -23,9 +23,8 @@ out_file=sys.argv[2]
 n_pop=int(sys.argv[3])
 # n_pop=3
 #we need to use this to get out the correct header
-pops=sys.argv[4:-1]
+pops=sys.argv[4:]
 # pops=["CARL","VBI","FVG"]
-
 
 # first, we need to create a dictionary with position as the key, than splitted by 
 # variant type: well add all the data in the value
@@ -64,7 +63,6 @@ for comb in pops_comb:
 
 #invert keys and values for a better check
 pops_share_inv = {y:x for x,y in pops_share.iteritems()}
-
 #now we need to count what we have and assign everything to the correct category
 all_count={}
 all_count["SNP"]={y:0 for x,y in pops_share.iteritems()}
@@ -99,7 +97,7 @@ for vtype in all_count:
 
 
 #now lets print the list of sites to keep			
-print "Keeplist created!"
+print "Resume created!"
 #now we need to read the stream from the vcf file and for each line
 # decide if we want to keep it or not, based on matching fields
 
