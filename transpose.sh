@@ -1,4 +1,4 @@
-#! /bin/sh
+#!/usr/bin/env bash
 # Transpose a matrix: assumes all lines have same number
 # of fields
 BOF=$(date)
