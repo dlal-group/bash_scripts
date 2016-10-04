@@ -150,13 +150,13 @@ done
 done
 
 for pop in CARL
-for pop in CARL FVG VBI INCIPE2
+for pop in CARL FVG VBI
 do
 # for panel in CARL_FVG_VBI.shapeit CARL_FVG_VBI_TGP3_ALL.shapeit CARL_FVG_VBI_TSI.shapeit EUR.shapeit TGP3_ALL.shapeit
 for panel in CARL_FVG_VBI_TGP3_ALL.shapeit
 do
 # for chr in {1..19}
-for chr in 1 5
+for chr in 1
 do
 genz=`ls ${pop}/${panel}/${chr}/*.gen.gz|wc -l | cut -f 1 -d " "`
 cmdz=`ls ${pop}/${panel}/${chr}/*.cmd|wc -l | cut -f 1 -d " "`
@@ -168,14 +168,14 @@ fi
 done
 done
 done 2> /dev/null
- > 07072016_impute_check.txt
+ > 03102016_impute_check.txt
 
 
 for panel in CARL_FVG_VBI_UK10K_TGP3_ALL
 
 for panel in CARL_FVG_VBI_TGP3_ALL
 do
-for chr in 1 5
+for chr in 1
 do
 last=`wc -l ${panel}/${chr}/${chr}.chunks.txt| cut -f 1 -d " "`
 for chunk in $(seq ${last})
