@@ -17,12 +17,11 @@ start_time1 = time.ctime(int(start_time))
 print start_time1
 
 isec_sites_file=sys.argv[1]
-# isec_sites_file="/lustre/scratch113/projects/esgi-vbseq/09022016_PANEL_SESOURCES/INGI/UNION/1/sites_test.txt"
+# isec_sites_file="/lustre/scratch113/projects/esgi-vbseq/09022016_PANEL_SESOURCES/INGI/UNION/1/sites.txt"
 out_file=sys.argv[2]
-# out_file="/lustre/scratch113/projects/esgi-vbseq/09022016_PANEL_SESOURCES/INGI/UNION/1/count.txt"
+# out_file="/lustre/scratch113/projects/esgi-vbseq/09022016_PANEL_SESOURCES/INGI/UNION/1/overlap_count"
 n_pop=int(sys.argv[3])
 # n_pop=3
-
 #we need to use this to get out the correct header
 pops=sys.argv[4:-1]
 # pops=["CARL","VBI","FVG"]
@@ -76,6 +75,7 @@ for key in all_sites:
 		dupe_map=[]
 		dupe_sum=[]
 		if len(all_sites[key][v_type]) == 1:
+			print all_sites[key][v_type]
 			all_count[v_type][all_sites[key][v_type][0][4]] = all_count[v_type][all_sites[key][v_type][0][4]]+1 
 		else:
 			#we need to manage the duplicates
