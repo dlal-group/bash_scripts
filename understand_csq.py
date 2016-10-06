@@ -1,4 +1,5 @@
-#!/software/bin/python2.7
+#!/usr/bin/env python2.7
+
 #script used to extract consequence annotation from vcf files. From Enza Colonna and moddified by Max Cocca.
 import gzip 
 import re 

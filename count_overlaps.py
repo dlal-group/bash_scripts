@@ -106,7 +106,7 @@ for var_type in all_class_sites:
 		share_table=open('%s.%s.%s.share_count.tab' %(isec_sites_file,var_type,pops_share_inv[s_key]), 'w')
 		for variant in all_class_sites[var_type][s_key]:
 			#match count key with pop
-			print >> share_table,'%s' %(" ".join(variant))
+			print >> share_table,'%s' %("\t".join(variant))
 		share_count.close()
 
 
