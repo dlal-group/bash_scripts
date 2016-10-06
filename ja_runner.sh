@@ -838,3 +838,5 @@ file=`sed -n "${LSB_JOBINDEX}p" $1`
 bcftools norm -f /lustre/scratch114/resources/ref/Homo_sapiens/1000Genomes_hs37d5/hs37d5.fa -m + ${file}| bcftools plugin fill-AN-AC -O z -o ${file}.norm.vcf.gz
 tabix -f -p vcf ${file}.norm.vcf.gz
 ~/Work/bash_scripts/vcfchk_fast_count.sh ${file}.norm.vcf.gz
+
+
