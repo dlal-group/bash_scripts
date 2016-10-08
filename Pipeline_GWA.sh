@@ -54,6 +54,6 @@ mkdir -p ${out_path}
 sge_script_create "${cohort}_chr${chr}_${trait}" "${out_path}/${cohort}_chr${chr}_${trait}.o" "${out_path}/${cohort}_chr${chr}_${trait}.e" ${out_path} R CMD BATCH \'--args ${pheno} ${trait} ${covariates} ${kinship} ${geno} ${cohort} ${chr} ${imp_path}\' ~/scripts/r_scripts/GWAS_1000G_phd.R ${out_path}/1000G_PHD_${trait}_chr${chr}.Rout > ${out_path}/1000G_PHD_${trait}_chr${chr}.sh
 chmod ug+x ${out_path}/1000G_PHD_${trait}_chr${chr}.sh
 
-qsub -V -l h_vmem=5G -- ${out_path}/1000G_PHD_${trait}_chr${chr}.sh
+echo "${out_path}/1000G_PHD_${trait}_chr${chr}.sh" | qsub -V -l h_vmem=5G
 done
 
