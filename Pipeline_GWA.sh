@@ -49,7 +49,7 @@ for chr in $(seq 1 22)
 do
 # RUN GWAS analyses using the GWA function
 # we need to create the script, than we'll submit it
-
+mkdir -p ${out_path}
 # sge_script_create "${cohort}_chr${chr}_${trait}" "${out_path}/${cohort}_chr${chr}_${trait}.o" "${out_path}/${cohort}_chr${chr}_${trait}.e" ${out_path} R CMD BATCH \'--args ${pheno} ${trait} ${covariates} ${kinship} ${geno} ${cohort} ${chr} ${imp_path}\' ~/scripts/r_scripts/GWAS_1KG_imputed.R ${out_path}/MetS_score_analysis_chr${chr}.Rout > ${out_path}/MetS_score_analysis_chr${chr}.sh
 sge_script_create "${cohort}_chr${chr}_${trait}" "${out_path}/${cohort}_chr${chr}_${trait}.o" "${out_path}/${cohort}_chr${chr}_${trait}.e" ${out_path} R CMD BATCH \'--args ${pheno} ${trait} ${covariates} ${kinship} ${geno} ${cohort} ${chr} ${imp_path}\' ~/scripts/r_scripts/GWAS_1000G_phd.R ${out_path}/1000G_PHD_${trait}_chr${chr}.Rout > ${out_path}/1000G_PHD_${trait}_chr${chr}.sh
 chmod ug+x ${out_path}/1000G_PHD_${trait}_chr${chr}.sh
