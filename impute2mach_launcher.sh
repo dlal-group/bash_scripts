@@ -37,7 +37,9 @@ output_file=${output_file_path}/${chr}
 
 #Extract geno file
 geno_file_name=`basename $geno_file`
-gunzip -c ${geno_file} | awk '!($0 in a){a[$0];print}' > ${output_file_path}/${chr}/${geno_file_name}.gen
+#11/10/2016 - skip duplicate romoval: we didit already in the previous step
+# gunzip -c ${geno_file} | awk '!($0 in a){a[$0];print}' > ${output_file_path}/${chr}/${geno_file_name}.gen
+gunzip -c ${geno_file}  > ${output_file_path}/${chr}/${geno_file_name}.gen
 
 
 echo "Convert to file vector..."
