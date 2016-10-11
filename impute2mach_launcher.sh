@@ -1,4 +1,5 @@
 #!/usr/bin/env bash
+set -e
 
 if [ $# -lt 5 ]
 then
