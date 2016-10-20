@@ -75,17 +75,30 @@ file=`sed -n "${SGE_TASK_ID}p" $1`
 ###################################
 #30/09/2016
 
-# Convert IDs in CADD annotated files and generate UNRELATED data set from them
+# # Convert IDs in CADD annotated files and generate UNRELATED data set from them
+# base_dir=`dirname ${file}`
+# file_name=`basename ${file}`
+
+# mkdir -p ${base_dir}/30092016_CONV_ID
+# mkdir -p ${base_dir}/30092016_UNRELATED
+
+# bcftools reheader -s ${pop}_SC2CLIN.samples ${file} -o ${base_dir}/30092016_CONV_ID/${file_name}
+# tabix -f -p vcf ${base_dir}/30092016_CONV_ID/${file_name}
+# # bcftools view -h 1.vcf.gz| tail -n 1| cut -f 10-| tr "\t" "\n" > ${pop}_wgs_clin.samples
+# #create the unrelated dataset
+# bcftools view -S ^${unrel_file} ${base_dir}/30092016_CONV_ID/${file_name} -O z -o ${base_dir}/30092016_UNRELATED/${file_name}
+# tabix -f -p vcf ${base_dir}/30092016_UNRELATED/${file_name}
+
+###################################
+#20/10/2016
+# Extract chr pos and pval for a list of traits and different chromosomes from UK10K analyses results
 base_dir=`dirname ${file}`
 file_name=`basename ${file}`
+trait=`echo ${file_name%%.*}`
 
-mkdir -p ${base_dir}/30092016_CONV_ID
-mkdir -p ${base_dir}/30092016_UNRELATED
+mkdir -p ${base_dir}/20102016_SUBSET
 
-bcftools reheader -s ${pop}_SC2CLIN.samples ${file} -o ${base_dir}/30092016_CONV_ID/${file_name}
-tabix -f -p vcf ${base_dir}/30092016_CONV_ID/${file_name}
-# bcftools view -h 1.vcf.gz| tail -n 1| cut -f 10-| tr "\t" "\n" > ${pop}_wgs_clin.samples
-#create the unrelated dataset
-bcftools view -S ^${unrel_file} ${base_dir}/30092016_CONV_ID/${file_name} -O z -o ${base_dir}/30092016_UNRELATED/${file_name}
-tabix -f -p vcf ${base_dir}/30092016_UNRELATED/${file_name}
-
+for chr in {1..22}
+do
+	awk -v chr=${chr} '{if($1==chr) print $1,$3,$7}'${file} > ${base_dir}/20102016_SUBSET/${trait}.chr${chr}.pval.txt
+done
