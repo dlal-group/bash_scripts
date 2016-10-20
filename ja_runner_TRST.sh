@@ -100,5 +100,5 @@ mkdir -p ${base_dir}/20102016_SUBSET
 
 for chr in {1..22}
 do
-	awk -v chr=${chr} '{if($1==chr) print $1,$3,$7}'${file} > ${base_dir}/20102016_SUBSET/${trait}.chr${chr}.pval.txt
+	awk -v chr=${chr} '{if($1==chr) print $1,$3,$7}' ${file} > ${base_dir}/20102016_SUBSET/${trait}.chr${chr}.pval.txt
 done
