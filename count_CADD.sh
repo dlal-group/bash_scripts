@@ -23,7 +23,10 @@ if [[ ${CADD_val} -eq 2 ]]; then
 	#statements
 	CADD_1=${CADD[0]}
 	CADD_2=${CADD[1]}
-	bcftools norm -m - ${file} | bcftools +fill-AN-AC | bcftools query -i'INFO/CADD_PHRED>=${CADD_1} && INFO/CADD_PHRED<${CADD_2} && TYPE="${v_type}"' -f"%CHROM\t%POS\t%ID\t%REF\t%ALT\t%INFO/CADD_PHRED\t%INFO/CSQ\t%AC\t%AN\n" | awk 'BEGIN{OFS="\t"}{print $0, $(NF-1)/$(NF)}'| awk 'BEGIN{OFS="\t"}{if($(NF)<= 0.5) print $0, $(NF);else print $0, 1-$(NF)}' > ${base_dir}/CADD_STRAT/${file_name}.${v_type}.${CADD_1}_${CADD_2}.freq.tab
+	# bcftools annotate -x"INFO/AFR_AF,INFO/AMR_AF,INFO/EAS_AF,INFO/EUR_AF,INFO/SAS_AF" ${file} | bcftools norm -m - |  bcftools +fill-AN-AC | bcftools query -i"INFO/CADD_PHRED>=${CADD_1} && INFO/CADD_PHRED<${CADD_2} && TYPE='${v_type}'" -f"%CHROM\t%POS\t%ID\t%REF\t%ALT\t%INFO/CADD_PHRED\t%INFO/CSQ\t%AC\t%AN\n" | awk 'BEGIN{OFS="\t"}{print $0, $(NF-1)/$(NF)}'| awk 'BEGIN{OFS="\t"}{if($(NF)<= 0.5) print $0, $(NF);else print $0, 1-$(NF)}' | more
+	# bcftools annotate -x"INFO/AFR_AF,INFO/AMR_AF,INFO/EAS_AF,INFO/EUR_AF,INFO/SAS_AF" ${file} | bcftools norm -m - |  bcftools +fill-AN-AC | bcftools query -i'INFO/CADD_PHRED>=${CADD_1} && INFO/CADD_PHRED<${CADD_2} && TYPE="${v_type}"' -f"%CHROM\t%POS\t%ID\t%REF\t%ALT\t%INFO/CADD_PHRED\t%INFO/CSQ\t%AC\t%AN\n" | awk 'BEGIN{OFS="\t"}{print $0, $(NF-1)/$(NF)}'| awk 'BEGIN{OFS="\t"}{if($(NF)<= 0.5) print $0, $(NF);else print $0, 1-$(NF)}' > ${base_dir}/CADD_STRAT/${file_name}.${v_type}.${CADD_1}_${CADD_2}.freq.tab
+	#for phd analyses sake, do not split multiallelics
+	bcftools annotate -x"INFO/AFR_AF,INFO/AMR_AF,INFO/EAS_AF,INFO/EUR_AF,INFO/SAS_AF" ${file} |  bcftools +fill-AN-AC | bcftools query -i'INFO/CADD_PHRED>=${CADD_1} && INFO/CADD_PHRED<${CADD_2} && TYPE="${v_type}"' -f"%CHROM\t%POS\t%ID\t%REF\t%ALT\t%INFO/CADD_PHRED\t%INFO/CSQ\t%AC\t%AN\n" | awk 'BEGIN{OFS="\t"}{print $0, $(NF-1)/$(NF)}'| awk 'BEGIN{OFS="\t"}{if($(NF)<= 0.5) print $0, $(NF);else print $0, 1-$(NF)}' > ${base_dir}/CADD_STRAT/${file_name}.${v_type}.${CADD_1}_${CADD_2}.freq.tab
 	
 	#we need to split each table by LOF category
 	for cat in frameshift splice_acceptor splice_donor stop_gain stop_loss
@@ -31,11 +34,13 @@ if [[ ${CADD_val} -eq 2 ]]; then
 		fgrep ${cat} ${base_dir}/CADD_STRAT/${file_name}.${vtype}.${CADD_1}_${CADD_2}.freq.tab > ${base_dir}/CADD_STRAT/${file_name}.${v_type}.${CADD_1}_${CADD_2}.${cat}.tab
 	done
 
-	bcftools norm -m - ${file} | bcftools +fill-AN-AC | bcftools view -G -i'INFO/CADD_PHRED>=${CADD_1} && INFO/CADD_PHRED<${CADD_2} && TYPE="${v_type}"' -O z -o ${base_dir}/CADD_STRAT/${file_name}.${v_type}.${CADD_1}_${CADD_2}.vcf.gz
+	# bcftools norm -m - ${file} | bcftools +fill-AN-AC | bcftools view -G -i'INFO/CADD_PHRED>=${CADD_1} && INFO/CADD_PHRED<${CADD_2} && TYPE="${v_type}"' -O z -o ${base_dir}/CADD_STRAT/${file_name}.${v_type}.${CADD_1}_${CADD_2}.vcf.gz
+	bcftools annotate -x"INFO/AFR_AF,INFO/AMR_AF,INFO/EAS_AF,INFO/EUR_AF,INFO/SAS_AF" ${file} | bcftools +fill-AN-AC | bcftools view -G -i'INFO/CADD_PHRED>=${CADD_1} && INFO/CADD_PHRED<${CADD_2} && TYPE="${v_type}"' -O z -o ${base_dir}/CADD_STRAT/${file_name}.${v_type}.${CADD_1}_${CADD_2}.vcf.gz
 	tabix -p vcf ${base_dir}/CADD_STRAT/${file_name}.${v_type}.${CADD_1}_${CADD_2}.vcf.gz
 else
 	CADD_1=${CADD[0]}
-	bcftools norm -m - ${file} | bcftools +fill-AN-AC | bcftools query -i'INFO/CADD_PHRED>=${CADD_1} && TYPE="${v_type}"' -f"%CHROM\t%POS\t%ID\t%REF\t%ALT\t%INFO/CADD_PHRED\t%INFO/CSQ\t%AC\t%AN\n" | awk 'BEGIN{OFS="\t"}{print $0, $(NF-1)/$(NF)}'| awk 'BEGIN{OFS="\t"}{if($(NF)<= 0.5) print $0, $(NF);else print $0, 1-$(NF)}' > ${base_dir}/CADD_STRAT/${file_name}.${v_type}.${CADD_1}.freq.tab
+	# bcftools norm -m - ${file} | bcftools +fill-AN-AC | bcftools query -i'INFO/CADD_PHRED>=${CADD_1} && TYPE="${v_type}"' -f"%CHROM\t%POS\t%ID\t%REF\t%ALT\t%INFO/CADD_PHRED\t%INFO/CSQ\t%AC\t%AN\n" | awk 'BEGIN{OFS="\t"}{print $0, $(NF-1)/$(NF)}'| awk 'BEGIN{OFS="\t"}{if($(NF)<= 0.5) print $0, $(NF);else print $0, 1-$(NF)}' > ${base_dir}/CADD_STRAT/${file_name}.${v_type}.${CADD_1}.freq.tab
+	bcftools annotate -x"INFO/AFR_AF,INFO/AMR_AF,INFO/EAS_AF,INFO/EUR_AF,INFO/SAS_AF" ${file} | bcftools +fill-AN-AC | bcftools query -i'INFO/CADD_PHRED>=${CADD_1} && TYPE="${v_type}"' -f"%CHROM\t%POS\t%ID\t%REF\t%ALT\t%INFO/CADD_PHRED\t%INFO/CSQ\t%AC\t%AN\n" | awk 'BEGIN{OFS="\t"}{print $0, $(NF-1)/$(NF)}'| awk 'BEGIN{OFS="\t"}{if($(NF)<= 0.5) print $0, $(NF);else print $0, 1-$(NF)}' > ${base_dir}/CADD_STRAT/${file_name}.${v_type}.${CADD_1}.freq.tab
 	
 	#we need to split each table by LOF category
 	for cat in frameshift splice_acceptor splice_donor stop_gain stop_loss
@@ -43,6 +48,7 @@ else
 		fgrep ${cat} ${base_dir}/CADD_STRAT/${file_name}.${v_type}.${CADD_1}.freq.tab > ${base_dir}/CADD_STRAT/${file_name}.${v_type}.${CADD_1}.${cat}.tab
 	done
 
-	bcftools norm -m - ${file} | bcftools +fill-AN-AC | bcftools view -G -i'INFO/CADD_PHRED>=${CADD_1} && TYPE="${v_type}"' -O z -o ${base_dir}/CADD_STRAT/${file_name}.${v_type}.${CADD_1}.vcf.gz
+	# bcftools norm -m - ${file} | bcftools +fill-AN-AC | bcftools view -G -i'INFO/CADD_PHRED>=${CADD_1} && TYPE="${v_type}"' -O z -o ${base_dir}/CADD_STRAT/${file_name}.${v_type}.${CADD_1}.vcf.gz
+	bcftools annotate -x"INFO/AFR_AF,INFO/AMR_AF,INFO/EAS_AF,INFO/EUR_AF,INFO/SAS_AF" ${file} | bcftools +fill-AN-AC | bcftools view -G -i'INFO/CADD_PHRED>=${CADD_1} && TYPE="${v_type}"' -O z -o ${base_dir}/CADD_STRAT/${file_name}.${v_type}.${CADD_1}.vcf.gz
 	tabix -p vcf ${base_dir}/CADD_STRAT/${file_name}.${v_type}.${CADD_1}.vcf.gz
 fi
