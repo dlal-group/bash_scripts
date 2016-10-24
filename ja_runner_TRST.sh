@@ -92,8 +92,8 @@ file=`sed -n "${SGE_TASK_ID}p" $1`
 ###################################
 #20/10/2016
 # Extract chr pos and pval for a list of traits and different chromosomes from UK10K analyses results
-base_dir=`dirname ${file}`
-file_name=`basename ${file}`
+# base_dir=`dirname ${file}`
+# file_name=`basename ${file}`
 # trait=`echo ${file_name%%.*}`
 
 # mkdir -p ${base_dir}/20102016_SUBSET
@@ -104,10 +104,23 @@ file_name=`basename ${file}`
 # 	# zcat ${file} | awk '{print $1,$3,$7}' > ${base_dir}/20102016_SUBSET/${trait}.chr${chr}.pval.txt
 # done
 
-for pop in CARL FVG
-do
-mkdir -p /home/cocca/analyses/INGI-TGP3/${pop}/UK10K_INGI_pvals_comp/
-#we want to get stuff in UK10K reolica and look at pvals in INGI imputed data
-awk 'FNR==NR{a[$2]=$0;next}{if($2 in a) print a[$2],$3}' /netapp/nfs/UK10K/analyses/INGI_${pop}/by_jie/20102016_SUBSET/${file_name} /home/cocca/analyses/INGI-TGP3/${pop}/GEMMA/output/20102016_SUBSET/${file_name} > /home/cocca/analyses/INGI-TGP3/${pop}/UK10K_INGI_pvals_comp/${file_name}
+# for pop in CARL FVG
+# do
+# mkdir -p /home/cocca/analyses/INGI-TGP3/${pop}/UK10K_INGI_pvals_comp/
+# #we want to get stuff in UK10K reolica and look at pvals in INGI imputed data
+# awk 'FNR==NR{a[$2]=$0;next}{if($2 in a) print a[$2],$3}' /netapp/nfs/UK10K/analyses/INGI_${pop}/by_jie/20102016_SUBSET/${file_name} /home/cocca/analyses/INGI-TGP3/${pop}/GEMMA/output/20102016_SUBSET/${file_name} > /home/cocca/analyses/INGI-TGP3/${pop}/UK10K_INGI_pvals_comp/${file_name}
 
-done
+# done
+#########################################################
+# 24/10/2016
+# Extract numbers for annotations with freqs and AC based on CADD thresholds:
+# [0-5) 
+# [5-15)
+# [15-20)
+# >= 20
+
+# want to know how many for each threshold, what kind of caonsequences, and how many singleton
+base_dir=`dirname ${file}`
+file_name=`basename ${file}`
+
+
