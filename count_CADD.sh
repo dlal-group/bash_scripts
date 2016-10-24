@@ -31,7 +31,7 @@ if [[ ${CADD_val} -eq 2 ]]; then
 	#we need to split each table by LOF category
 	for cat in frameshift splice_acceptor splice_donor stop_gain stop_loss
 	do
-		fgrep ${cat} ${base_dir}/CADD_STRAT/${file_name}.${vtype}.${CADD_1}_${CADD_2}.freq.tab > ${base_dir}/CADD_STRAT/${file_name}.${v_type}.${CADD_1}_${CADD_2}.${cat}.tab
+		fgrep ${cat} ${base_dir}/CADD_STRAT/${file_name}.${v_type}.${CADD_1}_${CADD_2}.freq.tab > ${base_dir}/CADD_STRAT/${file_name}.${v_type}.${CADD_1}_${CADD_2}.${cat}.tab
 	done
 
 	# bcftools norm -m - ${file} | bcftools +fill-AN-AC | bcftools view -G -i'INFO/CADD_PHRED>=${CADD_1} && INFO/CADD_PHRED<${CADD_2} && TYPE="${v_type}"' -O z -o ${base_dir}/CADD_STRAT/${file_name}.${v_type}.${CADD_1}_${CADD_2}.vcf.gz
