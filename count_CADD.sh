@@ -35,8 +35,8 @@ if [[ ${CADD_val} -eq 2 ]]; then
 	done
 
 	# bcftools norm -m - ${file} | bcftools +fill-AN-AC | bcftools view -G -i'INFO/CADD_PHRED>=${CADD_1} && INFO/CADD_PHRED<${CADD_2} && TYPE="${v_type}"' -O z -o ${base_dir}/CADD_STRAT/${file_name}.${v_type}.${CADD_1}_${CADD_2}.vcf.gz
-	bcftools annotate -x"INFO/AFR_AF,INFO/AMR_AF,INFO/EAS_AF,INFO/EUR_AF,INFO/SAS_AF" ${file} | bcftools +fill-AN-AC | bcftools view -G -i"INFO/CADD_PHRED>=${CADD_1} && INFO/CADD_PHRED<${CADD_2} && TYPE='${v_type}'" -O z -o ${base_dir}/CADD_STRAT/${file_name}.${v_type}.${CADD_1}_${CADD_2}.vcf.gz
-	tabix -f -p vcf ${base_dir}/CADD_STRAT/${file_name}.${v_type}.${CADD_1}_${CADD_2}.vcf.gz
+	# bcftools annotate -x"INFO/AFR_AF,INFO/AMR_AF,INFO/EAS_AF,INFO/EUR_AF,INFO/SAS_AF" ${file} | bcftools +fill-AN-AC | bcftools view -G -i"INFO/CADD_PHRED>=${CADD_1} && INFO/CADD_PHRED<${CADD_2} && TYPE='${v_type}'" -O z -o ${base_dir}/CADD_STRAT/${file_name}.${v_type}.${CADD_1}_${CADD_2}.vcf.gz
+	# tabix -f -p vcf ${base_dir}/CADD_STRAT/${file_name}.${v_type}.${CADD_1}_${CADD_2}.vcf.gz
 else
 	CADD_1=${CADD[0]}
 	# bcftools norm -m - ${file} | bcftools +fill-AN-AC | bcftools query -i'INFO/CADD_PHRED>=${CADD_1} && TYPE="${v_type}"' -f"%CHROM\t%POS\t%ID\t%REF\t%ALT\t%INFO/CADD_PHRED\t%INFO/CSQ\t%AC\t%AN\n" | awk 'BEGIN{OFS="\t"}{print $0, $(NF-1)/$(NF)}'| awk 'BEGIN{OFS="\t"}{if($(NF)<= 0.5) print $0, $(NF);else print $0, 1-$(NF)}' > ${base_dir}/CADD_STRAT/${file_name}.${v_type}.${CADD_1}.freq.tab
@@ -49,6 +49,6 @@ else
 	done
 
 	# bcftools norm -m - ${file} | bcftools +fill-AN-AC | bcftools view -G -i'INFO/CADD_PHRED>=${CADD_1} && TYPE="${v_type}"' -O z -o ${base_dir}/CADD_STRAT/${file_name}.${v_type}.${CADD_1}.vcf.gz
-	bcftools annotate -x"INFO/AFR_AF,INFO/AMR_AF,INFO/EAS_AF,INFO/EUR_AF,INFO/SAS_AF" ${file} | bcftools +fill-AN-AC | bcftools view -G -i"INFO/CADD_PHRED>=${CADD_1} && TYPE='${v_type}'" -O z -o ${base_dir}/CADD_STRAT/${file_name}.${v_type}.${CADD_1}.vcf.gz
-	tabix -f -p vcf ${base_dir}/CADD_STRAT/${file_name}.${v_type}.${CADD_1}.vcf.gz
+	# bcftools annotate -x"INFO/AFR_AF,INFO/AMR_AF,INFO/EAS_AF,INFO/EUR_AF,INFO/SAS_AF" ${file} | bcftools +fill-AN-AC | bcftools view -G -i"INFO/CADD_PHRED>=${CADD_1} && TYPE='${v_type}'" -O z -o ${base_dir}/CADD_STRAT/${file_name}.${v_type}.${CADD_1}.vcf.gz
+	# tabix -f -p vcf ${base_dir}/CADD_STRAT/${file_name}.${v_type}.${CADD_1}.vcf.gz
 fi
