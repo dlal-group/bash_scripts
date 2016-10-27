@@ -79,7 +79,7 @@ for line in open (individualssamplelist , 'r') :
 
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 out_file=open(outfile , 'w')
-print >> out_file, '#CHROM\tPOZ\tPOS\tID\tREF\tALT\tINFO\tREC\tALC\tDAC\tMAC\tDAF\tMAF'
+print >> out_file, '#CHROM\tPOZ\tPOS\tID\tREF\tALT\tAA\tREC\tALC\tDAC\tMAC\tDAF\tMAF'
 
 sampleind_index=[]
 for line in gzip.open(inputvcf, 'r'):
@@ -102,6 +102,7 @@ for line in gzip.open(inputvcf, 'r'):
 				aasplitted=ii.split('=')
 				iisplitted=aasplitted[1].split('|')
 				ancestralallele=iisplitted[0]
+				info_ancestral=ii
 				break
 			else:
 				ancestralallele='.'
@@ -126,7 +127,8 @@ for line in gzip.open(inputvcf, 'r'):
 			alleles_count=frequencies_mac(  temporary_genotypes, ref, alt) 
 			rac=alleles_count[0]; alc=alleles_count[1]; dac='NA'; mac=alleles_count[3]
 
-		for item in  [chr,poz,position, vid, ref, alt, infofield]:  #z[0:8]: 
+		# for item in  [chr,poz,position, vid, ref, alt, infofield]:  #z[0:8]: 
+		for item in  [chr,poz,position, vid, ref, alt, info_ancestral]:  #z[0:8]: 
 			print >> out_file, '%s\t' %(item),
 
 		print >> out_file, '%s\t%s\t%s\t%s\t' %(rac,alc, dac, mac),
