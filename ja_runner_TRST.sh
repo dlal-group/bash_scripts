@@ -103,15 +103,22 @@ file_name=`basename ${file}`
 # 	zcat ${file} | awk -v chr=${chr} '{if($1==chr) print $1,$3,$7}' > ${base_dir}/20102016_SUBSET/${trait}.chr${chr}.pval.txt
 # 	# zcat ${file} | awk '{print $1,$3,$7}' > ${base_dir}/20102016_SUBSET/${trait}.chr${chr}.pval.txt
 # done
-for pop in FVG
-do
-while read line
-do
-mkdir -p /home/cocca/analyses/INGI-TGP3/${pop}/UK10K_INGI_pvals_comp/
-file_name=`basename ${line}`
-echo ${file_name}
-#we want to get stuff in UK10K reolica and look at pvals in INGI imputed data
-awk 'FNR==NR{a[$2]=$0;next}{if($2 in a) print a[$2],$3}' /netapp/nfs/UK10K/analyses/INGI_${pop}/by_jie/20102016_SUBSET/${file_name} /home/cocca/analyses/INGI-TGP3/${pop}/GEMMA/output/20102016_SUBSET/${file_name} > /home/cocca/analyses/INGI-TGP3/${pop}/UK10K_INGI_pvals_comp/${file_name}
+# for pop in FVG
+# do
+# while read line
+# do
+# mkdir -p /home/cocca/analyses/INGI-TGP3/${pop}/UK10K_INGI_pvals_comp/
+# file_name=`basename ${line}`
+# echo ${file_name}
+# #we want to get stuff in UK10K reolica and look at pvals in INGI imputed data
+# awk 'FNR==NR{a[$2]=$0;next}{if($2 in a) print a[$2],$3}' /netapp/nfs/UK10K/analyses/INGI_${pop}/by_jie/20102016_SUBSET/${file_name} /home/cocca/analyses/INGI-TGP3/${pop}/GEMMA/output/20102016_SUBSET/${file_name} > /home/cocca/analyses/INGI-TGP3/${pop}/UK10K_INGI_pvals_comp/${file_name}
 
-done < <(cat /netapp/nfs/UK10K/analyses/INGI_FVG/by_jie/20102016_SUBSET/files.list)
-done
+# done < <(cat /netapp/nfs/UK10K/analyses/INGI_FVG/by_jie/20102016_SUBSET/files.list)
+# done
+
+#27/10/2016
+# count DAC for each samples
+pop=$2
+sample=${file}
+GWAS_DAC=`cat /netapp/dati/INGI_WGS/18112015/${pop}/12112015_FILTERED_REL/30092016_CONV_ID/27102016_DAC_COUNT/by_sample/*.${sample}.tab | fgrep -v "#CHROM"| awk '{sum+=$10}END{print sum}'`
+echo "${sample} ${GWAS_DAC}" >> /netapp/dati/INGI_WGS/18112015/${pop}/12112015_FILTERED_REL/30092016_CONV_ID/27102016_DAC_COUNT/by_sample/${pop}_all_samples_DAC.tab

@@ -716,60 +716,26 @@ case $MODE in
     #   - check alleles concordance
     # 3) Keep track of variants missing from each comparison
 
-    echo "Extract from tables for each population, info about shared sites"
+    echo "Extract from tables for each population, info about sites"
     pops_updated="FVG VBI CARL "
     for pop in $pops_updated
     do
       case $pop in
         FVG )
-          pop_path=/lustre/scratch113/projects/fvg_seq/16092015/12112015_FILTERED_REL/
+          pop_path=/netapp/dati/INGI_WGS/18112015/FVG/12112015_FILTERED_REL/30092016_UNRELATED
           ;;
         VBI )
-          pop_path=/lustre/scratch113/projects/esgi-vbseq/20140430_purging/UNRELATED/RESULTS/DAF/FIVE_POP
+          pop_path=/netapp/dati/INGI_WGS/18112015/VBI/12112015_FILTERED_REL/30092016_UNRELATED
           ;;
         CARL )
-          pop_path=/lustre/scratch113/projects/esgi-vbseq/20140430_purging/UNRELATED/RESULTS/DAF/FIVE_POP
-          ;;
-        TSI )
-          pop_path=/lustre/scratch113/projects/esgi-vbseq/20140430_purging/UNRELATED/RESULTS/DAF/FIVE_POP
-          ;;
-        CEU )
-          pop_path=/lustre/scratch113/projects/esgi-vbseq/20140430_purging/UNRELATED/RESULTS/DAF/FIVE_POP
+          pop_path=/netapp/dati/INGI_WGS/18112015/CARL/12112015_FILTERED_REL/30092016_UNRELATED
           ;;
       esac
       #those are the files I need to use to extract the info splitted by chr
       # pop_path=/lustre/scratch113/projects/esgi-vbseq/20140430_purging/UNRELATED/RESULTS/DAF/FIVE_POP
-      sel_var=${outdir}/${pop}/${CHR}_sel_${variant}_${pop}.tab
 
-      #extract the list in bed format only for BIALLELIC sites
-      bcftools view -i"MAF<=0.01" -m2 -M2 -v ${variant} ${pop_path}/${CHR}.vcf.gz | bcftools query -f"%CHROM\t%POS\n" -o ${sel_snps}
-      
       #extract the list with all informations needed
-      echo"%CHROM\t%POS\t%ID\t%REF\t%ALT\t%INFO/AC\t%INFO/AN";bcftools view -i"MAF<=0.01" -m2 -M2 -v ${variant} ${pop_path}/${CHR}.vcf.gz | bcftools query -f"%CHROM\t%POS\t%ID\t%REF\t%ALT\t%INFO/AC\t%INFO/AN\n" | awk 'BEGIN{OFS="\t"}{print $0,$7-$6,$6/$7,1-($6/$7)}'
-
-
-      # #create the list of variants we need to extract
-      # awk '{print $1"O"$2"O"$3}' ${private} | tr " " "\t" | dos2unix > ${private}.list
-      # awk '{print $1"O"$2"O"$3}' ${private_fixed} | tr " " "\t" | dos2unix > ${private_fixed}.list
-      # awk '{print $1"O"$2"O"$3}' ${shared} | tr " " "\t" | dos2unix > ${shared}.list
-      # awk '{print $1"O"$2"O"$3}' ${shared_fixed} | tr " " "\t" | dos2unix > ${shared_fixed}.list
-
-      #create temporary files to do the extraction
-      in_file=${pop_path}/CHR${CHR}/INGI_chr${CHR}.merged_maf.tab.gz
-      # zcat ${in_file} | awk '{print $1"O"$2"O"$3,$0}' | tr " " "\t" | dos2unix > ${in_file}.tmp
-
-      zcat ${in_file} |awk '{print $1"O"$2"O"$3"O"$4,$0}'|tr " " "\t" | fgrep -w -f <(awk -v cro=${CHR} '{if($1==cro) print $1"O"$2"O"$3"O"$4}' ${private})|cut -f 2- |gzip -c > ${in_file}.${pop}.private.tab.gz
-      zcat ${in_file} |awk '{print $1"O"$2"O"$3"O"$4,$0}'|tr " " "\t" | fgrep -w -f <(awk -v cro=${CHR} '{if($1==cro) print $1"O"$2"O"$3"O"$4}' ${private_fixed})|cut -f 2- |gzip -c > ${in_file}.${pop}.private_fixed.tab.gz
-      zcat ${in_file} |awk '{print $1"O"$2"O"$3"O"$4,$0}'|tr " " "\t" | fgrep -w -f <(awk -v cro=${CHR} '{if($1==cro) print $1"O"$2"O"$3"O"$4}' ${shared})|cut -f 2- |gzip -c > ${in_file}.${pop}.shared.tab.gz
-      zcat ${in_file} |awk '{print $1"O"$2"O"$3"O"$4,$0}'|tr " " "\t" | fgrep -w -f <(awk -v cro=${CHR} '{if($1==cro) print $1"O"$2"O"$3"O"$4}' ${shared_fixed})|cut -f 2- |gzip -c > ${in_file}.${pop}.shared_fixed.tab.gz
-      
-      # #now grep the file to extract the data we need, using different lists
-      # (fgrep -w -f <(grep "^${CHR}" ${private}.list) ${in_file}.tmp)| cut -f 2- | dos2unix |gzip -c > ${in_file}.private.tab.gz
-      # (fgrep -w -f <(grep "^${CHR}" ${private_fixed}.list) ${in_file}.tmp)| cut -f 2- | dos2unix |gzip -c > ${in_file}.private_fixed.tab.gz
-      # (fgrep -w -f <(grep "^${CHR}" ${shared}.list) ${in_file}.tmp)| cut -f 2- | dos2unix |gzip -c > ${in_file}.shared.tab.gz
-      # (fgrep -w -f <(grep "^${CHR}" ${shared_fixed}.list) ${in_file}.tmp)| cut -f 2- | dos2unix |gzip -c > ${in_file}.shared_fixed.tab.gz
-
-      # rm ${in_file}.tmp
+      echo -e "CHROM\tPOS\tID\tREF\tALT\tAC\tAN\tAAF\tMAF";bcftools view -m2 -M2 ${pop_path}/ALL_${pop}_02102016.vcf.gz | bcftools query -f"%CHROM\t%POS\t%ID\t%REF\t%ALT\t%INFO/AC\t%INFO/AN\n" | awk 'BEGIN{OFS="\t"}{print $0,$6/$7}' | awk 'BEGIN{OFS="\t"}{if($8 <= 0.5) print $0,$8;else print $0, 1-$8}' > ${pop_path}/ALL_${pop}_02102016.freq.tab
 
     done
   ;;
