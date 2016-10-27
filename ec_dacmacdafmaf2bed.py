@@ -106,6 +106,7 @@ for line in gzip.open(inputvcf, 'r'):
 				break
 			else:
 				ancestralallele='.'
+				info_ancestral='.'
 		
 
 		temporary_genotypes=[]		
