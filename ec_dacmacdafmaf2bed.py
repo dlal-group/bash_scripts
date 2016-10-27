@@ -96,48 +96,53 @@ for line in gzip.open(inputvcf, 'r'):
 		chr=z[0]; poz=int(z[1])-1; position=z[1]; vid=z[2]; ref=z[header.index('REF')]; alt=z[header.index('ALT')]; infofield=z[header.index('INFO')]
 		infosplit=infofield.split(';')
 
-		for ii in infosplit:
-			if re.match('AA=', ii): 
+		#skip all multiallelic sites
+		if re.match(",", alt):
+
+		else:
+
+			for ii in infosplit:
+				if re.match('AA=', ii): 
+					# pdb.set_trace()
+					aasplitted=ii.split('=')
+					iisplitted=aasplitted[1].split('|')
+					ancestralallele=iisplitted[0]
+					info_ancestral=ii
+					break
+				else:
+					ancestralallele='.'
+					info_ancestral='.'
+			
+
+			temporary_genotypes=[]		
+
+			for id in sampleind_index: temporary_genotypes.append(z[id])
+			#print temporary_genotypes
+
+			#print '##', ref, alt, ancestralallele
+			if not (re.search('\.', ancestralallele) or re.search('-' , ancestralallele) or re.search('N', ancestralallele)):
 				# pdb.set_trace()
-				aasplitted=ii.split('=')
-				iisplitted=aasplitted[1].split('|')
-				ancestralallele=iisplitted[0]
-				info_ancestral=ii
-				break
-			else:
-				ancestralallele='.'
-				info_ancestral='.'
-		
+				if ((ref == ancestralallele)	or (alt == ancestralallele) or (ref == ancestralallele.upper())	or (alt == ancestralallele.upper())):
+					alleles_count=frequencies_anc_known_confidence(temporary_genotypes, ref, alt, ancestralallele.upper())
+					rac=alleles_count[0]; alc=alleles_count[1]; dac=alleles_count[3]; mac=alleles_count[4]
+				else:
+					alleles_count=frequencies_mac(  temporary_genotypes, ref, alt) 
+					rac=alleles_count[0]; alc=alleles_count[1]; dac='NA'; mac=alleles_count[3]
 
-		temporary_genotypes=[]		
-
-		for id in sampleind_index: temporary_genotypes.append(z[id])
-		#print temporary_genotypes
-
-		#print '##', ref, alt, ancestralallele
-		if not (re.search('\.', ancestralallele) or re.search('-' , ancestralallele) or re.search('N', ancestralallele)):
-			# pdb.set_trace()
-			if ((ref == ancestralallele)	or (alt == ancestralallele) or (ref == ancestralallele.upper())	or (alt == ancestralallele.upper())):
-				alleles_count=frequencies_anc_known_confidence(temporary_genotypes, ref, alt, ancestralallele.upper())
-				rac=alleles_count[0]; alc=alleles_count[1]; dac=alleles_count[3]; mac=alleles_count[4]
-			else:
+			else: 
 				alleles_count=frequencies_mac(  temporary_genotypes, ref, alt) 
 				rac=alleles_count[0]; alc=alleles_count[1]; dac='NA'; mac=alleles_count[3]
 
-		else: 
-			alleles_count=frequencies_mac(  temporary_genotypes, ref, alt) 
-			rac=alleles_count[0]; alc=alleles_count[1]; dac='NA'; mac=alleles_count[3]
+			# for item in  [chr,poz,position, vid, ref, alt, infofield]:  #z[0:8]: 
+			for item in  [chr,poz,position, vid, ref, alt, info_ancestral]:  #z[0:8]: 
+				print >> out_file, '%s\t' %(item),
 
-		# for item in  [chr,poz,position, vid, ref, alt, infofield]:  #z[0:8]: 
-		for item in  [chr,poz,position, vid, ref, alt, info_ancestral]:  #z[0:8]: 
-			print >> out_file, '%s\t' %(item),
+			print >> out_file, '%s\t%s\t%s\t%s\t' %(rac,alc, dac, mac),
 
-		print >> out_file, '%s\t%s\t%s\t%s\t' %(rac,alc, dac, mac),
+			if not dac=='NA': print >> out_file, '%.6f\t' %(int(dac)/float(len(sampleind_index)*2)),
+			else: print >> out_file, 'NA\t',
 
-		if not dac=='NA': print >> out_file, '%.6f\t' %(int(dac)/float(len(sampleind_index)*2)),
-		else: print >> out_file, 'NA\t',
-
-		if not mac=='NA': print >> out_file, int(mac)/float(len(sampleind_index)*2)
-		else: print >> out_file, 'NA\t'
+			if not mac=='NA': print >> out_file, int(mac)/float(len(sampleind_index)*2)
+			else: print >> out_file, 'NA\t'
 
 
