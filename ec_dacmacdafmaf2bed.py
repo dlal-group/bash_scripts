@@ -97,7 +97,7 @@ for line in gzip.open(inputvcf, 'r'):
 		infosplit=infofield.split(';')
 
 		#skip all multiallelic sites
-		if re.match('T,G', alt):
+		if not re.match('\s+,', alt):
 			for ii in infosplit:
 				if re.match('AA=', ii): 
 					# pdb.set_trace()
