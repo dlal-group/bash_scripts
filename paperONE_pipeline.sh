@@ -733,9 +733,9 @@ case $MODE in
       esac
       #those are the files I need to use to extract the info splitted by chr
       # pop_path=/lustre/scratch113/projects/esgi-vbseq/20140430_purging/UNRELATED/RESULTS/DAF/FIVE_POP
-
+      echo $pop
       #extract the list with all informations needed
-      echo -e "CHROM\tPOS\tID\tREF\tALT\tAC\tAN\tAAF\tMAF";bcftools view -m2 -M2 ${pop_path}/ALL_${pop}_02102016.vcf.gz | bcftools query -f"%CHROM\t%POS\t%ID\t%REF\t%ALT\t%INFO/AC\t%INFO/AN\n" | awk 'BEGIN{OFS="\t"}{print $0,$6/$7}' | awk 'BEGIN{OFS="\t"}{if($8 <= 0.5) print $0,$8;else print $0, 1-$8}' > ${pop_path}/ALL_${pop}_02102016.freq.tab
+      (echo -e "CHROM\tPOS\tID\tREF\tALT\tAC\tAN\tAAF\tMAF";bcftools view -m2 -M2 ${pop_path}/ALL_${pop}_02102016.vcf.gz | bcftools query -f"%CHROM\t%POS\t%ID\t%REF\t%ALT\t%INFO/AC\t%INFO/AN\n" | awk 'BEGIN{OFS="\t"}{print $0,$6/$7}' | awk 'BEGIN{OFS="\t"}{if($8 <= 0.5) print $0,$8;else print $0, 1-$8}') > ${pop_path}/ALL_${pop}_02102016.freq.tab
 
     done
   ;;
