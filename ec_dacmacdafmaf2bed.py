@@ -117,8 +117,8 @@ for line in gzip.open(inputvcf, 'r'):
 		#print '##', ref, alt, ancestralallele
 		if not (re.search('\.', ancestralallele) or re.search('-' , ancestralallele) or re.search('N', ancestralallele)):
 			# pdb.set_trace()
-			if ((ref == ancestralallele)	or (alt == ancestralallele)):
-				alleles_count=frequencies_anc_known_confidence(temporary_genotypes, ref, alt, ancestralallele)
+			if ((ref == ancestralallele)	or (alt == ancestralallele) or (ref == ancestralallele.upper())	or (alt == ancestralallele.upper())):
+				alleles_count=frequencies_anc_known_confidence(temporary_genotypes, ref, alt, ancestralallele.upper())
 				rac=alleles_count[0]; alc=alleles_count[1]; dac=alleles_count[3]; mac=alleles_count[4]
 			else:
 				alleles_count=frequencies_mac(  temporary_genotypes, ref, alt) 
