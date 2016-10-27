@@ -99,7 +99,7 @@ for line in gzip.open(inputvcf, 'r'):
 				# pdb.set_trace()
 				aasplitted=ii.split('=')
 				iisplitted=aasplitted[1].split('|')
-				ancestralallele=iisplitted[1]
+				ancestralallele=iisplitted[0]
 				break
 			else:
 				ancestralallele='.'
