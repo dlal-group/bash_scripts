@@ -120,5 +120,5 @@ file_name=`basename ${file}`
 # count DAC for each samples
 pop=$2
 sample=${file}
-GWAS_DAC=`cat /netapp/dati/INGI_WGS/18112015/${pop}/12112015_FILTERED_REL/30092016_CONV_ID/27102016_DAC_COUNT/by_sample/*.${sample}.tab | fgrep -v "#CHROM"| awk '{sum+=$10}END{print sum}'`
+GWAS_DAC=`cat /netapp/dati/INGI_WGS/18112015/${pop}/12112015_FILTERED_REL/30092016_CONV_ID/27102016_DAC_COUNT/by_sample/*.${sample}.tab | fgrep -v "#CHROM"| awk '$10!="NA"'| awk '{sum+=$10}END{print sum}'`
 echo "${sample} ${GWAS_DAC}" >> /netapp/dati/INGI_WGS/18112015/${pop}/12112015_FILTERED_REL/30092016_CONV_ID/27102016_DAC_COUNT/by_sample/${pop}_all_samples_DAC.tab
