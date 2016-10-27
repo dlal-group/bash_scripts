@@ -839,4 +839,12 @@ file=`sed -n "${LSB_JOBINDEX}p" $1`
 # tabix -f -p vcf ${file}.norm.vcf.gz
 # ~/Work/bash_scripts/vcfchk_fast_count.sh ${file}.norm.vcf.gz
 
+#27/10/2016
+base_dir=`dirname ${file}`
+file_name=`basename ${file}`
+
+mkdir -p ${base_dir}/NO_CSQ/
+
+bcftools norm -f /lustre/scratch114/resources/ref/Homo_sapiens/1000Genomes_hs37d5/hs37d5.fa -m - ${file}| bcftools plugin fill-AN-AC| bcftools annotate -x"INFO/CSQ" -O z -o ${base_dir}/NO_CSQ/${file_name}.norm.vcf.gz
+tabix -f -p vcf ${base_dir}/NO_CSQ/${file_name}.norm.vcf.gz
 
