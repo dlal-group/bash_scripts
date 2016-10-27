@@ -97,7 +97,8 @@ for line in gzip.open(inputvcf, 'r'):
 		for ii in infosplit:
 			if re.match('AA=', ii): 
 				# pdb.set_trace()
-				iisplitted=ii.split('=')
+				aasplitted=ii.split('=')
+				iisplitted=aasplitted[1].split('|')
 				ancestralallele=iisplitted[1]
 				break
 			else:
