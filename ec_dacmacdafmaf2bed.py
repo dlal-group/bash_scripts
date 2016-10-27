@@ -11,9 +11,9 @@ import os
 ec_dac_mac_1kg.py individuals.list (from vcf header) vcfinput outfile
 
 """
-# individualssamplelist="/lustre/scratch113/projects/esgi-vbseq/20140430_purging/UNRELATED/listpop/FVG_unrelated.list"
+# individualssamplelist="/netapp/dati/INGI_WGS/18112015/CARL/12112015_FILTERED_REL/30092016_CONV_ID/CARL_wgs.samples"
 individualssamplelist=sys.argv[1]
-# inputvcf="/lustre/scratch113/projects/esgi-vbseq/20140430_purging/UNRELATED/POP_MERGED_FILES/FIVE_POPS/20140711_ANNOTATED/22.vcf.gz"
+# inputvcf="/netapp/dati/INGI_WGS/18112015/CARL/12112015_FILTERED_REL/30092016_CONV_ID/1.vcf.gz"
 inputvcf=sys.argv[2]
 # outprefix="FVG.chr22.tab"
 outfile=sys.argv[3]
@@ -29,10 +29,11 @@ def frequencies_anc_known_confidence(genlist, ref, alt, anc) :
 		x=item.split(':')
 		r=x[0].count('0'); a=x[0].count('1'); m=x[0].count('.')
 		R=R+r; A=A+a; M=M+m #here we're not taking in account that a site can be missing for an entire population
-		upperanc=swap[anc]
 		if ref==anc: D=A
-		elif ref==upperanc: D=A
-		else: D=R
+		else
+			upperanc=swap[anc]
+			if ref==upperanc: D=A
+			else: D=R
 
 	if (R==0 and A==0):
 		mac="NA"
