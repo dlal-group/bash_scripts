@@ -30,10 +30,11 @@ def frequencies_anc_known_confidence(genlist, ref, alt, anc) :
 		r=x[0].count('0'); a=x[0].count('1'); m=x[0].count('.')
 		R=R+r; A=A+a; M=M+m #here we're not taking in account that a site can be missing for an entire population
 		if ref==anc: D=A
+		elif alt==anc: D=R
 		else:
 			upperanc=swap[anc]
 			if ref==upperanc: D=A
-			else: D=R
+			elif alt==upperanc: R=A
 
 	if (R==0 and A==0):
 		mac="NA"
