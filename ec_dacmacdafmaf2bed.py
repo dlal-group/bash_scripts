@@ -24,16 +24,16 @@ outfile=sys.argv[3]
 def frequencies_anc_known_confidence(genlist, ref, alt, anc) :
 	R=A=M=0
 	D=0; confidence=''
-	#swap={'a':'A', 't':'T', 'g':'G', 'c':'C'}
+	swap={'a':'A', 't':'T', 'g':'G', 'c':'C'}
 	for item in genlist:
 		x=item.split(':')
 		r=x[0].count('0'); a=x[0].count('1'); m=x[0].count('.')
 		R=R+r; A=A+a; M=M+m #here we're not taking in account that a site can be missing for an entire population
+		upperanc=swap[anc]
 		if ref==anc: D=A
+	    else if ref==upperanc: D=A		
 		else: D=R
-		    #upperanc=swap[anc]
-		    #if ref==upperanc: D=A
-		    #else: D=R
+
 	if (R==0 and A==0):
 		mac="NA"
 	else:
