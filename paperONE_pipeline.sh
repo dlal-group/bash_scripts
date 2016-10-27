@@ -33,7 +33,7 @@ case $MODE in
   ;;
   EXTRFREQ )
   #variant type
-  variant=$3
+  pop_file=$2
 
   ;;
   HWECLEAN)
@@ -717,27 +717,14 @@ case $MODE in
     # 3) Keep track of variants missing from each comparison
 
     echo "Extract from tables for each population, info about sites"
-    pops_updated="FVG VBI CARL "
-    for pop in $pops_updated
-    do
-      case $pop in
-        FVG )
-          pop_path=/netapp/dati/INGI_WGS/18112015/FVG/12112015_FILTERED_REL/30092016_UNRELATED
-          ;;
-        VBI )
-          pop_path=/netapp/dati/INGI_WGS/18112015/VBI/12112015_FILTERED_REL/30092016_UNRELATED
-          ;;
-        CARL )
-          pop_path=/netapp/dati/INGI_WGS/18112015/CARL/12112015_FILTERED_REL/30092016_UNRELATED
-          ;;
-      esac
+    pop_file_name=`basename ${pop_file}`
+    pop_dir_name=`dirname ${pop_file}`
       #those are the files I need to use to extract the info splitted by chr
       # pop_path=/lustre/scratch113/projects/esgi-vbseq/20140430_purging/UNRELATED/RESULTS/DAF/FIVE_POP
-      echo $pop
+    echo ${pop_file_name}
       #extract the list with all informations needed
-      (echo -e "CHROM\tPOS\tID\tREF\tALT\tAC\tAN\tAAF\tMAF";bcftools view -m2 -M2 ${pop_path}/ALL_${pop}_02102016.vcf.gz | bcftools query -f"%CHROM\t%POS\t%ID\t%REF\t%ALT\t%INFO/AC\t%INFO/AN\n" | awk 'BEGIN{OFS="\t"}{print $0,$6/$7}' | awk 'BEGIN{OFS="\t"}{if($8 <= 0.5) print $0,$8;else print $0, 1-$8}') > ${pop_path}/ALL_${pop}_02102016.freq.tab
+    (echo -e "CHROM\tPOS\tID\tREF\tALT\tAC\tAN\tAAF\tMAF";bcftools view -m2 -M2 ${pop_file} | bcftools query -f"%CHROM\t%POS\t%ID\t%REF\t%ALT\t%INFO/AC\t%INFO/AN\n" | awk 'BEGIN{OFS="\t"}{print $0,$6/$7}' | awk 'BEGIN{OFS="\t"}{if($8 <= 0.5) print $0,$8;else print $0, 1-$8}') > ${pop_dir_name}/${pop_file_name}.freq.tab
 
-    done
   ;;
   * )
     echo -e "USAGE:\n
