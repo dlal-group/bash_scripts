@@ -79,7 +79,7 @@ case $mode in
 		esac
 		chmod ug+x ${out_path}/${trait}/CKDGEN_R4_${trait}_chr${chr}.sh
 
-		echo "${out_path}/${trait}/CKDGEN_R4_${trait}_chr${chr}.sh" | qsub -cwd -V -hold_jid KIN_${cohort} -l h_vmem=3G
+		echo "${out_path}/${trait}/CKDGEN_R4_${trait}_chr${chr}.sh" | qsub -cwd -V -l h_vmem=3G
 		done
 		done < <(cat ${trait_list})
 	;;
