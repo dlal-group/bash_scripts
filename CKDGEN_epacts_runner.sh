@@ -25,7 +25,7 @@ mkdir --p ${out_path}/
 
 echo "Creating Empirical Kinship matrix..."
 #here we just need to specify the first vcf file
-echo "${DIR}/epacts make-kin --vcf ${VCF}/chr1.dose.vcf.gz --min-maf 0.01 -sepchr --out ${kinfolder}.single.q.emmax.kinf --run 5" | 
+echo "${DIR}/epacts make-kin --vcf ${VCF}/chr1.dose.vcf.gz --min-maf 0.01 -sepchr --out ${kinfolder}.single.q.emmax.kinf --run 5" | qsub -N KIN_${cohort} -o \$JOB_ID_DAC_${cohort}.o -e \$JOB_ID_DAC_${cohort}.e -V -l h_vmem=2G -cwd
 
 echo "Creating the ped file..."
 
@@ -46,7 +46,7 @@ sge_script_create "${cohort}_chr${chr}_${trait}" "${out_path}/${cohort}_chr${chr
 
 chmod ug+x ${out_path}/${trait}/CKDGEN_R4_${trait}_chr${chr}.sh
 
-echo "${out_path}/${trait}/CKDGEN_R4_${trait}_chr${chr}.sh" | qsub -cwd -V -l h_vmem=3G
+echo "${out_path}/${trait}/CKDGEN_R4_${trait}_chr${chr}.sh" | qsub -cwd -V -hold_jid KIN_${cohort} -l h_vmem=3G
 done
 done < <(cat ${trait_list})
 
