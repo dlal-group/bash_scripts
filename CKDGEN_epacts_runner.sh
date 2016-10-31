@@ -66,14 +66,22 @@ case $mode in
 		mkdir -p ${out_path}/${trait}
 		# here we need to work by chromosome
 		# echo "Running LOGISTIC regression model test..."
-		sge_script_create "${cohort}_chr${chr}_${trait}" "${out_path}/${cohort}_chr${chr}_${trait}.o" "${out_path}/${cohort}_chr${chr}_${trait}.e" ${out_path}/${trait}  ${DIR}/epacts single --vcf ${VCF}/chr${chr}.dose.vcf.gz --ped ${PED} --chr ${chr} --pheno ${trait} --cov AGE --cov SEX --cov PC1 --cov PC2 --cov PC3 --cov PC4 --cov PC5 --cov PC6 --cov PC7 --cov PC8 --cov PC9 --cov PC10 --test b.wald --out ${OUT}.single.b.wald  --run 5 > ${out_path}/${trait}/CKDGEN_R4_${trait}_chr${chr}.sh
-
+		case $trait in
+			Gout_men )
+				sge_script_create "${cohort}_chr${chr}_${trait}" "${out_path}/${cohort}_chr${chr}_${trait}.o" "${out_path}/${cohort}_chr${chr}_${trait}.e" ${out_path}/${trait}  ${DIR}/epacts single --vcf ${VCF}/chr${chr}.dose.vcf.gz --ped ${PED} --chr ${chr} --pheno ${trait} --cov AGE --cov PC1 --cov PC2 --cov PC3 --cov PC4 --cov PC5 --cov PC6 --cov PC7 --cov PC8 --cov PC9 --cov PC10 --test b.wald --out ${OUT}.single.b.wald  --run 5 > ${out_path}/${trait}/CKDGEN_R4_${trait}_chr${chr}.sh
+				;;
+			Gout_women )
+				sge_script_create "${cohort}_chr${chr}_${trait}" "${out_path}/${cohort}_chr${chr}_${trait}.o" "${out_path}/${cohort}_chr${chr}_${trait}.e" ${out_path}/${trait}  ${DIR}/epacts single --vcf ${VCF}/chr${chr}.dose.vcf.gz --ped ${PED} --chr ${chr} --pheno ${trait} --cov AGE --cov PC1 --cov PC2 --cov PC3 --cov PC4 --cov PC5 --cov PC6 --cov PC7 --cov PC8 --cov PC9 --cov PC10 --test b.wald --out ${OUT}.single.b.wald  --run 5 > ${out_path}/${trait}/CKDGEN_R4_${trait}_chr${chr}.sh
+				;;
+				* )
+				sge_script_create "${cohort}_chr${chr}_${trait}" "${out_path}/${cohort}_chr${chr}_${trait}.o" "${out_path}/${cohort}_chr${chr}_${trait}.e" ${out_path}/${trait}  ${DIR}/epacts single --vcf ${VCF}/chr${chr}.dose.vcf.gz --ped ${PED} --chr ${chr} --pheno ${trait} --cov AGE --cov SEX --cov PC1 --cov PC2 --cov PC3 --cov PC4 --cov PC5 --cov PC6 --cov PC7 --cov PC8 --cov PC9 --cov PC10 --test b.wald --out ${OUT}.single.b.wald  --run 5 > ${out_path}/${trait}/CKDGEN_R4_${trait}_chr${chr}.sh
+				;;
+		esac
 		chmod ug+x ${out_path}/${trait}/CKDGEN_R4_${trait}_chr${chr}.sh
 
 		echo "${out_path}/${trait}/CKDGEN_R4_${trait}_chr${chr}.sh" | qsub -cwd -V -hold_jid KIN_${cohort} -l h_vmem=3G
 		done
 		done < <(cat ${trait_list})
-
 	;;
 esac
 
