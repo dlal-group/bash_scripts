@@ -19,9 +19,9 @@ source ~/scripts/bash_scripts/SGE_script_create_function
 DIR=/netapp/nfs/softwares/EPACTS/bin
 VCF=${imp_path}
 PED=${pheno_file}
-kinfolder=${out_path}/kinship
+kinfolder=${out_path}/kinship/${cohort}
 
-mkdir --p ${out_path}/
+mkdir --p ${out_path}/kinship
 
 echo "Creating Empirical Kinship matrix..."
 #here we just need to specify the first vcf file
@@ -42,7 +42,7 @@ mkdir -p ${out_path}/${trait}
 # sge_script_create "${cohort}_chr${chr}_${trait}" "${out_path}/${cohort}_chr${chr}_${trait}.o" "${out_path}/${cohort}_chr${chr}_${trait}.e" ${out_path} R CMD BATCH \'--args ${pheno} ${trait} ${covariates} ${kinship} ${geno} ${cohort} ${chr} ${imp_path}\' ~/scripts/r_scripts/GWAS_1KG_imputed.R ${out_path}/MetS_score_analysis_chr${chr}.Rout > ${out_path}/MetS_score_analysis_chr${chr}.sh
 # here we need to work by chromosome
 echo "Running EMMAX single variant test..."
-sge_script_create "${cohort}_chr${chr}_${trait}" "${out_path}/${cohort}_chr${chr}_${trait}.o" "${out_path}/${cohort}_chr${chr}_${trait}.e" ${out_path}/${trait}  ${DIR}/epacts single --vcf ${VCF}/chr${chr}.dose.vcf.gz --ped ${PED} --chr ${chr} --pheno ${trait} --test q.emmax --out ${OUT}.single.q.emmax --kinf ${OUT}.single.q.emmax.kinf --run 5 > ${out_path}/${trait}/CKDGEN_R4_${trait}_chr${chr}.sh
+sge_script_create "${cohort}_chr${chr}_${trait}" "${out_path}/${cohort}_chr${chr}_${trait}.o" "${out_path}/${cohort}_chr${chr}_${trait}.e" ${out_path}/${trait}  ${DIR}/epacts single --vcf ${VCF}/chr${chr}.dose.vcf.gz --ped ${PED} --chr ${chr} --pheno ${trait} --test q.emmax --out ${OUT}.single.q.emmax --kinf ${kinfolder}.single.q.emmax.kinf --run 5 > ${out_path}/${trait}/CKDGEN_R4_${trait}_chr${chr}.sh
 
 chmod ug+x ${out_path}/${trait}/CKDGEN_R4_${trait}_chr${chr}.sh
 
