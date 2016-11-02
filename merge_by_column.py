@@ -1,79 +1,65 @@
-#!/software/bin/python
-
+#!/usr/bin/env python2.7
+#Script used to merge data in a isec style
 import gzip 
 import re 
 import sys 
-from sys import stdout
-"""
-usage python ec_mergeXac.py mychr myvarofinterest mycontofinterest > myfilemerged.bed
+import subprocess as sub
+import time
+import collections
+import itertools
+from itertools import chain
 
-"""
-file1=sys.argv[1]
-file2=sys.argv[2]
-xac=sys.argv[3]
+all_files=sys.argv[1:3]
+# file2=sys.argv[2]
+# file3=sys.argv[3]
+pops=sys.argv[4:]
 
-dic_xac={}
+# pops=["CARL","FVG","VBI"]
+# file1="/netapp/dati/INGI_WGS/18112015/"+pops[0]+"/12112015_FILTERED_REL/30092016_UNRELATED/ALL_"+pops[0]+"_02102016.vcf.gz.freq.tab.10000"
+# file2="/netapp/dati/INGI_WGS/18112015/"+pops[1]+"/12112015_FILTERED_REL/30092016_UNRELATED/ALL_"+pops[1]+"_02102016.vcf.gz.freq.tab.10000"
+# file3="/netapp/dati/INGI_WGS/18112015/"+pops[2]+"/12112015_FILTERED_REL/30092016_UNRELATED/ALL_"+pops[2]+"_02102016.vcf.gz.freq.tab.10000"
 
-for line in gzip.open(file1, 'r'):
-	y=line.split('\t')
-	colofinterest=y.index(xac)
-	#print colofinterest
+# all_files=[file1,file2,file3]
+# all_sites_1=collections.defaultdict(lambda: collections.defaultdict(list))
+# all_sites_2=collections.defaultdict(lambda: collections.defaultdict(list))
+# all_sites_3=collections.defaultdict(lambda: collections.defaultdict(list))
+pop_files={}
+for file in all_files:
+	pop = all_files.index(file)
+	pop_files[pops[pop]] = file
 
-	posizione=y[2]; sitelist.append(posizione)
-		# if re.search('VT=SNP' ,line ): dic_type['SNP'].append(posizione); dic_xac['SNP'][pop][posizione]=y[colofinterest]
-		# elif re.search('VT=INDEL' ,line ): dic_type['INDEL'].append(posizione); dic_xac['INDEL'][pop][posizione]=y[colofinterest]
-		# elif re.search ('VT=SV' , line ) : dic_type['SV'].append(posizione); dic_xac['SV'][pop][posizione]=y[colofinterest]
-		# else: dic_type['NA'].append(posizione); dic_xac['NA'][pop][posizione]=y[colofinterest]
-		if (len(y[4]) == 1 and len(y[5]) == 1): dic_type['SNP'].append(posizione); dic_xac['SNP'][pop][posizione]=y[colofinterest]
-		elif (len(y[4]) != len(y[5]) and re.search(",",y[5]) ): dic_type['MULTI'].append(posizione); dic_xac['MULTI'][pop][posizione]=y[colofinterest]
-		elif (len(y[4]) != len(y[5]) and (not (re.search(",",y[5])))): dic_type['INDEL'].append(posizione); dic_xac['INDEL'][pop][posizione]=y[colofinterest]
-		elif re.search ('VT=SV' , line ) : dic_type['SV'].append(posizione); dic_xac['SV'][pop][posizione]=y[colofinterest]
-		else: dic_type['NA'].append(posizione); dic_xac['NA'][pop][posizione]=y[colofinterest]
+all_sites=collections.defaultdict(lambda: collections.defaultdict(lambda: collections.defaultdict(list)))
+for k in pop_files:
+	#read each file and create a dictionary with chr_pos_ref_alt as key and all other fields as values
+	with open('%s' %(pop_files[k]) ,'r') as current_file:
+		# for line in gzip.open(file1, 'r'):
+		next(current_file)
+		for line in current_file:
+			site=line.rstrip().split("\t")
+			site_k="_".join([site[0],site[1]])
+			if len(site[3]) != len(site[4]):
+				all_sites[site_k]["INDEL"][k].append([site[2:]])
+			else:
+				all_sites[site_k]["SNP"][k].append([site[2:]])
 
+#now we need to check the overlap between each population
+# 1_1000894
+print 'CHROM\tPOS\tID\tREF\tALT',
+for pop in pops:
+	print '\t%s\t%s\t%s\t%s' %(pop+"_AC",pop+"_AN",pop+"_AAF",pop+"_MAF"),
+print '\tPOPS'
 
-stdout.write('#CHR\tPOZ\tPOS\tVT')
-# for pop in poplist[contofinterest]: print '%s' %(pop),
-for pop in poplist[contofinterest]: stdout.write('\t%s' % pop)
-print '\r'
-
-for site in set(sitelist):
-	for vt in vartype:
-		for main_pop in poplist[contofinterest]:
-			if site in dic_xac[vt][main_pop]:  
-				# print '%s\t%s\t%s\t%s' %(chr,int(site)-1,site,vt)
-				stdout.write('%s\t%s\t%s\t%s' %(chr,int(site)-1,site,vt))
-				for pop in poplist[contofinterest]: 
-					# print '%s' %(dic_xac[vt][pop][site]),
-					if site in dic_xac[vt][pop]:
-						stdout.write('\t%s' %(dic_xac[vt][pop][site]))
-					else:
-						stdout.write('\tna')
-				print '\r'
-				break
-		# elif site in dic_xac[vt][poplist[contofinterest][1]]:
-		# 	stdout.write('%s\t%s\t%s\t%s' %(chr,int(site)-1,site,vt))
-		# 	for pop in poplist[contofinterest]: 
-		# 		# print '%s' %(dic_xac[vt][pop][site]),
-		# 		if site in dic_xac[vt][pop]:
-		# 			stdout.write('\t%s' %(dic_xac[vt][pop][site]))
-		# 		else:
-		# 			stdout.write('\tna')
-		# 	print '\r'
-		# elif site in dic_xac[vt][poplist[contofinterest][2]]:
-		# 	stdout.write('%s\t%s\t%s\t%s' %(chr,int(site)-1,site,vt))
-		# 	for pop in poplist[contofinterest]: 
-		# 		# print '%s' %(dic_xac[vt][pop][site]),
-		# 		if site in dic_xac[vt][pop]:
-		# 			stdout.write('\t%s' %(dic_xac[vt][pop][site]))
-		# 		else:
-		# 			stdout.write('\tna')
-		# 	print '\r'
-		# elif site in dic_xac[vt][poplist[contofinterest][3]]:
-		# 	stdout.write('%s\t%s\t%s\t%s' %(chr,int(site)-1,site,vt))
-		# 	for pop in poplist[contofinterest]: 
-		# 		# print '%s' %(dic_xac[vt][pop][site]),
-		# 		if site in dic_xac[vt][pop]:
-		# 			stdout.write('\t%s' %(dic_xac[vt][pop][site]))
-		# 		else:
-		# 			stdout.write('\tna')
-		# 	print '\r'
+for var in all_sites:
+	for v_type in all_sites[var]:
+		f_k=[all_sites[var][v_type].keys()][0][0]
+		var_split=var.split("_")
+		var_info=list(chain.from_iterable(all_sites[var][v_type][f_k][0]))
+		print '%s\t%s\t%s\t%s\t%s' %(var_split[0],var_split[1],var_info[0],var_info[1],var_info[2]),
+		for pop in pops:
+			if pop in all_sites[var][v_type].keys():
+				info=list(chain.from_iterable(all_sites[var][v_type][pop][0]))
+				print '\t%s\t%s\t%s\t%s' %(info[3],info[4],info[5],info[6]),
+			else:
+				print '\tNA\tNA\tNA\tNA',
+		print '\t%s' %("_".join(all_sites[var][v_type].keys()))
+		# print '\r'
