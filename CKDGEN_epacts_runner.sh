@@ -49,7 +49,8 @@ case $mode in
 
 		chmod ug+x ${out_path}/${mode}/${trait}/CKDGEN_R4_${trait}_chr${chr}.sh
 
-		echo "${out_path}/${mode}/${trait}/CKDGEN_R4_${trait}_chr${chr}.sh" | qsub -N "${cohort}_chr${chr}_${trait}" -o "${out_path}/${cohort}_chr${chr}_${trait}.o" -e "${out_path}/${cohort}_chr${chr}_${trait}.e" -cwd -V -hold_jid KIN_${cohort} -l h_vmem=3G
+		# echo "${out_path}/${mode}/${trait}/CKDGEN_R4_${trait}_chr${chr}.sh" | qsub -N "${cohort}_chr${chr}_${trait}" -o "${out_path}/${cohort}_chr${chr}_${trait}.o" -e "${out_path}/${cohort}_chr${chr}_${trait}.e" -cwd -V -hold_jid KIN_${cohort} -l h_vmem=3G
+		echo "${out_path}/${mode}/${trait}/CKDGEN_R4_${trait}_chr${chr}.sh" | qsub -N "${cohort}_chr${chr}_${trait}" -o "${out_path}/${cohort}_chr${chr}_${trait}.o" -e "${out_path}/${cohort}_chr${chr}_${trait}.e" -cwd -V -l h_vmem=3G
 		done
 		done < <(cat ${trait_list})
 
