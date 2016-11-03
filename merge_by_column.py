@@ -40,7 +40,7 @@ for k in pop_files.keys():
 		next(current_file)
 		for line in current_file:
 			site=line.rstrip().split("\t")
-			site_k="_".join([site[0],site[1]])
+			site_k="_".join([site[0],site[1],site[3],site[4]])
 			if len(site[3]) != len(site[4]):
 				all_sites[site_k]["INDEL"][k].append([site[2:]])
 			else:
@@ -57,7 +57,7 @@ for var in all_sites:
 		f_k=[all_sites[var][v_type].keys()][0][0]
 		var_split=var.split("_")
 		var_info=list(chain.from_iterable(all_sites[var][v_type][f_k][0]))
-		print '%s\t%s\t%s\t%s\t%s' %(var_split[0],var_split[1],var_info[0],var_info[1],var_info[2]),
+		print '%s\t%s\t%s\t%s\t%s' %(var_split[0],var_split[1],var_info[0],var_split[2],var_split[3]),
 		for pop in pops:
 			if pop in all_sites[var][v_type].keys():
 				info=list(chain.from_iterable(all_sites[var][v_type][pop][0]))
