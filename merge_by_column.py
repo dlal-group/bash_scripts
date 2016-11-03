@@ -9,10 +9,10 @@ import collections
 import itertools
 from itertools import chain
 
-all_files=sys.argv[1:3]
+all_files=sys.argv[1:4]
 # file2=sys.argv[2]
 # file3=sys.argv[3]
-pops=sys.argv[4:6]
+pops=sys.argv[4:]
 
 # pops=["CARL","FVG","VBI"]
 # file1="/netapp/dati/INGI_WGS/18112015/"+pops[0]+"/12112015_FILTERED_REL/30092016_UNRELATED/ALL_"+pops[0]+"_02102016.vcf.gz.freq.tab.10000"
