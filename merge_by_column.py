@@ -30,7 +30,7 @@ for file in all_files:
 	pop = all_files.index(file)
 	pop_files[pops[pop]] = file
 
-print >> sys.stderr, '%s' %(sys.argv)
+print >> sys.stderr, '%s' %(pop_files)
 
 
 all_sites=collections.defaultdict(lambda: collections.defaultdict(lambda: collections.defaultdict(list)))
