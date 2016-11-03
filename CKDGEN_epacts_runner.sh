@@ -25,13 +25,12 @@ kinfolder=${out_path}/kinship/${cohort}
 mkdir --p ${out_path}/kinship
 
 case $mode in
+	KINSHIP ) 
+		echo "Creating Empirical Kinship matrix..."
+		#here we just need to specify the first vcf file
+		echo "${DIR}/epacts make-kin --vcf ${VCF}/chr1.dose.vcf.gz --min-maf 0.01 -sepchr --out ${kinfolder}.single.q.emmax.kinf --run 5" | qsub -N KIN_${cohort} -o \$JOB_ID_KIN_${cohort}.o -e \$JOB_ID_KIN_${cohort}.e -V -l h_vmem=2G -cwd
+	;;
 	LINEAR )
-		# echo "Creating Empirical Kinship matrix..."
-		# #here we just need to specify the first vcf file
-		# echo "${DIR}/epacts make-kin --vcf ${VCF}/chr1.dose.vcf.gz --min-maf 0.01 -sepchr --out ${kinfolder}.single.q.emmax.kinf --run 5" | qsub -N KIN_${cohort} -o \$JOB_ID_KIN_${cohort}.o -e \$JOB_ID_KIN_${cohort}.e -V -l h_vmem=2G -cwd
-
-		# echo "Creating the ped file..."
-
 
 		while read trait
 		do
@@ -56,6 +55,7 @@ case $mode in
 
 	;;
 	LOGISTIC )
+		btest=$7
 		while read trait
 		do
 
@@ -69,13 +69,13 @@ case $mode in
 		# echo "Running LOGISTIC regression model test..."
 		case $trait in
 			Gout_men )
-				sge_script_create "${cohort}_chr${chr}_${trait}" "${out_path}/${cohort}_chr${chr}_${trait}.o" "${out_path}/${cohort}_chr${chr}_${trait}.e" ${out_path}/${trait}  ${DIR}/epacts single --vcf ${VCF}/chr${chr}.dose.vcf.gz --ped ${PED} --chr ${chr} --pheno ${trait} --cov AGE --cov PC1 --cov PC2 --cov PC3 --cov PC4 --cov PC5 --cov PC6 --cov PC7 --cov PC8 --cov PC9 --cov PC10 --unit 10000 --test b.wald --out ${OUT}.single.b.wald  --run 1 > ${out_path}/${mode}/${trait}/CKDGEN_R4_${trait}_chr${chr}.sh
+				sge_script_create "${cohort}_chr${chr}_${trait}" "${out_path}/${cohort}_chr${chr}_${trait}.o" "${out_path}/${cohort}_chr${chr}_${trait}.e" ${out_path}/${trait}  ${DIR}/epacts single --vcf ${VCF}/chr${chr}.dose.vcf.gz --ped ${PED} --chr ${chr} --pheno ${trait} --cov AGE --cov PC1 --cov PC2 --cov PC3 --cov PC4 --cov PC5 --cov PC6 --cov PC7 --cov PC8 --cov PC9 --cov PC10 --unit 10000 --test ${btest} --out ${OUT}.single.b.wald  --run 1 > ${out_path}/${mode}/${trait}/CKDGEN_R4_${trait}_chr${chr}.sh
 				;;
 			Gout_women )
-				sge_script_create "${cohort}_chr${chr}_${trait}" "${out_path}/${cohort}_chr${chr}_${trait}.o" "${out_path}/${cohort}_chr${chr}_${trait}.e" ${out_path}/${trait}  ${DIR}/epacts single --vcf ${VCF}/chr${chr}.dose.vcf.gz --ped ${PED} --chr ${chr} --pheno ${trait} --cov AGE --cov PC1 --cov PC2 --cov PC3 --cov PC4 --cov PC5 --cov PC6 --cov PC7 --cov PC8 --cov PC9 --cov PC10 --unit 10000 --test b.wald --out ${OUT}.single.b.wald  --run 1 > ${out_path}/${mode}/${trait}/CKDGEN_R4_${trait}_chr${chr}.sh
+				sge_script_create "${cohort}_chr${chr}_${trait}" "${out_path}/${cohort}_chr${chr}_${trait}.o" "${out_path}/${cohort}_chr${chr}_${trait}.e" ${out_path}/${trait}  ${DIR}/epacts single --vcf ${VCF}/chr${chr}.dose.vcf.gz --ped ${PED} --chr ${chr} --pheno ${trait} --cov AGE --cov PC1 --cov PC2 --cov PC3 --cov PC4 --cov PC5 --cov PC6 --cov PC7 --cov PC8 --cov PC9 --cov PC10 --unit 10000 --test ${btest} --out ${OUT}.single.b.wald  --run 1 > ${out_path}/${mode}/${trait}/CKDGEN_R4_${trait}_chr${chr}.sh
 				;;
 				* )
-				sge_script_create "${cohort}_chr${chr}_${trait}" "${out_path}/${cohort}_chr${chr}_${trait}.o" "${out_path}/${cohort}_chr${chr}_${trait}.e" ${out_path}/${trait}  ${DIR}/epacts single --vcf ${VCF}/chr${chr}.dose.vcf.gz --ped ${PED} --chr ${chr} --pheno ${trait} --cov AGE --cov SEX --cov PC1 --cov PC2 --cov PC3 --cov PC4 --cov PC5 --cov PC6 --cov PC7 --cov PC8 --cov PC9 --cov PC10 --unit 10000 --test b.wald --out ${OUT}.single.b.wald  --run 1 > ${out_path}/${mode}/${trait}/CKDGEN_R4_${trait}_chr${chr}.sh
+				sge_script_create "${cohort}_chr${chr}_${trait}" "${out_path}/${cohort}_chr${chr}_${trait}.o" "${out_path}/${cohort}_chr${chr}_${trait}.e" ${out_path}/${trait}  ${DIR}/epacts single --vcf ${VCF}/chr${chr}.dose.vcf.gz --ped ${PED} --chr ${chr} --pheno ${trait} --cov AGE --cov SEX --cov PC1 --cov PC2 --cov PC3 --cov PC4 --cov PC5 --cov PC6 --cov PC7 --cov PC8 --cov PC9 --cov PC10 --unit 10000 --test ${btest} --out ${OUT}.single.b.wald  --run 1 > ${out_path}/${mode}/${trait}/CKDGEN_R4_${trait}_chr${chr}.sh
 				;;
 		esac
 		chmod ug+x ${out_path}/${mode}/${trait}/CKDGEN_R4_${trait}_chr${chr}.sh
