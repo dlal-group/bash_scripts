@@ -30,6 +30,8 @@ for file in all_files:
 	pop = all_files.index(file)
 	pop_files[pops[pop]] = file
 
+print >> sys.stderr, '%s' %(all_files)
+print >> sys.stderr, '%s' %(pops)
 print >> sys.stderr, '%s' %(pop_files)
 
 
