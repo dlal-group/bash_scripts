@@ -32,7 +32,7 @@ if mode == 'GEMMA':
 	print 'chr\trs\tps\tn_mis\tn_obs\tallele1\tallele0\taf\tbeta\tse\tp_wald\tp_lrt\tp_score\trsID'
 	current_file=gzip.open('%s' %(res_file), 'r')
 	for line in current_file:
-		if not re.match('allele1',line):		
+		if not re.match('chr',line):		
 			site=line.rstrip().split("\t")
 			site_key="_".join([site[0],site[2],site[5],site[6]])
 			if site_key in all_annots.keys():
