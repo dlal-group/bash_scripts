@@ -1,4 +1,4 @@
-#!/software/bin/python2.7
+#!/usr/bin/env python2.7
 #annotate variants after genabel analyses using 1000GPh3 data
 import gzip 
 import re 
