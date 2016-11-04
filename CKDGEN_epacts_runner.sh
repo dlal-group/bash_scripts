@@ -21,11 +21,12 @@ DIR=/netapp/nfs/softwares/EPACTS/bin
 VCF=${imp_path}
 PED=${pheno_file}
 kinfolder=${out_path}/kinship/${cohort}
+mkdir --p ${out_path}
 
-mkdir --p ${out_path}/kinship
 
 case $mode in
 	KINSHIP ) 
+		mkdir --p ${out_path}/kinship
 		echo "Creating Empirical Kinship matrix..."
 		#here we just need to specify the first vcf file
 		echo "${DIR}/epacts make-kin --vcf ${VCF}/chr1.dose.vcf.gz --min-maf 0.01 -sepchr --out ${kinfolder}.single.q.emmax.kinf --run 5" | qsub -N KIN_${cohort} -o \$JOB_ID_KIN_${cohort}.o -e \$JOB_ID_KIN_${cohort}.e -V -l h_vmem=2G -cwd
