@@ -44,7 +44,6 @@ case $mode in
 		mkdir -p ${out_path}/${mode}/${trait}
 		# sge_script_create "${cohort}_chr${chr}_${trait}" "${out_path}/${cohort}_chr${chr}_${trait}.o" "${out_path}/${cohort}_chr${chr}_${trait}.e" ${out_path} R CMD BATCH \'--args ${pheno} ${trait} ${covariates} ${kinship} ${geno} ${cohort} ${chr} ${imp_path}\' ~/scripts/r_scripts/GWAS_1KG_imputed.R ${out_path}/MetS_score_analysis_chr${chr}.Rout > ${out_path}/MetS_score_analysis_chr${chr}.sh
 		# here we need to work by chromosome
-		echo "Running EMMAX single variant test..."
 		sge_script_create "${cohort}_chr${chr}_${trait}" "${out_path}/${cohort}_chr${chr}_${trait}.o" "${out_path}/${cohort}_chr${chr}_${trait}.e" ${out_path}/${trait}  ${DIR}/epacts single --vcf ${VCF}/chr${chr}.dose.vcf.gz --ped ${PED} --chr ${chr} --pheno ${trait} --unit 10000 --test q.emmax --out ${OUT}.single.q.emmax --kinf ${kinfolder}.single.q.emmax.kinf --run 1 > ${out_path}/${mode}/${trait}/CKDGEN_R4_${trait}_chr${chr}.sh
 
 		chmod ug+x ${out_path}/${mode}/${trait}/CKDGEN_R4_${trait}_chr${chr}.sh
