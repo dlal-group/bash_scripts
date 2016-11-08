@@ -845,6 +845,6 @@ file_name=`basename ${file}`
 
 mkdir -p ${base_dir}/NO_CSQ/
 
-bcftools annotate -x"INFO/CSQ,INFO/AFR_AF,INFO/AMR_AF,INFO/EAS_AF,INFO/EUR_AF,INFO/SAS_AF" ${file} | bcftools norm -f /lustre/scratch114/resources/ref/Homo_sapiens/1000Genomes_hs37d5/hs37d5.fa -m -| bcftools plugin fill-AN-AC -O z -o ${base_dir}/NO_CSQ/${file_name}.norm.vcf.gz
+bcftools annotate -x"ID,INFO/CSQ,INFO/AFR_AF,INFO/AMR_AF,INFO/EAS_AF,INFO/EUR_AF,INFO/SAS_AF" ${file} | bcftools norm -f /lustre/scratch114/resources/ref/Homo_sapiens/1000Genomes_hs37d5/hs37d5.fa -m -| bcftools plugin fill-AN-AC -O z -o ${base_dir}/NO_CSQ/${file_name}.norm.vcf.gz
 tabix -f -p vcf ${base_dir}/NO_CSQ/${file_name}.norm.vcf.gz
 
