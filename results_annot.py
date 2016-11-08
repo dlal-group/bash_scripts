@@ -1,5 +1,6 @@
 #!/usr/bin/env python2.7
 #annotate variants after genabel analyses using 1000GPh3 data
+import argparse
 import gzip 
 import re 
 import sys 
@@ -9,11 +10,20 @@ import collections
 import itertools
 from itertools import chain
 
-
+#include a usage message
+parser=argparse.ArgumentParser()
+parser.add_argument('<result file>')
+parser.add_argument('<annotation_vcf>')
+parser.add_argument('<GEMMA/genABEL>')
+if len(sys.argv)==1:
+    parser.print_usage()
+    sys.exit(1)
+args=parser.parse_args()
 
 res_file=sys.argv[1]
 annot_file=sys.argv[2]
 mode=sys.argv[3]
+
 
 # read annotation file (it will be in vcf.gz format)
 current_annot=gzip.open('%s' %(annot_file), 'r')

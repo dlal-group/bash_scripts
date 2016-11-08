@@ -69,18 +69,18 @@ case $mode in
 		# echo "Running LOGISTIC regression model test..."
 		case $trait in
 			Gout_men )
-				sge_script_create "${cohort}_chr${chr}_${trait}" "${out_path}/${cohort}_chr${chr}_${trait}.o" "${out_path}/${cohort}_chr${chr}_${trait}.e" ${out_path}/${trait}  ${DIR}/epacts single --vcf ${VCF}/chr${chr}.dose.vcf.gz --ped ${PED} --chr ${chr} --pheno ${trait} --cov AGE --cov PC1 --cov PC2 --cov PC3 --cov PC4 --cov PC5 --cov PC6 --cov PC7 --cov PC8 --cov PC9 --cov PC10 --unit 10000 --test ${btest} --out ${OUT}.single.b.wald  --run 1 > ${out_path}/${mode}/${trait}/CKDGEN_R4_${trait}_chr${chr}.sh
+				sge_script_create "${cohort}_chr${chr}_${trait}.${btest}" "${out_path}/${cohort}_chr${chr}_${trait}.${btest}.o" "${out_path}/${cohort}_chr${chr}_${trait}.${btest}.e" ${out_path}/${trait}  ${DIR}/epacts single --vcf ${VCF}/chr${chr}.dose.vcf.gz --ped ${PED} --chr ${chr} --pheno ${trait} --cov AGE --cov PC1 --cov PC2 --cov PC3 --cov PC4 --cov PC5 --cov PC6 --cov PC7 --cov PC8 --cov PC9 --cov PC10 --unit 10000 --test ${btest} --out ${OUT}.single.${btest}  --run 1 > ${out_path}/${mode}/${trait}/CKDGEN_R4_${trait}_chr${chr}.${btest}.sh
 				;;
 			Gout_women )
-				sge_script_create "${cohort}_chr${chr}_${trait}" "${out_path}/${cohort}_chr${chr}_${trait}.o" "${out_path}/${cohort}_chr${chr}_${trait}.e" ${out_path}/${trait}  ${DIR}/epacts single --vcf ${VCF}/chr${chr}.dose.vcf.gz --ped ${PED} --chr ${chr} --pheno ${trait} --cov AGE --cov PC1 --cov PC2 --cov PC3 --cov PC4 --cov PC5 --cov PC6 --cov PC7 --cov PC8 --cov PC9 --cov PC10 --unit 10000 --test ${btest} --out ${OUT}.single.b.wald  --run 1 > ${out_path}/${mode}/${trait}/CKDGEN_R4_${trait}_chr${chr}.sh
+				sge_script_create "${cohort}_chr${chr}_${trait}.${btest}" "${out_path}/${cohort}_chr${chr}_${trait}.${btest}.o" "${out_path}/${cohort}_chr${chr}_${trait}.${btest}.e" ${out_path}/${trait}  ${DIR}/epacts single --vcf ${VCF}/chr${chr}.dose.vcf.gz --ped ${PED} --chr ${chr} --pheno ${trait} --cov AGE --cov PC1 --cov PC2 --cov PC3 --cov PC4 --cov PC5 --cov PC6 --cov PC7 --cov PC8 --cov PC9 --cov PC10 --unit 10000 --test ${btest} --out ${OUT}.single.${btest}  --run 1 > ${out_path}/${mode}/${trait}/CKDGEN_R4_${trait}_chr${chr}.${btest}.sh
 				;;
 				* )
-				sge_script_create "${cohort}_chr${chr}_${trait}" "${out_path}/${cohort}_chr${chr}_${trait}.o" "${out_path}/${cohort}_chr${chr}_${trait}.e" ${out_path}/${trait}  ${DIR}/epacts single --vcf ${VCF}/chr${chr}.dose.vcf.gz --ped ${PED} --chr ${chr} --pheno ${trait} --cov AGE --cov SEX --cov PC1 --cov PC2 --cov PC3 --cov PC4 --cov PC5 --cov PC6 --cov PC7 --cov PC8 --cov PC9 --cov PC10 --unit 10000 --test ${btest} --out ${OUT}.single.b.wald  --run 1 > ${out_path}/${mode}/${trait}/CKDGEN_R4_${trait}_chr${chr}.sh
+				sge_script_create "${cohort}_chr${chr}_${trait}.${btest}" "${out_path}/${cohort}_chr${chr}_${trait}.${btest}.o" "${out_path}/${cohort}_chr${chr}_${trait}.${btest}.e" ${out_path}/${trait}  ${DIR}/epacts single --vcf ${VCF}/chr${chr}.dose.vcf.gz --ped ${PED} --chr ${chr} --pheno ${trait} --cov AGE --cov SEX --cov PC1 --cov PC2 --cov PC3 --cov PC4 --cov PC5 --cov PC6 --cov PC7 --cov PC8 --cov PC9 --cov PC10 --unit 10000 --test ${btest} --out ${OUT}.single.${btest}  --run 1 > ${out_path}/${mode}/${trait}/CKDGEN_R4_${trait}_chr${chr}.${btest}.sh
 				;;
 		esac
-		chmod ug+x ${out_path}/${mode}/${trait}/CKDGEN_R4_${trait}_chr${chr}.sh
+		chmod ug+x ${out_path}/${mode}/${trait}/CKDGEN_R4_${trait}_chr${chr}.${btest}.sh
 
-		echo "${out_path}/${mode}/${trait}/CKDGEN_R4_${trait}_chr${chr}.sh" | qsub -N "${cohort}_chr${chr}_${trait}" -o "${out_path}/${cohort}_chr${chr}_${trait}.o" -e "${out_path}/${cohort}_chr${chr}_${trait}.e" -cwd -V -l h_vmem=3G
+		echo "${out_path}/${mode}/${trait}/CKDGEN_R4_${trait}_chr${chr}.${btest}.sh" | qsub -N "${cohort}_chr${chr}_${trait}.${btest}" -o "${out_path}/${cohort}_chr${chr}_${trait}.${btest}.o" -e "${out_path}/${cohort}_chr${chr}_${trait}.${btest}.e" -cwd -V -l h_vmem=3G
 		done
 		done < <(cat ${trait_list})
 	;;
