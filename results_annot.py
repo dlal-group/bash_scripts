@@ -45,7 +45,7 @@ if mode == 'GEMMA':
 		if not re.match('chr',line):		
 			site=line.rstrip().split("\t")
 			site_key="_".join([site[0],site[2],site[5],site[6]])
-			if site_key in all_annots.keys():
+			if all_annots[site_key]:
 				all_res[site_key]=[site,all_annots[site_key]]
 				print '%s\t%s' %("\t".join(site), all_annots[site_key])
 			else:
@@ -59,7 +59,7 @@ elif mode == 'genABEL':
 		for line in current_file:
 			site=line.rstrip().split(",")
 			site_key="_".join([site[1],site[2],site[3],site[4]])
-			if site_key in all_annots.keys():
+			if all_annots[site_key]:
 				all_res[site_key]=[site,all_annots[site_key]]
 				print '%s,%s' %(",".join(site), all_annots[site_key])
 			else:
