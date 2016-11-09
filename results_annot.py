@@ -27,7 +27,7 @@ mode=sys.argv[3]
 
 # read annotation file (it will be in vcf.gz format)
 current_annot=gzip.open('%s' %(annot_file), 'r')
-
+sys.stderr.write('reading annotation file...\n')
 all_annots={}
 for line in current_annot:
 	x=line.split()
@@ -35,6 +35,8 @@ for line in current_annot:
 		ann_key="_".join([x[0],x[1],x[3],x[4]])
 		all_annots[ann_key] = x[2]
 
+
+sys.stderr.write('Starting annotation...\n')
 #now we need to get from res files all keys and add the rsID
 all_res = {}
 #read res_file
@@ -45,11 +47,12 @@ if mode == 'GEMMA':
 		if not re.match('chr',line):		
 			site=line.rstrip().split("\t")
 			site_key="_".join([site[0],site[2],site[5],site[6]])
-			if all_annots[site_key]:
-				all_res[site_key]=[site,all_annots[site_key]]
+			try:
+				all_annots[site_key]
+				# all_res[site_key]=[site,all_annots[site_key]]
 				print '%s\t%s' %("\t".join(site), all_annots[site_key])
-			else:
-				all_res[site_key]=[site,":".join([site[0],site[2]])]
+			except KeyError, e:
+				# all_res[site_key]=[site,":".join([site[0],site[2]])]
 				print '%s\t%s' %("\t".join(site),":".join([site[0],site[2]]))
 
 elif mode == 'genABEL':
@@ -59,9 +62,10 @@ elif mode == 'genABEL':
 		for line in current_file:
 			site=line.rstrip().split(",")
 			site_key="_".join([site[1],site[2],site[3],site[4]])
-			if all_annots[site_key]:
-				all_res[site_key]=[site,all_annots[site_key]]
+			try:
+				all_annots[site_key]:
+				# all_res[site_key]=[site,all_annots[site_key]]
 				print '%s,%s' %(",".join(site), all_annots[site_key])
-			else:
-				all_res[site_key]=[site,":".join([site[1],site[2]])]
+			except KeyError, e:
+				# all_res[site_key]=[site,":".join([site[1],site[2]])]
 				print '%s,%s' %(",".join(site),":".join([site[1],site[2]]))
