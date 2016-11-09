@@ -52,6 +52,17 @@ case $MODE in
     mac=$7
     outdir=$8/CHR${CHR}
     mkdir -p ${outdir}
+    ;;
+  LISTROH )
+    window=$3
+    overlap=$4
+    ld_win=$5
+    r2=$6
+    mac=$7
+    outdir=$8/CHR${CHR}
+    pop_path=$9
+    samples_to_exclude=${10}
+    mkdir -p ${outdir}
     ;;  
   ROH*)
     #set parameters for beagle:
@@ -613,6 +624,37 @@ case $MODE in
           
         fi
     done
+    ;;
+    LISTROH )
+    echo "Calculate ROH for a list of samples from splitted vcf files with IBDseq!!"
+    # echo "We'll have also data separate for villages in FVG"
+
+    echo -e "Parameters: \nwindow=${window}\noverlap=${overlap}\nr2=${r2}\nMAC=${mac}\npop_path=${pop_path}\nsamples_to_exclude=${samples_to_exclude}"
+    #use he same vcf file for all the samples but change the sample list of individuals toi exclude from the analysis
+    # pops_updated="FVG VBI CARL Erto Resia Illegio Sauris"
+      
+
+        #we can filter out unrelated after the calculation
+        # pop_list=/lustre/scratch113/projects/esgi-vbseq/20140430_purging/46_SAMPLES/listpop/BEAGLE/all_pop_but_${pop}.txt
+        # pop_list=/lustre/scratch113/projects/esgi-vbseq/20140430_purging/UNRELATED/listpop/FIVE_POPS/all_pop_but_${pop}.txt
+        # pop_list=/lustre/scratch113/projects/esgi-vbseq/20140430_purging/UNRELATED/listpop/all_pop_but_${pop}.txt
+        # pop_list=/lustre/scratch113/projects/esgi-vbseq/20140430_purging/ALL/listpop/all_pop_but_${pop}.txt
+        # marker_list=/lustre/scratch113/projects/esgi-vbseq/20140430_purging/POP_MERGED_FILES/20140520_ROH/sites_with_missing_genotypes.list
+        #use freq data
+        # bsub -J"roh_${pop}" -o"%J_roh_${pop}.o" -q normal -M8000 -n2 -R"span[hosts=1] select[mem>=8000] rusage[mem=8000]" -- java -Xms5000m -Xmx5000m -jar /nfs/team151/software/beagle_4/b4.r1274.jar gtgl=${pop_path}/22.vcf.gz ibd=true nthreads=2 excludesamples=${pop_list} excludemarkers=${marker_list} out=${pop}.roh
+        # bsub -J"roh_${pop}" -o"%J_roh_${pop}.o" -q normal -M8000 -n2 -R"span[hosts=1] select[mem>=8000] rusage[mem=8000]" -- java -Xms5000m -Xmx5000m -jar /nfs/team151/software/beagle_4/b4.r1274.jar gt=${pop_path}/22.nonmissing.vcf.gz ibd=true nthreads=2 excludesamples=${pop_list} out=${pop}.roh
+        # bsub -J"roh_${pop}" -o"%J_roh_${pop}.o" -q normal -M8000 -n2 -R"span[hosts=1] select[mem>=8000] rusage[mem=8000]" -- java -Xms5000m -Xmx5000m -jar /nfs/team151/software/beagle_4/b4.r1274.jar gt=${pop_path}/${CHR}.nonmissing.maf_gt_05.vcf.gz ibd=true nthreads=2 excludesamples=${pop_list} window=${window} overlap=${overlap} out=${pop}.roh
+        # bsub -J"roh_${pop}" -o"%J_roh_${pop}.o" -q normal -M8000 -n2 -R"span[hosts=1] select[mem>=8000] rusage[mem=8000]" -- java -Xms5000m -Xmx5000m -jar /nfs/team151/software/beagle_4/b4.r1274.jar gt=${pop_path}/${CHR}.non_missing.vcf.gz ibd=true nthreads=2 excludesamples=${pop_list} window=${window} overlap=${overlap} out=${outdir}/${pop}.roh
+        # bsub -J"roh_${pop}" -o"%J_roh_${pop}.o" -q yesterday -M8000 -n2 -R"span[hosts=1] select[mem>=8000] rusage[mem=8000]" -- java -Xms5000m -Xmx5000m -jar /nfs/team151/software/beagle_4/b4.r1274.jar gt=${pop_path}/${CHR}.nonmissing.vcf.gz ibd=true nthreads=2 excludesamples=${pop_list} window=${window} overlap=${overlap} out=${outdir}/${pop}.roh
+        # bsub -J"roh_${pop}_${CHR}" -o"%J_roh_${pop}_${CHR}.o" -q normal -M8000 -n4 -R"span[hosts=1] select[mem>=8000] rusage[mem=8000]" -- java -Xms5000m -Xmx5000m -jar /nfs/team151/software/beagle_4/b4.r1274.jar gt=${pop_path}/${CHR}.non_missing.vcf.gz ibd=true nthreads=4 excludesamples=${pop_list} window=${window} overlap=${overlap} out=${outdir}/${pop}.roh
+        # bsub -J"roh_${pop}_${CHR}" -o"%J_roh_${pop}_${CHR}.o" -q normal -M8000 -n4 -R"span[hosts=1] select[mem>=8000] rusage[mem=8000]" -- java -Xms5000m -Xmx5000m -jar /nfs/team151/software/IBDseq/ibdseq.r1206.jar gt=${pop_path}/${CHR}.non_missing.vcf.gz nthreads=4 excludesamples=${pop_list} out=${outdir}/${pop}.roh
+        if [[ $mac -eq 1 ]]; then
+          #statements
+        bsub -J"roh_${CHR}" -o"LOGS/%J_roh_${CHR}.o" -q normal -M5000 -n8 -R"span[hosts=1] select[mem>=5000] rusage[mem=5000]" -- java -Xms5000m -Xmx5000m -jar /nfs/team151/software/IBDseq/ibdseq.r1206.jar gt=${pop_path} excludesamples=${samples_to_exclude} chrom=${CHR} nthreads=8 ibdlod=1 r2max=${r2} out=${outdir}/${pop}.roh
+        else
+        bsub -J"roh_${CHR}" -o"LOGS/%J_roh_${CHR}.o" -q normal -M5000 -n8 -R"span[hosts=1] select[mem>=5000] rusage[mem=5000]" -- java -Xms5000m -Xmx5000m -jar /nfs/team151/software/IBDseq/ibdseq.r1206.jar gt=${pop_path} excludesamples=${samples_to_exclude} chrom=${CHR} nthreads=8 ibdlod=1 r2max=${r2} minalleles=${mac} out=${outdir}/${pop}.roh
+          
+        fi
     ;;
   SPLITCSQ )
     echo "Split a chromosome file using a list of consequences"
