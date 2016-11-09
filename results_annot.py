@@ -28,6 +28,8 @@ mode=sys.argv[3]
 # read annotation file (it will be in vcf.gz format)
 current_annot=gzip.open('%s' %(annot_file), 'r')
 sys.stderr.write('reading annotation file...\n')
+start_time = time.time()
+
 all_annots={}
 for line in current_annot:
 	x=line.split()
@@ -35,6 +37,8 @@ for line in current_annot:
 		ann_key="_".join([x[0],x[1],x[3],x[4]])
 		all_annots[ann_key] = x[2]
 
+elapsed_time = time.time() - start_time
+sys.stderr.write('Annotation read in '+ elapsed_time+'...\n')
 
 sys.stderr.write('Starting annotation...\n')
 #now we need to get from res files all keys and add the rsID
