@@ -43,6 +43,7 @@ elapsed_time = time.time() - start_time
 sys.stderr.write('Annotation read in '+ str(timedelta(seconds=elapsed_time)) +'...\n')
 
 sys.stderr.write('Starting annotation...\n')
+start_time = time.time()
 #now we need to get from res files all keys and add the rsID
 all_res = {}
 #read res_file
@@ -75,3 +76,7 @@ elif mode == 'genABEL':
 			except KeyError, e:
 				# all_res[site_key]=[site,":".join([site[1],site[2]])]
 				print '%s,%s' %(",".join(site),":".join([site[1],site[2]]))
+
+elapsed_time = time.time() - start_time
+
+sys.stderr.write('Annotation done in '+ str(timedelta(seconds=elapsed_time)) +'...\n')
