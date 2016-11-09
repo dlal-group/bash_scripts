@@ -62,6 +62,7 @@ case $MODE in
     outdir=$8/CHR${CHR}
     pop_path=$9
     samples_to_exclude=${10}
+    pop=${11}
     mkdir -p ${outdir}
     ;;  
   ROH*)
@@ -650,9 +651,9 @@ case $MODE in
         # bsub -J"roh_${pop}_${CHR}" -o"%J_roh_${pop}_${CHR}.o" -q normal -M8000 -n4 -R"span[hosts=1] select[mem>=8000] rusage[mem=8000]" -- java -Xms5000m -Xmx5000m -jar /nfs/team151/software/IBDseq/ibdseq.r1206.jar gt=${pop_path}/${CHR}.non_missing.vcf.gz nthreads=4 excludesamples=${pop_list} out=${outdir}/${pop}.roh
         if [[ $mac -eq 1 ]]; then
           #statements
-        bsub -J"roh_${CHR}" -o"LOGS/%J_roh_${CHR}.o" -q normal -M5000 -n8 -R"span[hosts=1] select[mem>=5000] rusage[mem=5000]" -- java -Xms5000m -Xmx5000m -jar /nfs/team151/software/IBDseq/ibdseq.r1206.jar gt=${pop_path} excludesamples=${samples_to_exclude} chrom=${CHR} nthreads=8 ibdlod=1 r2max=${r2} out=${outdir}/${pop}.roh
+        bsub -J"roh_${pop}_${CHR}" -o"LOGS/%J_roh_${pop}_${CHR}.o" -q normal -M5000 -n8 -R"span[hosts=1] select[mem>=5000] rusage[mem=5000]" -- java -Xms5000m -Xmx5000m -jar /nfs/team151/software/IBDseq/ibdseq.r1206.jar gt=${pop_path} excludesamples=${samples_to_exclude} chrom=${CHR} nthreads=8 ibdlod=1 r2max=${r2} out=${outdir}/${pop}.roh
         else
-        bsub -J"roh_${CHR}" -o"LOGS/%J_roh_${CHR}.o" -q normal -M5000 -n8 -R"span[hosts=1] select[mem>=5000] rusage[mem=5000]" -- java -Xms5000m -Xmx5000m -jar /nfs/team151/software/IBDseq/ibdseq.r1206.jar gt=${pop_path} excludesamples=${samples_to_exclude} chrom=${CHR} nthreads=8 ibdlod=1 r2max=${r2} minalleles=${mac} out=${outdir}/${pop}.roh
+        bsub -J"roh_${pop}_${CHR}" -o"LOGS/%J_roh_${pop}_${CHR}.o" -q normal -M5000 -n8 -R"span[hosts=1] select[mem>=5000] rusage[mem=5000]" -- java -Xms5000m -Xmx5000m -jar /nfs/team151/software/IBDseq/ibdseq.r1206.jar gt=${pop_path} excludesamples=${samples_to_exclude} chrom=${CHR} nthreads=8 ibdlod=1 r2max=${r2} minalleles=${mac} out=${outdir}/${pop}.roh
           
         fi
     ;;
