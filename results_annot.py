@@ -9,6 +9,7 @@ import time
 import collections
 import itertools
 from itertools import chain
+from datetime import timedelta
 
 #include a usage message
 parser=argparse.ArgumentParser()
@@ -38,7 +39,8 @@ for line in current_annot:
 		all_annots[ann_key] = x[2]
 
 elapsed_time = time.time() - start_time
-sys.stderr.write('Annotation read in '+ elapsed_time+'...\n')
+
+sys.stderr.write('Annotation read in '+ str(timedelta(seconds=elapsed_time)) +'...\n')
 
 sys.stderr.write('Starting annotation...\n')
 #now we need to get from res files all keys and add the rsID
