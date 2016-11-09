@@ -63,7 +63,7 @@ elif mode == 'genABEL':
 			site=line.rstrip().split(",")
 			site_key="_".join([site[1],site[2],site[3],site[4]])
 			try:
-				all_annots[site_key]:
+				all_annots[site_key]
 				# all_res[site_key]=[site,all_annots[site_key]]
 				print '%s,%s' %(",".join(site), all_annots[site_key])
 			except KeyError, e:
