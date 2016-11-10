@@ -16,6 +16,7 @@ parser=argparse.ArgumentParser()
 parser.add_argument('<result file>')
 parser.add_argument('<annotation_vcf>')
 parser.add_argument('<GEMMA/genABEL>')
+parser.add_argument('[indel recode file]')
 if len(sys.argv)==1:
     parser.print_usage()
     sys.exit(1)
@@ -24,6 +25,8 @@ args=parser.parse_args()
 res_file=sys.argv[1]
 annot_file=sys.argv[2]
 mode=sys.argv[3]
+#this argument is optional and used only in genABEL mode
+i_conv=sys.argv[4]
 
 
 # read annotation file (it will be in vcf.gz format)
@@ -63,14 +66,30 @@ if mode == 'GEMMA':
 				print '%s\t%s' %("\t".join(site),":".join([site[0],site[2]]))
 
 elif mode == 'genABEL':
+	#TODO: add ability to read result csv from GWA output from tar file with
+	# tar -axf VB_TG_22_Oct_08_2016_cocca.tar.gz VB_TG_22_Oct_08_2016_cocca.log --to-stdout
+	sys.stderr.write('Reading conversion file for genABEL format...\n')
+	start_time_conv = time.time()
+	# we need to retrieve the indel recoded conversion
+	all_recoded={}
+	with open('%s' %(i_conv) ,'r') as current_recode:
+		next(current_recode)
+		for line in current_recode:
+			rs_id=line.rstrip().split(" ")[1]
+			rec_key="_".join((rs_id.split("_")[0].split(":")))
+			all_recoded[rec_key] = "_".join(rs_id.split(":"))
+	elapsed_time_conv = time.time() - start_time_conv
+	sys.stderr.write('Conversion file read in '+ str(timedelta(seconds=elapsed_time_conv)) +'...\n')
+
 	print 'SNP,Chromosome,Position,A0,A1,NoMeasured,CallRate,Pexact,MarkerType,Rsq,p,beta,sebeta,effallelefreq,MAF,strand,rsID'
 	with open('%s' %(res_file) ,'r') as current_file:
 		next(current_file)
 		for line in current_file:
 			site=line.rstrip().split(",")
-			site_key="_".join([site[1],site[2],site[3],site[4]])
+			site_key="_".join([site[1],site[2]])
+			# site_key="_".join([site[1],site[2],site[3],site[4]])
 			try:
-				all_annots[site_key]
+				all_annots[all_recoded[site_key]]
 				# all_res[site_key]=[site,all_annots[site_key]]
 				print '%s,%s' %(",".join(site), all_annots[site_key])
 			except KeyError, e:
