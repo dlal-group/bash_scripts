@@ -22,11 +22,11 @@ if len(sys.argv)==1:
     sys.exit(1)
 args=parser.parse_args()
 
-res_file=sys.argv[1]
-annot_file=sys.argv[2]
-mode=sys.argv[3]
+res_file=sys.argv[1] # res_file="/home/cocca/analyses/1000G_test/CARL/MCH_out/CARL_MCH_10_Oct_08_2016_cocca_results.csv"
+annot_file=sys.argv[2] # annot_file="/netapp/nfs/resources/1000GP_phase3/vcf/ALL.chr10.phase3_shapeit2_mvncall_integrated_v5a.20130502.genotypes.180000.vcf.gz"
+mode=sys.argv[3] # mode="genABEL"
 #this argument is optional and used only in genABEL mode
-i_conv=sys.argv[4]
+i_conv=sys.argv[4] # i_conv="/netapp02/data/imputation/INGI_TGP3/CARL/carl/MERGED/CLEANED/chr10.gen_info"
 
 
 # read annotation file (it will be in vcf.gz format)
@@ -75,9 +75,14 @@ elif mode == 'genABEL':
 	with open('%s' %(i_conv) ,'r') as current_recode:
 		next(current_recode)
 		for line in current_recode:
-			rs_id=line.rstrip().split(" ")[1]
-			rec_key="_".join((rs_id.split("_")[0].split(":")))
-			all_recoded[rec_key] = "_".join(rs_id.split(":"))
+			if line.rstrip().split(" ")[0] == "---":
+				rs_id=line.rstrip().split(" ")[1]
+				rec_key="_".join((rs_id.split("_")[0].split(":")))
+				all_recoded[rec_key] = "_".join(rs_id.split(":"))
+			else:
+				rec_key="_".join((line.rstrip().split(" ")[0],line.rstrip().split(" ")[2]))
+				all_recoded[rec_key] = "_".join((rec_key,line.rstrip().split(" ")[3],line.rstrip().split(" ")[4]))
+
 	elapsed_time_conv = time.time() - start_time_conv
 	sys.stderr.write('Conversion file read in '+ str(timedelta(seconds=elapsed_time_conv)) +'...\n')
 
@@ -91,7 +96,7 @@ elif mode == 'genABEL':
 			try:
 				all_annots[all_recoded[site_key]]
 				# all_res[site_key]=[site,all_annots[site_key]]
-				print '%s,%s' %(",".join(site), all_annots[site_key])
+				print '%s,%s' %(",".join(site), all_annots[all_recoded[site_key]])
 			except KeyError, e:
 				# all_res[site_key]=[site,":".join([site[1],site[2]])]
 				print '%s,%s' %(",".join(site),":".join([site[1],site[2]]))
