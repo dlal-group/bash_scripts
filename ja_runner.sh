@@ -840,11 +840,30 @@ file=`sed -n "${LSB_JOBINDEX}p" $1`
 # ~/Work/bash_scripts/vcfchk_fast_count.sh ${file}.norm.vcf.gz
 
 #27/10/2016
-base_dir=`dirname ${file}`
+# base_dir=`dirname ${file}`
+# file_name=`basename ${file}`
+
+# mkdir -p ${base_dir}/NO_CSQ/
+
+# bcftools annotate -x"ID,INFO/CSQ,INFO/AFR_AF,INFO/AMR_AF,INFO/EAS_AF,INFO/EUR_AF,INFO/SAS_AF" ${file} | bcftools norm -f /lustre/scratch114/resources/ref/Homo_sapiens/1000Genomes_hs37d5/hs37d5.fa -m -| bcftools plugin fill-AN-AC -O z -o ${base_dir}/NO_CSQ/${file_name}.norm.vcf.gz
+# tabix -f -p vcf ${base_dir}/NO_CSQ/${file_name}.norm.vcf.gz
+
+#15/11/2016
+# Extract EUR populations
 file_name=`basename ${file}`
+pop=$2
+mode=$3
 
-mkdir -p ${base_dir}/NO_CSQ/
+base_dir=/lustre/scratch113/projects/carl_seq/08072016_paperONE/TGP3_EUR
+pop_file=/lustre/scratch113/projects/carl_seq/08072016_paperONE/pops/lists/ALL_but_${pop}_bcftools.samples
+mkdir -p  ${base_dir}/${pop}/
 
-bcftools annotate -x"ID,INFO/CSQ,INFO/AFR_AF,INFO/AMR_AF,INFO/EAS_AF,INFO/EUR_AF,INFO/SAS_AF" ${file} | bcftools norm -f /lustre/scratch114/resources/ref/Homo_sapiens/1000Genomes_hs37d5/hs37d5.fa -m -| bcftools plugin fill-AN-AC -O z -o ${base_dir}/NO_CSQ/${file_name}.norm.vcf.gz
-tabix -f -p vcf ${base_dir}/NO_CSQ/${file_name}.norm.vcf.gz
+case $mode in
+	MAC )
+		bcftools view -S ${pop_file} ${file} | bcftools plugin fill-AN-AC | bcftools view --min-ac 2 -O z -o ${base_dir}/${pop}/${file_name}.mac2.vcf.gz
+	;;
+	MAF )
+		bcftools view -S ${pop_file} ${file} | bcftools plugin fill-AN-AC | bcftools view --min-af 0.01:minor -O z -o ${base_dir}/${pop}/${file_name}.maf01.vcf.gz
+	;;
+esac
 
