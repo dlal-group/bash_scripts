@@ -529,7 +529,8 @@ case $MODE in
     echo -e "Parameters: \nwindow=${window}\noverlap=${overlap}\nr2=${r2}\nMAC=${mac}"
     #use he same vcf file for all the samples but change the sample list of individuals toi exclude from the analysis
     # pops_updated="FVG VBI CARL Erto Resia Illegio Sauris"
-    pops_updated="FVG VBI CARL"
+    # pops_updated="FVG VBI CARL"
+    pops_updated="VBI"
     for pop in $pops_updated
     do
 
