@@ -855,15 +855,15 @@ pop=$2
 mode=$3
 
 base_dir=/lustre/scratch113/projects/carl_seq/08072016_paperONE/TGP3_EUR
-pop_file=/lustre/scratch113/projects/carl_seq/08072016_paperONE/pops/lists/ALL_but_${pop}_bcftools.samples
+pop_file=/lustre/scratch113/projects/carl_seq/08072016_paperONE/pops/lists/ALL_but_${pop}.samples
 mkdir -p  ${base_dir}/${pop}/
 
 case $mode in
 	MAC )
-		bcftools view -S ${pop_file} ${file} | bcftools plugin fill-AN-AC | bcftools view --min-ac 2 -O z -o ${base_dir}/${pop}/${file_name}.mac2.vcf.gz
+		bcftools view -S ^${pop_file} ${file} | bcftools plugin fill-AN-AC | bcftools view --min-ac 2 -O z -o ${base_dir}/${pop}/${file_name}.mac2.vcf.gz
 	;;
 	MAF )
-		bcftools view -S ${pop_file} ${file} | bcftools plugin fill-AN-AC | bcftools view --min-af 0.01:minor -O z -o ${base_dir}/${pop}/${file_name}.maf01.vcf.gz
+		bcftools view -S ^${pop_file} ${file} | bcftools plugin fill-AN-AC | bcftools view --min-af 0.01:minor -O z -o ${base_dir}/${pop}/${file_name}.maf01.vcf.gz
 	;;
 esac
 
