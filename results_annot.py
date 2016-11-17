@@ -14,29 +14,29 @@ import sys
 import select
 
 
-if select.select([sys.stdin,],[],[],0.0)[0]:
-	res_file=sys.stdin # res_file="/home/cocca/analyses/1000G_test/CARL/MCH_out/CARL_MCH_10_Oct_08_2016_cocca_results.csv"
-	annot_file=sys.argv[1] # annot_file="/netapp/nfs/resources/1000GP_phase3/vcf/ALL.chr10.phase3_shapeit2_mvncall_integrated_v5a.20130502.genotypes.180000.vcf.gz"
-	mode=sys.argv[2] # mode="genABEL"
-	#this argument is optional and used only in genABEL mode
-	i_conv=sys.argv[3] # i_conv="/netapp02/data/imputation/INGI_TGP3/CARL/carl/MERGED/CLEANED/chr10.gen_info"
-else:
+# if select.select([sys.stdin,],[],[],0.0)[0]:
+# 	res_file=sys.stdin # res_file="/home/cocca/analyses/1000G_test/CARL/MCH_out/CARL_MCH_10_Oct_08_2016_cocca_results.csv"
+# 	annot_file=sys.argv[1] # annot_file="/netapp/nfs/resources/1000GP_phase3/vcf/ALL.chr10.phase3_shapeit2_mvncall_integrated_v5a.20130502.genotypes.180000.vcf.gz"
+# 	mode=sys.argv[2] # mode="genABEL"
+# 	#this argument is optional and used only in genABEL mode
+# 	i_conv=sys.argv[3] # i_conv="/netapp02/data/imputation/INGI_TGP3/CARL/carl/MERGED/CLEANED/chr10.gen_info"
+# else:
 	#include a usage message
-	parser=argparse.ArgumentParser()
-	parser.add_argument('<result file>')
-	parser.add_argument('<annotation_vcf>')
-	parser.add_argument('<GEMMA/genABEL>')
-	parser.add_argument('[indel recode file]')
-	if len(sys.argv)==1:
-	    parser.print_usage()
-	    sys.exit(1)
-	args=parser.parse_args()
-	res_file=sys.argv[1] # res_file="/home/cocca/analyses/1000G_test/CARL/MCH_out/CARL_MCH_10_Oct_08_2016_cocca_results.csv"
-	annot_file=sys.argv[2] # annot_file="/netapp/nfs/resources/1000GP_phase3/vcf/ALL.chr10.phase3_shapeit2_mvncall_integrated_v5a.20130502.genotypes.180000.vcf.gz"
-	mode=sys.argv[3] # mode="genABEL"
-	#this argument is optional and used only in genABEL mode
-	i_conv=sys.argv[4] # i_conv="/netapp02/data/imputation/INGI_TGP3/CARL/carl/MERGED/CLEANED/chr10.gen_info"
-	sys.stderr.write('file name:' + str(res_file))
+	# parser=argparse.ArgumentParser()
+	# parser.add_argument('<result file>')
+	# parser.add_argument('<annotation_vcf>')
+	# parser.add_argument('<GEMMA/genABEL>')
+	# parser.add_argument('[indel recode file]')
+	# if len(sys.argv)==1:
+	#     parser.print_usage()
+	#     sys.exit(1)
+	# args=parser.parse_args()
+res_file=sys.argv[1] # res_file="/home/cocca/analyses/1000G_test/CARL/MCH_out/CARL_MCH_10_Oct_08_2016_cocca_results.csv"
+annot_file=sys.argv[2] # annot_file="/netapp/nfs/resources/1000GP_phase3/vcf/ALL.chr10.phase3_shapeit2_mvncall_integrated_v5a.20130502.genotypes.180000.vcf.gz"
+mode=sys.argv[3] # mode="genABEL"
+#this argument is optional and used only in genABEL mode
+i_conv=sys.argv[4] # i_conv="/netapp02/data/imputation/INGI_TGP3/CARL/carl/MERGED/CLEANED/chr10.gen_info"
+sys.stderr.write('file name:' + str(res_file))
 
 # read annotation file (it will be in vcf.gz format)
 current_annot=gzip.open('%s' %(annot_file), 'r')
