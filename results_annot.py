@@ -20,6 +20,7 @@ if select.select([sys.stdin,],[],[],0.0)[0]:
 	mode=sys.argv[2] # mode="genABEL"
 	#this argument is optional and used only in genABEL mode
 	i_conv=sys.argv[3] # i_conv="/netapp02/data/imputation/INGI_TGP3/CARL/carl/MERGED/CLEANED/chr10.gen_info"
+	sys.stderr.write('annot file: '+annot_file+'\n')
 else:
 	#include a usage message
 	parser=argparse.ArgumentParser()
