@@ -36,7 +36,7 @@ else:
 	mode=sys.argv[3] # mode="genABEL"
 	#this argument is optional and used only in genABEL mode
 	i_conv=sys.argv[4] # i_conv="/netapp02/data/imputation/INGI_TGP3/CARL/carl/MERGED/CLEANED/chr10.gen_info"
-
+	sys.stderr.write('file name:' + str(res_file))
 
 # read annotation file (it will be in vcf.gz format)
 current_annot=gzip.open('%s' %(annot_file), 'r')
