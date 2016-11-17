@@ -61,7 +61,11 @@ all_res = {}
 #read res_file
 if mode == 'GEMMA':
 	print 'chr\trs\tps\tn_mis\tn_obs\tallele1\tallele0\taf\tbeta\tse\tp_wald\tp_lrt\tp_score\trsID'
-	current_file=gzip.open('%s' %(res_file), 'r')
+	if select.select([sys.stdin,],[],[],0.0)[0]:
+		current_file=sys.stdin
+	else:
+		current_file=gzip.open('%s' %(res_file), 'r')
+
 	for line in current_file:
 		if not re.match('chr',line):		
 			site=line.rstrip().split("\t")
@@ -82,34 +86,34 @@ elif mode == 'genABEL':
 	# we need to retrieve the indel recoded conversion
 	all_recoded={}
 	with open('%s' %(i_conv) ,'r') as current_recode:
-		# next(current_recode)
-		if not re.match('SNP',line):
-			for line in current_recode:
-				if line.rstrip().split(" ")[0] == "---":
-					rs_id=line.rstrip().split(" ")[1]
-					rec_key="_".join((rs_id.split("_")[0].split(":")))
-					all_recoded[rec_key] = "_".join(rs_id.split(":"))
-				else:
-					rec_key="_".join((line.rstrip().split(" ")[0],line.rstrip().split(" ")[2]))
-					all_recoded[rec_key] = "_".join((rec_key,line.rstrip().split(" ")[3],line.rstrip().split(" ")[4]))
+		next(current_recode)
+		# if not re.match('SNP',line):
+		for line in current_recode:
+			if line.rstrip().split(" ")[0] == "---":
+				rs_id=line.rstrip().split(" ")[1]
+				rec_key="_".join((rs_id.split("_")[0].split(":")))
+				all_recoded[rec_key] = "_".join(rs_id.split(":"))
+			else:
+				rec_key="_".join((line.rstrip().split(" ")[0],line.rstrip().split(" ")[2]))
+				all_recoded[rec_key] = "_".join((rec_key,line.rstrip().split(" ")[3],line.rstrip().split(" ")[4]))
 
 	elapsed_time_conv = time.time() - start_time_conv
 	sys.stderr.write('Conversion file read in '+ str(timedelta(seconds=elapsed_time_conv)) +'...\n')
 
 	print 'SNP,Chromosome,Position,A0,A1,NoMeasured,CallRate,Pexact,MarkerType,Rsq,p,beta,sebeta,effallelefreq,MAF,strand,rsID'
 	with open('%s' %(res_file) ,'r') as current_file:
-		next(current_file)
-		for line in current_file:
-			site=line.rstrip().split(",")
-			site_key="_".join([site[1],site[2]])
-			# site_key="_".join([site[1],site[2],site[3],site[4]])
-			try:
-				all_annots[all_recoded[site_key]]
-				# all_res[site_key]=[site,all_annots[site_key]]
-				print '%s,%s' %(",".join(site), all_annots[all_recoded[site_key]])
-			except KeyError, e:
-				# all_res[site_key]=[site,":".join([site[1],site[2]])]
-				print '%s,%s' %(",".join(site),":".join([site[1],site[2]]))
+		if not re.match('SNP',line):
+			for line in current_file:
+				site=line.rstrip().split(",")
+				site_key="_".join([site[1],site[2]])
+				# site_key="_".join([site[1],site[2],site[3],site[4]])
+				try:
+					all_annots[all_recoded[site_key]]
+					# all_res[site_key]=[site,all_annots[site_key]]
+					print '%s,%s' %(",".join(site), all_annots[all_recoded[site_key]])
+				except KeyError, e:
+					# all_res[site_key]=[site,":".join([site[1],site[2]])]
+					print '%s,%s' %(",".join(site),":".join([site[1],site[2]]))
 
 elapsed_time = time.time() - start_time
 
