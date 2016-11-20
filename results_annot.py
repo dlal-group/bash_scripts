@@ -54,18 +54,18 @@ def ann_reader(d,ann_line):
 sys.stderr.write('reading annotation file...\n')
 start_time = time.time()
 
-pool=ThreadPool(int(threads))
+# pool=ThreadPool(int(threads))
 current_annot=gzip.open('%s' %(annot_file), 'r')
 all_annots={}
 
-# for line in current_annot:
-# 	x=line.split()
-# 	if not re.match('#',line):
-# 		ann_key="_".join([x[0],x[1],x[3],x[4]])
-# 		all_annots[ann_key] = x[2]
-
 for line in current_annot:
-	pool.map(ann_reader(all_annots,line),line)
+	x=line.split()
+	if not re.match('#',line):
+		ann_key="_".join([x[0],x[1],x[3],x[4]])
+		all_annots[ann_key] = x[2]
+
+# for line in current_annot:
+# 	pool.map(ann_reader(all_annots,line),line)
 elapsed_time = time.time() - start_time
 sys.stderr.write('Annotation read in '+ str(timedelta(seconds=elapsed_time)) +'...\n')
 
