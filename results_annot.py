@@ -29,6 +29,7 @@ else:
 	parser.add_argument('<annotation_vcf>')
 	parser.add_argument('<GEMMA/genABEL>')
 	parser.add_argument('[indel recode file]')
+	parser.add_argument('[threads]')
 	if len(sys.argv)==1:
 	    parser.print_usage()
 	    sys.exit(1)
