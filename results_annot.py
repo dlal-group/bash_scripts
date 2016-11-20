@@ -10,13 +10,14 @@ import collections
 import itertools
 from itertools import chain
 from datetime import timedelta
-import sys
 import select
+from multiprocessing import Pool
+from multiprocessing.dummy import Pool as ThreadPool 
 
 
 if select.select([sys.stdin,],[],[],0.0)[0]:
 	res_file=sys.stdin # res_file="/home/cocca/analyses/1000G_test/CARL/MCH_out/CARL_MCH_10_Oct_08_2016_cocca_results.csv"
-	annot_file=sys.argv[1] # annot_file="/netapp/nfs/resources/1000GP_phase3/vcf/ALL.chr10.phase3_shapeit2_mvncall_integrated_v5a.20130502.genotypes.180000.vcf.gz"
+	annot_file=sys.argv[1] # annot_file="/netapp/nfs/resources/1000GP_phase3/vcf/ALL.chr10.phase3_shapeit2_mvncall_integrated_v5a.20130502.genotypes.vcf.gz"
 	mode=sys.argv[2] # mode="genABEL"
 	#this argument is optional and used only in genABEL mode
 	i_conv=sys.argv[3] # i_conv="/netapp02/data/imputation/INGI_TGP3/CARL/carl/MERGED/CLEANED/chr10.gen_info"
@@ -37,22 +38,34 @@ else:
 	mode=sys.argv[3] # mode="genABEL"
 	#this argument is optional and used only in genABEL mode
 	i_conv=sys.argv[4] # i_conv="/netapp02/data/imputation/INGI_TGP3/CARL/carl/MERGED/CLEANED/chr10.gen_info"
-	
+	threads=sys.argv[5]#threads=8
+
+def ann_reader(d,ann_line):
+	x=ann_line.split("\t")
+	if not re.match('#',line):
+		ann_key="_".join([x[0],x[1],x[3],x[4]])
+		d[ann_key] = x[2]
+
+	# return d
+
 
 # read annotation file (it will be in vcf.gz format)
-current_annot=gzip.open('%s' %(annot_file), 'r')
 sys.stderr.write('reading annotation file...\n')
 start_time = time.time()
 
+pool=ThreadPool(threads)
+current_annot=gzip.open('%s' %(annot_file), 'r')
 all_annots={}
+
+# for line in current_annot:
+# 	x=line.split()
+# 	if not re.match('#',line):
+# 		ann_key="_".join([x[0],x[1],x[3],x[4]])
+# 		all_annots[ann_key] = x[2]
+
 for line in current_annot:
-	x=line.split()
-	if not re.match('#',line):
-		ann_key="_".join([x[0],x[1],x[3],x[4]])
-		all_annots[ann_key] = x[2]
-
+	pool.map(ann_reader(all_annots,line),line)
 elapsed_time = time.time() - start_time
-
 sys.stderr.write('Annotation read in '+ str(timedelta(seconds=elapsed_time)) +'...\n')
 
 sys.stderr.write('Starting annotation...\n')
