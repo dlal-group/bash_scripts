@@ -54,7 +54,7 @@ def ann_reader(d,ann_line):
 sys.stderr.write('reading annotation file...\n')
 start_time = time.time()
 
-pool=ThreadPool(threads)
+pool=ThreadPool(int(threads))
 current_annot=gzip.open('%s' %(annot_file), 'r')
 all_annots={}
 
