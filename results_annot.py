@@ -29,7 +29,7 @@ else:
 	parser.add_argument('<annotation_vcf>')
 	parser.add_argument('<GEMMA/genABEL>')
 	parser.add_argument('[indel recode file]')
-	parser.add_argument('[threads]')
+	# parser.add_argument('[threads]')
 	if len(sys.argv)==1:
 	    parser.print_usage()
 	    sys.exit(1)
@@ -39,7 +39,7 @@ else:
 	mode=sys.argv[3] # mode="genABEL"
 	#this argument is optional and used only in genABEL mode
 	i_conv=sys.argv[4] # i_conv="/netapp02/data/imputation/INGI_TGP3/CARL/carl/MERGED/CLEANED/chr10.gen_info"
-	threads=sys.argv[5]#threads=8
+	# threads=sys.argv[5]#threads=8
 
 def ann_reader(d,ann_line):
 	x=ann_line.split("\t")
