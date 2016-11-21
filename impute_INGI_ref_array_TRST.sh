@@ -72,7 +72,7 @@ case $pop in
 	genodir=${genotype_base}/${pop}/shapeit
 	phasedir=${genotype_base}/${pop}/shapeit
 	;;
-	INCIPE2 )
+	* )
 	# extra_str_excl_snps="-exclude_snps_g /lustre/scratch114/teams/soranzo/users/mc14/fromscratch113/INGI/05272015_MERGED_REF_PANEL/snplist/${pop}_chr${chr}.exclude -impute_excluded"
 	genodir=${genotype_base}/${pop}/${chr}
 	phasedir=${genotype_base}/${pop}/${chr}
@@ -157,15 +157,18 @@ fi
 
 ### step 1: pre-phase ###
 if [[ $MODE == "PHASE" ]]; then
+	geno=${chr}
 	echo phase $geno chr$chr
-	# echo -e "#!/usr/local/bin/bash
-	# \necho \"Starting on : \$(date); Running on : \$(hostname); Job ID : \$LSB_JOBID\"
-	# \n$plink2 --bfile $genodir/$geno  $plink_str --make-bed --out chr$chr\n\n
-	# \n$shapeit2 --thread $thread --window $window_size --states 200 --effective-size 11418 -B chr$chr --input-map $scratch113/references_panel/1kg/genetic_map_chr${chr}_combined_b37.txt --output-log chr$chr.shapeit --output-max chr$chr.hap.gz chr$chr.sample $chrX_phase_str
-	# " > $phasedir/chr$chr.cmd
-	# cd $phasedir
+	echo -e "#!/usr/bin/env bash
+	\necho \"Starting on : \$(date); Running on : \$(hostname); Job ID : \$LSB_JOBID\"
+	\n$plink2 --bfile $genodir/$geno  $plink_str --make-bed --out $genodir/chr$chr\n\n
+	\n$shapeit2 --thread $thread --window $window_size --states 200 --effective-size 11418 -B $genodir/chr$chr --input-map ${genmap_dir}/genetic_map_chr${chr}_combined_b37.txt --output-log chr$chr.shapeit --output-max ${phasedir}/chr$chr.haps.gz ${phasedir}/chr$chr.sample $chrX_phase_str
+	" > $phasedir/chr$chr.cmd
+	cd $phasedir
 	# bsub -J $geno.shapeit.chr$chr -q long -o chr$chr.shapeit.log -e chr$chr.shapeit.err -n$thread -R "span[ptile=$thread] select[mem>18000] rusage[mem=18000]" -M18000 < chr$chr.cmd
-	# continue
+	# qsub -o /netapp02/data/imputation/INGI_TGP3/impute/${pop}_chr${chr}_STEP${step}.log -e /netapp02/data/imputation/INGI_TGP3/impute/${pop}_chr${chr}_STEP${step}.e -V -N ${pop}_chr${chr}_STEP${step} -hold_jid ${pop}_chr${chr}_STEP${step_p} -l h_vmem=20G 
+	qsub -o ${phasedir}/chr${chr}_\$JOB_ID.log -e ${phasedir}/chr${chr}_\$JOB_ID.e -V -N ${pop}_phase_chr${chr} -l h_vmem=${m} -cwd chr$chr.cmd
+	continue
 fi
 
 ### step 2: impute ###
