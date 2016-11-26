@@ -16,7 +16,7 @@ from multiprocessing import Pool
 from multiprocessing.dummy import Pool as ThreadPool 
 
 
-args=parser.parse_args()
+# args=parser.parse_args()
 roh_file=sys.argv[1] #roh_file="/lustre/scratch113/projects/carl_seq/08072016_paperONE/FILTERED_MAF/18112016_IBDSEQ_r20.15_mac1_CEU/CHR1/CEU.roh.hbd"
 vcf_file=sys.argv[2] #vcf_file="/lustre/scratch113/projects/carl_seq/08072016_paperONE/TGP3_INGI_MERGE/INGI_TGP3_filt.vcf.gz"
 filtered_snps=sys.argv[3] #filtered_snps="/lustre/scratch113/projects/carl_seq/08072016_paperONE/FILTERED_MAF/18112016_IBDSEQ_r20.15_mac1_CEU/CHR1/CEU.roh.r2.filtered.gz"
