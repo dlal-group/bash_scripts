@@ -152,7 +152,9 @@ case $MODE in
   outdir=CHR${CHR}
   mkdir -p ${outdir}
   ;;
-  MERGEVCF)
+  SEGDENSITY )
+  roh_file_path=$3
+  vcf_file_path=$4
 
   ;;
 esac
@@ -388,6 +390,12 @@ case $MODE in
       awk -v chr=${CHR} '{print $1,chr,$2,$3,(NF-3)/2}' EMI/w_${win_size}k/${density}/${pop}/${pop}.chr${CHR}.roh.out.clst.uniq.sorted.txt > EMI/w_${win_size}k/${density}/${pop}/${pop}.chr${CHR}.roh.out.clst.uniq.size
 
     done
+  ;;
+  SEGDENSITY )
+  
+  #we need to get the snp density for each segment, and his length
+  awk '{OFS="\t"}{print $0,$7-$6}' ${roh_file_path}
+
   ;;
   HET )
     #Extract Inbreeding coeff information for each population. Here we are using plink2 (1.9)
