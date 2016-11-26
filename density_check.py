@@ -133,10 +133,17 @@ sys.stderr.write('ROH file read in '+ str(timedelta(seconds=elapsed_time)) +'...
 #########################################################################################
 #3) Count number of sites before and after removing the filtered site
 #4) Print the in the output file
+
 outfile=open(out_file,'w')
+
+sys.stderr.write('Create extended ROH file...\n')
+start_time = time.time()
 
 for sample in all_ROH:
 	for roh in all_ROH[sample]:
 		all_ROH[sample][roh].density,all_ROH[sample][roh].filtered_density = check_density(all_ROH[sample][roh],vcf_file,filtered_snps)
 		all_ROH[sample][roh].hets,all_ROH[sample][roh].filtered_hets=check_het(sample,all_ROH[sample][roh],vcf_file,filtered_snps)
 		print >> outfile, '%s\t1\t%s\t2\t%s\t%s\t%s\t%s\t%s\t%s\t%s' %(sample,sample,all_ROH[sample][roh].chrom,all_ROH[sample][roh].start,all_ROH[sample][roh].end,all_ROH[sample][roh].lod,all_ROH[sample][roh].density,all_ROH[sample][roh].filtered_density,all_ROH[sample][roh].hets)
+
+elapsed_time = time.time() - start_time
+sys.stderr.write('Extended ROH file created in '+ str(timedelta(seconds=elapsed_time)) +'...\n')
