@@ -395,6 +395,10 @@ case $MODE in
   
   #we need to get the snp density for each segment, and his length
   awk '{OFS="\t"}{print $0,$7-$6}' ${roh_file_path}
+  while read line; do
+    #statements
+  done
+  12:3079090-3176183
 
   ;;
   HET )

@@ -12,8 +12,6 @@ from itertools import chain
 from datetime import timedelta
 import select
 from subprocess import call
-from multiprocessing import Pool
-from multiprocessing.dummy import Pool as ThreadPool 
 
 
 # args=parser.parse_args()

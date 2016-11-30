@@ -168,7 +168,7 @@ if [[ $MODE == "PHASE" ]]; then
 	# bsub -J $geno.shapeit.chr$chr -q long -o chr$chr.shapeit.log -e chr$chr.shapeit.err -n$thread -R "span[ptile=$thread] select[mem>18000] rusage[mem=18000]" -M18000 < chr$chr.cmd
 	# qsub -o /netapp02/data/imputation/INGI_TGP3/impute/${pop}_chr${chr}_STEP${step}.log -e /netapp02/data/imputation/INGI_TGP3/impute/${pop}_chr${chr}_STEP${step}.e -V -N ${pop}_chr${chr}_STEP${step} -hold_jid ${pop}_chr${chr}_STEP${step_p} -l h_vmem=20G 
 	qsub -o ${phasedir}/chr${chr}_\$JOB_ID.log -e ${phasedir}/chr${chr}_\$JOB_ID.e -V -N ${pop}_phase_chr${chr} -l h_vmem=${m} -cwd chr$chr.cmd
-	continue
+	# continue
 fi
 
 ### step 2: impute ###
