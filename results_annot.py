@@ -15,32 +15,32 @@ from multiprocessing import Pool
 from multiprocessing.dummy import Pool as ThreadPool 
 
 
-if select.select([sys.stdin,],[],[],0.0)[0]:
-	res_file=sys.stdin # res_file="/home/cocca/analyses/1000G_test/CARL/MCH_out/CARL_MCH_10_Oct_08_2016_cocca_results.csv"
-	annot_file=sys.argv[1] # annot_file="/netapp/nfs/resources/1000GP_phase3/vcf/ALL.chr10.phase3_shapeit2_mvncall_integrated_v5a.20130502.genotypes.vcf.gz"
-	mode=sys.argv[2] # mode="genABEL"
-	#this argument is optional and used only in genABEL mode
-	i_conv=sys.argv[3] # i_conv="/netapp02/data/imputation/INGI_TGP3/CARL/carl/MERGED/CLEANED/chr10.gen_info"
-	sys.stderr.write('annot file: '+annot_file+'\n')
-else:
-	#include a usage message
-	parser=argparse.ArgumentParser()
-	parser.add_argument('<result file>')
-	parser.add_argument('<annotation_vcf>')
-	parser.add_argument('<GEMMA/genABEL/datABEL>')
-	parser.add_argument('[indel recode file]')
-	# parser.add_argument('[threads]')
-	if len(sys.argv)==1:
-	    parser.print_usage()
-	    sys.exit(1)
-	args=parser.parse_args()
-	res_file=sys.argv[1] # res_file="/home/cocca/analyses/1000G_test/CARL/MCH_out/CARL_MCH_10_Oct_08_2016_cocca_results.csv"
-	# res_file="/netapp02/data/imputation/INGI_TGP3/VBI/dose/VBI_INGI_TGP3_chr10.map"
-	annot_file=sys.argv[2] # annot_file="/netapp/nfs/resources/1000GP_phase3/vcf/ALL.chr10.phase3_shapeit2_mvncall_integrated_v5a.20130502.genotypes.180000.vcf.gz"
-	mode=sys.argv[3] # mode="datABEL"
-	#this argument is optional and used only in genABEL mode
-	i_conv=sys.argv[4] # i_conv="/netapp02/data/imputation/INGI_TGP3/CARL/carl/MERGED/CLEANED/chr10.gen_info"
-	# threads=sys.argv[5]#threads=8
+# if select.select([sys.stdin,],[],[],0.0)[0]:
+# 	res_file=sys.stdin # res_file="/home/cocca/analyses/1000G_test/CARL/MCH_out/CARL_MCH_10_Oct_08_2016_cocca_results.csv"
+# 	annot_file=sys.argv[1] # annot_file="/netapp/nfs/resources/1000GP_phase3/vcf/ALL.chr10.phase3_shapeit2_mvncall_integrated_v5a.20130502.genotypes.vcf.gz"
+# 	mode=sys.argv[2] # mode="genABEL"
+# 	#this argument is optional and used only in genABEL mode
+# 	i_conv=sys.argv[3] # i_conv="/netapp02/data/imputation/INGI_TGP3/CARL/carl/MERGED/CLEANED/chr10.gen_info"
+# 	sys.stderr.write('annot file: '+annot_file+'\n')
+# else:
+#include a usage message
+parser=argparse.ArgumentParser()
+parser.add_argument('<result file>')
+parser.add_argument('<annotation_vcf>')
+parser.add_argument('<GEMMA/genABEL/datABEL>')
+parser.add_argument('[indel recode file]')
+# parser.add_argument('[threads]')
+if len(sys.argv)==1:
+    parser.print_usage()
+    sys.exit(1)
+args=parser.parse_args()
+res_file=sys.argv[1] # res_file="/home/cocca/analyses/1000G_test/CARL/MCH_out/CARL_MCH_10_Oct_08_2016_cocca_results.csv"
+# res_file="/netapp02/data/imputation/INGI_TGP3/VBI/dose/VBI_INGI_TGP3_chr10.map"
+annot_file=sys.argv[2] # annot_file="/netapp/nfs/resources/1000GP_phase3/vcf/ALL.chr10.phase3_shapeit2_mvncall_integrated_v5a.20130502.genotypes.180000.vcf.gz"
+mode=sys.argv[3] # mode="datABEL"
+#this argument is optional and used only in genABEL mode
+i_conv=sys.argv[4] # i_conv="/netapp02/data/imputation/INGI_TGP3/CARL/carl/MERGED/CLEANED/chr10.gen_info"
+# threads=sys.argv[5]#threads=8
 
 def ann_reader(d,ann_line):
 	x=ann_line.split("\t")
