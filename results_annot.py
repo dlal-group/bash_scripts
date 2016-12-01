@@ -27,7 +27,7 @@ else:
 	parser=argparse.ArgumentParser()
 	parser.add_argument('<result file>')
 	parser.add_argument('<annotation_vcf>')
-	parser.add_argument('<GEMMA/genABEL>')
+	parser.add_argument('<GEMMA/genABEL/datABEL>')
 	parser.add_argument('[indel recode file]')
 	# parser.add_argument('[threads]')
 	if len(sys.argv)==1:
@@ -35,8 +35,9 @@ else:
 	    sys.exit(1)
 	args=parser.parse_args()
 	res_file=sys.argv[1] # res_file="/home/cocca/analyses/1000G_test/CARL/MCH_out/CARL_MCH_10_Oct_08_2016_cocca_results.csv"
+	# res_file="/netapp02/data/imputation/INGI_TGP3/VBI/dose/VBI_INGI_TGP3_chr10.map"
 	annot_file=sys.argv[2] # annot_file="/netapp/nfs/resources/1000GP_phase3/vcf/ALL.chr10.phase3_shapeit2_mvncall_integrated_v5a.20130502.genotypes.180000.vcf.gz"
-	mode=sys.argv[3] # mode="genABEL"
+	mode=sys.argv[3] # mode="datABEL"
 	#this argument is optional and used only in genABEL mode
 	i_conv=sys.argv[4] # i_conv="/netapp02/data/imputation/INGI_TGP3/CARL/carl/MERGED/CLEANED/chr10.gen_info"
 	# threads=sys.argv[5]#threads=8
@@ -48,6 +49,21 @@ def ann_reader(d,ann_line):
 		d[ann_key] = x[2]
 
 	# return d
+
+def recode_reader(info_file):
+	recoded={}
+	with open('%s' %(info_file) ,'r') as current_recode:
+		next(current_recode)
+		# if not re.match('SNP',line):
+		for line in current_recode:
+			if line.rstrip().split(" ")[0] == "---":
+				rs_id=line.rstrip().split(" ")[1]
+				rec_key="_".join((rs_id.split("_")[0].split(":")))
+				recoded[rec_key] = "_".join(rs_id.split(":"))
+			else:
+				rec_key="_".join((line.rstrip().split(" ")[0],line.rstrip().split(" ")[2]))
+				recoded[rec_key] = "_".join((rec_key,line.rstrip().split(" ")[3],line.rstrip().split(" ")[4]))
+	return recoded
 
 
 # read annotation file (it will be in vcf.gz format)
@@ -99,26 +115,28 @@ elif mode == 'genABEL':
 	sys.stderr.write('Reading conversion file for genABEL format...\n')
 	start_time_conv = time.time()
 	# we need to retrieve the indel recoded conversion
-	all_recoded={}
-	with open('%s' %(i_conv) ,'r') as current_recode:
-		next(current_recode)
-		# if not re.match('SNP',line):
-		for line in current_recode:
-			if line.rstrip().split(" ")[0] == "---":
-				rs_id=line.rstrip().split(" ")[1]
-				rec_key="_".join((rs_id.split("_")[0].split(":")))
-				all_recoded[rec_key] = "_".join(rs_id.split(":"))
-			else:
-				rec_key="_".join((line.rstrip().split(" ")[0],line.rstrip().split(" ")[2]))
-				all_recoded[rec_key] = "_".join((rec_key,line.rstrip().split(" ")[3],line.rstrip().split(" ")[4]))
+	all_recoded=recode_reader(i_conv)
+	
+	# all_recoded={}
+	# with open('%s' %(i_conv) ,'r') as current_recode:
+	# 	next(current_recode)
+	# 	# if not re.match('SNP',line):
+	# 	for line in current_recode:
+	# 		if line.rstrip().split(" ")[0] == "---":
+	# 			rs_id=line.rstrip().split(" ")[1]
+	# 			rec_key="_".join((rs_id.split("_")[0].split(":")))
+	# 			all_recoded[rec_key] = "_".join(rs_id.split(":"))
+	# 		else:
+	# 			rec_key="_".join((line.rstrip().split(" ")[0],line.rstrip().split(" ")[2]))
+	# 			all_recoded[rec_key] = "_".join((rec_key,line.rstrip().split(" ")[3],line.rstrip().split(" ")[4]))
 
 	elapsed_time_conv = time.time() - start_time_conv
 	sys.stderr.write('Conversion file read in '+ str(timedelta(seconds=elapsed_time_conv)) +'...\n')
 
 	print 'SNP,Chromosome,Position,A0,A1,NoMeasured,CallRate,Pexact,MarkerType,Rsq,p,beta,sebeta,effallelefreq,MAF,strand,rsID'
 	with open('%s' %(res_file) ,'r') as current_file:
-		if not re.match('SNP',line):
-			for line in current_file:
+		for line in current_file:
+			if not re.match('SNP',line):
 				site=line.rstrip().split(",")
 				site_key="_".join([site[1],site[2]])
 				# site_key="_".join([site[1],site[2],site[3],site[4]])
@@ -129,6 +147,32 @@ elif mode == 'genABEL':
 				except KeyError, e:
 					# all_res[site_key]=[site,":".join([site[1],site[2]])]
 					print '%s,%s' %(",".join(site),":".join([site[1],site[2]]))
+
+elif mode == 'datABEL':
+	#we need to annotate imputed files in map/info format
+	sys.stderr.write('Reading conversion file for datABEL format...\n')
+	start_time_conv = time.time()
+	# we need to retrieve the indel recoded conversion
+	all_recoded=recode_reader(i_conv)
+	
+	elapsed_time_conv = time.time() - start_time_conv
+	sys.stderr.write('Conversion file read in '+ str(timedelta(seconds=elapsed_time_conv)) +'...\n')
+
+	print 'SNP Position A0 A1 Rsq'
+	with open('%s' %(res_file) ,'r') as current_file:
+		for line in current_file:
+			if not re.match('SNP',line):
+				site=line.rstrip().split(" ")
+				site_key="_".join([site[0].split(":")[0],site[1]])
+				# site_key="_".join([site[1],site[2],site[3],site[4]])
+				try:
+					all_annots[all_recoded[site_key]]
+					# all_res[site_key]=[site,all_annots[site_key]]
+					print '%s %s %s %s %s' %(all_annots[all_recoded[site_key]],site[1],site[2],site[3],site[4])
+				except KeyError, e:
+					# all_res[site_key]=[site,":".join([site[1],site[2]])]
+					print '%s' %(" ".join(site))
+
 
 elapsed_time = time.time() - start_time
 
