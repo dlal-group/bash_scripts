@@ -45,22 +45,31 @@ case $pop in
 	extra_str_excl_samples="-exclude_samples_g /lustre/scratch113/projects/esgi-vbseq/08092015/12112015_FILTERED_REL/LISTS/VBI_impute_exclude_sample.list"
 	# extra_str_excl_snps="-exclude_snps_g /lustre/scratch114/teams/soranzo/users/mc14/fromscratch113/INGI/05272015_MERGED_REF_PANEL/snplist/${pop}_chr${chr}.exclude -impute_excluded"
 	# genodir=/lustre/scratch114/teams/soranzo/users/mc14/fromscratch113/INGI/MERGED_REF_PANEL_Feb2015/VBI_geno
-	genodir=${genotype_base}/${pop}/merged/cleaned/${chr}
-	phasedir=${genotype_base}/${pop}/merged/cleaned/${chr}
+	# genodir=${genotype_base}/${pop}/merged/cleaned/${chr}
+	# phasedir=${genotype_base}/${pop}/merged/cleaned/${chr}
+	#6/12/2016 changes to impute missing samples
+	genodir=${genotype_base}/${pop}/shapeit
+	phasedir=${genotype_base}/${pop}/excluded
 	;;
 	FVG)
 	extra_str_excl_samples="-exclude_samples_g /lustre/scratch113/projects/fvg_seq/16092015/12112015_FILTERED_REL/LISTS/FVG_impute_exclude_sample.list"
 	# extra_str_excl_snps="-exclude_snps_g /lustre/scratch114/teams/soranzo/users/mc14/fromscratch113/INGI/05272015_MERGED_REF_PANEL/snplist/${pop}_chr${chr}.exclude -impute_excluded"
 	# genodir=/lustre/scratch114/teams/soranzo/users/mc14/fromscratch113/INGI/05272015_MERGED_REF_PANEL/GWAS/FVG/shapeit
-	genodir=${genotype_base}/${pop}/merged/cleaned/${chr}
-	phasedir=${genotype_base}/${pop}/merged/cleaned/${chr}
+	# genodir=${genotype_base}/${pop}/merged/cleaned/${chr}
+	# phasedir=${genotype_base}/${pop}/merged/cleaned/${chr}
+	#6/12/2016 changes to impute missing samples
+	genodir=${genotype_base}/${pop}/shapeit
+	phasedir=${genotype_base}/${pop}/excluded
 	;;
 	CARL)
 	extra_str_excl_samples="-exclude_samples_g /lustre/scratch113/projects/carl_seq/variant_refinement/12112015_FILTERED_REL/LISTS/CARL_impute_exclude_sample.list"
 	# extra_str_excl_snps="-exclude_snps_g /lustre/scratch114/teams/soranzo/users/mc14/fromscratch113/INGI/05272015_MERGED_REF_PANEL/snplist/${pop}_chr${chr}.exclude -impute_excluded"
 	# genodir=/lustre/scratch113/teams/soranzo/users/jh21/imputed/carl/shapeit
-	genodir=${genotype_base}/${pop}/merged/cleaned/${chr}
-	phasedir=${genotype_base}/${pop}/merged/cleaned/${chr}
+	# genodir=${genotype_base}/${pop}/merged/cleaned/${chr}
+	# phasedir=${genotype_base}/${pop}/merged/cleaned/${chr}
+	#6/12/2016 changes to impute missing samples
+	genodir=${genotype_base}/${pop}/shapeit
+	phasedir=${genotype_base}/${pop}/excluded
 	;;
 	INCIPE2 )
 	# extra_str_excl_snps="-exclude_snps_g /lustre/scratch114/teams/soranzo/users/mc14/fromscratch113/INGI/05272015_MERGED_REF_PANEL/snplist/${pop}_chr${chr}.exclude -impute_excluded"
@@ -72,7 +81,7 @@ esac
 refdir=/lustre/scratch113/projects/esgi-vbseq/02032016_INGI_REF_PANEL/IMPUTE/${PANEL}
 refhap=$refdir/${chr}/${chr}.INGI_REF.${PANEL}.hap.gz
 reflegend=$refdir/${chr}/${chr}.INGI_REF.${PANEL}.legend.gz
-
+extra_str_incl_samples="--include-ind ${phasedir}/${pop}_EXCLUDED_to_impute.list"
 # case $PANEL in
 # 	FVG )
 # 	refdir=/lustre/scratch114/teams/soranzo/users/mc14/fromscratch113/INGI/MERGED_REF_PANEL_Feb2015/SHAPEIT/FVG_HAP_LEGEND
@@ -143,14 +152,14 @@ fi
 ### step 1: pre-phase ###
 if [[ $MODE == "PHASE" ]]; then
 	echo phase $geno chr$chr
-	# echo -e "#!/usr/local/bin/bash
-	# \necho \"Starting on : \$(date); Running on : \$(hostname); Job ID : \$LSB_JOBID\"
-	# \n$plink2 --bfile $genodir/$geno  $plink_str --make-bed --out chr$chr\n\n
-	# \n$shapeit2 --thread $thread --window $window_size --states 200 --effective-size 11418 -B chr$chr --input-map $scratch113/references_panel/1kg/genetic_map_chr${chr}_combined_b37.txt --output-log chr$chr.shapeit --output-max chr$chr.hap.gz chr$chr.sample $chrX_phase_str
-	# " > $phasedir/chr$chr.cmd
-	# cd $phasedir
-	# bsub -J $geno.shapeit.chr$chr -q long -o chr$chr.shapeit.log -e chr$chr.shapeit.err -n$thread -R "span[ptile=$thread] select[mem>18000] rusage[mem=18000]" -M18000 < chr$chr.cmd
-	# continue
+	mkdir -p ${phasedir}
+	echo -e "#!/usr/local/bin/bash
+	\necho \"Starting on : \$(date); Running on : \$(hostname); Job ID : \$LSB_JOBID\"
+	\n$plink2 --bfile $genodir/$geno  $plink_str --make-bed --out ${phasedir}/chr$chr\n\n
+	\n$shapeit2 --thread $thread --window $window_size --states 200 --effective-size 11418 -B chr$chr --input-map ${gen_map} --output-log chr$chr.shapeit --output-max chr$chr.haps.gz chr$chr.sample ${extra_str_incl_samples} $chrX_phase_str 
+	" > $phasedir/chr$chr.cmd
+	cd $phasedir
+	bsub -J $geno.shapeit.chr$chr -q long -o chr$chr.shapeit.log -e chr$chr.shapeit.err -n$thread -R "span[ptile=$thread] select[mem>5000] rusage[mem=5000]" -M5000 < chr$chr.cmd
 fi
 
 ### step 2: impute ###
@@ -222,7 +231,13 @@ if [[ -s $imputedir/chr${chr}_command.list.tmp ]]; then
 	awk '!_[$0]++' $imputedir/chr${chr}_command.list.tmp > $imputedir/chr${chr}_command.list
 	rm $imputedir/chr${chr}_command.list.tmp
 
-	mkdir -p $imputedir/LOGS;size=`wc -l $imputedir/chr${chr}_command.list|cut -f 1 -d " "`;bsub -J "${PANEL}${postfix}.${pop}.chr${chr}[1-${size}]" -q $queue -R "select[mem>$mem] rusage[mem=$mem]" -M${mem} -o "$imputedir/LOGS/%J_${PANEL}${postfix}.${pop}.chr${chr}.%I.log" -e "$imputedir/LOGS/%J_${PANEL}${postfix}.${pop}.chr${chr}.%I.err" -- ~/Work/bash_scripts/ja_runner_par.sh -l $imputedir/chr${chr}_command.list
+	if [[ $MODE == "PHASE" ]]; then
+		mkdir -p $imputedir/LOGS;size=`wc -l $imputedir/chr${chr}_command.list|cut -f 1 -d " "`;bsub -J "${PANEL}${postfix}.${pop}.chr${chr}[1-${size}]" -q $queue -R "select[mem>$mem] rusage[mem=$mem]" -M${mem} -o "$imputedir/LOGS/%J_${PANEL}${postfix}.${pop}.chr${chr}.%I.log" -e "$imputedir/LOGS/%J_${PANEL}${postfix}.${pop}.chr${chr}.%I.err" -w "ended(bam_rg_fix[1])" -- ~/Work/bash_scripts/ja_runner_par.sh -l $imputedir/chr${chr}_command.list
+	else
+		mkdir -p $imputedir/LOGS;size=`wc -l $imputedir/chr${chr}_command.list|cut -f 1 -d " "`;bsub -J "${PANEL}${postfix}.${pop}.chr${chr}[1-${size}]" -q $queue -R "select[mem>$mem] rusage[mem=$mem]" -M${mem} -o "$imputedir/LOGS/%J_${PANEL}${postfix}.${pop}.chr${chr}.%I.log" -e "$imputedir/LOGS/%J_${PANEL}${postfix}.${pop}.chr${chr}.%I.err" -- ~/Work/bash_scripts/ja_runner_par.sh -l $imputedir/chr${chr}_command.list
+	fi
+	
+
 else
 	echo "Chromosome ${chr} already COMPLETED!!job not submitted!! "
 fi
