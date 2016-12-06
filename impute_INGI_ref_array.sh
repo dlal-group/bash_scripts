@@ -151,6 +151,7 @@ fi
 
 ### step 1: pre-phase ###
 if [[ $MODE == "PHASE" ]]; then
+	geno=chr$chr
 	echo phase $geno chr$chr
 	mkdir -p ${phasedir}
 	echo -e "#!/usr/local/bin/bash
@@ -158,8 +159,9 @@ if [[ $MODE == "PHASE" ]]; then
 	\n$plink2 --bfile $genodir/$geno  $plink_str --make-bed --out ${phasedir}/chr$chr\n\n
 	\n$shapeit2 --thread $thread --window $window_size --states 200 --effective-size 11418 -B chr$chr --input-map ${gen_map} --output-log chr$chr.shapeit --output-max chr$chr.haps.gz chr$chr.sample ${extra_str_incl_samples} $chrX_phase_str 
 	" > $phasedir/chr$chr.cmd
+	chmod ug+x $phasedir/chr$chr.cmd
 	cd $phasedir
-	bsub -J $geno.shapeit.chr$chr -q long -o chr$chr.shapeit.log -e chr$chr.shapeit.err -n$thread -R "span[ptile=$thread] select[mem>5000] rusage[mem=5000]" -M5000 < chr$chr.cmd
+	bsub -J ${pop}.shapeit.chr$chr -q long -o chr$chr.shapeit.log -e chr$chr.shapeit.err -n$thread -R "span[ptile=$thread] select[mem>5000] rusage[mem=5000]" -M5000 < chr$chr.cmd
 fi
 
 ### step 2: impute ###
@@ -232,7 +234,7 @@ if [[ -s $imputedir/chr${chr}_command.list.tmp ]]; then
 	rm $imputedir/chr${chr}_command.list.tmp
 
 	if [[ $MODE == "PHASE" ]]; then
-		mkdir -p $imputedir/LOGS;size=`wc -l $imputedir/chr${chr}_command.list|cut -f 1 -d " "`;bsub -J "${PANEL}${postfix}.${pop}.chr${chr}[1-${size}]" -q $queue -R "select[mem>$mem] rusage[mem=$mem]" -M${mem} -o "$imputedir/LOGS/%J_${PANEL}${postfix}.${pop}.chr${chr}.%I.log" -e "$imputedir/LOGS/%J_${PANEL}${postfix}.${pop}.chr${chr}.%I.err" -w "ended(bam_rg_fix[1])" -- ~/Work/bash_scripts/ja_runner_par.sh -l $imputedir/chr${chr}_command.list
+		mkdir -p $imputedir/LOGS;size=`wc -l $imputedir/chr${chr}_command.list|cut -f 1 -d " "`;bsub -J "${PANEL}${postfix}.${pop}.chr${chr}[1-${size}]" -q $queue -R "select[mem>$mem] rusage[mem=$mem]" -M${mem} -o "$imputedir/LOGS/%J_${PANEL}${postfix}.${pop}.chr${chr}.%I.log" -e "$imputedir/LOGS/%J_${PANEL}${postfix}.${pop}.chr${chr}.%I.err" -w "ended(${pop}.shapeit.chr$chr)" -- ~/Work/bash_scripts/ja_runner_par.sh -l $imputedir/chr${chr}_command.list
 	else
 		mkdir -p $imputedir/LOGS;size=`wc -l $imputedir/chr${chr}_command.list|cut -f 1 -d " "`;bsub -J "${PANEL}${postfix}.${pop}.chr${chr}[1-${size}]" -q $queue -R "select[mem>$mem] rusage[mem=$mem]" -M${mem} -o "$imputedir/LOGS/%J_${PANEL}${postfix}.${pop}.chr${chr}.%I.log" -e "$imputedir/LOGS/%J_${PANEL}${postfix}.${pop}.chr${chr}.%I.err" -- ~/Work/bash_scripts/ja_runner_par.sh -l $imputedir/chr${chr}_command.list
 	fi
