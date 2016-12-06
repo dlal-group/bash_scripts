@@ -157,7 +157,7 @@ if [[ $MODE == "PHASE" ]]; then
 	echo -e "#!/usr/local/bin/bash
 	\necho \"Starting on : \$(date); Running on : \$(hostname); Job ID : \$LSB_JOBID\"
 	\n$plink2 --bfile $genodir/$geno  $plink_str --make-bed --out ${phasedir}/chr$chr\n\n
-	\n$shapeit2 --thread $thread --window $window_size --states 200 --effective-size 11418 -B chr$chr --input-map ${gen_map} --output-log chr$chr.shapeit --output-max chr$chr.haps.gz chr$chr.sample ${extra_str_incl_samples} $chrX_phase_str 
+	\n$shapeit2 --thread $thread --window $window_size --states 200 --effective-size 11418 -B chr$chr --input-map ${gen_map} --output-log ${pop}_chr$chr.shapeit --output-max chr$chr.haps.gz chr$chr.sample ${extra_str_incl_samples} $chrX_phase_str 
 	" > $phasedir/chr$chr.cmd
 	chmod ug+x $phasedir/chr$chr.cmd
 	cd $phasedir
