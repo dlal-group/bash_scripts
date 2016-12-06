@@ -149,6 +149,7 @@ else
 	chrX_impute_str=""
 fi
 
+gen_map=${genmap_dir}/genetic_map_chr${chr}_combined_b37.txt
 ### step 1: pre-phase ###
 if [[ $MODE == "PHASE" ]]; then
 	geno=chr$chr
@@ -157,7 +158,7 @@ if [[ $MODE == "PHASE" ]]; then
 	echo -e "#!/usr/local/bin/bash
 	\necho \"Starting on : \$(date); Running on : \$(hostname); Job ID : \$LSB_JOBID\"
 	\n$plink2 --bfile $genodir/$geno  $plink_str --make-bed --out ${phasedir}/chr$chr\n\n
-	\n$shapeit2 --thread $thread --window $window_size --states 200 --effective-size 11418 -B chr$chr --input-map ${gen_map} --output-log ${pop}_chr$chr.shapeit --output-max chr$chr.haps.gz chr$chr.sample ${extra_str_incl_samples} $chrX_phase_str 
+	\n$shapeit2 --thread $thread --window $window_size --states 200 --effective-size 11418 -B chr$chr --input-map ${gen_map} --output-log ${pop}chr$chr.shapeit --output-max chr$chr.haps.gz chr$chr.sample ${extra_str_incl_samples} $chrX_phase_str 
 	" > $phasedir/chr$chr.cmd
 	chmod ug+x $phasedir/chr$chr.cmd
 	cd $phasedir
@@ -204,7 +205,6 @@ for chunk in `seq 1 $chunk_num`; do
 		refhap=$refdir/$refname/chr$chr.${chunkStr}$postfix.hap.gz
 		reflegend=$refdir/$refname/chr$chr.${chunkStr}$postfix.legend.gz
 	fi
-	gen_map=${genmap_dir}/genetic_map_chr${chr}_combined_b37.txt
 	if [[ -s $imputedir/chr$chr.$chunkStr.gen.gz ]];then
 		echo "Chunk $imputedir/chr$chr.$chunkStr.gen.gz already imputed!!!Skip!"
 	else
