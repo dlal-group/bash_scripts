@@ -48,7 +48,7 @@ case $pop in
 	# genodir=${genotype_base}/${pop}/merged/cleaned/${chr}
 	# phasedir=${genotype_base}/${pop}/merged/cleaned/${chr}
 	#6/12/2016 changes to impute missing samples
-	genodir=${genotype_base}/${pop}/shapeit
+	genodir=${genotype_base}/${pop}/shapeit/${chr}/chr${chr}_sorted
 	phasedir=${genotype_base}/${pop}/excluded
 	;;
 	FVG)
@@ -58,7 +58,7 @@ case $pop in
 	# genodir=${genotype_base}/${pop}/merged/cleaned/${chr}
 	# phasedir=${genotype_base}/${pop}/merged/cleaned/${chr}
 	#6/12/2016 changes to impute missing samples
-	genodir=${genotype_base}/${pop}/shapeit
+	genodir=${genotype_base}/${pop}/shapeit/chr${chr}
 	phasedir=${genotype_base}/${pop}/excluded
 	;;
 	CARL)
@@ -68,7 +68,7 @@ case $pop in
 	# genodir=${genotype_base}/${pop}/merged/cleaned/${chr}
 	# phasedir=${genotype_base}/${pop}/merged/cleaned/${chr}
 	#6/12/2016 changes to impute missing samples
-	genodir=${genotype_base}/${pop}/shapeit
+	genodir=${genotype_base}/${pop}/shapeit/chr${chr}
 	phasedir=${genotype_base}/${pop}/excluded
 	;;
 	INCIPE2 )
@@ -152,12 +152,12 @@ fi
 gen_map=${genmap_dir}/genetic_map_chr${chr}_combined_b37.txt
 ### step 1: pre-phase ###
 if [[ $MODE == "PHASE" ]]; then
-	geno=chr$chr
+	# geno=chr$chr
 	echo phase $geno chr$chr
 	mkdir -p ${phasedir}
 	echo -e "#!/usr/local/bin/bash
 	\necho \"Starting on : \$(date); Running on : \$(hostname); Job ID : \$LSB_JOBID\"
-	\n$plink2 --bfile $genodir/$geno  $plink_str --make-bed --out ${phasedir}/chr$chr\n\n
+	\n$plink2 --bfile $genodir  $plink_str --make-bed --out ${phasedir}/chr$chr\n\n
 	\n$shapeit2 --thread $thread --window $window_size --states 200 --effective-size 11418 -B chr$chr --input-map ${gen_map} --output-log ${pop}chr$chr.shapeit --output-max chr$chr.haps.gz chr$chr.sample ${extra_str_incl_samples} $chrX_phase_str 
 	" > $phasedir/chr$chr.cmd
 	chmod ug+x $phasedir/chr$chr.cmd
