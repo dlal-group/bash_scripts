@@ -27,7 +27,7 @@ case $mode in
 		cat ${basefolder}/${pop}/${chr}/chr${chr}.${chunkStr}.gen_info | sed 's,'"/lustre/scratch113/projects/esgi-vbseq/02032016_INGI_REF_PANEL/IMPUTE/CARL_FVG_VBI_TGP3_ALL/${chr}/${chr}.INGI_REF.CARL_FVG_VBI_TGP3_ALL.*.legend.gz:"',,g' >> ${basefolder}/${pop}/chr${chr}.gen_tmp1_info
 
 		#create the COMPLETE merged imputed files
-		done << (cat ${gen_list})
+		done < <(cat ${gen_list})
 		echo "Creating merged complete files...."
 		mkdir -p ${basefolder}/${pop}/MERGED/ALL
 		mkdir -p ${basefolder}/${pop}/MERGED/CLEANED
