@@ -156,7 +156,7 @@ do
 for panel in CARL_FVG_VBI_TGP3_ALL.shapeit
 do
 # for chr in {1..19}
-for chr in 1
+for chr in {1..22}
 do
 genz=`ls ${pop}/${panel}/${chr}/*.gen.gz|wc -l | cut -f 1 -d " "`
 cmdz=`ls ${pop}/${panel}/${chr}/*.cmd|wc -l | cut -f 1 -d " "`
@@ -167,8 +167,7 @@ echo "$pop $panel $chr $genz $cmdz WARNING"
 fi
 done
 done
-done 2> /dev/null
- > 03102016_impute_check.txt
+done 2> /dev/null > 07122016_impute_check.txt
 
 
 for panel in CARL_FVG_VBI_UK10K_TGP3_ALL
