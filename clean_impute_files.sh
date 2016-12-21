@@ -7,6 +7,8 @@ chr=$2
 basefolder=$3
 # basefolder=/netapp02/data/imputation/INGI_TGP3/impute
 mode=$4
+basefolder2=$5
+outfolder=$6
 
 case $mode in
 	STEP1 )
@@ -127,5 +129,14 @@ case $mode in
 		mv ${basefolder}/${pop}/MERGED/CLEANED/RECODED/FILEVECTOR/prob/${chr}.prob.fvi ${basefolder}/${pop}/MERGED/CLEANED/RECODED/FILEVECTOR/prob/${pop}_INGI_TGP3_chr${chr}.fvi
 		
 		echo "ENDED!!"
+		;;
+	MERGE )
+		#merge data
+		qctool -g ${basefolder}/${pop^^}/${pop}/MERGED/ALL/chr${chr}.gen.gz -s ${basefolder}/${pop^^}/${pop}/MERGED/ALL/CARL.gen_samples -g ${basefolder2}/${pop^^}/MERGED/ALL/chr${chr}.gen.gz -s ${basefolder2}/${pop^^}/MERGED/ALL/CARL.gen_samples -og ${outfolder}/${pop^^}/MERGED/ALL/chr${chr}.joined.gen -os ${outfolder}/${pop^^}/MERGED/ALL/chr${chr}.joined.sample -omit-chromosome -sort
+		gzip ${outfolder}/${pop^^}/MERGED/ALL/chr${chr}.joined.gen
+		#extract stats
+		qctool -g ${outfolder}/${pop^^}/MERGED/ALL/chr${chr}.joined.gen.gz -s ${outfolder}/${pop^^}/MERGED/ALL/chr${chr}.joined.sample -sample-stats ${outfolder}/${pop^^}/MERGED/ALL/chr${chr}.joined.sample_stats -os ${outfolder}/${pop^^}/MERGED/ALL/chr${chr}.joined.new.sample
+		qctool -g ${outfolder}/${pop^^}/MERGED/ALL/chr${chr}.joined.gen.gz -snp-stats ${outfolder}/${pop^^}/MERGED/ALL/chr${chr}.joined.gen.snp_stats
+
 		;;
 esac
