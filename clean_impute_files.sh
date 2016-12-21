@@ -131,6 +131,8 @@ case $mode in
 		echo "ENDED!!"
 		;;
 	MERGE )
+		#create output folder
+		mkdir -p ${outfolder}/${pop^^}/MERGED/ALL/
 		#merge data
 		qctool -g ${basefolder}/${pop^^}/${pop}/MERGED/ALL/chr${chr}.gen.gz -s ${basefolder}/${pop^^}/${pop}/MERGED/ALL/CARL.gen_samples -g ${basefolder2}/${pop^^}/MERGED/ALL/chr${chr}.gen.gz -s ${basefolder2}/${pop^^}/MERGED/ALL/CARL.gen_samples -og ${outfolder}/${pop^^}/MERGED/ALL/chr${chr}.joined.gen -os ${outfolder}/${pop^^}/MERGED/ALL/chr${chr}.joined.sample -omit-chromosome -sort
 		gzip ${outfolder}/${pop^^}/MERGED/ALL/chr${chr}.joined.gen
