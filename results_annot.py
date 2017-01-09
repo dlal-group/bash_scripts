@@ -17,7 +17,8 @@ from multiprocessing.dummy import Pool as ThreadPool
 
 # if select.select([sys.stdin,],[],[],0.0)[0]:
 # 	res_file=sys.stdin # res_file="/home/cocca/analyses/1000G_test/CARL/MCH_out/CARL_MCH_10_Oct_08_2016_cocca_results.csv"
-# 	annot_file=sys.argv[1] # annot_file="/netapp/nfs/resources/1000GP_phase3/vcf/ALL.chr10.phase3_shapeit2_mvncall_integrated_v5a.20130502.genotypes.vcf.gz"
+# 	res_file="/home/cocca/imputation/MERGED_DATA/CARL/MERGED/ALL/chr20.gen_info"
+# 	annot_file=sys.argv[1] # annot_file="/netapp/nfs/resources/1000GP_phase3/vcf/ALL.chr20.phase3_shapeit2_mvncall_integrated_v5a.20130502.genotypes.vcf.gz"
 # 	mode=sys.argv[2] # mode="genABEL"
 # 	#this argument is optional and used only in genABEL mode
 # 	i_conv=sys.argv[3] # i_conv="/netapp02/data/imputation/INGI_TGP3/CARL/carl/MERGED/CLEANED/chr10.gen_info"
@@ -27,7 +28,7 @@ from multiprocessing.dummy import Pool as ThreadPool
 parser=argparse.ArgumentParser()
 parser.add_argument('<result file>')
 parser.add_argument('<annotation_vcf>')
-parser.add_argument('<GEMMA/genABEL/datABEL>')
+parser.add_argument('<GEMMA/genABEL/datABEL/info>')
 parser.add_argument('[indel recode file]')
 # parser.add_argument('[threads]')
 if len(sys.argv)==1:
@@ -172,6 +173,25 @@ elif mode == 'datABEL':
 				except KeyError, e:
 					# all_res[site_key]=[site,":".join([site[1],site[2]])]
 					print '%s' %(" ".join(site))
+
+elif mode == 'info':
+	print 'snp_id rs_id position a0 a1 exp_freq_a1 info certainty type info_type0 concord_type0 r2_type0'
+	with open('%s' %(res_file) ,'r') as current_file:
+			for line in current_file:
+				if not re.match('snp_id',line):
+					site=line.rstrip().split(" ")
+					if re.match('---',site[0]):
+						site_key="_".join([site[1].split(":")[0],site[1].split(":")[1]])
+					else:
+						site_key="_".join([site[0],site[2],site[3],site[4]])
+						
+					try:
+						all_annots[site_key]
+						# all_res[site_key]=[site,all_annots[site_key]]
+						print '%s %s %s %s %s %s %s %s %s %s %s %s' %(site[0],all_annots[site_key],site[2],site[3],site[4],site[5],site[6],site[7],site[8],site[9],site[10],site[11])
+					except KeyError, e:
+						# all_res[site_key]=[site,":".join([site[1],site[2]])]
+						print '%s' %(" ".join(site))
 
 
 elapsed_time = time.time() - start_time
