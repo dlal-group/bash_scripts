@@ -29,7 +29,7 @@ parser=argparse.ArgumentParser()
 parser.add_argument('<result file>')
 parser.add_argument('<annotation_vcf>')
 parser.add_argument('<GEMMA/genABEL/datABEL/info>')
-parser.add_argument('[indel recode file]', nargs='?')
+parser.add_argument('[indel recode file]', nargs='?', default=None)
 # parser.add_argument('[threads]')
 if len(sys.argv)==1:
     parser.print_usage()
