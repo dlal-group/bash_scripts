@@ -188,10 +188,26 @@ elif mode == 'info':
 					try:
 						all_annots[site_key]
 						# all_res[site_key]=[site,all_annots[site_key]]
-						print '%s %s %s %s %s %s %s %s %s %s %s %s' %(site[0],all_annots[site_key],site[2],site[3],site[4],site[5],site[6],site[7],site[8],site[9],site[10],site[11])
+						print '%s %s %s' %(site[0],all_annots[site_key]," ".join(site[2:]))
 					except KeyError, e:
 						# all_res[site_key]=[site,":".join([site[1],site[2]])]
 						print '%s' %(" ".join(site))
+elif mode == 'gen':
+	current_file=gzip.open('%s' %(res_file), 'r')
+	for line in current_file:
+		site=line.rstrip().split(" ")
+		if re.match('---',site[0]):
+			site_key="_".join([site[1].split(":")[0],site[1].split(":")[1]])
+		else:
+			site_key="_".join([site[0],site[2],site[3],site[4]])
+			
+		try:
+			all_annots[site_key]
+			# all_res[site_key]=[site,all_annots[site_key]]
+			print '%s %s %s' %(site[0],all_annots[site_key]," ".join(site[2:]))
+		except KeyError, e:
+			# all_res[site_key]=[site,":".join([site[1],site[2]])]
+			print '%s' %(" ".join(site))
 
 
 elapsed_time = time.time() - start_time
