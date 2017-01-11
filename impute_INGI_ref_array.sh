@@ -76,6 +76,11 @@ case $pop in
 	genodir=/lustre/scratch113/teams/soranzo/users/jh21/imputed/incipe2/shapeit
 	phasedir=/lustre/scratch113/teams/soranzo/users/jh21/imputed/incipe2/shapeit
 	;;
+	* )
+	# extra_str_excl_snps="-exclude_snps_g /lustre/scratch114/teams/soranzo/users/mc14/fromscratch113/INGI/05272015_MERGED_REF_PANEL/snplist/${pop}_chr${chr}.exclude -impute_excluded"
+	genodir=${genotype_base}/${pop}/${chr}
+	phasedir=${genotype_base}/${pop}/${chr}
+	;;
 esac
 
 refdir=/lustre/scratch113/projects/esgi-vbseq/02032016_INGI_REF_PANEL/IMPUTE/${PANEL}
