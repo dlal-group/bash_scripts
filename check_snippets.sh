@@ -312,3 +312,20 @@ do
 
 
 done
+
+for pop in KORCULA
+do
+for panel in CARL_FVG_VBI_TSI.shapeit
+do
+for chr in 2
+do
+genz=`ls ${pop}/${panel}/${chr}/*.gen.gz|wc -l | cut -f 1 -d " "`
+cmdz=`ls ${pop}/${panel}/${chr}/*.cmd|wc -l | cut -f 1 -d " "`
+if [ $genz -eq $cmdz ];then
+echo "$pop $panel $chr $genz $cmdz OK"
+else
+echo "$pop $panel $chr $genz $cmdz WARNING"
+fi
+done
+done
+done
