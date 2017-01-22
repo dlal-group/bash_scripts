@@ -149,14 +149,15 @@ done
 done
 done
 
+for pop in KORCULA
 for pop in CARL
-for pop in CARL FVG VBI
+for pop in VIS
 do
-# for panel in CARL_FVG_VBI.shapeit CARL_FVG_VBI_TGP3_ALL.shapeit CARL_FVG_VBI_TSI.shapeit EUR.shapeit TGP3_ALL.shapeit
-for panel in CARL_FVG_VBI_TGP3_ALL.shapeit
+for panel in CARL_FVG_VBI.shapeit CARL_FVG_VBI_TGP3_ALL.shapeit CARL_FVG_VBI_TSI.shapeit TGP3_ALL.shapeit
+# for panel in CARL_FVG_VBI_TGP3_ALL.shapeit
 do
-# for chr in {1..19}
-for chr in {1..22}
+# for chr in {1..22}
+for chr in 2
 do
 genz=`ls ${pop}/${panel}/${chr}/*.gen.gz|wc -l | cut -f 1 -d " "`
 cmdz=`ls ${pop}/${panel}/${chr}/*.cmd|wc -l | cut -f 1 -d " "`
@@ -313,9 +314,9 @@ do
 
 done
 
-for pop in KORCULA
+for pop in KORCULA VIS
 do
-for panel in CARL_FVG_VBI_TSI.shapeit
+for panel in TGP3_ALL.shapeit CARL_FVG_VBI.shapeit CARL_FVG_VBI_TSI.shapeit CARL_FVG_VBI_TGP3_ALL.shapeit
 do
 for chr in 2
 do
@@ -329,3 +330,39 @@ fi
 done
 done
 done
+
+#snippet to check data after rsid conversion
+for chr in {1..22}
+do
+o_col=`zcat chr${chr}.gen.gz | awk '{print NF}' | uniq`
+o_row=`zcat chr${chr}.gen.gz | wc -l | cut -f 1 -d " "`
+n_col=`zcat chr${chr}.converted.gen.gz | awk '{print NF}' | uniq`
+n_row=`zcat chr${chr}.converted.gen.gz | wc -l | cut -f 1 -d " "`
+
+if [[ o_col -eq n_col && o_row -eq n_row ]]; then
+echo -e "col check: ${o_col} -> ${n_col}\nrow check: ${o_row} -> ${n_row} : OK"
+else
+echo -e "col check: ${o_col} -> ${n_col}\nrow check: ${o_row} -> ${n_row} : WRONG"
+#statements
+fi
+done
+
+#snippet to check how many sites we lose merging imputations
+for pop in CARL FVG VBI
+for pop in CARL
+do
+echo -e "POP CHR OLD_ROWS NEW_ROWS DIFF OLD_TYPE2 NEW_TYPE2 TYPE2_DIFF"
+
+for chr in {1..22}
+do
+o_info_row=`wc -l /netapp02/data/imputation/INGI_TGP3/${pop}/MERGED/ALL/chr${chr}.gen_info | cut -f 1 -d " "`
+n_info_row=`zcat /netapp02/data/imputation/INGI_TGP3_MERGED/${pop}/MERGED/ALL/INFO_PRECONV/chr${chr}.gen_info_preconv.gz | wc -l | cut -f 1 -d " "`
+
+o_info_type2_row=`awk '$9==2' /netapp02/data/imputation/INGI_TGP3/${pop}/MERGED/ALL/chr${chr}.gen_info |wc -l| cut -f 1 -d " "`
+n_info_type2_row=`zcat /netapp02/data/imputation/INGI_TGP3_MERGED/${pop}/MERGED/ALL/INFO_PRECONV/chr${chr}.gen_info_preconv.gz|awk '$9==2' | wc -l | cut -f 1 -d " "`
+
+
+echo -e "${pop} ${chr} $[o_info_row - 1 ] $[n_info_row - 1 ] $[o_info_row - n_info_row] ${o_info_type2_row} ${n_info_type2_row} $[o_info_type2_row - n_info_type2_row]"
+done
+done
+

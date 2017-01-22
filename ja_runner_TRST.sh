@@ -6,7 +6,75 @@
 # a_size=`wc -l chr${chr}_command.list| cut -f 1 -d " "`;echo "~/scripts/bash_scripts/ja_runner_par_TRST.sh -l $imputedir/chr${chr}_command.list"|qsub -t 1-${a_size} -o ${imputedir}/chr${chr}_\$JOB_ID_\$TASK_ID.log -e ${imputedir}/chr${chr}_\$JOB_ID_\$TASK_ID.e -V -N ${pop}_chr${chr} -l h_vmem=${m}
 set -e
 
-file=`sed -n "${SGE_TASK_ID}p" $1`
+# file=`sed -n "${SGE_TASK_ID}p" $1`
+
+#add options capabilities to the normal ja runner
+echo "${@}"
+while getopts ":dstql" opt; do
+  case $opt in
+    d)
+      echo $opt
+      echo "Double column list mode triggered!" >&2
+      file=`sed -n "${SGE_TASK_ID}p" $2 | awk '{print $1}'`
+      file2=`sed -n "${SGE_TASK_ID}p" $2 | awk '{print $2}'`
+      echo ${file}
+      echo ${file2}
+      ;;
+    t)
+      echo $opt
+      echo "Triple column list mode triggered!" >&2
+      file1=`sed -n "${SGE_TASK_ID}p" $2 | awk '{print $1}'`
+      file2=`sed -n "${SGE_TASK_ID}p" $2 | awk '{print $2}'`
+      file3=`sed -n "${SGE_TASK_ID}p" $2 | awk '{print $3}'`
+      echo ${file1}
+      echo ${file2}
+      echo ${file3}
+      file=${file1}\:${file2}\:${file3}
+      ;;
+    q)
+      echo $opt
+      echo "Quadruple column list mode triggered!" >&2
+      file1=`sed -n "${SGE_TASK_ID}p" $2 | awk '{print $1}'`
+      file2=`sed -n "${SGE_TASK_ID}p" $2 | awk '{print $2}'`
+      file3=`sed -n "${SGE_TASK_ID}p" $2 | awk '{print $3}'`
+      file4=`sed -n "${SGE_TASK_ID}p" $2 | awk '{print $4}'`
+      echo ${file1}
+      echo ${file2}
+      echo ${file3}
+      echo ${file4}
+      file=${file1}\:${file2}\:${file3}\:${file4}
+      ;;
+    s)
+      echo $opt
+      echo "Single list mode triggered!!" >&2
+      file=`sed -n "${SGE_TASK_ID}p" $2`
+      echo ${file}
+      # $script ${file} $4 $5 $6 $7 $8
+      ;;
+    l)
+      echo $opt
+      echo "Script list mode triggered!!" >&2
+      file=`sed -n "${SGE_TASK_ID}p" $2`
+      # echo ${file}
+      script=${file}
+      # $script ${file} $4 $5 $6 $7 $8
+      # $script ${file} "${@:3}"
+      $script "${@:3}"
+      ;;
+    *)
+      echo $opt
+    ;;
+  esac
+  #bit to generate a report....
+  # PID=$!
+  # wait $!
+  # status=$?
+  # wdir=`pwd -P`
+  # cmd=`history | tail -n2| head -1| cut -f 2- -d " "`
+  # email=mc14@sanger.ac.uk
+  # /nfs/users/nfs_m/mc14/Work/bash_scripts/send_report.sh ${status} ${email} ${wdir} ${cmd}
+
+done
 
 #11/09/2016
 #remove duplicate lines from vcf files
@@ -92,8 +160,8 @@ file=`sed -n "${SGE_TASK_ID}p" $1`
 ###################################
 #20/10/2016
 # Extract chr pos and pval for a list of traits and different chromosomes from UK10K analyses results
-base_dir=`dirname ${file}`
-file_name=`basename ${file}`
+# base_dir=`dirname ${file}`
+# file_name=`basename ${file}`
 # trait=`echo ${file_name%%.*}`
 
 # mkdir -p ${base_dir}/20102016_SUBSET
@@ -126,4 +194,9 @@ file_name=`basename ${file}`
 #21/11/2016
 # extract stats for Italian Genome
 
-bcftools stats -s - ${file} > ${base_dir}/${file_name}.vcfchk
+# bcftools stats -s - ${file} > ${base_dir}/${file_name}.vcfchk
+
+#match info files between different imputations to compare frequencies and info scores
+base_dir=`dirname ${file}`
+file_name=`basename ${file}`
+
