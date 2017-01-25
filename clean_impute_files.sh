@@ -146,6 +146,7 @@ case $mode in
 		# 1) define the file header
 		outfolder=$5
 		info_head="snp_id rs_id position a0 a1 exp_freq_a1 info certainty type info_type0 concord_type0 r2_type0"
+		mkdir -p ${outfolder}/${pop^^}/MERGED/ALL
 		# 2) select the relevant columns from the stats file 
 		(echo ${info_head};tail -n+2 ${basefolder}/${pop^^}/MERGED/ALL/chr${chr}.gen.snp_stats |awk 'BEGIN{OFS=" "}{$15=sprintf("%.3f",$15)}{$19=sprintf("%.3f",$19)}{if($6==$7) print $1,$2,$4,$5,$6,$15,$19,0;else print $1,$2,$4,$5,$6,1-$15,$19,0}' |awk 'BEGIN{OFS=" "}{if($2~"rs") print $0,2,0,0,0;else print $0,0,0,0,0}') > ${outfolder}/${pop^^}/MERGED/ALL/chr${chr}.gen_info
 
