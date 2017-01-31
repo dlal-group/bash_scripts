@@ -161,6 +161,10 @@ case $mode in
 		fgrep -v -w -f ${outfolder}/${pop^^}/MERGED/ALL/chr${chr}.genotyped_merge.list ${outfolder}/${pop^^}/MERGED/ALL/chr${chr}.gen_info_tmp | awk 'BEGIN{OFS=" "}{ print $0,0,0,0,0}' > ${outfolder}/${pop^^}/MERGED/ALL/chr${chr}.gen_info_tmp_not_genotyped
 		(echo ${info_head};cat ${outfolder}/${pop^^}/MERGED/ALL/chr${chr}.gen_info_tmp_genotyped ${outfolder}/${pop^^}/MERGED/ALL/chr${chr}.gen_info_tmp_not_genotyped | sort -g -k3,3) > ${outfolder}/${pop^^}/MERGED/ALL/chr${chr}.gen_info
 
-
+		mkdir -p ${outfolder}/${pop^^}/MERGED/ALL/TMP
+		mv ${outfolder}/${pop^^}/MERGED/ALL/chr${chr}.genotyped_merge.list ${outfolder}/${pop^^}/MERGED/ALL/TMP/
+		mv ${outfolder}/${pop^^}/MERGED/ALL/chr${chr}.gen_info_tmp ${outfolder}/${pop^^}/MERGED/ALL/TMP/
+		mv ${outfolder}/${pop^^}/MERGED/ALL/chr${chr}.gen_info_tmp_genotyped ${outfolder}/${pop^^}/MERGED/ALL/TMP/
+		mv ${outfolder}/${pop^^}/MERGED/ALL/chr${chr}.gen_info_tmp_not_genotyped ${outfolder}/${pop^^}/MERGED/ALL/TMP/
 		;;
 esac
