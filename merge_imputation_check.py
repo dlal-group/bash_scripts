@@ -57,8 +57,8 @@ for info_file_name in all_files:
 for intersect_site in to_merge_files.keys():
 	if len(to_merge_files[intersect_site]) > 1:
 		f_k=to_merge_files[intersect_site].keys()[0]
-		chrom=to_merge_files[intersect_site][info_filename]['chrom']
-		pos=to_merge_files[intersect_site][info_filename]['pos']
+		chrom=to_merge_files[intersect_site][f_k]['chrom']
+		pos=to_merge_files[intersect_site][f_k]['pos']
 		print '%s\t%s' %(chrom,pos),
 		for info_filename in to_merge_files[intersect_site].keys():
 			v_info=to_merge_files[intersect_site][info_filename]['info']
