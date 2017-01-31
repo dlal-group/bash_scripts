@@ -156,10 +156,10 @@ case $mode in
 		comm -12 <(awk '$9==2' ${basefolder}/${pop^^}/${pop}/MERGED/ALL/chr${chr}.gen_info | cut -f 2 -d " "|sort) <(awk '$9==2' ${basefolder2}/${pop^^}/MERGED/ALL/chr${chr}.gen_info | cut -f 2 -d " "| sort) > ${outfolder}/${pop^^}/MERGED/ALL/chr${chr}.genotyped_merge.list
 		# 2) select the relevant columns from the stats file 
 		# (echo ${info_head};tail -n+2 ${basefolder}/${pop^^}/MERGED/ALL/chr${chr}.gen.snp_stats |awk 'BEGIN{OFS=" "}{$15=sprintf("%.3f",$15)}{$19=sprintf("%.3f",$19)}{if($6==$7) print $1,$2,$4,$5,$6,$15,$19,0;else print $1,$2,$4,$5,$6,1-$15,$19,0}' |awk 'BEGIN{OFS=" "}{if($2~"rs") print $0,2,0,0,0;else print $0,0,0,0,0}') > ${outfolder}/${pop^^}/MERGED/ALL/chr${chr}.gen_info
-		(echo ${info_head};tail -n+2 ${basefolder3}/${pop^^}/MERGED/ALL/chr${chr}.gen.snp_stats |awk 'BEGIN{OFS=" "}{$15=sprintf("%.3f",$15)}{$19=sprintf("%.3f",$19)}{if($6==$7) print $1,$2,$4,$5,$6,$15,$19,0;else print $1,$2,$4,$5,$6,1-$15,$19,0}') > ${outfolder}/${pop^^}/MERGED/ALL/chr${chr}.gen_info_tmp
+		(tail -n+2 ${basefolder3}/${pop^^}/MERGED/ALL/chr${chr}.gen.snp_stats |awk 'BEGIN{OFS=" "}{$15=sprintf("%.3f",$15)}{$19=sprintf("%.3f",$19)}{if($6==$7) print $1,$2,$4,$5,$6,$15,$19,0;else print $1,$2,$4,$5,$6,1-$15,$19,0}') > ${outfolder}/${pop^^}/MERGED/ALL/chr${chr}.gen_info_tmp
 		fgrep -w -f ${outfolder}/${pop^^}/MERGED/ALL/chr${chr}.genotyped_merge.list ${outfolder}/${pop^^}/MERGED/ALL/chr${chr}.gen_info_tmp | awk 'BEGIN{OFS=" "}{ print $0,2,0,0,0}' > ${outfolder}/${pop^^}/MERGED/ALL/chr${chr}.gen_info_tmp_genotyped
 		fgrep -v -w -f ${outfolder}/${pop^^}/MERGED/ALL/chr${chr}.genotyped_merge.list ${outfolder}/${pop^^}/MERGED/ALL/chr${chr}.gen_info_tmp | awk 'BEGIN{OFS=" "}{ print $0,0,0,0,0}' > ${outfolder}/${pop^^}/MERGED/ALL/chr${chr}.gen_info_tmp_not_genotyped
-		cat ${outfolder}/${pop^^}/MERGED/ALL/chr${chr}.gen_info_tmp_genotyped ${outfolder}/${pop^^}/MERGED/ALL/chr${chr}.gen_info_tmp_not_genotyped | sort -g -k3,3 > ${outfolder}/${pop^^}/MERGED/ALL/chr${chr}.gen_info
+		(echo ${info_head};cat ${outfolder}/${pop^^}/MERGED/ALL/chr${chr}.gen_info_tmp_genotyped ${outfolder}/${pop^^}/MERGED/ALL/chr${chr}.gen_info_tmp_not_genotyped | sort -g -k3,3) > ${outfolder}/${pop^^}/MERGED/ALL/chr${chr}.gen_info
 
 
 		;;
