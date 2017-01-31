@@ -144,7 +144,7 @@ case $mode in
 	INFO )
 		# Step to create info style files from qctools calculated stats
 		# 1) define the file header
-		outfolder=$5
+		# outfolder=$5
 		info_head="snp_id rs_id position a0 a1 exp_freq_a1 info certainty type info_type0 concord_type0 r2_type0"
 		mkdir -p ${outfolder}/${pop^^}/MERGED/ALL
 		# to get the real number of gentyoped sites, we need to extract the genotyped sites from the relative info files, than we get a uniq list
