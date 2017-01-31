@@ -29,3 +29,6 @@ do
 done
 
 # file=/lustre/scratch113/teams/soranzo/users/jh21/imputed/carl/gemma/TG/chr19.gemma.gz
+
+
+/nfs/team151/software/ensembl-tools-release-79/scripts/variant_effect_predictor/variant_effect_predictor.pl --format ensembl --o ${filename}.vep.annotated.tab --merged --all_refseq --gmaf --maf_esp --maf_1kg --quiet --regulatory --ccds --protein --uniprot --sift b --polyphen b --plugin Condel,/software/vertres/bin-external/VEP_plugins/config/Condel/config/,b --symbol --force_overwrite --html --cache --dir /data/blastdb/Ensembl/vep

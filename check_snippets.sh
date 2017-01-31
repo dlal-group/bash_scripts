@@ -348,19 +348,20 @@ fi
 done
 
 #snippet to check how many sites we lose merging imputations
-for pop in CARL FVG VBI
 for pop in CARL
+for pop in CARL FVG VBI
 do
 echo -e "POP CHR OLD_ROWS NEW_ROWS DIFF OLD_TYPE2 NEW_TYPE2 TYPE2_DIFF"
 
 for chr in {1..22}
 do
 o_info_row=`wc -l /netapp02/data/imputation/INGI_TGP3/${pop}/MERGED/ALL/chr${chr}.gen_info | cut -f 1 -d " "`
-n_info_row=`zcat /netapp02/data/imputation/INGI_TGP3_MERGED/${pop}/MERGED/ALL/INFO_PRECONV/chr${chr}.gen_info_preconv.gz | wc -l | cut -f 1 -d " "`
+# n_info_row=`zcat /netapp02/data/imputation/INGI_TGP3_MERGED/${pop}/MERGED/ALL/INFO_PRECONV/chr${chr}.gen_info_preconv.gz | wc -l | cut -f 1 -d " "`
+n_info_row=`wc -l /home/cocca/imputation/MERGED_INGI_TGP3_23012017/${pop}/MERGED/ALL/chr${chr}.gen_info | cut -f 1 -d " "`
 
 o_info_type2_row=`awk '$9==2' /netapp02/data/imputation/INGI_TGP3/${pop}/MERGED/ALL/chr${chr}.gen_info |wc -l| cut -f 1 -d " "`
-n_info_type2_row=`zcat /netapp02/data/imputation/INGI_TGP3_MERGED/${pop}/MERGED/ALL/INFO_PRECONV/chr${chr}.gen_info_preconv.gz|awk '$9==2' | wc -l | cut -f 1 -d " "`
-
+# n_info_type2_row=`zcat /netapp02/data/imputation/INGI_TGP3_MERGED/${pop}/MERGED/ALL/INFO_PRECONV/chr${chr}.gen_info_preconv.gz|awk '$9==2' | wc -l | cut -f 1 -d " "`
+n_info_type2_row=`awk '$9==2' /home/cocca/imputation/MERGED_INGI_TGP3_23012017/${pop}/MERGED/ALL/chr${chr}.gen_info | wc -l | cut -f 1 -d " "`
 
 echo -e "${pop} ${chr} $[o_info_row - 1 ] $[n_info_row - 1 ] $[o_info_row - n_info_row] ${o_info_type2_row} ${n_info_type2_row} $[o_info_type2_row - n_info_type2_row]"
 done
