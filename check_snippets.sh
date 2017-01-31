@@ -367,3 +367,19 @@ echo -e "${pop} ${chr} $[o_info_row - 1 ] $[n_info_row - 1 ] $[o_info_row - n_in
 done
 done
 
+#check als info files consistency
+for chr in {1..22}
+do
+o_col=`cat chr${chr}.gen_info | awk '{print NF}' | uniq`
+o_row=`cat chr${chr}.gen_info | wc -l | cut -f 1 -d " "`
+n_col=`cat chr${chr}.gen_info_converted | awk '{print NF}' | uniq`
+n_row=`cat chr${chr}.gen_info_converted | wc -l | cut -f 1 -d " "`
+
+if [[ o_col -eq n_col && o_row -eq n_row ]]; then
+echo -e "col check: ${o_col} -> ${n_col}\nrow check: ${o_row} -> ${n_row} : OK"
+else
+echo -e "col check: ${o_col} -> ${n_col}\nrow check: ${o_row} -> ${n_row} : WRONG"
+#statements
+fi
+done
+
