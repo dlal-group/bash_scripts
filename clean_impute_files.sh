@@ -144,7 +144,7 @@ case $mode in
 		# /netapp/nfs/softwares/snptest_v2.5.2/snptest_v2.5.2 -summary_stats_only -data ${outfolder}/${pop^^}/MERGED/ALL/chr${chr}.joined.gen.gz ${outfolder}/${pop^^}/MERGED/ALL/chr${chr}.sample -o ${outfolder}/${pop^^}/MERGED/ALL/chr${chr}.joined.gen.SNPTEST.snp_stats
 		/netapp/nfs/softwares/snptest_v2.5.2/snptest_v2.5.2 -summary_stats_only -data ${outfolder}/${pop^^}/MERGED/ALL/chr${chr}.gen.gz ${outfolder}/${pop^^}/MERGED/ALL/chr${chr}.sample -o ${outfolder}/${pop^^}/MERGED/ALL/chr${chr}.joined.gen.SNPTEST.snp_stats
 		#we need only rsid chromosome position alleleA alleleB info columns
-		(egrep -v "^#" ${outfolder}/${pop^^}/MERGED/ALL/chr${chr}.joined.gen.SNPTEST.snp_stats | cut -f 2-6,9,10-12,14 -d " " | head -1;egrep -v "^#" ${outfolder}/${pop^^}/MERGED/ALL/chr${chr}.joined.gen.SNPTEST.snp_stats | tail -n+2 | cut -f 2-6,9,10-12,14 -d " " | awk '{print $0, ($11+($12*2))/($14*2)}') > ${outfolder}/${pop^^}/MERGED/ALL/chr${chr}.joined.gen.SNPTEST.info_a1_freq
+		(egrep -v "^#" ${outfolder}/${pop^^}/MERGED/ALL/chr${chr}.joined.gen.SNPTEST.snp_stats | cut -f 2-6,9,10-12,14 -d " " | head -1;egrep -v "^#" ${outfolder}/${pop^^}/MERGED/ALL/chr${chr}.joined.gen.SNPTEST.snp_stats | tail -n+2 | cut -f 2-6,9,10-12,14 -d " " | awk '{print $0, ($8+($9*2))/($10*2)}') > ${outfolder}/${pop^^}/MERGED/ALL/chr${chr}.joined.gen.SNPTEST.info_a1_freq
 		;;
 	INFO )
 		# Step to create info style files from qctools calculated stats
