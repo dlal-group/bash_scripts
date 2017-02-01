@@ -134,11 +134,14 @@ case $mode in
 		#create output folder
 		mkdir -p ${outfolder}/${pop^^}/MERGED/ALL/
 		#merge data
-		qctool -g ${basefolder}/${pop^^}/${pop}/MERGED/ALL/chr${chr}.gen.gz -s ${basefolder}/${pop^^}/${pop}/MERGED/ALL/${pop^^}.gen_samples -g ${basefolder2}/${pop^^}/MERGED/ALL/chr${chr}.gen.gz -s ${basefolder2}/${pop^^}/MERGED/ALL/${pop^^}.gen_samples -snp-match-fields position,alleles -match-alleles-to-cohort1 -og ${outfolder}/${pop^^}/MERGED/ALL/chr${chr}.joined.gen -os ${outfolder}/${pop^^}/MERGED/ALL/chr${chr}.joined.sample -omit-chromosome -sort
-		gzip ${outfolder}/${pop^^}/MERGED/ALL/chr${chr}.joined.gen
-		#extract stats
-		qctool -g ${outfolder}/${pop^^}/MERGED/ALL/chr${chr}.joined.gen.gz -s ${outfolder}/${pop^^}/MERGED/ALL/chr${chr}.joined.sample -sample-stats ${outfolder}/${pop^^}/MERGED/ALL/chr${chr}.joined.sample_stats -os ${outfolder}/${pop^^}/MERGED/ALL/chr${chr}.joined.new.sample
-		qctool -g ${outfolder}/${pop^^}/MERGED/ALL/chr${chr}.joined.gen.gz -snp-stats ${outfolder}/${pop^^}/MERGED/ALL/chr${chr}.joined.gen.snp_stats
+		# qctool -g ${basefolder}/${pop^^}/${pop}/MERGED/ALL/chr${chr}.gen.gz -s ${basefolder}/${pop^^}/${pop}/MERGED/ALL/${pop^^}.gen_samples -g ${basefolder2}/${pop^^}/MERGED/ALL/chr${chr}.gen.gz -s ${basefolder2}/${pop^^}/MERGED/ALL/${pop^^}.gen_samples -snp-match-fields position,alleles -match-alleles-to-cohort1 -og ${outfolder}/${pop^^}/MERGED/ALL/chr${chr}.joined.gen -os ${outfolder}/${pop^^}/MERGED/ALL/chr${chr}.joined.sample -omit-chromosome -sort
+		# gzip ${outfolder}/${pop^^}/MERGED/ALL/chr${chr}.joined.gen
+		# #extract stats
+		# qctool -g ${outfolder}/${pop^^}/MERGED/ALL/chr${chr}.joined.gen.gz -s ${outfolder}/${pop^^}/MERGED/ALL/chr${chr}.joined.sample -sample-stats ${outfolder}/${pop^^}/MERGED/ALL/chr${chr}.joined.sample_stats -os ${outfolder}/${pop^^}/MERGED/ALL/chr${chr}.joined.new.sample
+		# qctool -g ${outfolder}/${pop^^}/MERGED/ALL/chr${chr}.joined.gen.gz -snp-stats ${outfolder}/${pop^^}/MERGED/ALL/chr${chr}.joined.gen.snp_stats
+
+		#generate stats with snptest also....
+		/netapp/nfs/softwares/snptest_v2.5.2/snptest_v2.5.2 -summary_stats_only -data ${outfolder}/${pop^^}/MERGED/ALL/chr${chr}.joined.gen.gz ${outfolder}/${pop^^}/MERGED/ALL/chr${chr}.sample -o ${outfolder}/${pop^^}/MERGED/ALL/chr${chr}.joined.gen.SNPTEST.snp_stats
 
 		;;
 	INFO )
