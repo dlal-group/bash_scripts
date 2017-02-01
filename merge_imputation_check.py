@@ -24,8 +24,8 @@ pop=sys.argv[4]
 to_merge_files=collections.defaultdict(lambda: collections.defaultdict(lambda: collections.defaultdict()))
 all_sites_keys=[]
 
-sys.stderr.write(all_files)
-sys.stderr.write(sys.argv)
+sys.stderr.write(str(all_files))
+sys.stderr.write(str(sys.argv))
 
 for info_file in all_files:
 	# info_file=all_files[0]
