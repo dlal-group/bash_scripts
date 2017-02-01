@@ -24,13 +24,15 @@ pop=sys.argv[4]
 to_merge_files=collections.defaultdict(lambda: collections.defaultdict(lambda: collections.defaultdict()))
 all_sites_keys=[]
 
+print(all_files)
+
 for info_file in all_files:
 	# info_file=all_files[0]
 	pathfilename, file_extension = os.path.splitext(info_file)
 	filename = os.path.basename(info_file)
 	#we need to modify the filename since they can be the same for different imputation set
 	key_filename="_".join([filename,str(all_files.index(info_file))])
-	print("Reading file " + filename + "...")
+	sys.stderr.write("Reading file " + filename + "...\n")
 	if file_extension == ".gz" :
 		current_file=gzip.open('%s' %(info_file), 'r')
 		for line in current_file:
