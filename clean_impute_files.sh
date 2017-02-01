@@ -141,7 +141,8 @@ case $mode in
 		# qctool -g ${outfolder}/${pop^^}/MERGED/ALL/chr${chr}.joined.gen.gz -snp-stats ${outfolder}/${pop^^}/MERGED/ALL/chr${chr}.joined.gen.snp_stats
 
 		#generate stats with snptest also....
-		/netapp/nfs/softwares/snptest_v2.5.2/snptest_v2.5.2 -summary_stats_only -data ${outfolder}/${pop^^}/MERGED/ALL/chr${chr}.joined.gen.gz ${outfolder}/${pop^^}/MERGED/ALL/chr${chr}.sample -o ${outfolder}/${pop^^}/MERGED/ALL/chr${chr}.joined.gen.SNPTEST.snp_stats
+		# /netapp/nfs/softwares/snptest_v2.5.2/snptest_v2.5.2 -summary_stats_only -data ${outfolder}/${pop^^}/MERGED/ALL/chr${chr}.joined.gen.gz ${outfolder}/${pop^^}/MERGED/ALL/chr${chr}.sample -o ${outfolder}/${pop^^}/MERGED/ALL/chr${chr}.joined.gen.SNPTEST.snp_stats
+		/netapp/nfs/softwares/snptest_v2.5.2/snptest_v2.5.2 -summary_stats_only -data ${outfolder}/${pop^^}/MERGED/ALL/chr${chr}.gen.gz ${outfolder}/${pop^^}/MERGED/ALL/chr${chr}.sample -o ${outfolder}/${pop^^}/MERGED/ALL/chr${chr}.joined.gen.SNPTEST.snp_stats
 
 		;;
 	INFO )
