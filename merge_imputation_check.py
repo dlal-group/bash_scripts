@@ -10,7 +10,7 @@ import itertools
 from itertools import chain
 import os
 
-all_files=sys.argv[1:2]
+all_files=sys.argv[1:3]
 chrom=sys.argv[3]
 # chrom=10
 # file3=sys.argv[3]
@@ -24,15 +24,13 @@ pop=sys.argv[4]
 to_merge_files=collections.defaultdict(lambda: collections.defaultdict(lambda: collections.defaultdict()))
 all_sites_keys=[]
 
-sys.stderr.write(str(sys.argv[1:3]))
-
 for info_file in all_files:
 	# info_file=all_files[0]
 	pathfilename, file_extension = os.path.splitext(info_file)
 	filename = os.path.basename(info_file)
 	#we need to modify the filename since they can be the same for different imputation set
 	key_filename="_".join([filename,str(all_files.index(info_file))])
-	sys.stderr.write("Reading file " + filename + "...\n")
+	sys.stderr.write("Reading file " + filename +" for " + pop + "...\n")
 	if file_extension == ".gz" :
 		current_file=gzip.open('%s' %(info_file), 'r')
 		for line in current_file:
