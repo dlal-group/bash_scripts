@@ -53,7 +53,7 @@ for info_file_name in all_files:
 	#we need to modify the filename since they can be the same for different imputation set
 	header_key_filename="_".join([filename,str(all_files.index(info_file_name))])
 	print '\t%s\t%s\t%s' %("info_"+header_key_filename, "type_"+header_key_filename, "exp_a1_af_"+header_key_filename),
-print '\n'
+print ''
 
 for intersect_site in to_merge_files.keys():
 	if len(to_merge_files[intersect_site]) > 1:
@@ -66,4 +66,4 @@ for intersect_site in to_merge_files.keys():
 			v_type=to_merge_files[intersect_site][info_filename]['type']
 			a1_freq=to_merge_files[intersect_site][info_filename]['exp_a1_freq']
 			print '\t%s\t%s\t%s' %(v_info,v_type,a1_freq),
-		print '\n'
+		print ''
