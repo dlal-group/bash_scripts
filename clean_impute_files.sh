@@ -144,7 +144,8 @@ case $mode in
 		# /netapp/nfs/softwares/snptest_v2.5.2/snptest_v2.5.2 -summary_stats_only -data ${outfolder}/${pop^^}/MERGED/ALL/chr${chr}.joined.gen.gz ${outfolder}/${pop^^}/MERGED/ALL/chr${chr}.sample -o ${outfolder}/${pop^^}/MERGED/ALL/chr${chr}.joined.gen.SNPTEST.snp_stats
 		/netapp/nfs/softwares/snptest_v2.5.2/snptest_v2.5.2 -summary_stats_only -data ${outfolder}/${pop^^}/MERGED/ALL/chr${chr}.gen.gz ${outfolder}/${pop^^}/MERGED/ALL/chr${chr}.sample -o ${outfolder}/${pop^^}/MERGED/ALL/chr${chr}.joined.gen.SNPTEST.snp_stats
 		#we need only rsid chromosome position alleleA alleleB info columns
-		(egrep -v "^#" ${outfolder}/${pop^^}/MERGED/ALL/chr${chr}.joined.gen.SNPTEST.snp_stats | cut -f 1,2,4-6,9,14-16,18 -d " " | head -1;egrep -v "^#" ${outfolder}/${pop^^}/MERGED/ALL/chr${chr}.joined.gen.SNPTEST.snp_stats | tail -n+2 | cut -f 1,2,4-6,9,14-16,18 -d " "  | awk '{print $0, ($8+($9*2))/($10*2)}') > ${outfolder}/${pop^^}/MERGED/ALL/chr${chr}.joined.gen.SNPTEST.info_a1_freq
+		header="snp_id rs_id position a0 a1 exp_freq_a1 info certainty type info_type0 concord_type0 r2_type0"
+		(echo "${header}"; egrep -v "^#" ${outfolder}/${pop^^}/MERGED/ALL/chr${chr}.joined.gen.SNPTEST.snp_stats | tail -n+2 | cut -f 1,2,4-6,9,14-16,18 -d " "  | awk '{print $0, ($8+($9*2))/($10*2)}'| awk '{print $1,$2,$3,$4,$5,$11,$6,0,0,0,0,0}') > ${outfolder}/${pop^^}/MERGED/ALL/chr${chr}.joined.gen.SNPTEST.info_a1_freq
 
 
 		;;
