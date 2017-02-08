@@ -340,9 +340,9 @@ n_col=`zcat chr${chr}.converted.gen.gz | awk '{print NF}' | uniq`
 n_row=`zcat chr${chr}.converted.gen.gz | wc -l | cut -f 1 -d " "`
 
 if [[ o_col -eq n_col && o_row -eq n_row ]]; then
-echo -e "col check: ${o_col} -> ${n_col}\nrow check: ${o_row} -> ${n_row} : OK"
+echo -e "col check: ${o_col} -> ${n_col}\trow check: ${o_row} -> ${n_row} : OK"
 else
-echo -e "col check: ${o_col} -> ${n_col}\nrow check: ${o_row} -> ${n_row} : WRONG"
+echo -e "col check: ${o_col} -> ${n_col}\trow check: ${o_row} -> ${n_row} : WRONG"
 #statements
 fi
 done

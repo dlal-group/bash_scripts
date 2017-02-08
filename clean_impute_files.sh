@@ -175,4 +175,5 @@ case $mode in
 		mv ${outfolder}/${pop^^}/MERGED/ALL/chr${chr}.gen_info_tmp_genotyped ${outfolder}/${pop^^}/MERGED/ALL/TMP/
 		mv ${outfolder}/${pop^^}/MERGED/ALL/chr${chr}.gen_info_tmp_not_genotyped ${outfolder}/${pop^^}/MERGED/ALL/TMP/
 		;;
+
 esac
