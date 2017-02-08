@@ -148,7 +148,7 @@ for check_site in all_imputed_stuff:
 
 #write a file for testing allele frequencies
 freq_test=open('%s/chr%s_to_test.txt' %(outpath, chrom),'w')
-print >> freq_test,"chrom\tpos\ta0\ta1\ttgp_an\ttgp_ac1\ttgp_a1_f\timp_an\timp_ac1\timp_a1_f"
+print >> freq_test,"chrom\tpos\trsID\ta0\ta1\ttgp_an\ttgp_ac1\ttgp_a1_f\timp_an\timp_ac1\timp_a1_f"
 
 for to_check_site in final_compare:
 	site_to_check=final_compare[to_check_site]
