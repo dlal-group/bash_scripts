@@ -35,7 +35,7 @@ plink --noweb --bfile ${out2_pref}.flipped --exclude ${out2_pref}.flipped.bad_al
 #06/02/2017
 # Snippets to check exome chip data on FVG and CARL after imputation
 # 1) Get exome chip sites used in merged dataset for each cohort
-for pop in CARL
+for pop in FVG
 do
 for chr in {1..22}
 do
@@ -44,7 +44,7 @@ done
 done
 
 # 2) get frequencies from 1000G data, splitting multiallelic sites
-for pop in CARL
+for pop in FVG
 do
 for chr in {1..22}
 do
@@ -54,10 +54,18 @@ bcftools view -v snps -R /home/cocca/imputation/31012017_MERGED_TEST/${pop}/${ch
 done
 done
 
-# 3) get frequencies from imputed data
+#run the script to extract frequencies and the formated file to perform the test on
 for pop in CARL FVG
 do
-
-fgrep -h -w -f /netapp/dati/WGS_REF_PANEL/genotypes/${pop}/exome/all_exome_rs.list /home/cocca/imputation/MERGED_INGI_TGP3_23012017/${pop}/MERGED/ALL/chr*.gen_info > /home/cocca/imputation/MERGED_INGI_TGP3_23012017/${pop}/MERGED/ALL/all_exome_chip.list
-
+for chr in {1..22}
+do
+exome_chip="/netapp/dati/WGS_REF_PANEL/genotypes/${pop}/exome/${chr}/chr${chr}_flipped.bim"
+tgp_data="/home/cocca/imputation/31012017_MERGED_TEST/${pop}/${chr}_exome_TGP_sites.txt"
+impute_data="/home/cocca/imputation/MERGED_INGI_TGP3_23012017/${pop}/MERGED/ALL/chr${chr}.gen_info"
+chromosome=${chr}
+# pop="CARL"
+outpath="/home/cocca/imputation/31012017_MERGED_TEST/${pop}"
+echo "Processing $pop $chr..."
+/home/cocca/scripts/bash_scripts/exome_sites_extraction.py ${exome_chip} ${tgp_data} ${impute_data} ${chr} ${pop} ${outpath}
+done
 done

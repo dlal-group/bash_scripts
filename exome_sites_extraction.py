@@ -144,7 +144,7 @@ for check_site in all_imputed_stuff:
 			all_data_to_check[t_check_key2] = tgp_values[t_check_key2]
 	else:
 		all_data_to_check[t_check_key1] = tgp_values[t_check_key1]
-		final_compare[t_check_key1] = {"chrom":tgp_values[t_check_key1]["chrom"],"pos":tgp_values[t_check_key1]["pos"],"a0":all_imputed_stuff[t_check_key1]["a0"],"a1":all_imputed_stuff[t_check_key1]["a1"],"tgp_a1_f":tgp_values[t_check_key1]["chrom"],"tgp_a1_f":tgp_values[t_check_key1]["a1_af"],"tgp_an":tgp_values[t_check_key1]["an"],"tgp_ac1":tgp_values[t_check_key1]["ac1"],"imp_a1_f":all_imputed_stuff[t_check_key1]["a1_af"],"imp_an":all_imputed_stuff[t_check_key1]["an"],"imp_ac1":all_imputed_stuff[t_check_key1]["ac1"]}
+		final_compare[t_check_key1] = {"chrom":tgp_values[t_check_key1]["chrom"],"pos":tgp_values[t_check_key1]["pos"],"rsID":tgp_values[t_check_key1]["rsID"],"a0":all_imputed_stuff[t_check_key1]["a0"],"a1":all_imputed_stuff[t_check_key1]["a1"],"tgp_a1_f":tgp_values[t_check_key1]["chrom"],"tgp_a1_f":tgp_values[t_check_key1]["a1_af"],"tgp_an":tgp_values[t_check_key1]["an"],"tgp_ac1":tgp_values[t_check_key1]["ac1"],"imp_a1_f":all_imputed_stuff[t_check_key1]["a1_af"],"imp_an":all_imputed_stuff[t_check_key1]["an"],"imp_ac1":all_imputed_stuff[t_check_key1]["ac1"]}
 
 #write a file for testing allele frequencies
 freq_test=open('%s/chr%s_to_test.txt' %(outpath, chrom),'w')
@@ -152,4 +152,4 @@ print >> freq_test,"chrom\tpos\ta0\ta1\ttgp_an\ttgp_ac1\ttgp_a1_f\timp_an\timp_a
 
 for to_check_site in final_compare:
 	site_to_check=final_compare[to_check_site]
-	print >> freq_test,"%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s" %(site_to_check['chrom'], site_to_check['pos'], site_to_check['a0'], site_to_check['a1'], site_to_check['tgp_an'], site_to_check['tgp_ac1'], site_to_check['tgp_a1_f'], site_to_check['imp_an'], site_to_check['imp_ac1'], site_to_check['imp_a1_f'])
+	print >> freq_test,"%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s" %(site_to_check['chrom'], site_to_check['pos'],site_to_check['rsID'], site_to_check['a0'], site_to_check['a1'], site_to_check['tgp_an'], site_to_check['tgp_ac1'], site_to_check['tgp_a1_f'], site_to_check['imp_an'], site_to_check['imp_ac1'], site_to_check['imp_a1_f'])
