@@ -59,7 +59,7 @@ for pop in CARL FVG
 do
 for chr in {1..22}
 do
-exome_chip="/netapp/dati/WGS_REF_PANEL/genotypes/${pop}/exome/${chr}/chr${chr}_flipped.bim"
+exome_chip="/netapp/dati/WGS_REF_PANEL/genotypes/${pop}/exome/${chr}/chr${chr}_sorted.bim"
 tgp_data="/home/cocca/imputation/31012017_MERGED_TEST/${pop}/${chr}_exome_TGP_sites.txt"
 impute_data="/home/cocca/imputation/MERGED_INGI_TGP3_23012017/${pop}/MERGED/ALL/chr${chr}.gen_info"
 chromosome=${chr}
@@ -67,5 +67,20 @@ chromosome=${chr}
 outpath="/home/cocca/imputation/31012017_MERGED_TEST/${pop}"
 echo "Processing $pop $chr..."
 /home/cocca/scripts/bash_scripts/exome_sites_extraction.py ${exome_chip} ${tgp_data} ${impute_data} ${chr} ${pop} ${outpath}
+done
+done
+
+#for each cohort remove the selected sites
+for pop in CARL FVG
+for pop in FVG
+do
+basefolder="/home/cocca/imputation/MERGED_INGI_TGP3_23012017"
+mkdir -p ${basefolder}/${pop}/MERGED/ALL/UNFILTERED
+mkdir -p ${basefolder}/${pop}/MERGED/ALL/FILTERED
+
+for chr in {2..22}
+do
+echo "/home/cocca/scripts/bash_scripts/qctool_remove_script.sh ${pop} ${chr} ${basefolder}"|qsub -N ${pop}_${chr}_clean -o ${basefolder}/\$JOB_ID_${pop}_${chr}_clean.log -e ${basefolder}/\$JOB_ID_${pop}_${chr}_clean.e -V -l h_vmem=10G
+
 done
 done
