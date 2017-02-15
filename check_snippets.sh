@@ -383,3 +383,93 @@ echo -e "col check: ${o_col} -> ${n_col}\nrow check: ${o_row} -> ${n_row} : WRON
 fi
 done
 
+#check data after exome data snp filtering
+for pop in CARL FVG
+do
+for chr in {1..22}
+do
+
+basefolder=/home/cocca/imputation/MERGED_INGI_TGP3_23012017/${pop}/MERGED/ALL
+ex_filter=/home/cocca/imputation/31012017_MERGED_TEST/${pop}/chr${chr}_snpsIDS_to_filter.list
+o_gz=`zcat ${basefolder}/UNFILTERED/chr${chr}.gen.gz |wc -l| cut -f 1 -d " "`
+n_gz=`zcat ${basefolder}/FILTERED/chr${chr}.gen.gz |wc -l| cut -f 1 -d " "`
+o_info=`wc -l ${basefolder}/UNFILTERED/chr${chr}.gen_info | cut -f 1 -d " "`
+n_info=`wc -l ${basefolder}/FILTERED/chr${chr}.gen_info | cut -f 1 -d " "`
+ex_snp=`wc -l ${ex_filter}| cut -f 1 -d " "`
+diff_info=$[o_info -n_info]
+echo "${pop} ${chr} ${o_gz} ${n_gz} ${o_info} ${n_info} ${ex_snp} ${diff_info}"
+done
+done
+
+#check if missing exome are not included and imputed in any other previous imputation result
+for pop in CARL FVG
+do
+for chr in {1..22}
+do
+
+fgrep -v -w -f <(cut -f 2 -d " " ~/imputation/MERGED_INGI_TGP3_23012017/${pop}/MERGED/ALL/UNFILTERED/chr${chr}.gen_info ) /home/cocca/imputation/31012017_MERGED_TEST/${pop}/chr${chr}_snpsIDS_to_filter.list > /home/cocca/imputation/31012017_MERGED_TEST/${pop}/exomesites_chr${chr}_to_check.list
+fgrep -w -f /home/cocca/imputation/31012017_MERGED_TEST/${pop}/exomesites_chr${chr}_to_check.list /netapp02/data/imputation/INGI_TGP3/${pop}/MERGED/ALL/chr${chr}.gen_info > /home/cocca/imputation/31012017_MERGED_TEST/${pop}/exomesites_chr${chr}_checked_old_imp.list
+fgrep -w -f /home/cocca/imputation/31012017_MERGED_TEST/${pop}/exomesites_chr${chr}_to_check.list /netapp02/data/imputation/INGI_TGP3_MISSING/${pop}/MERGED/ALL/chr${chr}.gen_info > /home/cocca/imputation/31012017_MERGED_TEST/${pop}/exomesites_chr${chr}_checked_missing_imp.list
+
+old_imp=`wc -l /home/cocca/imputation/31012017_MERGED_TEST/${pop}/exomesites_chr${chr}_checked_old_imp.list| cut -f 1 -d " " `
+missing_imp=`wc -l /home/cocca/imputation/31012017_MERGED_TEST/${pop}/exomesites_chr${chr}_checked_missing_imp.list| cut -f 1 -d " " `
+
+echo "${pop} ${chr} ${old_imp} ${missing_imp}"
+done
+done
+
+#check bimbam files
+for pop in CARL FVG
+do
+
+for chr in {1..22}
+do
+gen=`zcat /home/cocca/imputation/MERGED_INGI_TGP3_23012017/${pop}/MERGED/ALL/BIMBAM/chr${chr}.gen.gz.bimbam.gz| wc -l| cut -f 1 -d " "`
+pos=`wc -l /home/cocca/imputation/MERGED_INGI_TGP3_23012017/${pop}/MERGED/ALL/BIMBAM/chr${chr}.gen.gz.pos | cut -f 1 -d " "`
+
+echo "${pop} ${chr} ${gen} ${pos}"
+done
+done
+
+
+for pop in VBI
+do
+for chr in {1..22}
+do
+md5sum /home/cocca/imputation/MERGED_INGI_TGP3_23012017/${pop}/MERGED/ALL/BIMBAM/chr${chr}.gen.gz.bimbam.gz
+done >> /home/cocca/imputation/MERGED_INGI_TGP3_23012017/${pop}/MERGED/ALL/BIMBAM/all_gen.md5
+done
+
+for pop in VBI
+do
+for chr in {1..22}
+do
+md5sum /home/cocca/imputation/MERGED_INGI_TGP3_23012017/${pop}/MERGED/ALL/BIMBAM/chr${chr}.gen.gz.pos
+done >> /home/cocca/imputation/MERGED_INGI_TGP3_23012017/${pop}/MERGED/ALL/BIMBAM/all_pos.md5
+done
+
+#########################
+# gzip temporary files from merging imputation
+for pop in CARL FVG
+do
+imputedir=/home/cocca/imputation/MERGED_INGI_TGP3_23012017/${pop}/MERGED/ALL
+
+m=3G
+a_size=`wc -l ${imputedir}/zip_command.list| cut -f 1 -d " "`;echo "~/scripts/bash_scripts/ja_runner_par_TRST.sh -l ${imputedir}/zip_command.list"|qsub -t 1-${a_size} -o ${imputedir}/chr${chr}_\$JOB_ID_\$TASK_ID.log -e ${imputedir}/chr${chr}_\$JOB_ID_\$TASK_ID.e -V -N ${pop}_chr${chr} -l h_vmem=${m}
+
+done
+
+ls chr*.joined.gen.SNPTEST.snp_stats
+chr9.joined.gen.SNPTEST.info_a1_freq
+
+
+
+for pop in CARL FVG
+do
+imputedir=/home/cocca/imputation/MERGED_INGI_TGP3_23012017/${pop}/MERGED/ALL
+for chr in {1..22}
+do
+echo "gzip -f ${imputedir}/chr${chr}.joined.gen.SNPTEST.info_a1_freq"
+echo "gzip -f ${imputedir}/chr${chr}.joined.gen.SNPTEST.snp_stats"
+done >> ${imputedir}/zip_command.list
+done

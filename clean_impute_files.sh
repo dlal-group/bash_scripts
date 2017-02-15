@@ -59,7 +59,7 @@ case $mode in
 		#here we have some problems..
 		qctool -g ${basefolder}/${pop}/MERGED/ALL/chr${chr}.gen.gz -incl-rsids ${basefolder}/${pop}/MERGED/CLEANED/chr${chr}.gen_rsID.to_keep -omit-chromosome -og ${basefolder}/${pop}/MERGED/CLEANED/chr${chr}.gen.gz 
 		#create sample file
-		cut -f -6 -d " " ${basefolder}/${pop}/${chr}/chr${chr}.05.gen_samples > ${basefolder}/${pop}/MERGED/CLEANED/chr${chr}.gen_samples
+		cut -f -6 -d " " ${basefolder}/${pop}/MERGED/ALL/chr${chr}.sample > ${basefolder}/${pop}/MERGED/CLEANED/chr${chr}.gen_samples
 		echo "ENDED!!!"
 		;;
 	STEP3 )
