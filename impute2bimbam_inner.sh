@@ -24,10 +24,10 @@ case $mode in
 	ALL )
 		#just in case of qctool merging of files we need to remove the first column
 		# zcat $file|cut -f 2- -d " " | awk -v chr=${chr} '{ snp=(NF-5)/3; printf "chr"chr":"$3","$4","$5; for(i=1; i<=snp; i++) printf "," $(i*3+3)*2+$(i*3+4); printf "\n" }' > ${outpath}/${file_name}.bimbam
-		zcat ${file} | awk -v chr=${chr} '{ snp=(NF-5)/3; printf "chr"chr":"$3","$4","$5; for(i=1; i<=snp; i++) printf "," $(i*3+3)*2+$(i*3+4); printf "\n" }' | gzip -c > ${outpath}/${file_name}.bimbam.gz
+		zcat ${file} | awk -v chr=${chr} '{ snp=(NF-5)/3; {if ($2~"rs") printf $2"_"$4"_"$5","$4","$5;else printf $2","$4","$5} ; for(i=1; i<=snp; i++) printf "," $(i*3+3)*2+$(i*3+4); printf "\n" }' | gzip -c > ${outpath}/${file_name}.bimbam.gz
 		#just in case of qctool merging of files we need to remove the first column
 		# zcat $file|cut -f 2- -d " " | awk -v chrom=$chr '{printf "chr"chrom":"$3","$3","chrom"\n"}' > $outpath/$file_name.pos
-		zcat $file | awk -v chrom=${chr} '{printf "chr"chrom":"$3","$3","chrom"\n"}' > $outpath/$file_name.pos
+		zcat $file | awk -v chrom=${chr} '{if($2~"rs") printf $2"_"$4"_"$5","$3","chrom"\n";else printf $2","$3","chrom"\n"}' > $outpath/$file_name.pos
 	;;
 	GEN)
 		#just in case of qctool merging of files we need to remove the first column
