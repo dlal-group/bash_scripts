@@ -101,7 +101,7 @@ case $mode in
 		#create MAP files (move it in filevector creation step!!)
 		(echo "SNP Position A0 A1 Rsq";tail -n+2 ${basefolder}/${pop}/MERGED/CLEANED/RECODED/chr${chr}.gen_info | cut -f 2-5,7 -d " ") > ${basefolder}/${pop}/MERGED/CLEANED/RECODED/FILEVECTOR/dose/${pop}_INGI_TGP3_chr${chr}.map
 		cp ${basefolder}/${pop}/MERGED/CLEANED/RECODED/FILEVECTOR/dose/${pop}_INGI_TGP3_chr${chr}.map ${basefolder}/${pop}/MERGED/CLEANED/RECODED/FILEVECTOR/prob/${pop}_INGI_TGP3_chr${chr}.info
-
+		
 		echo "ENDED!!"
 		;;
 	STEP5 )
@@ -110,6 +110,21 @@ case $mode in
 		sel=$5
 		mkdir -p ${basefolder}/${pop}/MERGED/ALL/BIMBAM
 		/home/cocca/scripts/bash_scripts/impute2bimbam_inner.sh ${basefolder}/${pop}/MERGED/ALL/chr${chr}.gen.gz ${chr} ${basefolder}/${pop}/MERGED/ALL/BIMBAM $sel
+		echo "ENDED!!"
+		;;
+	CLEANABEL )
+	echo "Clean temporary files from all steps and format files!"
+		rm ${basefolder}/${pop}/chr${chr}.gen_tmp1.gz
+		rm ${basefolder}/${pop}/chr${chr}.gen_tmp1_info
+		mkdir -p ${basefolder}/${pop}/MERGED/CLEANED/RECODED/FILEVECTOR/dose
+		mkdir -p ${basefolder}/${pop}/MERGED/CLEANED/RECODED/FILEVECTOR/prob
+		mv ${basefolder}/${pop}/MERGED/CLEANED/RECODED/FILEVECTOR/${chr}.dose.* ${basefolder}/${pop}/MERGED/CLEANED/RECODED/FILEVECTOR/dose/
+		mv ${basefolder}/${pop}/MERGED/CLEANED/RECODED/FILEVECTOR/${chr}.prob.* ${basefolder}/${pop}/MERGED/CLEANED/RECODED/FILEVECTOR/prob/
+		mv ${basefolder}/${pop}/MERGED/CLEANED/RECODED/FILEVECTOR/dose/${chr}.dose.fvd ${basefolder}/${pop}/MERGED/CLEANED/RECODED/FILEVECTOR/dose/${pop}_INGI_TGP3_chr${chr}.fvd
+		mv ${basefolder}/${pop}/MERGED/CLEANED/RECODED/FILEVECTOR/dose/${chr}.dose.fvi ${basefolder}/${pop}/MERGED/CLEANED/RECODED/FILEVECTOR/dose/${pop}_INGI_TGP3_chr${chr}.fvi
+		mv ${basefolder}/${pop}/MERGED/CLEANED/RECODED/FILEVECTOR/prob/${chr}.prob.fvd ${basefolder}/${pop}/MERGED/CLEANED/RECODED/FILEVECTOR/prob/${pop}_INGI_TGP3_chr${chr}.fvd
+		mv ${basefolder}/${pop}/MERGED/CLEANED/RECODED/FILEVECTOR/prob/${chr}.prob.fvi ${basefolder}/${pop}/MERGED/CLEANED/RECODED/FILEVECTOR/prob/${pop}_INGI_TGP3_chr${chr}.fvi
+		
 		echo "ENDED!!"
 		;;
 	CLEAN )

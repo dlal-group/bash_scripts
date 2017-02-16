@@ -51,6 +51,8 @@ echo "Conversion ended!"
 #sort the files obtained in mach format
 output_file_suffix_path=${output_file}
 
+#clean useless files
+rm -r ${output_file_path}/${chr}/
 # sort -k1 ${output_file_suffix_path}.machdose -o ${output_file_suffix_path}.machdose 
 
 #add the 1-> field in the dose file

@@ -1,29 +1,48 @@
 #####snippets to work on genotype qc
-
+#Save each output step in a corrispondent folder to avoid caos
 # 1) Remove bad samples using PLINK:
 # - convert report to ped, using convertReportToTPED.py
 
-zcall_path="/netapp/nfs/softwares/zCall/Version3_GenomeStudio/GenomeStudio"
+zcall_path=$1
+raw_data_path=$2
+gs_report=$3
+prefix=`date +"%d%m%Y%H%M%S"`
+pop=$4
 
-${zcall_path}/convertReportToTPED.py -R GIANT_V1.txt -O /home/shared/14022017_FVG_MEGA_QC/fvg_unico_mega_V1_2016-05-05/14022017_FVG_MEGA_V1
+
+zcall_path="/netapp/nfs/softwares/zCall/Version3_GenomeStudio/GenomeStudio"
+raw_data_path="/home/shared/14022017_FVG_MEGA_QC/fvg_unico_mega_V1_2016-05-05"
+gs_report=${raw_data_path}/GIANT_V1.txt
+gs_report_basename=`basename ${gs_report}`
+prefix=`date +"%d%m%Y%H%M%S"`
+pop="FVG"
+
+mkdir -p ${raw_data_path}/01_het_check
+mkdir -p ${raw_data_path}/02_callrate_check
+
+${zcall_path}/convertReportToTPED.py -R ${gs_report} -O ${raw_data_path}/01_het_check/${prefix}_${pop}
 
 # check het and missingness with plink
 
-plink --tfile /home/shared/14022017_FVG_MEGA_QC/fvg_unico_mega_V1_2016-05-05/14022017_FVG_MEGA_V1 --het --out /home/shared/14022017_FVG_MEGA_QC/fvg_unico_mega_V1_2016-05-05/14022017_FVG_MEGA_V1_het_check
+plink --tfile ${raw_data_path}/01_het_check/${prefix}_${pop} --het --out ${raw_data_path}/01_het_check/${prefix}_${pop}_het_check
 
 # add het column
-tail -n+2 14022017_FVG_MEGA_V1_het_check.het| awk '{OFS="\t"}{print $0,($5-$3)/$5}' > 14022017_FVG_MEGA_V1_het_check.het.rate
+tail -n+2 ${raw_data_path}/01_het_check/${prefix}_${pop}_het_check.het| awk '{OFS="\t"}{print $0,($5-$3)/$5}' > ${raw_data_path}/01_het_check/${prefix}_${pop}_het_check.het.rate
 
+#call rate check
 # extract samples with less tha 0.95 call rate
-plink --tfile /home/shared/14022017_FVG_MEGA_QC/fvg_unico_mega_V1_2016-05-05/14022017_FVG_MEGA_V1 --mind 0.05 --make-bed --out /home/shared/14022017_FVG_MEGA_QC/fvg_unico_mega_V1_2016-05-05/14022017_FVG_MEGA_V1_mind001_check
+plink --tfile ${raw_data_path}/01_het_check/${prefix}_${pop} --mind 0.05 --make-bed --out ${raw_data_path}/02_callrate_check/${prefix}_${pop}_mind005_check
 
 # check if those samples are the same with high het-rate
-fgrep -w -f <(cut -f 1 14022017_FVG_MEGA_V1_mind001_check.irem) 14022017_FVG_MEGA_V1_het_check.het.rate
+fgrep -w -f <(cut -f 1 ${raw_data_path}/02_callrate_check/${prefix}_${pop}_mind001_check.irem) ${raw_data_path}/01_het_check/${prefix}_${pop}_het_check.het.rate > ${raw_data_path}/02_callrate_check/HET_callrate_bad_samples.list
 
 # remove bad samples from report
-/netapp/nfs/softwares/zCall/additionalScripts/dropSamplesFromReport_FasterVersion.py -R GIANT_V1.txt
+/netapp/nfs/softwares/zCall/additionalScripts/dropSamplesFromReport_FasterVersion.py ${gs_report} ${raw_data_path}/02_callrate_check/${prefix}_${pop}_mind001_check.irem > ${raw_data_path}/02_callrate_check/${gs_report_basename}_callrate95.txt
 
-Use the script findMeanSD.py to calculate μ and σ of both homozygote clusters for common sites (MAF > 5%)
+#Use the script findMeanSD.py to calculate μ and σ of both homozygote clusters for common sites (MAF > 5%)
+#we need to use the cleaned report
+${zcall_path}/findMeanSD.py -R ${gs_report}
+
 
 Take the output of Step 1 and run findBetas.r to derive the linear regression model
 	We suggest using the “1” flag for weighted linear regression
