@@ -12,13 +12,13 @@ n_snp=sys.argv[2]
 #n_snp=6
 
 
-current_file=gzip.open('%s' %(input_file), 'r')
 # lines= [if not re.match('#',i): i.split("\t") for i in current_file.readlines()]
+current_file=gzip.open('%s' %(input_file), 'r')
 lines=[]
 for line in current_file:
 	if not re.match('#',line):
 		site=line.rstrip().split("\t")
-		variant=[site[0],site[1],site[2]]
+		variant=[site[0],site[1],site[2], site[3],site[4],site[9:]]
 		lines.append(variant)
 
 all_rs_list=[]
@@ -48,6 +48,6 @@ for i in range(0, len(lines)):
 for snp_set in all_rs_list:
 	print 'block\t%s' %(all_rs_list.index(snp_set))
 	for snp in snp_set:
-		print '%s\t%s\t%s' %(snp[0],snp[1],snp[2])
+		print '%s\t%s\t%s\t%s\t%s\t%s' %(snp[0],snp[1],snp[2],snp[3],snp[4],"\t".join(snp[5]))
 
 # print(all_rs_list)
