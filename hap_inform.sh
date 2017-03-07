@@ -16,7 +16,7 @@ pop=$6
 # sd=0.05
 # subset_sample="/home/cocca/analyses/michelangelo/EUR_samples_phase3.txt"
 #add subset Asian and whole TGP3
-
+mkdir -p $base_out
 basename_out=`basename ${TGP_input}`
 
 ad_maf1=`echo "$maf $sd" | awk '{print $1-$2}'`
