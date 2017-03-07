@@ -18,7 +18,11 @@ lines=[]
 for line in current_file:
 	if not re.match('#',line):
 		site=line.rstrip().split("\t")
-		variant=[site[0],site[1],site[2], site[3],site[4],site[9:]]
+		geno=site[9:]
+		geno=[w.replace('0', site[3]) for w in geno]
+		geno=[w.replace('1', site[4]) for w in geno]
+		# variant=[site[0],site[1],site[2], site[3],site[4],site[9:]]
+		variant=[site[0],site[1],site[2], site[3],site[4],geno]
 		lines.append(variant)
 
 all_rs_list=[]
