@@ -39,7 +39,6 @@ plink --file ${outname_f2} --freq --allow-no-sex --out ${outname_f2}
 #correctly format the frq file
 sed -i 's/^[ 	]*//;s/ \+/	/g' ${outname_f2}.frq
 
-
 #sort the same file1 and file2
 sort -k1 ${outname_f1}.ped > ${outname_f1}.sorted;mv ${outname_f1}.ped ${outname_f1}.unsorted;mv ${outname_f1}.sorted ${outname_f1}.ped;sort -k1 ${outname_f2}.ped > ${outname_f2}.sorted;mv ${outname_f2}.ped ${outname_f2}.unsorted;mv ${outname_f2}.sorted ${outname_f2}.ped
 
@@ -68,4 +67,4 @@ do
 	fi
 done
 
-last_discordance_pipeline_step.sh $3
+$MY_BASH_SCRIPTS/last_discordance_pipeline_step.sh $3

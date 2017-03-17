@@ -15,7 +15,7 @@ done
 cat QC_OUT/sample_header.txt QC_OUT/all_samples_all_chr_concordance_discordance_table_nohead.txt > QC_OUT/all_samples_all_chr_concordance_discordance_table.txt
 
 #now call the script to calculate the overall GC/NRD by sample
-python2.7 /nfs/users/nfs_m/mc14/Work/bash_scripts/non_ref_discordance_by_sample.py QC_OUT/all_samples_all_chr_concordance_discordance_table.txt $1
+python2.7 $MY_BASH_SCRIPTS/non_ref_discordance_by_sample.py QC_OUT/all_samples_all_chr_concordance_discordance_table.txt $1
 
 #move files:
 mv all_sample_concordance_discordance* QC_OUT/
