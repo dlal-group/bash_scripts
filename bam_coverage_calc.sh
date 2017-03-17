@@ -12,7 +12,7 @@ out_name=`basename ${files[$index]}`
 
 #extract per base coverage from bam file, than calculate mean coverage (use R for a complete summary for each sample?)
 
-#samtools depth ${files[$index]} | gzip -c > ${out_path}/${out_name}.coverage.gz
+samtools depth ${files[$index]} | gzip -c > ${out_path}/${out_name}.coverage.gz
 
 #call R to create a complete summary
 contig=`zcat ${out_path}/${out_name}.coverage.gz | cut -f 1 | sort | uniq`
