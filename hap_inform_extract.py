@@ -19,8 +19,14 @@ for line in current_file:
 	if not re.match('#',line):
 		site=line.rstrip().split("\t")
 		geno=site[9:]
+		# need to take care of multiallelic sites
 		geno=[w.replace('0', site[3]) for w in geno]
-		geno=[w.replace('1', site[4]) for w in geno]
+		if len(site[4]) > 1:
+			multi=",".split(site[4])
+			geno=[w.replace('1', multi[0]) for w in geno]
+			geno=[w.replace('2', multi[1]) for w in geno]
+		else
+			geno=[w.replace('1', site[4]) for w in geno]
 		# variant=[site[0],site[1],site[2], site[3],site[4],site[9:]]
 		variant=[site[0],site[1],site[2], site[3],site[4],geno]
 		lines.append(variant)
